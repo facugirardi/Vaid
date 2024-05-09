@@ -1,0 +1,52 @@
+/*******************************************************/
+/******************** ## Client Logo ********************/
+/*******************************************************/
+.client-logo-item
+    text-align: center
+    margin: 0 10px 35px
+    
+    &.style-two
+        a
+            opacity: 0.3
+            filter: grayscale(1)
+            &:hover
+                opacity: 1
+                filter: grayscale(0)
+            
+    &.style-three
+        padding: 25px
+        background: white
+        +gapLR(margin, 0)
+        +flexcenter(center)
+        border-radius: 20px
+        height: calc(100% - 35px)
+        border: 1px solid $border-color
+        box-shadow: 0px 10px 60px 0px rgba(0, 0, 0, 0.10)
+            
+    &.style-four
+        +gapLR(margin, 0)
+        border-radius: 20px
+        +gapLR(padding, 15px)
+        background: rgba(0, 0, 0, 0.01)
+        border: 1px solid $border-color
+            
+.logo-white
+    .client-logo-item
+        img
+            filter: brightness(0) invert(1)
+        &.style-three
+            transition: 0.5s
+            background: rgba(255, 255, 255, 0.05)
+            border: 1.2px solid rgba(255, 255, 255, 0.10)
+            box-shadow: 0px 10px 60px 0px rgba(0, 0, 0, 0.10)
+            &:hover
+                background: $primary-color
+            
+.client-logo-wrap
+    display: flex
+    flex-wrap: wrap
+    align-items: center
+    justify-content: space-around
+    .client-logo-item
+        +gapLR(margin, 25px)
+        max-width: calc(50% - 50px)

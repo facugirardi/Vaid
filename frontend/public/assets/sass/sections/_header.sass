@@ -1,0 +1,501 @@
+/*******************************************************/
+/******************* ## Header style *******************/
+/*******************************************************/
+.main-header
+    position: relative
+    left: 0px
+    top: 0px
+    z-index: 999
+    width: 100%
+    transition: all 500ms ease
+    .header-upper
+        z-index: 5
+        width: 100%
+        position: relative
+        transition: all 500ms ease
+    .header-inner
+        border-bottom: 1px solid $border-color
+    .logo-outer
+        flex: none
+        +res-bl(lg)
+            display: none
+    .logo
+        z-index: 9
+        padding: 2px 0
+        position: relative
+    &.menu-absolute
+        .header-upper
+            position: absolute
+    &.fixed-header
+        .header-upper
+            top: 0
+            left: 0
+            position: fixed
+            background: white
+            animation: sticky  1s
+            box-shadow: 0px 0px 30px 0px rgba(87, 95, 245, .10)
+        .header-inner
+            +gapTB(padding, 0)
+            border-bottom: none
+        .main-menu
+            .navbar-collapse
+                > ul
+                    > li
+                        +res-ab(lg)
+                            +gapTB(padding, 25px)
+    &.no-border
+        &:not(.fixed-header)
+            .header-inner
+                border-bottom: none
+
+.nav-outer
+    +res-bl(lg)
+        width: 100%
+
+/** Header Main Menu **/
+.main-menu
+    +res-bl(lg)
+        width: 100%
+    .mobile-logo
+        margin-right: auto
+        +res-bl(sm)
+            max-width: 150px
+    .collapse
+        +res-bl(lg)
+            overflow: auto
+    .navbar-collapse
+        padding: 0px
+        > ul
+            display: flex
+            +res-bl(lg)
+                display: block
+                padding: 25px 0
+                background: white
+                box-shadow: inset 0px 0px 30px 0px rgba(87, 95, 245, .10)
+                > li:last-child
+                    border-bottom: 1px solid $border-color
+        +res-bl(lg)
+            left: 0
+            width: 100%
+            position: absolute
+            max-height: calc(100vh - 80px)
+        li
+            padding: 20px
+            +flexcenter(space-between)
+            +res-bl(xxl)
+                +gapLR(padding, 10px)
+            +res-bl(lg)
+                display: block
+                padding: 0 15px
+                border-top: 1px solid $border-color
+            &.dropdown .dropdown-btn
+                cursor: pointer
+                margin-left: 5px
+                font-weight: 600
+                margin-bottom: -2px
+                color: $heading-color
+                +res-bl(lg)
+                    position: absolute
+                    right: 10px
+                    top: 0
+                    width: 50px
+                    height: 43px
+                    border-left: 1px solid $border-color
+                    text-align: center
+                    line-height: 43px
+            a
+                opacity: 1
+                display: block
+                font-size: 18px
+                @extend %heading
+                position: relative
+                text-transform: capitalize
+                transition: all 500ms ease
+                +res-bl(lg)
+                    padding: 10px 10px
+                    line-height: 22px
+                &:hover
+                    color: $primary-color
+            &.current > a, &.current-menu-item > a
+                font-weight: 600
+            li
+                border-top: 1px solid $border-color
+                a
+                    text-transform: capitalize
+                    &:before
+                        display: none
+            .megamenu
+                position: absolute
+                left: 0px
+                top: 100%
+                width: 100%
+                z-index: 100
+                display: none
+                padding: 20px 0
+                background: #ffffff
+                box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.05), -2px 0px 5px 1px rgba(0, 0, 0, 0.05)
+                +clearfix
+                +res-bl(lg)
+                    position: relative
+                    box-shadow: none
+                    width: 100%
+                    .container
+                        max-width: 100%
+                    .row
+                        margin: 0px
+                ul
+                    display: block
+                    position: relative
+                    top: 0
+                    width: 100%
+                    box-shadow: none
+            ul
+                position: absolute
+                left: inherit
+                top: 100%
+                min-width: 250px
+                z-index: 100
+                display: none
+                background: white
+                box-shadow: 2px 2px 5px 1px rgba(0, 0, 0, 0.05), -2px 0px 5px 1px rgba(0, 0, 0, 0.05)
+                +res-bl(lg)
+                    position: relative
+                    display: none
+                    width: 100%
+                    box-shadow: none
+                    background: transparent
+                    +clearfix
+                    +res-bl(xs)
+                        min-width: auto
+                li
+                    width: 100%
+                    padding: 7px 20px
+                    +res-bl(lg)
+                        padding: 0 15px
+                    ul
+                        left: 100%
+                        top: 0%
+                        +res-bl(lg)
+                            left: auto
+
+    .navbar-header
+        display: none
+        +res-bl(lg)
+            +flexcenter(start)
+        .navbar-toggle
+            float: right
+            padding: 4px 0
+            cursor: pointer
+            background: transparent
+            .icon-bar
+                background: $base-color
+                height: 2px
+                width: 30px
+                display: block
+                margin: 7px 0 
+
+/* Menu Btns */
+.menu-btns
+    flex: none
+    display: flex
+    align-items: center
+    button
+        color: white
+        cursor: pointer
+        margin-left: 33px 
+        background-color: transparent
+        &.cart
+            +res-bl(xs)
+                display: none
+                
+    .light-btn
+        font-size: 18px
+        @extend %heading
+        i
+            font-size: 0.8em
+            margin-left: 9px
+            transform: rotate(-30deg)
+        +res-bl(lg)
+            display: none
+    .theme-btn
+        margin-left: 33px
+        +res-bl(xl)
+            display: none
+            
+                
+/* White Menu */   
+.main-header.header-white
+    +res-ab(lg)
+        .navbar-collapse > ul > li
+            > a,
+            > .dropdown-btn
+                color: white
+    .nav-search > button
+        color: white
+    .navbar-toggle .icon-bar
+        background: white
+    .light-btn
+        color: white
+        text-decoration: underline
+    &.fixed-header
+        .header-upper
+            background: $navyblue-color
+        
+/* Header Search */
+.nav-search
+    font-size: 16px
+    position: relative
+    > button
+        background: transparent
+    form
+        position: absolute
+        width: 320px
+        top: 100%
+        right: 0
+        z-index: 777
+        +flexcenter(center)
+        background-color: #fff
+        animation: fadeIn 0.5s
+        box-shadow: 0 0 5px 5px rgba(0, 0, 0, 0.05)
+        +res-bl(xs)
+            width: 275px
+        &.hide
+            display: none
+        input
+            border: none
+            background: transparent
+            padding: 15px 5px 15px 25px
+            &::placeholder
+                color: $base-color
+        button
+            background: transparent
+            padding: 15px 20px 15px 0
+    
+/** hidden-sidebar *
+.menu-sidebar
+    > button
+        background: transparent
+
+.hidden-bar
+    position: fixed
+    left: -350px
+    top: 0px
+    opacity: 0
+    width: 350px
+    height: 100%
+    z-index: 99999
+    overflow-y: auto
+    visibility: hidden
+    background-color: #222222
+    border-left: 1px solid #231b26
+    transition: all 0.5s ease
+    +res-bl(xs)
+        width: 300px
+    .social-style-one
+        a
+            +size(40px)
+            line-height: 40px
+
+.side-content-visible .hidden-bar
+    left: 0px
+    opacity: 1
+    visibility: visible
+
+.hidden-bar
+    .inner-box
+        position: relative
+        padding: 100px 40px 50px
+        +res-bl(xs)
+            +gapLR(padding, 25px)
+    .cross-icon
+        position: absolute
+        right: 30px
+        top: 30px
+        z-index: 1
+        cursor: pointer
+        color: #ffffff
+        font-size: 20px
+        transition: all 500ms ease
+    h4
+        position: relative
+        color: #ffffff
+        margin-bottom: 35px
+
+/*Appointment Form
+.hidden-bar .appointment-form
+    position: relative
+
+    .form-group
+        position: relative
+        margin-bottom: 20px
+
+    input
+        &[type="text"], &[type="email"]
+            position: relative
+            display: block
+            width: 100%
+            line-height: 23px
+            padding: 10px 25px
+            color: #ffffff
+            font-size: 16px
+            background: none
+            transition: all 300ms ease
+            border: 1px solid rgba(255, 255, 255, 0.1)
+
+    textarea
+        position: relative
+        display: block
+        width: 100%
+        line-height: 23px
+        padding: 10px 25px
+        color: #ffffff
+        font-size: 16px
+        border: 1px solid rgba(255, 255, 255, 0.1)
+        background: none
+        transition: all 300ms ease
+        resize: none
+
+    input::placeholder
+        font-size: 14px
+        color: #bdbdbd
+
+    textarea
+        &::placeholder
+            font-size: 14px
+            color: #bdbdbd
+
+    .form-group button
+        width: 100%
+        font-size: 16px
+        padding: 10px 15px
+        margin-bottom: 20px
+        border-color: white
+
+.form-back-drop
+    position: fixed
+    right: 100%
+    top: 0px
+    width: 100%
+    height: 100%
+    opacity: 0
+    background: rgba(0, 0, 0, 0.7)
+    visibility: hidden
+    z-index: 9990
+    transition: all 0.5s ease
+
+.side-content-visible .form-back-drop
+    opacity: 1
+    right: 0
+    visibility: visible
+    
+    
+// Header Top
+.header-top
+    +gapTB(padding, 7px)
+    .top-left,
+    .top-right
+        > ul
+            flex-wrap: wrap
+            align-items: center
+            display: inline-flex
+            +gapLR(margin, -20px)
+            > li
+                align-items: center
+                display: inline-flex
+                +gapLR(margin, 20px)
+                color: rgba(255, 255, 255, 0.65)
+                i
+                    margin-right: 10px
+                    color: $primary-color
+                a
+                    color: rgba(255, 255, 255, 0.65)
+                    &:hover
+                        color: white
+            .nice-select
+                border: none
+                font-size: 16px
+                line-height: 1.5
+                padding: 0 25px 0 0
+                background: transparent
+                .current
+                    color: white
+                &:after
+                    right: 8px
+                    +size(8px)
+                    top: 50%
+                    margin-top: -6px
+                    border-color: white
+                .list
+                    width: auto
+                    > li
+                        margin-bottom: 0
+                        &:before
+                            display: none
+                    
+    .top-left
+        > ul >li
+            a
+                color: white
+                margin-left: 5px
+                text-decoration: underline
+            span
+                +res-bl(xl)
+                    display: none
+                    
+    .top-middle
+        color: white
+        font-weight: 600
+                    
+    .top-right
+        +res-bl(sm)
+            display: none
+        .social-icons
+            a
+                i
+                    color: white
+                &:not(:last-child)
+                    margin-right: 5px
+                
+.bgc-primary .top-left ul li i
+    color: white
+    margin-right: 0
+    margin-left: 10px
+    transform: rotate(-45deg)
+                
+                    
+/* Header Style Two */
+.main-header.style-two
+    .main-logo
+        max-width: 40%
+    
+                    
+/* Sidebar Menu */
+.sidebar-menu
+    li
+        color: white
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1)
+        &:first-child
+            border-top: 1px solid rgba(255, 255, 255, 0.1)
+            
+        a
+            color: white
+            font-size: 18px
+            font-weight: 500
+            padding: 6px 20px
+            display: inline-block
+            text-transform: capitalize
+        &.dropdown
+            > ul
+                display: none
+            .dropdown-btn
+                position: absolute
+                right: 10px
+                top: 0
+                width: 45px
+                height: 43px
+                cursor: pointer
+                line-height: 43px
+                text-align: center
+                border-left: 1px solid rgba(255, 255, 255, 0.1)
+        ul
+            margin-left: 10px

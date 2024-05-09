@@ -1,0 +1,457 @@
+/*******************************************************/
+/*********************  ## Pricing  ********************/
+/*******************************************************/
+.pricing-item
+    z-index: 1
+    transition: 0.5s
+    position: relative
+    padding: 50px 45px
+    border-radius: 20px
+    margin-bottom: 30px
+    background: $lighter-color
+    +res-bt(md, lg)
+        +gapLR(padding, 35px)
+    +res-bl(xs)
+        +gapLR(padding, 30px)
+    .circle
+        z-index: -1
+        +poRT(40px)
+    .price
+        @extend %h2
+        transition: 0.5s
+        margin-bottom: 10px
+        letter-spacing: -1.44px
+        +res-bl(xs)
+            font-size: 40px
+        .next
+            font-size: 16px
+            transition: 0.5s
+            font-weight: 400
+            color: $base-color
+            letter-spacing: -0.48px
+    .text
+        transition: 0.5s
+        font-weight: 500
+        margin-bottom: 35px
+        color: $heading-color
+    .title
+        transition: 0.5s
+        margin-bottom: 25px
+        letter-spacing: -0.66px
+    .list
+        padding-bottom: 8px
+        li,
+        li:before
+            transition: 0.5s
+    .theme-btn
+        +res-bl(xs)
+            +gapLR(padding, 25px)
+    &.style-two
+        +gapTB(padding, 40px)
+        +res-ab(lg)
+            +gapLR(padding, 50px)
+        &:before
+            +poLT(0)
+            content: ''
+            +size(100%)
+            z-index: -1
+            transition: 0.5s
+            background: white
+            border-radius: 20px
+            border: 1px solid $border-color
+        .popular
+            z-index: -2
+            color: white
+            +poLT(0, 2px)
+            padding: 10px
+            transition: 0.5s
+            +size(100%, 60px)
+            text-align: center
+            text-transform: uppercase
+            background: $heading-color
+            border-radius: 20px 20px 0 0
+        .title
+            z-index: 1
+            transition: 0.5s
+            overflow: hidden
+            margin-bottom: 0
+            padding: 2px 12px
+            border-radius: 7px
+            position: relative
+            display: inline-block
+            color: $primary-color
+            +res-bl(xs)
+                font-size: 20px
+            &:after
+                +poLT(0)
+                content: ''
+                +size(100%)
+                z-index: -1
+                opacity: 0.2
+                background: $primary-color
+        .text
+            color: $base-color
+        .list
+            padding-bottom: 3px
+            li.hide
+                opacity: 0.15
+        hr
+            margin-bottom: 50px
+        .theme-btn
+            color: $heading-color
+            border: 2px solid #e4e4e4
+            background-image: linear-gradient(to top, white 50%, $heading-color 50%)
+        &:hover
+            transform: translateY(20px)
+            &:before
+                border-color: white
+                box-shadow: 0px 10px 60px rgba(0, 0, 0, 0.10)
+            .popular
+                top: -40px
+            .title
+                color: white
+                background: $primary-color
+            .price
+                color: $primary-color
+            .theme-btn
+                color: white
+                background-position: 0 0
+                border-color: $heading-color
+        
+    &.style-three
+        background: transparent
+        border: 1.2px solid rgba(0, 0, 0, 0.10)
+        .theme-btn
+            background: #000
+            margin-bottom: 42px
+            border: 2px solid transparent
+        .list
+            padding-bottom: 0
+            li
+                &.hide
+                    opacity: 0.15
+                &:last-child
+                    margin-bottom: 0
+                
+        &:hover
+            background: #000
+            .text,
+            .price,
+            .title,
+            .list li,
+            .price .next
+                color: white
+            .list li
+                &.hide
+                    opacity: 0.35
+                &:before
+                    background: white
+            .theme-btn
+                border-color: white
+                
+    &.style-four
+        transition: 0.5s
+        +gapTB(padding, 40px)
+        +res-ab(lg)
+            +gapLR(padding, 50px)
+        &:before
+            content: ''
+            z-index: -2
+            +poLT(0, -7px)
+            transition: 0.5s
+            +size(100%, 30px)
+            background: $heading-color
+            border-radius: 20px 20px 0 0
+        &:after
+            +poLT(0)
+            content: ''
+            +size(100%)
+            z-index: -1
+            transition: 0.5s
+            background: white
+            border-radius: 20px
+            border: 1px solid $border-color
+        .icon
+            line-height: 1
+            font-size: 65px
+            margin-bottom: 12px
+            color: $primary-color
+        .title
+            margin-bottom: 40px
+        .icon,
+        .text,
+        .title,
+        .price
+            text-align: center
+        hr
+            transition: 0.5s
+            margin-bottom: 40px
+        .icon-list
+            margin-bottom: 40px
+            li
+                transition: 0.5s
+        .theme-btn
+            color: $base-color
+            border: 2px solid #e4e4e4
+            background-image: linear-gradient(to top, transparent 50%, $primary-color 50%)
+        &:hover
+            &:before
+                background: $primary-color
+            &:after
+                background: $heading-color
+            .text,
+            .price,
+            .title,
+            .icon-list li,
+            .price .next
+                color: white
+            hr
+                opacity: 1
+                background: #D9D9D9
+            .theme-btn
+                color: white
+                background-position: 0 0
+                border-color: $heading-color
+                
+    &.style-five
+        background: white
+        border: 1px solid $border-color
+        +gapTB(padding, 40px)
+        +res-ab(lg)
+            +gapLR(padding, 50px)
+        .title-price
+            display: flex
+            align-items: center
+            justify-content: space-between
+            .title
+                color: white
+                padding: 3px 10px
+                border-radius: 5px
+                margin-bottom: 22px
+                letter-spacing: -0.66px
+                background: $primary-color
+            .price
+                margin-bottom: 15px
+        .text
+            margin-top: 25px
+            margin-bottom: 30px
+        .icon-list
+            margin-bottom: 45px
+            li
+                &.hide
+                    opacity: 0.1
+        .footer-text
+            margin: 10px 0 -5px 25px
+        &:hover
+            border-color: white
+            box-shadow: 0px 10px 60px rgba(141, 141, 141, 0.10)
+            .theme-btn
+                background-position: 0 0
+            
+    &.style-six
+        background: #0E1916
+        .icon
+            +size(90px)
+            font-size: 55px
+            line-height: 90px
+            border-radius: 50%
+            text-align: center
+            margin-bottom: 35px
+            color: $primary-color
+            background: rgba(255, 255, 255, 0.05)
+        h5
+            color: white
+            margin-bottom: 10px
+        p
+            margin-bottom: 25px
+            color: rgba(255, 255, 255, 0.65)
+        .icon-list
+            margin-bottom: 40px
+            li
+                color: white
+                font-weight: 400
+        &:hover
+            .theme-btn
+                color: $heading-color
+                background-position: 0 0
+   
+    &.bgc-primary,
+    &.bgc-navyblue
+        .text,
+        .next,
+        .price,
+        .list li
+            color: white
+        .list li:before
+            background: white
+        .theme-btn
+            outline: 2px solid white
+   
+    &.bgc-primary
+        background: $primary-color
+   
+    &.bgc-navyblue
+        background: $navyblue-color
+        
+    &.bgc-yellow
+        background: $secondary-color
+        .list li:before
+            background: $heading-color
+            
+            
+.save-percent
+    font-weight: 500
+    background-image: url(../images/shapes/title-shape-two.png)
+    background-position: center bottom
+    background-repeat: no-repeat
+    background-size: 100%
+    padding-bottom: 15px
+    padding-left: 10px
+    margin-left: -10px
+    margin-right: 22px
+    +res-ab(xs)
+        font-size: 20px
+            
+.pricing-tab
+    display: inline-flex
+    li
+        &:first-child button:after,
+        &:last-child button:before
+            content: ''
+            +size(20px)
+            transition: 0.5s
+            border-radius: 50%
+            background: $primary-color
+        &:first-child button:after
+            margin-left: 10px
+        &:last-child button:before
+            margin-right: 10px
+        &:first-child button:before
+            position: absolute
+            +size(46px, 24px)
+            content: ''
+            top: 50%
+            right: 0
+            z-index: -1
+            border-radius: 12px
+            background: $primary-color
+            transform: translate(50%, -50%)
+        button
+            padding: 0
+            z-index: 1
+            display: flex
+            font-weight: 600
+            color: $base-color
+            align-items: center
+            position: relative
+            background: transparent
+            text-transform: capitalize
+            font-family: $heading-font
+            +res-ab(xs)
+                font-size: 20px
+            &:focus,
+            &:hover
+                color: $heading-color
+            &.active
+                color: $heading-color
+        &:first-child button.active:after,
+        &:last-child button.active:before
+            background: white
+            
+.trustpilot-review
+    +res-bt(lg, xl)
+        padding: 25px
+    h6
+        margin-bottom: 15px
+    hr
+        +gapTB(margin, 45px)
+    .rattings
+        display: flex
+        i
+            +size(26px)
+            font-size: 14px
+            background: white
+            text-align: center
+            line-height: 26px
+            margin-right: 5px
+            color: $primary-color
+    .authors
+        display: flex
+        img
+            +size(40px)
+            border-radius: 50%
+            border: 1.5px solid white
+            &:not(:first-child)
+                margin-left: -10px
+                +res-bt(lg, xl)
+                    margin-left: -15px
+        .plus
+            flex: none
+            margin-left: -10px
+            +circle(white, 40px)
+            color: $primary-color
+            
+            
+/* BG Circle shapes */
+.bg-circle-shapes
+    z-index: -1
+    left: 50%
+    bottom: 0
+    +size(1090px)
+    position: absolute
+    transform: translate(-50%, 50%)
+    +res-bl(xl)
+        +size(700px)
+    +res-bl(md)
+        +size(500px)
+    span
+        +absmiddle()
+        border-radius: 50%
+        background: rgba(21, 31, 57, 0.02)
+        border: 1px solid rgba(21, 31, 57, 0.07)
+        &:nth-child(1)
+            +size(100%)
+        &:nth-child(2)
+            +size(80%)
+        &:nth-child(3)
+            +size(60%)
+        &:nth-child(4)
+            +size(40%)
+        
+        
+/* Home Nine */
+.price-left-tab
+    +res-ab(xxl)
+        max-width: 355px
+    +res-bl(xl)
+        margin-top: 0
+    +res-bt(md, lg)
+        margin-top: 40px
+        
+        
+/* Pricing Page */
+.pricing-three-area
+    .pricing-item.style-three
+        border: none
+        background: white
+        box-shadow: 0px 10px 60px rgba(130, 130, 130, 0.10)
+        .theme-btn
+            background: $primary-color
+        &:hover
+            background: $navyblue-color
+            .theme-btn
+                background: $navyblue-color
+            
+.pricing-three-shapes
+    .shape
+        z-index: -1
+        max-width: 10%
+        position: absolute
+        &.one
+            left: 5%
+            bottom: 15%
+            animation: upDownLeft 20s infinite
+        &.two
+            right: 10%
+            top: 10%
+            animation: upDownLeft 20s infinite

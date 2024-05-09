@@ -1,0 +1,124 @@
+/*******************************************************/
+/******************* ## Forms Styles *******************/
+/*******************************************************/
+.newsletter-form
+    padding: 10px
+    display: flex
+    background: white
+    align-items: center
+    border-radius: 15px
+    label
+        margin: 0 0 0 20px
+        +res-bl(xs)
+            display: none
+    input
+        border: none
+        padding: 0 5px 0 20px
+        background: transparent
+        &::placeholder
+            color: $base-color
+    button
+        flex: none
+        color: white
+        font-weight: 600
+        padding: 9px 24px
+        border-radius: 12px
+        +flexcenter(center)
+        background: $heading-color
+        i
+            margin-top: 2px
+            font-size: 0.9em
+            margin-left: 10px
+            transform: rotate(-30deg)
+            +res-bl(xs)
+                display: none
+        b
+            +res-ab(ms)
+                font-size: 18px
+                padding: 4px 18px
+                
+    &.style-two
+        padding: 5px
+        button
+            +size(46px)
+            padding: 5px
+            text-align: center
+            line-height: 46px
+            background: $primary-color
+            i
+                margin-left: 0
+                display: block
+                
+    &.style-three
+        padding: 0
+        border-radius: 0
+        align-items: stretch
+        background: transparent
+        input
+            background: white
+            padding: 13px 25px
+            margin-right: 10px
+            border-radius: 15px
+        button
+            background: $primary-color
+            +res-ab(sm)
+                font-size: 18px
+                +gapLR(padding, 45px)
+                
+.nice-select
+    font-size: 16px
+    border-radius: 7px
+    font-weight: 400
+    padding: 4px 40px 4px 20px
+    background: $lighter-color
+    border: 1px solid $border-color
+    &:after
+        right: 20px
+        top: 24px
+        +size(7px)
+    .list
+        width: 100%
+        li
+            font-size: 16px
+            margin-bottom: 0
+            &:before
+                content: none
+            
+            
+.help-block.with-errors
+    color: red
+    
+    
+/* Sign Up/In */
+.sign-in-up-wrapper
+    padding: 30px
+    text-align: center
+    box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.05)
+    +res-bl(xs)
+        +gapLR(padding, 20px)
+    .form-title
+        margin-bottom: 25px
+    .form-group
+        position: relative
+        label
+            top: 15px
+            left: 25px
+            position: absolute
+        input
+            padding: 15px 25px 15px 50px
+    .form-note
+        margin-top: 35px
+        padding-top: 10px
+        border-top: 1px solid $border-color
+        p
+            margin-bottom: 0
+            +res-bl(xs)
+                font-size: 15px
+            a
+                color: $primary-color
+    .forgot-password
+        padding-top: 5px
+        margin-top: 10px
+        border-top: 1px solid $border-color
+        a
+            color: $primary-color

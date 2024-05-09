@@ -1,0 +1,343 @@
+/*******************************************************/
+/******************* ## Footer Area  *******************/
+/*******************************************************/
+.footer-newsletter
+    padding: 40px 60px
+    border-radius: 15px
+    margin-bottom: -15px
+    background: $primary-color
+    transform: translateY(-100px)
+    +res-bl(sm)
+        +gapLR(padding, 35px)
+    +res-bl(xs)
+        +gapLR(padding, 25px)
+
+.footer-widget
+    margin-bottom: 50px
+                
+.footer-title
+    color: white
+    font-size: 18px
+    margin-bottom: 22px
+        
+.widget-links ul li
+    font-weight: 500
+    line-height: 1.5
+    a
+        color: rgba(255, 255, 255, 0.45)
+        &:hover
+            color: white
+    &:not(:last-child)
+        margin-bottom: 16px
+    
+.widget-contact ul li
+    display: flex
+    i
+        flex: none
+        width: 20px
+        color: white
+        margin-top: 10px
+        margin-right: 10px
+    a
+        color: rgba(255, 255, 255, 0.45)
+        &:hover
+            color: white
+    &:not(:last-child)
+        margin-bottom: 14px
+    
+.widget-gallery ul
+    display: flex
+    flex-wrap: wrap
+    margin: 0 -10px -10px 0
+    li
+        width: 80px
+        overflow: hidden
+        position: relative
+        border-radius: 10px
+        margin: 0 10px 10px 0
+        max-width: calc(33% - 10px)
+        &:after
+            +poLT(0)
+            content: ''
+            +size(100%)
+            transition: 0.4s
+            transform: scale3d(1, 0, 1)
+            background: linear-gradient(94deg, rgba(176, 101, 231, 0.75) 13.66%, rgba(49, 87, 239, 0.75) 81.89%)
+        i
+            z-index: 1
+            +poLT(50%)
+            transition: 0.4s
+            font-size: 12px
+            +circle(white, 30px)
+            color: $secondary-color
+            transform: translate(-50%, -50%) scale3d(1, 0, 1) rotate(-40deg)
+        &:hover
+            &:after
+                transform: scale3d(1, 1, 1)
+            i
+                transform: translate(-50%, -50%) scale3d(1, 1, 1) rotate(-40deg)
+    
+.footer-bottom
+    position: relative
+    border-top: 1px solid rgba(255, 255, 255, 0.1)
+    .copyright-text
+        a
+            color: white
+
+    .footer-bottom-menu ul
+        flex-wrap: wrap
+        align-items: center
+        display: inline-flex
+        +gapLR(margin, -15px)
+        justify-content: center
+        li
+            +gapLR(margin, 15px)
+            text-transform: capitalize
+            a
+                color: rgba(255, 255, 255, 0.45)
+                &:hover
+                    color: white
+    .scroll-top
+        +size(55px)
+        font-size: 20px
+        line-height: 55px
+        border-radius: 14px
+        background: $secondary-color
+        +poLT(calc(50% - 27px), -27px)
+        +res-bl(lg)
+            +size(45px)
+            font-size: 16px
+            line-height: 45px
+            left: calc(50% - 22px)
+            
+/* Footer One */
+.main-footer.footer-one
+    background: #151F39
+    color: rgba(255, 255, 255, 0.45)
+    .widget-links
+        +res-ab(xl)
+            +container(max-content)
+ 
+/* Footer Two */
+.main-footer.footer-two
+    z-index: 1
+    position: relative
+    background-color: $heading-color
+    color: rgba(255, 255, 255, 0.45)
+    .widget-links
+        +res-ab(xl)
+            margin-left: auto
+            max-width: max-content
+    .footer-bottom
+        color: white
+        border-top: none
+        .copyright-text a
+            color: $secondary-color
+        .footer-bottom-menu a
+            color: white
+            &:hover
+                color: $secondary-color
+    &:after
+        z-index: -1
+        content: ''
+        +size(600px)
+        +poRB(-300px)
+        filter: blur(300px)
+        background: $primary-color
+        animation: 10s zoomInOut infinite
+            
+.footer-inner
+    border-radius: 20px
+    background: #00131F
+    padding: 80px 80px 30px
+    +res-bl(ms)
+        +gapLR(padding, 25px)
+    
+.footer-top-newsletter
+    z-index: 1
+    position: relative
+    &:after,
+    &:before
+        content: ''
+        z-index: -1
+        bottom: 20px
+        +size(60px, 85px)
+        position: absolute
+        background-size: 100% 100%
+    &:before
+        left: 12%
+        background-image: url(../images/shapes/leaf1.png)
+    &:after
+        right: 12%
+        background-image: url(../images/shapes/leaf2.png)
+    
+/* Footer Three */
+.main-footer.footer-three
+    .widget-links
+        +res-ab(xl)
+            margin-left: auto
+            max-width: max-content
+    .copyright-text
+        color: rgba(255, 255, 255, 0.66)
+    .scroll-top
+        +res-ab(lg)
+            left: calc(62% - 27px);
+        
+.for-middle-border
+    +res-ab(lg)
+        position: relative
+        &:after
+            content: ''
+            +poLT(62%, 0)
+            +size(1px, 100%)
+            background: rgba(255, 255, 255, 0.1)
+        
+.footer-btns
+    .theme-btn
+        margin-top: 15px
+        &:not(:last-child)
+            margin-right: 20px
+        i
+            transform: rotate(0)
+            
+.footer-cta
+    display: flex
+    flex-wrap: wrap
+    align-items: center
+    .logo
+        margin-right: auto
+        margin-bottom: 25px
+    h3
+        margin-bottom: 25px
+        +res-ab(md)
+            margin-right: 8%
+        +res-bl(sm)
+            font-size: 25px
+    .theme-btn
+        margin-bottom: 25px
+        
+.footer-cta-two
+    overflow: hidden
+    position: relative
+    padding: 60px 80px
+    border-radius: 55px
+    +res-bl(xl)
+        +gapLR(padding, 40px)
+    +res-bl(ms)
+        +gapLR(padding, 20px)
+    .section-title h2
+        +res-bt(lg, xl)
+            font-size: 40px
+    p
+        margin-bottom: 0
+    &:after
+        +poRT(0)
+        content: ''
+        z-index: -1
+        +size(33%, 100%)
+        background: url(../images/shapes/cta-btn-line-bg.png)
+    
+.footer-cta-shape
+    +poRT(36%, 30%)
+    z-index: -1
+    max-width: 20%
+    +res-bl(xl)
+        opacity: 0.15
+        
+/* Footer Four */
+.main-footer.footer-four
+    .widget-newsletter
+        h3
+            color: white
+            +res-bl(md)
+                font-size: 25px
+        .icon-list
+            display: flex
+            flex-wrap: wrap
+            margin-right: -25px
+            li
+                margin: 10px 25px 0 0
+                color: rgba(255, 255, 255, 0.65)
+                i
+                    margin-top: 0
+    .widget-links
+        +res-ab(xl)
+            +container(max-content)
+    .copyright-text a
+        color: $primary-color
+        
+        
+/* Footer BG Light */
+.main-footer.text-black
+    .footer-title
+        color: $heading-color
+    .widget-links ul li a,
+    .widget-contact ul li a,
+    .footer-bottom-menu ul li a
+        color: $base-color
+    .widget-contact ul li i
+        color: $secondary-color
+    .footer-bottom
+        .copyright-text a
+            color: $primary-color
+            font-weight: bold
+    .social-style-one
+        a
+            color: $heading-color
+            &:not(:hover)
+                background: rgba(0, 0, 0, 0.1)
+        
+.main-footer.footer-six
+    .footer-newsletter
+        border-radius: 0
+        background: $secondary-color
+        .newsletter-form button
+            color: $heading-color
+            background: $primary-color
+        +res-ab(lg)
+            +gapTB(padding, 65px)
+    .widget-links
+        +res-ab(xl)
+            +container(max-content)
+    .footer-bottom
+        border-color: $border-color
+        .scroll-top
+            background: $primary-color
+
+/* Footer Five */
+.main-footer.footer-five
+    .footer-widget
+        .section-title
+            h2
+                +res-bt(md, xl)
+                    font-size: 38px
+        ul li
+            &:not(:last-child)
+                margin-bottom: 20px
+    .widget-contact-info
+        max-width: 200px
+        +res-ab(xl)
+            +gapLR(margin, auto)
+        ul li a
+            font-weight: 600
+    .newsletter-form
+        background: #F6F6F6
+        border-radius: 20px
+        border: 1px solid rgba(0, 0, 0, .1)
+        margin-top: 55px
+        button
+            background: $primary-color
+    .radio-part
+        display: flex
+        margin-top: 20px
+        margin-left: 20px
+        align-items: center
+        input
+            +size(24px)
+            opacity: 0.25
+            margin-right: 10px
+            &:checked
+                opacity: 1
+        label
+            font-weight: 400
+            margin-bottom: 0

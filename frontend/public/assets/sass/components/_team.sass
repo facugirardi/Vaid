@@ -1,0 +1,33 @@
+/*******************************************************/
+/********************** ## Team **********************/
+/*******************************************************/
+.team-member
+    text-align: center
+    margin-bottom: 40px
+    .image
+        position: relative
+        margin-bottom: 20px
+        img
+            border-radius: 12px
+        .social-media
+            opacity: 0
+            transition: 0.5s
+            +poLB(50%, 50px)
+            padding: 10px 25px
+            border-radius: 12px
+            width: max-content
+            background: $primary-color
+            transform: translate(-50%)
+            a
+                color: white
+                margin: 0 8px
+                font-size: 14px
+    .description
+        h5
+            margin-bottom: 0
+        .designation
+            color: $primary-color
+    &:hover
+        .social-media
+            opacity: 1
+            bottom: 20px

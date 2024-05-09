@@ -1,0 +1,376 @@
+/*******************************************************/
+/******************* ## Iconic Box *******************/
+/*******************************************************/
+.iconic-box
+    z-index: 1
+    overflow: hidden
+    transition: 0.5s
+    background: white
+    position: relative
+    margin-bottom: 30px
+    border-radius: 15px
+    padding: 40px 50px 35px
+    +res-bl(xs)
+        +gapLR(padding, 25px)
+    .icon
+        z-index: 1
+        line-height: 1
+        font-size: 65px
+        transition: 0.5s
+        position: relative
+        margin-bottom: 45px
+        color: $primary-color
+        &:after
+            content: ''
+            +size(80px)
+            z-index: -1
+            +poLT(5px, 10px)
+            transition: 0.5s
+            border-radius: 50%
+            transition-delay: 0.2s
+            background: $lighter-color
+    .content
+        h4
+            margin-bottom: 15px
+        p
+            transition: 0.5s
+            font-size: 18px
+            font-weight: 500
+        hr
+            transition: 0.5s
+            margin-top: 30px
+            margin-bottom: 20px
+        .read-more
+            margin-top: 8px
+    .bg
+        z-index: -1
+        +poRT(-20px)
+        max-width: 60%
+        transition: 0.5s
+    &:hover
+        background: $primary-color
+        .icon,
+        .read-more,
+        .content p,
+        .content h4 a
+                color: white
+        .icon:after
+            background: rgba(255, 255, 255, 0.1)
+        hr
+            opacity: 0.15
+            background: white
+        .bg
+            top: 0
+            right: 0
+    &.style-two
+        background: rgba(217, 217, 217, 0.10)
+        border: 1px solid rgba(255, 255, 255, 0.1)
+        .icon
+            color: white
+            &:after
+                background: rgba(255, 255, 255, 0.05)
+        h5
+            margin-bottom: 15px
+            a
+                color: white
+        p
+            font-size: 16px
+            font-weight: 400
+            color: rgba(255, 255, 255, 0.55)
+        .read-more
+            color: rgba(255, 255, 255, 0.55)
+        &:hover
+            .icon
+                color: $primary-color
+            h5 a
+                color: $primary-color
+                text-decoration: underline
+            p
+                color: rgba(255, 255, 255, 0.55)
+            .read-more
+                color: white
+                
+    &.style-three
+        padding: 30px 40px 18px
+        background: rgba(255, 255, 255, 0.05)
+        border: 1px solid rgba(255, 255, 255, 0.1)
+        +res-bl(xs)
+            +gapLR(padding, 33px)
+        .icon
+            margin-bottom: 20px
+            &:after
+                display: none
+        h5
+            margin-bottom: 18px
+            letter-spacing: -0.66px
+            a
+                color: white
+        p
+            font-size: 16px
+            font-weight: 400
+            color: rgba(255, 255, 255, 0.55)
+        .bg
+            top: 25px
+            right: 30px
+        &:hover
+            p
+                color: rgba(255, 255, 255, 0.55)
+            
+    &.style-four
+        background: white
+        text-align: center
+        border-radius: 20px
+        padding: 38px 28px 15px
+        border: 3px solid white
+        box-shadow: 0px 10px 60px rgba(155, 155, 155, 0.10)
+        .icon
+            +size(70px)
+            font-size: 27px
+            line-height: 70px
+            text-align: center
+            margin: 0 auto 30px
+            color: $primary-color
+            &:after
+                top: 0
+                left: 0
+                +size(100%)
+                opacity: 0.1
+                background: $primary-color
+        h5
+            font-size: 20px
+            margin-bottom: 12px
+        p
+            font-size: 16px
+            font-weight: 400
+        &:hover
+            border-color: $primary-color
+            .icon
+                color: white
+                &:after
+                    opacity: 1
+            p
+                color: $base-color
+            
+    &.style-five
+        background: transparent
+        padding: 30px 50px 15px
+        border: 1px solid $border-color
+        +res-bl(xs)
+            +gapLR(padding, 40px)
+        .icon
+            font-size: 55px
+            margin-bottom: 10px
+            color: $primary-color
+            &:after
+                display: none
+        p
+            font-size: 16px
+            font-weight: 400
+        &:hover
+            background: white
+            border-color: white
+            box-shadow: 0px 10px 60px rgba(0, 0, 0, 0.10)
+            p
+                color: $base-color
+            
+    &.style-six
+        background: #F9F9FF
+        padding: 40px 35px 20px
+        border: 1px solid $border-color
+        +res-bl(xs)
+            +gapLR(padding, 30px)
+        .icon
+            font-size: 55px
+            margin-bottom: 25px
+            color: $secondary-color
+            &:after
+                display: none
+        h5
+            font-size: 20px
+            margin-bottom: 15px
+            letter-spacing: -0.4px
+        p
+            font-size: 16px
+            font-weight: 400
+        &:hover
+            background: white
+            border-color: white
+            box-shadow: 0px 10px 60px rgba(0, 0, 0, 0.10)
+            h5 a
+                text-decoration: underline
+            p
+                color: $base-color
+            
+    &.style-seven
+        padding: 35px 40px 15px
+        background: transparent
+        +res-bl(xs)
+            +gapLR(padding, 30px)
+        &:after
+            +poLT(0)
+            content: ''
+            +size(100%)
+            z-index: -1
+            opacity: 0.05
+            background: $primary-color
+        .icon
+            +size(60px)
+            color: white
+            font-size: 30px
+            line-height: 60px
+            text-align: center
+            border-radius: 12px
+            margin-bottom: 20px
+            background: $primary-color
+            box-shadow: 0px 0px 30px 0px rgba(0, 0, 0, 0.2)
+            &:after
+                display: none
+        .icon-title
+            display: flex
+            align-items: center
+            margin-bottom: 15px
+            i
+                flex: none
+                font-size: 20px
+                margin-right: 15px
+                +circle(white, 50px)
+                color: $primary-color
+            h5
+                margin-bottom: 0
+        h5
+            font-size: 20px
+            margin-bottom: 10px
+            letter-spacing: -0.4px
+        p
+            font-size: 16px
+            font-weight: 400
+        .bg
+            top: auto
+            right: -20px
+            bottom: -20px
+        &:hover
+            background: $primary-color
+            .icon
+                background: white
+                color: $primary-color
+            h5 a
+                color: white
+            .bg
+                right: 0
+                bottom: 0
+        &.border
+            padding-top: 30px
+            padding-bottom: 10px
+            
+    &.style-eight
+        background: $lighter-color
+        padding: 35px 40px 15px
+        +res-bl(xs)
+            +gapLR(padding, 30px)
+        .icon
+            font-size: 50px
+            margin-bottom: 25px
+            color: $heading-color
+            &:after
+                display: none
+        hr
+            margin-bottom: 22px
+        h5
+            font-size: 20px
+            margin-bottom: 10px
+            letter-spacing: -0.4px
+        p
+            font-size: 16px
+            font-weight: 400
+        .bg
+            top: 20px
+            right: 40px
+        &:hover
+            background: $primary-color
+            .icon
+                color: white
+            h5 a
+                color: white
+                
+    &.style-nine
+        padding: 0
+        border-radius: 0
+        background: transparent
+        .icon
+            +size(45px)
+            font-size: 20px
+            line-height: 45px
+            text-align: center
+            margin-bottom: 22px
+            color: $primary-color
+            &:after
+                top: 0
+                left: 0
+                +size(100%)
+                opacity: 0.1
+                background: $primary-color
+        h5
+            font-size: 20px
+            margin-bottom: 10px
+        p
+            font-size: 16px
+            font-weight: 400
+            margin-bottom: 0
+        &:hover
+            p
+                color: $base-color
+        &.text-white
+            .icon
+                +size(auto)
+                color: white
+                font-size: 30px
+                text-align: left
+                margin-bottom: 16px
+                &:after
+                    display: none
+            p
+                color: rgba(255, 255, 255, 0.65)
+                
+    &.style-ten
+        padding-top: 0
+        overflow: initial
+        text-align: center
+        margin-bottom: 75px
+        padding-bottom: 15px
+        border: 1px solid $border-color
+        box-shadow: 0px 10px 60px rgba(141, 141, 141, 0.10)
+        .icon
+            font-size: 45px
+            margin-top: -45px
+            margin-bottom: 20px
+            +circle(white, 92px)
+            line-height: 82px
+            display: inline-block
+            border: 5px solid $border-color
+            &:after
+                display: none
+        p
+            font-size: 16px
+            font-weight: 400
+        &:hover
+            background: white
+            box-shadow: none
+            .icon
+                border-color: white
+                background: $primary-color
+            h5 a
+                text-decoration: underline
+            p
+                color: $base-color
+            
+
+.generative-ai-area
+    &:after
+        content: ''
+        z-index: -1
+        +size(500px)
+        +absmiddle()
+        opacity: 0.7
+        border-radius: 50%
+        filter: blur(500px)
+        background: #FEC458

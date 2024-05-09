@@ -1,0 +1,70 @@
+/*******************************************************/
+/******************** ## CTA Area *********************/
+/*******************************************************/
+.cta-area
+    z-index: 1
+    position: relative
+    &:before
+        +poLT(0)
+        z-index: -1
+        content: ''
+        +size(100%)
+        background: linear-gradient(180deg, rgba(0, 0, 0, 0.90) 0%, rgba(0, 0, 0, 0.30) 100%)
+    
+/* Footer top CTA */
+.footer-top-cta-area
+    position: relative
+    z-index: 1
+    &:after
+        +poLB(0)
+        z-index: -1
+        content: ''
+        +size(100%, 100px)
+        background: $heading-color
+    
+
+.footer-top-cta-wrap
+    padding: 80px 150px
+    border-radius: 20px
+    background-size: cover
+    background-position: center
+    +res-bl(xxl)
+        +gapLR(padding, 50px)
+    +res-bl(xs)
+        +gapLR(padding, 25px)
+    
+.footer-top-cta-content
+    .subtitle-one.style-three
+        border: 2px solid white
+    .theme-btn
+        background: white
+        color: $heading-color
+        
+/* Home Seven */
+.cta-left-content
+    display: flex
+    border-radius: 12px
+    align-items: center
+    padding: 50px 50px 25px
+    background-repeat: no-repeat
+    background-position: left bottom
+    +res-bl(xl)
+        flex-wrap: wrap
+    +res-bl(xs)
+        +gapLR(padding, 25px)
+    .subtitle
+        font-weight: 600
+        color: $heading-color
+    .theme-btn.style-four
+        flex: none
+        border: 2px solid $heading-color
+        background-image: linear-gradient(to left, transparent 50%, $heading-color 50%)
+        
+.cta-right-image
+    height: 100%
+    min-height: 200px
+    border-radius: 12px
+    background-size: cover
+    background-position: center
+    
+    

@@ -1,0 +1,230 @@
+@charset "UTF-8";
+@font-face {
+  font-family: "flaticon_akpager";
+  src: url("./flaticon_akpager.ttf?e788e3b40871e984f6077ccf69099be0") format("truetype"), url("./flaticon_akpager.woff?e788e3b40871e984f6077ccf69099be0") format("woff"), url("./flaticon_akpager.woff2?e788e3b40871e984f6077ccf69099be0") format("woff2"), url("./flaticon_akpager.eot?e788e3b40871e984f6077ccf69099be0#iefix") format("embedded-opentype"), url("./flaticon_akpager.svg?e788e3b40871e984f6077ccf69099be0#flaticon_akpager") format("svg"); }
+
+i[class^="flaticon-"]:before, i[class*=" flaticon-"]:before {
+  font-family: flaticon_akpager !important;
+  font-style: normal;
+  font-weight: normal !important;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+.flaticon-telegram:before {
+  content: ""; }
+
+.flaticon-hexagons:before {
+  content: ""; }
+
+.flaticon-layers:before {
+  content: ""; }
+
+.flaticon-analytics:before {
+  content: ""; }
+
+.flaticon-artificial-intelligence:before {
+  content: ""; }
+
+.flaticon-machine-learning:before {
+  content: ""; }
+
+.flaticon-access-control:before {
+  content: ""; }
+
+.flaticon-placeholder:before {
+  content: ""; }
+
+.flaticon-collaborate:before {
+  content: ""; }
+
+.flaticon-project-management:before {
+  content: ""; }
+
+.flaticon-security:before {
+  content: ""; }
+
+.flaticon-sketching:before {
+  content: ""; }
+
+.flaticon-goal:before {
+  content: ""; }
+
+.flaticon-web-address:before {
+  content: ""; }
+
+.flaticon-efficiency:before {
+  content: ""; }
+
+.flaticon-compass:before {
+  content: ""; }
+
+.flaticon-market-research:before {
+  content: ""; }
+
+.flaticon-digital-marketing:before {
+  content: ""; }
+
+.flaticon-double-quotes:before {
+  content: ""; }
+
+.flaticon-open-book:before {
+  content: ""; }
+
+.flaticon-help:before {
+  content: ""; }
+
+.flaticon-new-job:before {
+  content: ""; }
+
+.flaticon-self-development:before {
+  content: ""; }
+
+.flaticon-goal-1:before {
+  content: ""; }
+
+.flaticon-pen-tool:before {
+  content: ""; }
+
+.flaticon-code:before {
+  content: ""; }
+
+.flaticon-megaphone:before {
+  content: ""; }
+
+.flaticon-diaphragm:before {
+  content: ""; }
+
+.flaticon-caduceus:before {
+  content: ""; }
+
+.flaticon-app-development:before {
+  content: ""; }
+
+.flaticon-healthy-lifestyle-logo:before {
+  content: ""; }
+
+.flaticon-seeding:before {
+  content: ""; }
+
+.flaticon-self-development-1:before {
+  content: ""; }
+
+.flaticon-book:before {
+  content: ""; }
+
+.flaticon-creative-team:before {
+  content: ""; }
+
+.flaticon-graduate:before {
+  content: ""; }
+
+.flaticon-online-education:before {
+  content: ""; }
+
+.flaticon-star:before {
+  content: ""; }
+
+.flaticon-review:before {
+  content: ""; }
+
+.flaticon-layers-1:before {
+  content: ""; }
+
+.flaticon-online-registration:before {
+  content: ""; }
+
+.flaticon-tap:before {
+  content: ""; }
+
+.flaticon-web-browser:before {
+  content: ""; }
+
+.flaticon-web-content:before {
+  content: ""; }
+
+.flaticon-optimization:before {
+  content: ""; }
+
+.flaticon-educational-school-hand-drawn-tools:before {
+  content: ""; }
+
+.flaticon-paper-airplane-toy:before {
+  content: ""; }
+
+.flaticon-diamond:before {
+  content: ""; }
+
+.flaticon-quotation-mark:before {
+  content: ""; }
+
+.flaticon-scribble:before {
+  content: ""; }
+
+.flaticon-machine-learning-1:before {
+  content: ""; }
+
+.flaticon-payment-gateway:before {
+  content: ""; }
+
+.flaticon-speak:before {
+  content: ""; }
+
+.flaticon-customer-service:before {
+  content: ""; }
+
+.flaticon-customer-service-1:before {
+  content: ""; }
+
+.flaticon-idea:before {
+  content: ""; }
+
+.flaticon-earning:before {
+  content: ""; }
+
+.flaticon-meeting:before {
+  content: ""; }
+
+.flaticon-financial-advisor:before {
+  content: ""; }
+
+.flaticon-brand-identity:before {
+  content: ""; }
+
+.flaticon-technology:before {
+  content: ""; }
+
+.flaticon-talent-search:before {
+  content: ""; }
+
+.flaticon-zigzag:before {
+  content: ""; }
+
+.flaticon-smartphone:before {
+  content: ""; }
+
+.flaticon-payment-method:before {
+  content: ""; }
+
+.flaticon-data:before {
+  content: ""; }
+
+.flaticon-technology-1:before {
+  content: ""; }
+
+.flaticon-mortgage:before {
+  content: ""; }
+
+.flaticon-financial:before {
+  content: ""; }
+
+.flaticon-revenue:before {
+  content: ""; }
+
+.flaticon-debit-card:before {
+  content: ""; }
+
+.flaticon-money-transfer:before {
+  content: ""; }

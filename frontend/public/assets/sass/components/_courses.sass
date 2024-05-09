@@ -1,0 +1,103 @@
+/*******************************************************/
+/********************  ## Courses  *******************/
+/*******************************************************/
+.course-nav
+    li
+        z-index: 1
+        cursor: pointer
+        @extend %heading
+        transition: 0.5s
+        padding: 11px 25px
+        background: white
+        margin-bottom: 10px
+        border-radius: 12px
+        position: relative
+        +flexcenter(space-between)
+        box-shadow: 0px 10px 60px 0px rgba(185, 102, 231, 0.20)
+        i
+            margin-left: 10px
+            transform: rotate(-40deg)
+        &:before
+            +poLT(0)
+            content: ''
+            opacity: 0
+            +size(100%)
+            z-index: -1
+            transition: 0.5s
+            border-radius: 12px
+            background: linear-gradient(94deg, #B065E7 13.66%, #3157EF 81.89%)
+        &.active
+            color: white
+            &:before
+                opacity: 1
+
+.course-item
+    padding: 5px
+    background: white
+    margin-bottom: 30px
+    border-radius: 20px
+    box-shadow: 0px 10px 60px 0px rgba(185, 102, 231, 0.20) 
+    .image
+        position: relative
+        &:before
+            +poLT(0)
+            z-index: 1
+            opacity: 0
+            content: ''
+            +size(100%)
+            transition: 0.5s
+            border-radius: 12px
+            background: linear-gradient(94deg, rgba(176, 101, 231, 0.75) 13.66%, rgba(49, 87, 239, 0.75) 81.89%)
+        img
+            width: 100%
+            border-radius: 12px
+        .details-btn
+            z-index: 2
+            +size(50px)
+            opacity: 0
+            +absmiddle()
+            font-size: 18px
+            background: white
+            line-height: 50px
+            color: $primary-color
+            i
+                transform: rotate(-45deg)
+    .content
+        padding: 20px 30px 30px
+        .category
+            font-size: 14px
+            font-weight: 600
+            margin-bottom: 5px
+            display: inline-block
+            color: $primary-color
+        h6
+            margin-bottom: 15px
+            +res-ab(xs)
+                font-size: 18px
+            a:hover
+                text-decoration: underline
+        .author
+            display: flex
+            font-size: 14px
+            font-weight: 600
+            align-items: center
+            img
+                +size(30px)
+                border-radius: 50%
+                margin-right: 10px
+    .duration-ratting
+        padding: 5px 30px
+        border-radius: 18px
+        background: #F9F9FF
+        +flexcenter(space-between)
+        border: 1px solid $border-color
+        .ratting
+            i
+                color: #FEA858
+                font-size: 14px
+    &:hover
+        .image
+            &:before
+                opacity: 1
+            .details-btn
+                opacity: 1

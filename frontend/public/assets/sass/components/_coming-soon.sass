@@ -1,0 +1,42 @@
+/*******************************************************/
+/******************** ## Coming Soon ********************/
+/*******************************************************/
+.coming-soon-area
+    display: flex
+    min-height: 100vh
+    align-items: center
+
+.coming-soon-content
+    h1
+        line-height: 1.1
+        margin-bottom: 25px
+        +res-bl(xl)
+            font-size: 60px
+        +res-bl(sm)
+            font-size: 50px
+        +res-bl(ms)
+            font-size: 45px
+        +res-bl(xs)
+            font-size: 38px
+
+.coming-soon-wrap
+    display: flex
+    flex-wrap: wrap
+    +gapLR(margin, -10px)
+    li
+        @extend %h5
+        margin: 10px
+        line-height: 1
+        background: white
+        +flexcenter(center)
+        border-radius: 15px
+        padding: 10px 15px 25px
+        flex-direction: column
+        width: calc(25% - 20px)
+        +res-bl(sm)
+            width: calc(50% - 20px)
+        span
+            font-size: 65px
+            color: $primary-color
+            +res-bl(xl)
+                font-size: 55px

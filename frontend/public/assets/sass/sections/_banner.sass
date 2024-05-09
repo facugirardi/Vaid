@@ -1,0 +1,61 @@
+/*******************************************************/
+/******************* ## Page Banner *******************/
+/*******************************************************/
+.banner-inner
+    h1
+        margin-bottom: 30px
+        +res-bl(xl)
+            font-size: 55px
+            margin-bottom: 20px
+        +res-bl(md)
+            font-size: 40px
+            margin-bottom: 15px
+        +res-bl(sm)
+            font-size: 36px
+            
+    h2
+        margin-bottom: 35px
+        +res-bl(xl)
+            font-size: 40px
+            margin-bottom: 20px
+        +res-bl(md)
+            font-size: 35px
+        +res-bl(sm)
+            font-size: 30px
+            
+    .blog-meta
+        +gapTB(padding, 0)
+        justify-content: center
+        li a
+            color: white
+            
+.breadcrumb
+    padding: 0
+    margin: 0
+    font-size: 24px
+    background: transparent
+    text-transform: capitalize
+    +res-bl(xl)
+        font-size: 20px
+    +res-bl(sm)
+        font-size: 18px
+    +res-bl(xs)
+        font-size: 16px
+    .breadcrumb-item
+        padding: 0
+        color: white
+        font-weight: 400
+        +flexcenter(center)
+        a
+            color: white
+        &.active
+            text-decoration: underline
+            text-underline-offset: 3px
+            text-decoration-thickness: 1px
+        &+.breadcrumb-item::before
+            +gapLR(margin, 15px)
+            flex: none
+            color: white
+            content: "\f105"
+            font-family: "Font Awesome 5 Pro"
+            

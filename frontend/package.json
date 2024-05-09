@@ -1,0 +1,24 @@
+{
+  "name": "vaid",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "aos": "^2.3.4",
+    "isotope-layout": "^3.0.6",
+    "next": "14.1.0",
+    "react": "^18",
+    "react-bootstrap": "^1.6.1",
+    "react-countup": "^6.5.0",
+    "react-dom": "^18",
+    "react-nice-select": "^1.0.6",
+    "react-player": "^2.14.1",
+    "react-slick": "^0.30.2",
+    "react-visibility-sensor": "^5.1.1"
+  }
+}

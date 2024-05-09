@@ -1,0 +1,313 @@
+$flaticon_akpager-font: "flaticon_akpager";
+
+@font-face {
+    font-family: $flaticon_akpager-font;
+    src: url("./flaticon_akpager.ttf?e788e3b40871e984f6077ccf69099be0") format("truetype"),
+url("./flaticon_akpager.woff?e788e3b40871e984f6077ccf69099be0") format("woff"),
+url("./flaticon_akpager.woff2?e788e3b40871e984f6077ccf69099be0") format("woff2"),
+url("./flaticon_akpager.eot?e788e3b40871e984f6077ccf69099be0#iefix") format("embedded-opentype"),
+url("./flaticon_akpager.svg?e788e3b40871e984f6077ccf69099be0#flaticon_akpager") format("svg");
+}
+
+i[class^="flaticon-"]:before, i[class*=" flaticon-"]:before {
+    font-family: flaticon_akpager !important;
+    font-style: normal;
+    font-weight: normal !important;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+$flaticon_akpager-map: (
+    "telegram": "\f101",
+    "hexagons": "\f102",
+    "layers": "\f103",
+    "analytics": "\f104",
+    "artificial-intelligence": "\f105",
+    "machine-learning": "\f106",
+    "access-control": "\f107",
+    "placeholder": "\f108",
+    "collaborate": "\f109",
+    "project-management": "\f10a",
+    "security": "\f10b",
+    "sketching": "\f10c",
+    "goal": "\f10d",
+    "web-address": "\f10e",
+    "efficiency": "\f10f",
+    "compass": "\f110",
+    "market-research": "\f111",
+    "digital-marketing": "\f112",
+    "double-quotes": "\f113",
+    "open-book": "\f114",
+    "help": "\f115",
+    "new-job": "\f116",
+    "self-development": "\f117",
+    "goal-1": "\f118",
+    "pen-tool": "\f119",
+    "code": "\f11a",
+    "megaphone": "\f11b",
+    "diaphragm": "\f11c",
+    "caduceus": "\f11d",
+    "app-development": "\f11e",
+    "healthy-lifestyle-logo": "\f11f",
+    "seeding": "\f120",
+    "self-development-1": "\f121",
+    "book": "\f122",
+    "creative-team": "\f123",
+    "graduate": "\f124",
+    "online-education": "\f125",
+    "star": "\f126",
+    "review": "\f127",
+    "layers-1": "\f128",
+    "online-registration": "\f129",
+    "tap": "\f12a",
+    "web-browser": "\f12b",
+    "web-content": "\f12c",
+    "optimization": "\f12d",
+    "educational-school-hand-drawn-tools": "\f12e",
+    "paper-airplane-toy": "\f12f",
+    "diamond": "\f130",
+    "quotation-mark": "\f131",
+    "scribble": "\f132",
+    "machine-learning-1": "\f133",
+    "payment-gateway": "\f134",
+    "speak": "\f135",
+    "customer-service": "\f136",
+    "customer-service-1": "\f137",
+    "idea": "\f138",
+    "earning": "\f139",
+    "meeting": "\f13a",
+    "financial-advisor": "\f13b",
+    "brand-identity": "\f13c",
+    "technology": "\f13d",
+    "talent-search": "\f13e",
+    "zigzag": "\f13f",
+    "smartphone": "\f140",
+    "payment-method": "\f141",
+    "data": "\f142",
+    "technology-1": "\f143",
+    "mortgage": "\f144",
+    "financial": "\f145",
+    "revenue": "\f146",
+    "debit-card": "\f147",
+    "money-transfer": "\f148",
+);
+
+.flaticon-telegram:before {
+    content: map-get($flaticon_akpager-map, "telegram");
+}
+.flaticon-hexagons:before {
+    content: map-get($flaticon_akpager-map, "hexagons");
+}
+.flaticon-layers:before {
+    content: map-get($flaticon_akpager-map, "layers");
+}
+.flaticon-analytics:before {
+    content: map-get($flaticon_akpager-map, "analytics");
+}
+.flaticon-artificial-intelligence:before {
+    content: map-get($flaticon_akpager-map, "artificial-intelligence");
+}
+.flaticon-machine-learning:before {
+    content: map-get($flaticon_akpager-map, "machine-learning");
+}
+.flaticon-access-control:before {
+    content: map-get($flaticon_akpager-map, "access-control");
+}
+.flaticon-placeholder:before {
+    content: map-get($flaticon_akpager-map, "placeholder");
+}
+.flaticon-collaborate:before {
+    content: map-get($flaticon_akpager-map, "collaborate");
+}
+.flaticon-project-management:before {
+    content: map-get($flaticon_akpager-map, "project-management");
+}
+.flaticon-security:before {
+    content: map-get($flaticon_akpager-map, "security");
+}
+.flaticon-sketching:before {
+    content: map-get($flaticon_akpager-map, "sketching");
+}
+.flaticon-goal:before {
+    content: map-get($flaticon_akpager-map, "goal");
+}
+.flaticon-web-address:before {
+    content: map-get($flaticon_akpager-map, "web-address");
+}
+.flaticon-efficiency:before {
+    content: map-get($flaticon_akpager-map, "efficiency");
+}
+.flaticon-compass:before {
+    content: map-get($flaticon_akpager-map, "compass");
+}
+.flaticon-market-research:before {
+    content: map-get($flaticon_akpager-map, "market-research");
+}
+.flaticon-digital-marketing:before {
+    content: map-get($flaticon_akpager-map, "digital-marketing");
+}
+.flaticon-double-quotes:before {
+    content: map-get($flaticon_akpager-map, "double-quotes");
+}
+.flaticon-open-book:before {
+    content: map-get($flaticon_akpager-map, "open-book");
+}
+.flaticon-help:before {
+    content: map-get($flaticon_akpager-map, "help");
+}
+.flaticon-new-job:before {
+    content: map-get($flaticon_akpager-map, "new-job");
+}
+.flaticon-self-development:before {
+    content: map-get($flaticon_akpager-map, "self-development");
+}
+.flaticon-goal-1:before {
+    content: map-get($flaticon_akpager-map, "goal-1");
+}
+.flaticon-pen-tool:before {
+    content: map-get($flaticon_akpager-map, "pen-tool");
+}
+.flaticon-code:before {
+    content: map-get($flaticon_akpager-map, "code");
+}
+.flaticon-megaphone:before {
+    content: map-get($flaticon_akpager-map, "megaphone");
+}
+.flaticon-diaphragm:before {
+    content: map-get($flaticon_akpager-map, "diaphragm");
+}
+.flaticon-caduceus:before {
+    content: map-get($flaticon_akpager-map, "caduceus");
+}
+.flaticon-app-development:before {
+    content: map-get($flaticon_akpager-map, "app-development");
+}
+.flaticon-healthy-lifestyle-logo:before {
+    content: map-get($flaticon_akpager-map, "healthy-lifestyle-logo");
+}
+.flaticon-seeding:before {
+    content: map-get($flaticon_akpager-map, "seeding");
+}
+.flaticon-self-development-1:before {
+    content: map-get($flaticon_akpager-map, "self-development-1");
+}
+.flaticon-book:before {
+    content: map-get($flaticon_akpager-map, "book");
+}
+.flaticon-creative-team:before {
+    content: map-get($flaticon_akpager-map, "creative-team");
+}
+.flaticon-graduate:before {
+    content: map-get($flaticon_akpager-map, "graduate");
+}
+.flaticon-online-education:before {
+    content: map-get($flaticon_akpager-map, "online-education");
+}
+.flaticon-star:before {
+    content: map-get($flaticon_akpager-map, "star");
+}
+.flaticon-review:before {
+    content: map-get($flaticon_akpager-map, "review");
+}
+.flaticon-layers-1:before {
+    content: map-get($flaticon_akpager-map, "layers-1");
+}
+.flaticon-online-registration:before {
+    content: map-get($flaticon_akpager-map, "online-registration");
+}
+.flaticon-tap:before {
+    content: map-get($flaticon_akpager-map, "tap");
+}
+.flaticon-web-browser:before {
+    content: map-get($flaticon_akpager-map, "web-browser");
+}
+.flaticon-web-content:before {
+    content: map-get($flaticon_akpager-map, "web-content");
+}
+.flaticon-optimization:before {
+    content: map-get($flaticon_akpager-map, "optimization");
+}
+.flaticon-educational-school-hand-drawn-tools:before {
+    content: map-get($flaticon_akpager-map, "educational-school-hand-drawn-tools");
+}
+.flaticon-paper-airplane-toy:before {
+    content: map-get($flaticon_akpager-map, "paper-airplane-toy");
+}
+.flaticon-diamond:before {
+    content: map-get($flaticon_akpager-map, "diamond");
+}
+.flaticon-quotation-mark:before {
+    content: map-get($flaticon_akpager-map, "quotation-mark");
+}
+.flaticon-scribble:before {
+    content: map-get($flaticon_akpager-map, "scribble");
+}
+.flaticon-machine-learning-1:before {
+    content: map-get($flaticon_akpager-map, "machine-learning-1");
+}
+.flaticon-payment-gateway:before {
+    content: map-get($flaticon_akpager-map, "payment-gateway");
+}
+.flaticon-speak:before {
+    content: map-get($flaticon_akpager-map, "speak");
+}
+.flaticon-customer-service:before {
+    content: map-get($flaticon_akpager-map, "customer-service");
+}
+.flaticon-customer-service-1:before {
+    content: map-get($flaticon_akpager-map, "customer-service-1");
+}
+.flaticon-idea:before {
+    content: map-get($flaticon_akpager-map, "idea");
+}
+.flaticon-earning:before {
+    content: map-get($flaticon_akpager-map, "earning");
+}
+.flaticon-meeting:before {
+    content: map-get($flaticon_akpager-map, "meeting");
+}
+.flaticon-financial-advisor:before {
+    content: map-get($flaticon_akpager-map, "financial-advisor");
+}
+.flaticon-brand-identity:before {
+    content: map-get($flaticon_akpager-map, "brand-identity");
+}
+.flaticon-technology:before {
+    content: map-get($flaticon_akpager-map, "technology");
+}
+.flaticon-talent-search:before {
+    content: map-get($flaticon_akpager-map, "talent-search");
+}
+.flaticon-zigzag:before {
+    content: map-get($flaticon_akpager-map, "zigzag");
+}
+.flaticon-smartphone:before {
+    content: map-get($flaticon_akpager-map, "smartphone");
+}
+.flaticon-payment-method:before {
+    content: map-get($flaticon_akpager-map, "payment-method");
+}
+.flaticon-data:before {
+    content: map-get($flaticon_akpager-map, "data");
+}
+.flaticon-technology-1:before {
+    content: map-get($flaticon_akpager-map, "technology-1");
+}
+.flaticon-mortgage:before {
+    content: map-get($flaticon_akpager-map, "mortgage");
+}
+.flaticon-financial:before {
+    content: map-get($flaticon_akpager-map, "financial");
+}
+.flaticon-revenue:before {
+    content: map-get($flaticon_akpager-map, "revenue");
+}
+.flaticon-debit-card:before {
+    content: map-get($flaticon_akpager-map, "debit-card");
+}
+.flaticon-money-transfer:before {
+    content: map-get($flaticon_akpager-map, "money-transfer");
+}
