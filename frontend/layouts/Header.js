@@ -16,10 +16,10 @@ export default Header;
 
 const Header3 = ({ onePage }) => {
   const menus = [
-    { id: 1, href: "home", title: "Home" },
-    { id: 2, href: "about", title: "about" },
-    { id: 3, href: "services", title: "services" },
-    { id: 4, href: "faqs", title: "FAQs" },
+    { id: 1, href: "/#home", title: "Home" },
+    { id: 2, href: "/#about", title: "about" },
+    { id: 3, href: "/#services", title: "services" },
+    { id: 4, href: "/#faqs", title: "FAQs" },
   ];
   return (
     <header className="main-header menu-absolute">
@@ -51,10 +51,10 @@ const Header3 = ({ onePage }) => {
             </div>
             {/* Menu Button */}
             <div className="menu-btns ms-lg-auto">
-              <Link href="#" className="light-btn">
+              <Link href="login" className="light-btn">
                 Log in
               </Link>
-              <Link href="#" className="theme-btn style-two">
+              <Link href="sign-up" className="theme-btn style-two">
                 Sign Up <i className="far fa-arrow-right" />
               </Link>
             </div>
@@ -97,7 +97,7 @@ const Nav = ({
             <ul className="navigation onepage clearfix">
               {menus.map((menu) => (
                 <li key={menu.id}>
-                  <a href={`#${menu.href}`}>{menu.title}</a>
+                  <a href={`${menu.href}`}>{menu.title}</a>
                 </li>
               ))}
             </ul>

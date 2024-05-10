@@ -25,23 +25,16 @@ const Footer3 = () => {
                 data-aos-offset={50}
               >
                 <div className="section-title text-white">
-                  <h2>We’re Now Available On Mobile. Download Our Apps!</h2>
+                  <h2>We’re Also Available On Mobile.</h2>
                   <p>No credit card requirement it’s full free for all</p>
                 </div>
                 <div className="footer-btns">
                   <a
-                    href="https://play.google.com/store/apps"
+                    href="/"
                     className="theme-btn"
                     style={{border:'.1px solid white !important'}}
                   >
-                    Play Store <i className="fab fa-google-play" />
-                  </a>
-                  <a
-                    href="https://www.apple.com/app-store/"
-                    className="theme-btn"
-                    style={{border:'.1px solid white !important'}}
-                  >
-                    Apple Store <i className="fab fa-apple" />
+                    Get Started <i className="far fa-arrow-right" />
                   </a>
                 </div>
               </div>
