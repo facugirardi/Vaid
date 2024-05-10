@@ -21,7 +21,7 @@ const Footer3 = () => {
               <div
                 className="footer-widget widget-about"
                 data-aos="fade-up"
-                data-aos-duration={1500}
+                data-aos-duration={1000}
                 data-aos-offset={50}
               >
                 <div className="section-title text-white">
@@ -44,7 +44,7 @@ const Footer3 = () => {
                 className="footer-widget widget-links"
                 data-aos="fade-up"
                 data-aos-delay={100}
-                data-aos-duration={1500}
+                data-aos-duration={1000}
                 data-aos-offset={50}
               >
                 <h6 className="footer-title">Links</h6>
@@ -69,7 +69,7 @@ const Footer3 = () => {
                 className="footer-widget widget-links"
                 data-aos="fade-up"
                 data-aos-delay={150}
-                data-aos-duration={1500}
+                data-aos-duration={1000}
                 data-aos-offset={50}
               >
                 <h6 className="footer-title">External Links</h6>
@@ -97,7 +97,7 @@ const Footer3 = () => {
               <div
                 className="copyright-text pt-10 text-lg-start text-center"
                 data-aos="fade-left"
-                data-aos-duration={1500}
+                data-aos-duration={1000}
                 data-aos-offset={50}
               >
                 <p>
@@ -110,7 +110,7 @@ const Footer3 = () => {
               <div
                 className="footer-bottom-logo text-lg-end text-center"
                 data-aos="fade-right"
-                data-aos-duration={1500}
+                data-aos-duration={1000}
                 data-aos-offset={50}
               >
                 <Link href="/">
