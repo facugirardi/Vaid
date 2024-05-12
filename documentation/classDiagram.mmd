@@ -1,0 +1,159 @@
+classDiagram
+
+    class TipoUsuario{
+        INT ID
+        STRING TipoUs
+    }
+
+    class Usuario{
+        INT ID
+        STRING Email
+        STRING Contraseña
+        STRING TipoUsuarioID
+    }
+
+    class Org{
+        STRING Nombre
+        STRING LinkForm
+        STRING Logo
+        STRING SitioWeb
+    }
+
+    class Candidato{
+        INT ID
+        STRING Nombre
+        STRING Apellido
+        DATE FechaNacimiento
+        DATE DiasDisp
+        DATE HorasDisp
+        STRING Descripcion
+    }
+
+    class CandidatoxUsuario{
+        INT CandidatoID
+        INT UsuarioID
+    }
+
+    class Etiqueta{
+        INT ID
+        STRING Nombre
+    }
+
+    class EtiquetaxCandidato{
+        INT CandidatoID
+        INT EtiquetaID
+    }
+
+    class CategoriaUsuario{
+        INT ID
+        STRING Nombre
+    }
+
+    class Persona{
+        INT ID
+        STRING Nombre
+        STRING Apellido
+        INT Telefono
+        DATE FechaNacimiento
+        INT UsuarioID
+        INT CategoriaUsID
+    }
+
+    class PersonaxEtiqueta{
+        INT PersonaID
+        INT EtiquetaID
+    }
+
+    class Evento{
+        INT ID
+        STRING Nombre
+        STRING Descripcion
+        DATE FechaEvento
+        INT HoraEvento
+        INT UsuarioID
+    }
+
+    class Reporte{
+        INT ID
+        INT EventoID
+    }
+
+    class Tarea{
+        INT ID
+        STRING Nombre
+        STRING Descripcion
+        DATE FechaTarea
+        INT HoraTarea
+        STRING PublicoDirigido
+        INT UsuarioID
+    }
+
+    class CategoriaProducto{
+        INT ID
+        STRING Nombre
+    }
+
+    class Producto{
+        INT ID
+        STRING Nombre
+        INT CategriaProdID
+    }
+
+    class EstadoProducto{
+        INT ID
+        STRING EstadoProd
+        INT PersonaID
+    }
+
+    class Sede{
+        INT ID
+        STRING Nombre
+    }
+
+    class Inventario{
+        INT ID
+        INT Cantidad
+        INT ProductoID
+        INT SedeID
+    }
+
+    class ProductoxInventario{
+        INT ID
+        INT ProductoID
+        INT InventarioID
+    }
+
+    class Donacion{
+        INT ID
+        STRING Descripcion
+        INT Monto
+        INT ProductoID
+        INT UsuarioID
+    }
+
+    class TipoOperacion{
+        INT ID
+        STRING TipoOp
+    }
+
+    class Operacion{
+        INT ID
+        STRING Descripcion
+        STRING Factura
+        INT ProductoID
+        INT TipoOpID
+    }
+
+    class ProductoxOperacion{
+        INT ID
+        INT ProductoID
+        INT OperacionID
+    }
+
+    class Video{
+        INT ID
+        STRING Titulo
+        STRING Descripcion
+        STRING LinkVideo
+        INT UsuarioID
+    }
