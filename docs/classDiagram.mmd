@@ -1,115 +1,115 @@
 classDiagram
 
     class TipoUsuario{
-        STRING TipoUs
+        - STRING TipoUs
     }
 
     class Usuario{
-        STRING Email
-        STRING Contraseña
+        - STRING Email
+        - STRING Contraseña
     }
 
     class Org{
-        STRING Nombre
-        STRING LinkForm
-        STRING Logo
-        STRING SitioWeb
+        - STRING Nombre
+        - STRING LinkForm
+        - STRING Logo
+        - STRING SitioWeb
     }
 
     class Candidato{
-        STRING Nombre
-        STRING Apellido
-        DATE FechaNacimiento
-        DATE DiasDisp
-        DATE HorasDisp
-        STRING Descripcion
+        - STRING Nombre
+        - STRING Apellido
+        - DATE FechaNacimiento
+        - DATE DiasDisp
+        - TIME HorasDisp
+        - STRING Descripcion
     }
 
     class CandidatoxUsuario{
     }
 
     class Etiqueta{
-        STRING Nombre
+        - STRING Nombre
     }
 
     class EtiquetaxCandidato{
     }
 
     class CategoriaUsuario{
-        STRING Nombre
+        - STRING Nombre
     }
 
     class Persona{
-        STRING Nombre
-        STRING Apellido
-        INT Telefono
-        DATE FechaNacimiento
+        - STRING Nombre
+        - STRING Apellido
+        - STRING Telefono
+        - DATE FechaNacimiento
     }
 
     class PersonaxEtiqueta{
     }
 
     class Evento{
-        STRING Nombre
-        STRING Descripcion
-        DATE FechaEvento
-        INT HoraEvento
+        - STRING Nombre
+        - STRING Descripcion
+        - DATE FechaEvento
+        - TIME HoraEvento
     }
 
     class Reporte{
-        STRING Reporte
+        - STRING Reporte
     }
 
     class Tarea{
-        STRING Nombre
-        STRING Descripcion
-        DATE FechaTarea
-        INT HoraTarea
-        STRING PublicoDirigido
+        - STRING Nombre
+        - STRING Descripcion
+        - DATE FechaTarea
+        - TIME HoraTarea
+        - STRING PublicoDirigido
     }
 
     class CategoriaProducto{
-        STRING Nombre
+        - STRING Nombre
     }
 
     class Producto{
-        STRING Nombre
+        - STRING Nombre
     }
 
     class EstadoProducto{
-        STRING EstadoProd
+        - STRING EstadoProd
     }
 
     class Sede{
-        STRING Nombre
+        - STRING Nombre
     }
 
     class Inventario{
-        INT Cantidad
+        - INT Cantidad
     }
 
     class ProductoxInventario{
     }
 
     class Donacion{
-        STRING Descripcion
-        INT Monto
+        - STRING Descripcion
+        - INT Monto
     }
 
     class TipoOperacion{
-        STRING TipoOp
+        - STRING TipoOp
     }
 
     class Operacion{
-        STRING Descripcion
-        STRING Factura
+        - STRING Descripcion
+        - STRING Factura
     }
 
     class ProductoxOperacion{
     }
 
     class Video{
-        STRING Titulo
-        STRING Descripcion
-        STRING LinkVideo
+        - STRING Titulo
+        - STRING Descripcion
+        - STRING LinkVideo
     }
