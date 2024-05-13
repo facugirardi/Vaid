@@ -7,6 +7,14 @@ classDiagram
     class Usuario{
         - STRING Email
         - STRING Contraseña
+
+        + cambiarContrasena()
+        + crearTarea()
+        + crearEvento()
+        + agregarDonacion()
+        + agregarOperacion()
+        + agregarInventario() 
+	+ registrarse()  
     }
 
     class Org{
@@ -14,6 +22,8 @@ classDiagram
         - STRING LinkForm
         - STRING Logo
         - STRING SitioWeb
+
+        + subirLogo()
     }
 
     class Candidato{
@@ -23,6 +33,9 @@ classDiagram
         - DATE DiasDisp
         - TIME HorasDisp
         - STRING Descripcion
+
+	+ enviarFormulario()
+        + generarEtiquetas()
     }
 
     class CandidatoxUsuario{
@@ -54,10 +67,16 @@ classDiagram
         - STRING Descripcion
         - DATE FechaEvento
         - TIME HoraEvento
+
+	+ listarEventos()
+	+ editarEvento()
+	+ crearEvento()
     }
 
     class Reporte{
         - STRING Reporte
+
+	+ generarReporte()
     }
 
     class Tarea{
@@ -66,6 +85,11 @@ classDiagram
         - DATE FechaTarea
         - TIME HoraTarea
         - STRING PublicoDirigido
+   
+	+ listarTareas()
+	+ editarTarea()
+	+ crearTarea()
+	+ dirigirTarea()
     }
 
     class CategoriaProducto{
@@ -86,6 +110,9 @@ classDiagram
 
     class Inventario{
         - INT Cantidad
+	
+	+ listarInventariosPorSede()
+	+ cambiarCantidad()
     }
 
     class ProductoxInventario{
@@ -94,6 +121,10 @@ classDiagram
     class Donacion{
         - STRING Descripcion
         - INT Monto
+
+	+ listarDonaciones()
+	+ agregarDonacion()
+	+ editarDonacion()
     }
 
     class TipoOperacion{
@@ -103,6 +134,10 @@ classDiagram
     class Operacion{
         - STRING Descripcion
         - STRING Factura
+    
+	+ listarOperaciones()
+	+ agregarOperacion()
+	+ editarOperacion()
     }
 
     class ProductoxOperacion{
@@ -112,4 +147,8 @@ classDiagram
         - STRING Titulo
         - STRING Descripcion
         - STRING LinkVideo
+
+	+ subirVideo()
+	+ listarVideos()
+	+ editarDescripcionTitulo()
     }
