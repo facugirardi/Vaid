@@ -64,7 +64,7 @@ const page = () => {
               <div
                 className="hero-content style-three rmb-55"
                 data-aos="fade-left"
-                data-aos-duration={1500}
+                data-aos-duration={1000}
                 data-aos-offset={50}
               >
                 <h1>
@@ -90,7 +90,7 @@ const page = () => {
               <div
                 className="hero-three-image"
                 data-aos="fade-right"
-                data-aos-duration={1500}
+                data-aos-duration={1000}
                 data-aos-offset={50}
               >
                 <img src="assets/images/placeholderimage.png" alt="Hero" style={{borderRadius:'10px'}}/>
@@ -105,7 +105,7 @@ const page = () => {
         <div
           className="section-title text-center text-white mb-60"
           data-aos="fade-up"
-          data-aos-duration={1500}
+          data-aos-duration={1000}
           data-aos-offset={50}
         >
           <h4>Organizations That Trust Us</h4>
@@ -114,10 +114,10 @@ const page = () => {
           <div
             className="client-logo-item"
             data-aos="fade-up"
-            data-aos-duration={1500}
+            data-aos-duration={1000}
             data-aos-offset={50}
           >
-            <a href="#">
+            <a href="https://vasodeleche.org/" target="_blank">
               <img
                 src="assets/images/client-logos/vaso.png"
                 alt="Client Logo"
@@ -128,7 +128,7 @@ const page = () => {
             className="client-logo-item"
             data-aos="fade-up"
             data-aos-delay={50}
-            data-aos-duration={1500}
+            data-aos-duration={1000}
             data-aos-offset={50}
           >
             <a href="#">
@@ -142,7 +142,7 @@ const page = () => {
             className="client-logo-item"
             data-aos="fade-up"
             data-aos-delay={100}
-            data-aos-duration={1500}
+            data-aos-duration={1000}
             data-aos-offset={50}
           >
             <a href="#">
@@ -156,7 +156,7 @@ const page = () => {
             className="client-logo-item"
             data-aos="fade-up"
             data-aos-delay={150}
-            data-aos-duration={1500}
+            data-aos-duration={1000}
             data-aos-offset={50}
           >
             <a href="#">
@@ -170,7 +170,7 @@ const page = () => {
             className="client-logo-item"
             data-aos="fade-up"
             data-aos-delay={200}
-            data-aos-duration={1500}
+            data-aos-duration={1000}
             data-aos-offset={50}
           >
             <a href="#">
@@ -184,7 +184,7 @@ const page = () => {
             className="client-logo-item"
             data-aos="fade-up"
             data-aos-delay={250}
-            data-aos-duration={1500}
+            data-aos-duration={1000}
             data-aos-offset={50}
           >
             <a href="#">
@@ -198,7 +198,7 @@ const page = () => {
             className="client-logo-item"
             data-aos="fade-up"
             data-aos-delay={300}
-            data-aos-duration={1500}
+            data-aos-duration={1000}
             data-aos-offset={50}
           >
             <a href="#">
@@ -212,7 +212,7 @@ const page = () => {
             className="client-logo-item"
             data-aos="fade-up"
             data-aos-delay={350}
-            data-aos-duration={1500}
+            data-aos-duration={1000}
             data-aos-offset={50}
           >
             <a href="#">
@@ -232,7 +232,7 @@ const page = () => {
             <div
               className="col-xl-7 col-lg-9 col-md-11"
               data-aos="fade-up"
-              data-aos-duration={1500}
+              data-aos-duration={1000}
               data-aos-offset={50}
             >
               <div className="section-title text-center mb-35">
@@ -249,7 +249,7 @@ const page = () => {
             <div
               className="row justify-content-center"
               data-aos="fade-up"
-              data-aos-duration={1500}
+              data-aos-duration={1000}
               data-aos-offset={50}
             >
               <div className="col-lg-10">
@@ -283,7 +283,7 @@ const page = () => {
                     <div
                       className="content rmb-55"
                       data-aos="fade-left"
-                      data-aos-duration={1500}
+                      data-aos-duration={1000}
                       data-aos-offset={50}
                     >
                       <div className="section-title mb-30">
@@ -310,7 +310,7 @@ const page = () => {
                     <div
                       className="image text-left text-lg-end"
                       data-aos="fade-right"
-                      data-aos-duration={1500}
+                      data-aos-duration={1000}
                       data-aos-offset={50}
                     >
                       <img src="assets/images/placeholder547x487.png" alt="Tab" style={{borderRadius:'10px'}}/>
@@ -387,14 +387,14 @@ const page = () => {
       {/* Tab Area End */}
       {/* What We Offer Area Start */}
       <section
-        id="services"
+        id=""
         className="what-we-offer-area bgc-lighter pt-100 rpt-80 pb-90 rpb-70"
       >
         <div className="container">
           <div
             className="row justify-content-center"
             data-aos="fade-up"
-            data-aos-duration={1500}
+            data-aos-duration={1000}
             data-aos-offset={50}
           >
             <div className="col-xl-7 col-lg-9 col-md-11">
@@ -410,7 +410,7 @@ const page = () => {
             <div
               className="col-xl-4 col-md-6"
               data-aos="fade-up"
-              data-aos-duration={1500}
+              data-aos-duration={1000}
               data-aos-offset={50}
             >
               <div className="iconic-box style-five">
@@ -432,7 +432,7 @@ const page = () => {
               className="col-xl-4 col-md-6"
               data-aos="fade-up"
               data-aos-delay={100}
-              data-aos-duration={1500}
+              data-aos-duration={1000}
               data-aos-offset={50}
             >
               <div className="iconic-box style-five">
@@ -453,7 +453,7 @@ const page = () => {
               className="col-xl-4 col-md-6"
               data-aos="fade-up"
               data-aos-delay={200}
-              data-aos-duration={1500}
+              data-aos-duration={1000}
               data-aos-offset={50}
             >
               <div className="iconic-box style-five">
@@ -474,7 +474,7 @@ const page = () => {
             <div
               className="col-xl-4 col-md-6"
               data-aos="fade-up"
-              data-aos-duration={1500}
+              data-aos-duration={1000}
               data-aos-offset={50}
             >
               <div className="iconic-box style-five">
@@ -495,7 +495,7 @@ const page = () => {
               className="col-xl-4 col-md-6"
               data-aos="fade-up"
               data-aos-delay={100}
-              data-aos-duration={1500}
+              data-aos-duration={1000}
               data-aos-offset={50}
             >
               <div className="iconic-box style-five">
@@ -516,7 +516,7 @@ const page = () => {
               className="col-xl-4 col-md-6"
               data-aos="fade-up"
               data-aos-delay={200}
-              data-aos-duration={1500}
+              data-aos-duration={1000}
               data-aos-offset={50}
             >
               <div className="iconic-box style-five">
@@ -550,7 +550,7 @@ const page = () => {
               <div
                 className="management-content text-white mt-40"
                 data-aos="fade-right"
-                data-aos-duration={1500}
+                data-aos-duration={1000}
                 data-aos-offset={50}
               >
                 <div className="section-title mb-30">
@@ -600,7 +600,7 @@ const page = () => {
               <div
                 className="management-images my-40"
                 data-aos="fade-left"
-                data-aos-duration={1500}
+                data-aos-duration={1000}
                 data-aos-offset={50}
               >
                 <img
@@ -621,7 +621,7 @@ const page = () => {
             <div
               className="image rel z-2 text-center"
               data-aos="zoom-in-up"
-              data-aos-duration={1500}
+              data-aos-duration={1000}
               data-aos-offset={50}
             >
               <img
@@ -633,7 +633,7 @@ const page = () => {
               className="author one"
               data-aos="fade-left"
               data-aos-delay={100}
-              data-aos-duration={1500}
+              data-aos-duration={1000}
               data-aos-offset={50}
             >
               <img
@@ -645,7 +645,7 @@ const page = () => {
               className="author two"
               data-aos="fade-right"
               data-aos-delay={100}
-              data-aos-duration={1500}
+              data-aos-duration={1000}
               data-aos-offset={50}
             >
               <img
@@ -657,7 +657,7 @@ const page = () => {
               className="check-list-item one"
               data-aos="fade-left"
               data-aos-delay={200}
-              data-aos-duration={1500}
+              data-aos-duration={1000}
               data-aos-offset={50}
             >
               <i className="fas fa-check" />
@@ -667,7 +667,7 @@ const page = () => {
               className="check-list-item two"
               data-aos="fade-rihgt"
               data-aos-delay={200}
-              data-aos-duration={1500}
+              data-aos-duration={1000}
               data-aos-offset={50}
             >
               <i className="fas fa-check" />
@@ -677,7 +677,7 @@ const page = () => {
               className="check-list-item three"
               data-aos="fade-left"
               data-aos-delay={300}
-              data-aos-duration={1500}
+              data-aos-duration={1000}
               data-aos-offset={50}
             >
               <i className="fas fa-check" />
@@ -687,7 +687,7 @@ const page = () => {
               className="check-list-item four"
               data-aos="fade-rihgt"
               data-aos-delay={300}
-              data-aos-duration={1500}
+              data-aos-duration={1000}
               data-aos-offset={50}
             >
               <i className="fas fa-check" />
@@ -698,14 +698,14 @@ const page = () => {
       </section>
       {/* Management Area End */}
       {/* How To Manage Area Start */}
-      <section className="how-to-manage-area bgc-lighter pt-125 rpt-105 pb-125 rpb-80">
+      <section className="how-to-manage-area bgc-lighter pt-125 rpt-105 pb-125 rpb-80" id='services'>
         <div className="container">
           <div className="row justify-content-center">
             <div className="col-xl-7 col-lg-9">
               <div
                 className="section-title text-center mb-55"
                 data-aos="fade-up"
-                data-aos-duration={1500}
+                data-aos-duration={1000}
                 data-aos-offset={50}
               >
                 <span className="subtitle-one mb-20">
@@ -720,7 +720,7 @@ const page = () => {
               <div
                 className="how-to-manage-image rmb-55"
                 data-aos="fade-left"
-                data-aos-duration={1500}
+                data-aos-duration={1000}
                 data-aos-offset={50}
               >
                 <img
@@ -732,7 +732,7 @@ const page = () => {
             <div
               className="col-lg-6"
               data-aos="fade-right"
-              data-aos-duration={1500}
+              data-aos-duration={1000}
               data-aos-offset={50}
             >
               <div className="feature-icon-box style-three">
@@ -791,7 +791,7 @@ const page = () => {
               <div
                 className="faq-left-content rmb-55"
                 data-aos="fade-left"
-                data-aos-duration={1500}
+                data-aos-duration={1000}
                 data-aos-offset={50}
               >
                 <div className="section-title mb-25">
@@ -813,7 +813,7 @@ const page = () => {
                 defaultActiveKey={active}
                 id="accordionOne"
                 data-aos="fade-right"
-                data-aos-duration={1500}
+                data-aos-duration={1000}
                 data-aos-offset={50}
               >
                 {accordionItems.map((item) => (
@@ -850,7 +850,7 @@ const page = () => {
             <div
               className="row justify-content-center text-center"
               data-aos="fade-up"
-              data-aos-duration={1500}
+              data-aos-duration={1000}
               data-aos-offset={50}
             >
               <div className="col-lg-7">

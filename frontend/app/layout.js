@@ -14,8 +14,8 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: {
-    template: "Vaid - AI Software",
-    default: "Vaid - AI Software", // a default is required when creating a template
+    template: "Vaid",
+    default: "Vaid",
   },
   description: "AI Management Solutions for Nonprofits",
 };

@@ -1,5 +1,24 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&display=swap");
 
+* {
+  scrollbar-width: thin;
+}
+
+/* Works on Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: rgb(255, 255, 255);
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgb(40, 80, 206);
+  border-radius: 20px;
+  border: 3.5px solid rgb(255, 255, 255);
+}
+
 .main-menu .navbar-collapse .mobile-menu li ul {
   opacity: 1 !important;
   visibility: unset !important;

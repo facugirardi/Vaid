@@ -21,27 +21,20 @@ const Footer3 = () => {
               <div
                 className="footer-widget widget-about"
                 data-aos="fade-up"
-                data-aos-duration={1500}
+                data-aos-duration={1000}
                 data-aos-offset={50}
               >
                 <div className="section-title text-white">
-                  <h2>We’re Now Available On Mobile. Download Our Apps!</h2>
+                  <h2>We’re Also Available On Mobile.</h2>
                   <p>No credit card requirement it’s full free for all</p>
                 </div>
                 <div className="footer-btns">
                   <a
-                    href="https://play.google.com/store/apps"
+                    href="/"
                     className="theme-btn"
                     style={{border:'.1px solid white !important'}}
                   >
-                    Play Store <i className="fab fa-google-play" />
-                  </a>
-                  <a
-                    href="https://www.apple.com/app-store/"
-                    className="theme-btn"
-                    style={{border:'.1px solid white !important'}}
-                  >
-                    Apple Store <i className="fab fa-apple" />
+                    Get Started <i className="far fa-arrow-right" />
                   </a>
                 </div>
               </div>
@@ -51,7 +44,7 @@ const Footer3 = () => {
                 className="footer-widget widget-links"
                 data-aos="fade-up"
                 data-aos-delay={100}
-                data-aos-duration={1500}
+                data-aos-duration={1000}
                 data-aos-offset={50}
               >
                 <h6 className="footer-title">Links</h6>
@@ -76,7 +69,7 @@ const Footer3 = () => {
                 className="footer-widget widget-links"
                 data-aos="fade-up"
                 data-aos-delay={150}
-                data-aos-duration={1500}
+                data-aos-duration={1000}
                 data-aos-offset={50}
               >
                 <h6 className="footer-title">External Links</h6>
@@ -104,7 +97,7 @@ const Footer3 = () => {
               <div
                 className="copyright-text pt-10 text-lg-start text-center"
                 data-aos="fade-left"
-                data-aos-duration={1500}
+                data-aos-duration={1000}
                 data-aos-offset={50}
               >
                 <p>
@@ -117,7 +110,7 @@ const Footer3 = () => {
               <div
                 className="footer-bottom-logo text-lg-end text-center"
                 data-aos="fade-right"
-                data-aos-duration={1500}
+                data-aos-duration={1000}
                 data-aos-offset={50}
               >
                 <Link href="/">
