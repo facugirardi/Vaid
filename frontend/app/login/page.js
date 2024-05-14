@@ -1,5 +1,5 @@
 "use client";
-import AkpagerLayout from "@/layouts/AkpagerLayout";
+import AkpagerLayout from "@/layouts/LandingLayout";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 

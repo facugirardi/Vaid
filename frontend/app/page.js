@@ -1,6 +1,6 @@
 "use client";
 import AkpagerAccordion from "@/components/AkpagerAccordion";
-import AkpagerLayout from "@/layouts/AkpagerLayout";
+import LandingLayout from "@/layouts/LandingLayout";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Accordion, Nav, Tab } from "react-bootstrap";
@@ -50,7 +50,7 @@ const page = () => {
   }, []);
   const [active, setActive] = useState("collapse1");
   return (
-    <AkpagerLayout header footer bodyClass={"home-three"} onePage>
+    <LandingLayout header footer bodyClass={"home-three"} onePage>
       {/* Hero area start */}
       <section
         id="home"
@@ -844,7 +844,7 @@ const page = () => {
         </div>
       </section>
       {/* Newsletter Area End */}
-    </AkpagerLayout>
+    </LandingLayout>
   );
 };
 export default page;

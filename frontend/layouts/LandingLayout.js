@@ -5,7 +5,7 @@ import { Fragment, useEffect } from "react";
 import niceSelect from "react-nice-select";
 import Footer from "./Footer";
 import Header from "./Header";
-const AkpagerLayout = ({ children, header, footer, bodyClass, onePage }) => {
+const LandingLayout = ({ children, header, footer, bodyClass, onePage }) => {
   useEffect(() => {
     akpagerUtility.animation();
     akpagerUtility.fixedHeader();
@@ -27,4 +27,4 @@ const AkpagerLayout = ({ children, header, footer, bodyClass, onePage }) => {
     </Fragment>
   );
 };
-export default AkpagerLayout;
+export default LandingLayout;
