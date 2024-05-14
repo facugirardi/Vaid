@@ -1,11 +1,9 @@
 "use client";
 import AkpagerAccordion from "@/components/AkpagerAccordion";
 import AkpagerLayout from "@/layouts/AkpagerLayout";
-import { sliderProps } from "@/utility/sliderProps";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Accordion, Nav, Tab } from "react-bootstrap";
-import Slider from "react-slick";
 
 const accordionItems = [
   {
