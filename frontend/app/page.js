@@ -630,30 +630,6 @@ const page = () => {
               />
             </div>
             <div
-              className="author one"
-              data-aos="fade-left"
-              data-aos-delay={100}
-              data-aos-duration={1000}
-              data-aos-offset={50}
-            >
-              <img
-                src="assets/images/about/management-author1.png"
-                alt="Author"
-              />
-            </div>
-            <div
-              className="author two"
-              data-aos="fade-right"
-              data-aos-delay={100}
-              data-aos-duration={1000}
-              data-aos-offset={50}
-            >
-              <img
-                src="assets/images/about/management-author2.png"
-                alt="Author"
-              />
-            </div>
-            <div
               className="check-list-item one"
               data-aos="fade-left"
               data-aos-delay={200}

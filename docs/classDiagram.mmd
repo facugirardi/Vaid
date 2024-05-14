@@ -1,5 +1,31 @@
 classDiagram
 
+    Usuario ..> TipoUsuario
+    Usuario --> Org
+    Usuario --> Persona
+    Usuario ..> Evento
+    Usuario ..> Tarea
+    Usuario ..> Inventario
+    Usuario ..> Donacion
+    Usuario ..> Video
+    Usuario ..> Operacion
+    Usuario --> CandidatoxUsuario
+    CandidatoxUsuario --> Candidato
+    Candidato --> EtiquetaxCandidato
+    EtiquetaxCandidato --> Etiqueta
+    PersonaxEtiqueta --> Etiqueta
+    Etiqueta --> TipoEtiqueta
+    Persona --> PersonaxEtiqueta
+    Evento ..> Reporte
+    Operacion --> TipoOperacion
+    Inventario --> Sede
+    Inventario --> ProductoxInventario
+    ProductoxInventario --> Producto
+    Producto --> EstadoProducto
+    Producto --> CategoriaProducto
+    Producto --> ProductoxOperacion
+    ProductoxOperacion --> Operacion
+
     class TipoUsuario{
         - STRING TipoUs
     }
@@ -14,7 +40,7 @@ classDiagram
         + agregarDonacion()
         + agregarOperacion()
         + agregarInventario() 
-	+ registrarse()  
+	    + registrarse()  
     }
 
     class Org{
@@ -34,7 +60,7 @@ classDiagram
         - TIME HorasDisp
         - STRING Descripcion
 
-	+ enviarFormulario()
+	    + enviarFormulario()
         + generarEtiquetas()
     }
 
@@ -86,10 +112,10 @@ classDiagram
         - TIME HoraTarea
         - STRING PublicoDirigido
    
-	+ listarTareas()
-	+ editarTarea()
-	+ crearTarea()
-	+ dirigirTarea()
+        + listarTareas()
+        + editarTarea()
+        + crearTarea()
+        + dirigirTarea()
     }
 
     class CategoriaProducto{
@@ -111,8 +137,8 @@ classDiagram
     class Inventario{
         - INT Cantidad
 	
-	+ listarInventariosPorSede()
-	+ cambiarCantidad()
+        + listarInventariosPorSede()
+        + cambiarCantidad()
     }
 
     class ProductoxInventario{
@@ -122,9 +148,9 @@ classDiagram
         - STRING Descripcion
         - INT Monto
 
-	+ listarDonaciones()
-	+ agregarDonacion()
-	+ editarDonacion()
+        + listarDonaciones()
+        + agregarDonacion()
+        + editarDonacion()
     }
 
     class TipoOperacion{
@@ -135,9 +161,9 @@ classDiagram
         - STRING Descripcion
         - STRING Factura
     
-	+ listarOperaciones()
-	+ agregarOperacion()
-	+ editarOperacion()
+        + listarOperaciones()
+        + agregarOperacion()
+        + editarOperacion()
     }
 
     class ProductoxOperacion{
@@ -148,7 +174,7 @@ classDiagram
         - STRING Descripcion
         - STRING LinkVideo
 
-	+ subirVideo()
-	+ listarVideos()
-	+ editarDescripcionTitulo()
+        + subirVideo()
+        + listarVideos()
+        + editarDescripcionTitulo()
     }
