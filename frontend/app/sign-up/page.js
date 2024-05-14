@@ -1,6 +1,5 @@
 "use client";
 import LandingLayout from "@/layouts/LandingLayout";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 

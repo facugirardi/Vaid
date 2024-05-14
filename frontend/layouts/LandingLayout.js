@@ -1,5 +1,4 @@
 "use client";
-import VideoPopup from "@/components/VideoPopup";
 import { akpagerUtility } from "@/utility";
 import { Fragment, useEffect } from "react";
 import niceSelect from "react-nice-select";
@@ -18,7 +17,6 @@ const LandingLayout = ({ children, header, footer, bodyClass, onePage }) => {
 
   return (
     <Fragment>
-      <VideoPopup />
       <div className="page-wrapper">
         <Header header={header} onePage={onePage} />
         {children}
