@@ -1,4 +1,4 @@
-import AkpagerLayout from "@/layouts/AkpagerLayout";
+import AkpagerLayout from "@/layouts/LandingLayout";
 import Link from "next/link";
 
 const e404 = () => {

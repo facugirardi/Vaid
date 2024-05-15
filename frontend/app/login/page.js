@@ -1,5 +1,5 @@
 "use client";
-import AkpagerLayout from "@/layouts/AkpagerLayout";
+import LandingLayout from "@/layouts/LandingLayout";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -13,7 +13,7 @@ const page = () => {
   }, []);
   const [active, setActive] = useState("collapse1");
   return (
-    <AkpagerLayout header footer bodyClass={"home-three"} onePage>
+    <LandingLayout header footer bodyClass={"home-three"} onePage>
       {/* Signup area start */}
       <section
         className="hero-area-three bgs-cover bgc-lighter pt-210 rpt-150 pb-100"
@@ -27,7 +27,7 @@ const page = () => {
         </div>
       </section>
       {/* Signup area End */}
-    </AkpagerLayout>
+    </LandingLayout>
   );
 };
 export default page;

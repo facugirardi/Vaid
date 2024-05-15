@@ -1,11 +1,9 @@
 "use client";
 import AkpagerAccordion from "@/components/AkpagerAccordion";
-import AkpagerLayout from "@/layouts/AkpagerLayout";
-import { sliderProps } from "@/utility/sliderProps";
+import LandingLayout from "@/layouts/LandingLayout";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Accordion, Nav, Tab } from "react-bootstrap";
-import Slider from "react-slick";
 
 const accordionItems = [
   {
@@ -52,7 +50,7 @@ const page = () => {
   }, []);
   const [active, setActive] = useState("collapse1");
   return (
-    <AkpagerLayout header footer bodyClass={"home-three"} onePage>
+    <LandingLayout header footer bodyClass={"home-three"} onePage>
       {/* Hero area start */}
       <section
         id="home"
@@ -630,30 +628,6 @@ const page = () => {
               />
             </div>
             <div
-              className="author one"
-              data-aos="fade-left"
-              data-aos-delay={100}
-              data-aos-duration={1000}
-              data-aos-offset={50}
-            >
-              <img
-                src="assets/images/about/management-author1.png"
-                alt="Author"
-              />
-            </div>
-            <div
-              className="author two"
-              data-aos="fade-right"
-              data-aos-delay={100}
-              data-aos-duration={1000}
-              data-aos-offset={50}
-            >
-              <img
-                src="assets/images/about/management-author2.png"
-                alt="Author"
-              />
-            </div>
-            <div
               className="check-list-item one"
               data-aos="fade-left"
               data-aos-delay={200}
@@ -870,7 +844,7 @@ const page = () => {
         </div>
       </section>
       {/* Newsletter Area End */}
-    </AkpagerLayout>
+    </LandingLayout>
   );
 };
 export default page;
