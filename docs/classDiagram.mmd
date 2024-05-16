@@ -10,28 +10,26 @@ Org ..> Video : sube
 TipoUsuario ..> Usuario : tiene
 Usuario --> Persona : tiene
 Sede o-- Inventario : tiene
-Inventario --> ProductoxInventario : tiene
-Producto --> ProductoxInventario : tiene
+Inventario --> ProductoXInventario : tiene
+Producto --> ProductoXInventario : tiene
 Producto --> Categoria : tiene
 Producto --> EstadoProducto : tiene
 Producto --> ProductoXOperacion : tiene
 DonacionXProducto --> Producto : tiene
 DonacionXProducto --> Donacion : tiene
 TareaxPersona --> Persona : tiene
-Persona --> PersonaxEvento : tiene
+Persona --> PersonaXEvento : tiene
 Etiqueta --> EtiquetaXCandidato : tiene
 Etiqueta --> TipoEtiqueta : tiene
 Etiqueta --> PersonaXEtiqueta : tiene
 Operacion --> TipoOperacion : tiene
 ProductoXOperacion --> Operacion : tiene
 Evento --* Reporte : genera
-PersonaxEvento --> Evento : tiene
+PersonaXEvento --> Evento : tiene
 Evento --* Invitado : tiene
-Tarea --> TareaxPersona : tiene
-Candidato --> EtiquetaxCandidato
-EtiquetaxCandidato --> Etiqueta
-PersonaxEtiqueta --> Etiqueta
-Persona --> PersonaxEtiqueta
+Tarea --> TareaXPersona : tiene
+Candidato --> EtiquetaXCandidato
+Persona --> PersonaXEtiqueta
 
 
     class TipoUsuario {
@@ -194,11 +192,11 @@ Persona --> PersonaxEtiqueta
         - STRING telefono
     }
 
-    class TareaxPersona{
+    class TareaXPersona{
         - STRING nombre
     }
 
-    class PersonaxEvento{
+    class PersonaXEvento{
         - STRING nombre
     }
     
