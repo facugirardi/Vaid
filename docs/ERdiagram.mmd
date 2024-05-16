@@ -10,15 +10,15 @@ Org ||--|{ Video : sube
 TipoUsuario ||--|{ Usuario : tiene
 Usuario ||--|| Persona : tiene
 Sede ||--|| Inventario : tiene
-Inventario ||--|{ ProductoxInventario : tiene
-Producto ||--|{ ProductoxInventario : tiene
+Inventario ||--|{ ProductoXInventario : tiene
+Producto ||--|{ ProductoXInventario : tiene
 Producto }|--|| Categoria : tiene
 Producto }|--|| EstadoProducto : tiene
 Producto ||--|{ ProductoXOperacion : tiene
 DonacionXProducto }|--|| Producto : tiene
 DonacionXProducto }|--|| Donacion : tiene
-TareaxPersona }|--|| Persona : tiene
-Persona ||--|{ PersonaxEvento : tiene
+TareaXPersona }|--|| Persona : tiene
+Persona ||--|{ PersonaXEvento : tiene
 Persona ||--|{ PersonaXEtiqueta : tiene
 Etiqueta ||--|{ EtiquetaXCandidato : tiene
 Etiqueta }|--|| TipoEtiqueta : tiene
@@ -26,10 +26,11 @@ Etiqueta ||--|{ PersonaXEtiqueta : tiene
 Operacion }|--|| TipoOperacion : tiene
 Operacion ||--|{ ProductoXOperacion : tiene
 Evento ||--|| Reporte : genera
-PersonaxEvento }|--|| Evento : tiene
+PersonaXEvento }|--|| Evento : tiene
 Evento ||--|{ Invitado : tiene
-Tarea ||--|{ TareaxPersona : tiene
+Tarea ||--|{ TareaXPersona : tiene
 EtiquetaXCandidato }|--|| Candidato : tiene
+Candidato ||--|| Persona : es
 
     TipoUsuario {
         int idTipoUsuario PK
@@ -61,7 +62,7 @@ EtiquetaXCandidato }|--|| Candidato : tiene
         varchar nombre
     }
 
-    ProductoxInventario{
+    ProductoXInventario{
         int idProductoXInventario PK
         int idProducto FK
         int idInventario FK
@@ -180,6 +181,7 @@ EtiquetaXCandidato }|--|| Candidato : tiene
         varchar telefono
         time disponibilidad
         date fechaNacimiento
+	int idUsuario FK
     }
 
     EtiquetaXCandidato{
@@ -208,13 +210,13 @@ EtiquetaXCandidato }|--|| Candidato : tiene
         int idEvento FK
     }
 
-    TareaxPersona{
+    TareaXPersona{
         int idTareaxPersona PK
         int idTarea FK
         int idPersona FK
     }
 
-    PersonaxEvento{
+    PersonaXEvento{
         int idPersonaxEvento PK
         int idEvento FK
         int idPersona FK
