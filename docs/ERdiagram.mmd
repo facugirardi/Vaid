@@ -30,6 +30,7 @@ PersonaXEvento }|--|| Evento : tiene
 Evento ||--|{ Invitado : tiene
 Tarea ||--|{ TareaXPersona : tiene
 EtiquetaXCandidato }|--|| Candidato : tiene
+Candidato ||--|| Persona : es
 
     TipoUsuario {
         int idTipoUsuario PK
@@ -180,6 +181,7 @@ EtiquetaXCandidato }|--|| Candidato : tiene
         varchar telefono
         time disponibilidad
         date fechaNacimiento
+	int idUsuario FK
     }
 
     EtiquetaXCandidato{

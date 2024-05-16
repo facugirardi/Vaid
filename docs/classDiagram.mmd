@@ -28,9 +28,9 @@ Evento --* Reporte : genera
 PersonaXEvento --> Evento : tiene
 Evento --* Invitado : tiene
 Tarea --> TareaXPersona : tiene
-Candidato --> EtiquetaXCandidato
-Persona --> PersonaXEtiqueta
-
+Candidato --> EtiquetaXCandidato : tiene
+Persona --> PersonaXEtiqueta : tiene
+Candidato --> Persona : es
 
     class TipoUsuario {
         - STRING tipousuario
@@ -47,7 +47,7 @@ Persona --> PersonaXEtiqueta
         + agregarDonacion()
         + agregarOperacion()
         + agregarInventario() 
-	    + registrarse()  
+	+ registrarse()  
     }
 
     class Org {
