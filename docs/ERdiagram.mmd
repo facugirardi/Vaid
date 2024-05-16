@@ -1,22 +1,22 @@
 erDiagram
 
-ONG ||--|| Usuario : tiene
-ONG ||--|{ Donaciones : tiene
-ONG ||--|{ Operacion : tiene
-ONG ||--|{ Tarea : tiene
-ONG ||--|{ Sede : tiene
-ONG ||--|{ Candidato : tiene
-ONG ||--|{ Video : tiene
-Usuario }|--|| TipoUsuario : tiene
+Org ||--|| Usuario : tiene
+Org ||--|{ Donacion : guarda
+Org ||--|{ Operacion : realiza
+Org ||--|{ Tarea : crea
+Org ||--|{ Sede : tiene
+Org ||--|{ Candidato : tiene
+Org ||--|{ Video : sube
+TipoUsuario ||--|{ Usuario : tiene
 Usuario ||--|| Persona : tiene
 Sede ||--|| Inventario : tiene
 Inventario ||--|{ ProductoxInventario : tiene
 Producto ||--|{ ProductoxInventario : tiene
 Producto }|--|| Categoria : tiene
 Producto }|--|| EstadoProducto : tiene
-ProductoXOperacion }|--|| Producto : tiene
+Producto ||--|{ ProductoXOperacion : tiene
 DonacionXProducto }|--|| Producto : tiene
-DonacionXProducto }|--|| Donaciones : tiene
+DonacionXProducto }|--|| Donacion : tiene
 TareaxPersona }|--|| Persona : tiene
 Persona ||--|{ PersonaxEvento : tiene
 Persona ||--|{ PersonaXEtiqueta : tiene
@@ -25,7 +25,7 @@ Etiqueta }|--|| TipoEtiqueta : tiene
 Etiqueta ||--|{ PersonaXEtiqueta : tiene
 Operacion }|--|| TipoOperacion : tiene
 Operacion ||--|{ ProductoXOperacion : tiene
-Evento ||--|| Reporte : tiene
+Evento ||--|| Reporte : genera
 PersonaxEvento }|--|| Evento : tiene
 Evento ||--|{ Invitado : tiene
 Tarea ||--|{ TareaxPersona : tiene
@@ -72,7 +72,7 @@ EtiquetaXCandidato }|--|| Candidato : tiene
         varchar descripcion
     }
    
-    Donaciones{
+    Donacion{
         int idDonacion PK
         int idProducto FK
         int idUsuario FK
@@ -112,7 +112,7 @@ EtiquetaXCandidato }|--|| Candidato : tiene
         varchar descripcion
         int idUsuario FK
     }
-    %%Tare y Evento tiene los mismo atributos, podemos crear una sola entidad con un atributo tipo
+    
     Tarea{
         int idTarea PK
         varchar titulo
@@ -140,9 +140,7 @@ EtiquetaXCandidato }|--|| Candidato : tiene
     }
 
     Usuario{
-        int idUsuario PK
-        varchar nombre
-        varchar apellido
+        int idUsuario PK 
         varchar correo
         varchar contrasena
         int idTipoUsuario FK
@@ -190,8 +188,8 @@ EtiquetaXCandidato }|--|| Candidato : tiene
         int idCandidato FK
     }
 
-    ONG{
-        int idONG PK
+    Org{
+        int idOrgPK
         varchar nombre
         varchar descripcion
         varchar direccion

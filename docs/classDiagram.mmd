@@ -1,38 +1,47 @@
 classDiagram
 
-    Usuario ..> TipoUsuario
-    Usuario --> Org
-    Usuario --> Persona
-    Usuario ..> Evento
-    Usuario ..> Tarea
-    Usuario ..> Inventario
-    Usuario ..> Donacion
-    Usuario ..> Video
-    Usuario ..> Operacion
-    Usuario --> CandidatoxUsuario
-    CandidatoxUsuario --> Candidato
-    Candidato --> EtiquetaxCandidato
-    EtiquetaxCandidato --> Etiqueta
-    PersonaxEtiqueta --> Etiqueta
-    Etiqueta --> TipoEtiqueta
-    Persona --> PersonaxEtiqueta
-    Evento ..> Reporte
-    Operacion --> TipoOperacion
-    Inventario --> Sede
-    Inventario --> ProductoxInventario
-    ProductoxInventario --> Producto
-    Producto --> EstadoProducto
-    Producto --> CategoriaProducto
-    Producto --> ProductoxOperacion
-    ProductoxOperacion --> Operacion
+Org --> Usuario : tiene
+Org ..> Donacion : guarda
+Org ..> Operacion : realiza
+Org ..> Tarea : crea
+Org ..> Sede : tiene
+Org o-- Candidato : tiene
+Org ..> Video : sube
+TipoUsuario ..> Usuario : tiene
+Usuario --> Persona : tiene
+Sede o-- Inventario : tiene
+Inventario --> ProductoxInventario : tiene
+Producto --> ProductoxInventario : tiene
+Producto --> Categoria : tiene
+Producto --> EstadoProducto : tiene
+Producto --> ProductoXOperacion : tiene
+DonacionXProducto --> Producto : tiene
+DonacionXProducto --> Donacion : tiene
+TareaxPersona --> Persona : tiene
+Persona --> PersonaxEvento : tiene
+Etiqueta --> EtiquetaXCandidato : tiene
+Etiqueta --> TipoEtiqueta : tiene
+Etiqueta --> PersonaXEtiqueta : tiene
+Operacion --> TipoOperacion : tiene
+ProductoXOperacion --> Operacion : tiene
+Evento --* Reporte : genera
+PersonaxEvento --> Evento : tiene
+Evento --* Invitado : tiene
+Tarea --> TareaxPersona : tiene
+Candidato --> EtiquetaxCandidato
+EtiquetaxCandidato --> Etiqueta
+PersonaxEtiqueta --> Etiqueta
+Persona --> PersonaxEtiqueta
 
-    class TipoUsuario{
-        - STRING TipoUs
+
+    class TipoUsuario {
+        - STRING tipousuario
+        - INT nivelPermiso
     }
 
-    class Usuario{
-        - STRING Email
-        - STRING Contraseña
+    class Usuario {
+        - STRING correo
+        - STRING contrasena
 
         + cambiarContrasena()
         + crearTarea()
@@ -43,138 +52,160 @@ classDiagram
 	    + registrarse()  
     }
 
-    class Org{
-        - STRING Nombre
-        - STRING LinkForm
-        - STRING Logo
-        - STRING SitioWeb
+    class Org {
+        - STRING nombre
+        - STRING descripcion
+        - STRING direccion
+        - STRING telefono
+        - STRING logo
+        - STRING correo
+        - STRING web
 
         + subirLogo()
     }
 
-    class Candidato{
-        - STRING Nombre
-        - STRING Apellido
-        - DATE FechaNacimiento
-        - DATE DiasDisp
-        - TIME HorasDisp
-        - STRING Descripcion
+    class Candidato {
+        - STRING nombre
+        - STRING apellido
+        - STRING correo
+        - STRING telefono
+        - TIME disponibilidad
+        - DATE fechaNacimiento
 
-	    + enviarFormulario()
+        + enviarFormulario()
         + generarEtiquetas()
     }
 
-    class CandidatoxUsuario{
-    }
-
-    class Etiqueta{
-        - STRING Nombre
-    }
-
-    class EtiquetaxCandidato{
-    }
-
-    class TipoEtiqueta{
-        - STRING TipoEt
-    }
-
-    class Persona{
-        - STRING Nombre
-        - STRING Apellido
-        - STRING Telefono
-        - DATE FechaNacimiento
-    }
-
-    class PersonaxEtiqueta{
-    }
-
-    class Evento{
-        - STRING Nombre
-        - STRING Descripcion
-        - DATE FechaEvento
-        - TIME HoraEvento
-
-	+ listarEventos()
-	+ editarEvento()
-	+ crearEvento()
-    }
-
-    class Reporte{
-        - STRING Reporte
-
-	+ generarReporte()
-    }
-
-    class Tarea{
-        - STRING Nombre
-        - STRING Descripcion
-        - DATE FechaTarea
-        - TIME HoraTarea
-        - STRING PublicoDirigido
-   
-        + listarTareas()
-        + editarTarea()
-        + crearTarea()
-        + dirigirTarea()
-    }
-
-    class CategoriaProducto{
-        - STRING Nombre
-    }
-
-    class Producto{
-        - STRING Nombre
-    }
-
-    class EstadoProducto{
-        - STRING EstadoProd
-    }
-
-    class Sede{
-        - STRING Nombre
+    class Sede {
+        - STRING nombre
+        - STRING direccion
     }
 
     class Inventario{
-        - INT Cantidad
-	
+
         + listarInventariosPorSede()
         + cambiarCantidad()
     }
 
-    class ProductoxInventario{
+        class Producto {
+        - STRING nombre
+        - STRING descripcion
     }
 
-    class Donacion{
-        - STRING Descripcion
-        - INT Monto
+    class Categoria {
+        - STRING nombre
+    }
+
+    class EstadoProducto {
+        - STRING descripcion
+    }
+
+    class Donacion {
+        - DATE fecha
+        - STRING descripcion
 
         + listarDonaciones()
         + agregarDonacion()
         + editarDonacion()
     }
 
-    class TipoOperacion{
-        - STRING TipoOp
+    class DonacionXProducto{
+        - STRING nombre
     }
 
-    class Operacion{
-        - STRING Descripcion
+
+    class Operacion {
+        - DATE fecha
+        - STRING descripcion
         - STRING Factura
-    
+
         + listarOperaciones()
         + agregarOperacion()
         + editarOperacion()
     }
 
-    class ProductoxOperacion{
+    class TipoOperacion {
+        - STRING descripcion
     }
 
-    class Video{
-        - STRING Titulo
-        - STRING Descripcion
-        - STRING LinkVideo
+    class ProductoXOperacion{
+        - STRING nombre
+    }
+
+    class Video {
+        - STRING titulo
+        - STRING url
+        - STRING descripcion
 
         + subirVideo()
         + listarVideos()
         + editarDescripcionTitulo()
+    }
+
+    class Evento {
+        - STRING titulo
+        - STRING descripcion
+        - DATE fecha
+        - TIME hora
+
+        + listarEventos()
+        + editarEvento()
+        + crearEvento()
+    }
+
+    class Reporte {
+        - STRING Reporte
+
+	    + generarReporte()
+    }
+
+
+    class Tarea {
+        - STRING Nombre
+        - STRING Descripcion
+        - DATE FechaTarea
+        - TIME HoraTarea
+        - STRING PublicoDirigido
+
+        + listarTareas()
+        + editarTarea()
+        + crearTarea()
+        + dirigirTarea()
+    }
+
+    class Persona {
+        - STRING nombre
+        - STRING apellido
+        - STRING telefono
+        - STRING contrasena
+    }
+
+    class Etiqueta {
+        - STRING nombre
+    }
+
+    class TipoEtiqueta {
+        - STRING Nombre
+    }
+
+    class Invitado {
+        - STRING nombre
+        - STRING apellido
+        - STRING telefono
+    }
+
+    class TareaxPersona{
+        - STRING nombre
+    }
+
+    class PersonaxEvento{
+        - STRING nombre
+    }
+    
+    class PersonaXEtiqueta{
+        - STRING nombre
+    }
+
+    class EtiquetaXCandidato{
+        - STRING nombre
     }
