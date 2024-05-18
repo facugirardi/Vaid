@@ -54,3 +54,68 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
 
     def __str__(self):
         return self.email
+
+class UserTypes(models.Model):
+    Usertype = models.CharField(max_length=255)
+    PermissionLevel = models.IntegerField()
+
+class User(models.Model):
+    Email = models.EmailField(max_length=255)
+    Password = models.CharField(max_length=255)
+
+    def ChangePasword(self):
+        return
+
+    def CreateTask(self):
+        return
+
+    def CreateEvent(self):
+        return
+
+    def CreateDonation(self):
+        return
+
+    def CreateInventory(self):
+        return
+
+    def CreateSede(self):
+        return
+
+    def RegistUser(self):
+        return
+        
+class Organization(models.Model):
+    Name = models.CharField(max_length=255)
+    Description = models.CharField(max_length=255)
+    PhoneNumber = models.CharField(max_length=255)  
+    OrgLogo = models.CharField(max_length=255)
+    Email = models.EmailField(max_length=255)
+    WebeSite = models.CharField(max_length=255)
+
+class Candidate(models.Model):
+    Name = models.CharField(max_length=255)
+    LastName = models.CharField(max_length=255)
+    PhoneNumber = models.CharField(max_length=255)
+    Disponibility = models.TimeField()
+    BornDate = models.DateField()
+
+class Person(models.Model):
+    Name = models.CharField(max_length=255)
+    LastName = models.CharField(max_length=255)
+    PhoneNumber = models.CharField(max_length=255)
+
+class Headquarters(models.Model):
+    Name = models.CharField(max_length=255)
+    Description = models.CharField(max_length=255)
+    
+class Inventory(models.Model):
+    Headquarter = models.ForeignKey(Headquarters, on_delete=models.CASCADE)
+
+class ProductCategory(models.Model):
+    Name = models.CharField(max_length=255)
+
+class ProductEstate(models.Model):
+    Name = models.CharField(max_length=255)
+        
+
+

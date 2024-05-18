@@ -44,9 +44,10 @@ Candidato --> Persona : es
         + cambiarContrasena()
         + crearTarea()
         + crearEvento()
-        + agregarDonacion()
-        + agregarOperacion()
-        + agregarInventario() 
+        + crearDonacion()
+        + crearOperacion()
+        + crearInventario()
+        + crearSede() 
 	+ registrarse()  
     }
 
@@ -65,7 +66,6 @@ Candidato --> Persona : es
     class Candidato {
         - STRING nombre
         - STRING apellido
-        - STRING correo
         - STRING telefono
         - TIME disponibilidad
         - DATE fechaNacimiento
@@ -81,6 +81,7 @@ Candidato --> Persona : es
 
     class Inventario{
 
+	+ asignarSede()
         + listarInventariosPorSede()
         + cambiarCantidad()
     }
@@ -175,7 +176,6 @@ Candidato --> Persona : es
         - STRING nombre
         - STRING apellido
         - STRING telefono
-        - STRING contrasena
     }
 
     class Etiqueta {
