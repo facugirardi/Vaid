@@ -8,6 +8,8 @@ const Header = ({ header, onePage }) => {
   switch (header) {
     case 3:
       return <Header3 onePage={onePage} />;
+    case 0:
+        return <HeaderEmpty onePage={onePage} />;  
     default:
       return <Header3 onePage={onePage} />;
   }
@@ -31,7 +33,7 @@ const Header3 = ({ onePage }) => {
               <div className="logo">
                 <Link href="/">
                   <img
-                    src="assets/images/vaidpng2.png"
+                    src="/assets/images/vaidpng2.png"
                     alt="Logo"
                     title="Logo"
                   />
@@ -43,7 +45,7 @@ const Header3 = ({ onePage }) => {
               <nav className="main-menu navbar-expand-lg">
                 <Nav
                   onePage={onePage}
-                  logo="assets/images/vaidpng2.png"
+                  logo="/assets/images/vaidpng2.png"
                   menus={menus}
                 />
               </nav>
@@ -51,10 +53,10 @@ const Header3 = ({ onePage }) => {
             </div>
             {/* Menu Button */}
             <div className="menu-btns ms-lg-auto">
-              <Link href="login" className="light-btn">
-                Log in
+              <Link href="/auth/login" className="light-btn">
+                Login
               </Link>
-              <Link href="sign-up" className="theme-btn style-two">
+              <Link href="/auth/register" className="theme-btn style-two">
                 Sign Up <i className="far fa-arrow-right" />
               </Link>
             </div>
@@ -66,8 +68,46 @@ const Header3 = ({ onePage }) => {
   );
 };
 
+
+
+const HeaderEmpty = ({ onePage }) => {
+  return (
+    <header className="main-header menu-absolute">
+      {/*Header-Upper*/}
+      <div className="header-upper">
+        <div className="container container-1520 clearfix">
+          <div className="header-inner py-20 rpy-10 rel d-flex align-items-center">
+            <div className="logo-outer">
+              <div className="logo">
+                <Link href="#">
+                  <img
+                    src="/assets/images/vaidpng2.png"
+                    alt="Logo"
+                    title="Logo"
+                  />
+                </Link>
+              </div>
+            </div>
+            <div className="nav-outer ms-lg-auto clearfix">
+              {/* Main Menu */}
+              <nav className="main-menu navbar-expand-lg">
+              </nav>
+              {/* Main Menu End*/}
+            </div>
+            {/* Menu Button */}
+            <div className="menu-btns ms-lg-auto">
+            </div>
+          </div>
+        </div>
+      </div>
+      {/*End Header Upper*/}
+    </header>
+  );
+};
+
+
 const Nav = ({
-  logo = "assets/images/logos/logo2.png",
+  logo = "/assets/images/vaidpng2.png",
   dark,
   onePage,
   menus,

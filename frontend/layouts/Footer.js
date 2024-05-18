@@ -4,6 +4,8 @@ const Footer = ({ footer }) => {
   switch (footer) {
     case 3:
       return <Footer3 />;
+    case 0:
+      return <FooterEmpty />
     default:
       return <Footer3 />;
   }
@@ -128,3 +130,7 @@ const Footer3 = () => {
     </footer>
   );
 };
+
+const FooterEmpty = () => {
+  return 
+}

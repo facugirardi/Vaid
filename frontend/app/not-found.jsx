@@ -3,7 +3,7 @@ import Link from "next/link";
 
 const e404 = () => {
   return (
-    <AkpagerLayout header={3} footer={3} bodyClass={"home-three"} onePage>
+    <AkpagerLayout header={0} footer={0} bodyClass={"home-three"} onePage>
       {" "}
       <section className="error-area py-150 rpy-100">
         <div className="container">
@@ -28,9 +28,6 @@ const e404 = () => {
                   never existed in the first place. But don't worry, you're not
                   lost for long.
                 </p>
-                <Link href="/" className="theme-btn mt-15 mb-10">
-                  Home <i className="far fa-arrow-right" />
-                </Link>
 
               </div>
             </div>
