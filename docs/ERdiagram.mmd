@@ -125,7 +125,12 @@ PersonaXOrg }|--|| Org : tiene
         time hora
         int idUsuario FK
     }
-
+    
+    PersonaXOrg{
+	int idPersona FK
+        int idOrg FK
+    }
+ 
     Evento{
         int idEvento PK
         varchar titulo
