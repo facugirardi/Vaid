@@ -66,6 +66,7 @@ Candidato ||--|| Persona : es
         int idProductoXInventario PK
         int idProducto FK
         int idInventario FK
+        int Cantidad 
     }
 
     EstadoProducto{
@@ -177,7 +178,6 @@ Candidato ||--|| Persona : es
         int idCandidato PK
         varchar nombre
         varchar apellido
-        varchar correo
         varchar telefono
         time disponibilidad
         date fechaNacimiento
