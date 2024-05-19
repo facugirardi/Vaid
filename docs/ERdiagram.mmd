@@ -31,6 +31,8 @@ Evento ||--|{ Invitado : tiene
 Tarea ||--|{ TareaXPersona : tiene
 EtiquetaXCandidato }|--|| Candidato : tiene
 Candidato ||--|| Persona : es
+Persona ||--|{ PersonaXOrg : tiene
+PersonaXOrg }|--|| Org : tiene
 
     TipoUsuario {
         int idTipoUsuario PK
@@ -154,8 +156,7 @@ Candidato ||--|| Persona : es
         varchar apellido
         varchar telefono
         varchar contrasena
-        int Usuario FK
-        int idCategoriaUsuario FK
+        int IDUsuario FK
     }
 
     Etiqueta{
