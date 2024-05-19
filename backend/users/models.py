@@ -38,10 +38,16 @@ class UserAccountManager(BaseUserManager):
         return user
 
 
+class UserType(models.Model):
+    Usertype = models.CharField(max_length=255)
+    PermissionLevel = models.IntegerField()
+
+
 class UserAccount(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     email = models.EmailField(unique=True, max_length=255)
+    user_type = models.ForeignKey(UserType, on_delete=models.CASCADE)
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -55,34 +61,6 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email
 
-class UserTypes(models.Model):
-    Usertype = models.CharField(max_length=255)
-    PermissionLevel = models.IntegerField()
-
-class User(models.Model):
-    Email = models.EmailField(max_length=255)
-    Password = models.CharField(max_length=255)
-
-    def ChangePasword(self):
-        return
-
-    def CreateTask(self):
-        return
-
-    def CreateEvent(self):
-        return
-
-    def CreateDonation(self):
-        return
-
-    def CreateInventory(self):
-        return
-
-    def CreateHeadquarter(self):
-        return
-
-    def RegistUser(self):
-        return
 
 class TagType(models.Model):
     Name = models.CharField(max_length=255)
