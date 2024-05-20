@@ -68,7 +68,7 @@ class TagType(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(max_length=255)
-    tag_type = models.ForeignKey(TagType, on_delete=models.CASCADE) 
+    TagType = models.ForeignKey(TagType, on_delete=models.CASCADE) 
 
 
 class Organization(models.Model):
@@ -81,7 +81,7 @@ class Candidate(models.Model):
     phone_number = models.CharField(max_length=255)
     disponibility = models.TimeField()
     born_date = models.DateField()
-    user_id = models.ForeignKey(UserAccount, on_delete=models.CASCADE) 
+    User = models.ForeignKey(UserAccount, on_delete=models.CASCADE) 
 
 
 class CandidateTagDetails(models.Model):
@@ -91,7 +91,7 @@ class CandidateTagDetails(models.Model):
 
 class Person(models.Model):
     phone_number = models.CharField(max_length=255)
-    user_id = models.ForeignKey(UserAccount, on_delete=models.CASCADE) 
+    User = models.ForeignKey(UserAccount, on_delete=models.CASCADE) 
 
 
 class PersonTagDetails(models.Model):
@@ -181,7 +181,7 @@ class DonationProductDetails(models.Model):
 
 
 class OperationType(models.Model):
-    Description = models.CharField(max_length=255)
+    description = models.CharField(max_length=255)
 
 
 class Operation(models.Model):
