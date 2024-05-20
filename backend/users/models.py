@@ -40,7 +40,7 @@ class UserAccountManager(BaseUserManager):
 
 class UserType(models.Model):
     Usertype = models.CharField(max_length=255)
-    PermissionLevel = models.IntegerField()
+    permission_level = models.IntegerField()
 
 
 class UserAccount(AbstractBaseUser, PermissionsMixin):
@@ -63,204 +63,142 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
 
 
 class TagType(models.Model):
-    Name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+
 
 class Tag(models.Model):
-    Name = models.CharField(max_length=255)
-    Type = models.ForeignKey(TagType, on_delete=models.CASCADE) 
+    name = models.CharField(max_length=255)
+    tag_type = models.ForeignKey(TagType, on_delete=models.CASCADE) 
+
 
 class Organization(models.Model):
-    Name = models.CharField(max_length=255)
-    Description = models.CharField(max_length=255)
-    PhoneNumber = models.CharField(max_length=255)  
-    OrgLogo = models.CharField(max_length=255)
-    Email = models.EmailField(max_length=255)
-    WebeSite = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+    description = models.CharField(max_length=255)
+    website = models.CharField(max_length=255)
 
-    def UploadLogo(self):
-        return
 
 class Candidate(models.Model):
-    Name = models.CharField(max_length=255)
-    LastName = models.CharField(max_length=255)
-    PhoneNumber = models.CharField(max_length=255)
-    Disponibility = models.TimeField()
-    BornDate = models.DateField()
+    phone_number = models.CharField(max_length=255)
+    disponibility = models.TimeField()
+    born_date = models.DateField()
+    user_id = models.ForeignKey(UserAccount, on_delete=models.CASCADE) 
 
-    def SendForm(self):
-        return
-    
-    def GenerateTag(self):
-        return
 
 class CandidateTagDetails(models.Model):
     Candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
     Tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
 
+
 class Person(models.Model):
-    Name = models.CharField(max_length=255)
-    LastName = models.CharField(max_length=255)
-    PhoneNumber = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=255)
+    user_id = models.ForeignKey(UserAccount, on_delete=models.CASCADE) 
+
 
 class PersonTagDetails(models.Model):
     Person = models.ForeignKey(Person, on_delete=models.CASCADE)
     Tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
 
-class Headquarters(models.Model):
-    Name = models.CharField(max_length=255)
-    Description = models.CharField(max_length=255)
-    
-class Inventory(models.Model):
-    Headquarter = models.ForeignKey(Headquarters, on_delete=models.CASCADE)
 
-    def AsignHeadquarter(self):
-        return
+class Headquarter(models.Model):
+    name = models.CharField(max_length=255)
+    address = models.CharField(max_length=255)
     
-    def ListInventory(self):
-        return
-    
-    def EditCuantity(self):
-        return
+
+class Inventory(models.Model):
+    Headquarter = models.ForeignKey(Headquarter, on_delete=models.CASCADE)
+
 
 class ProductCategory(models.Model):
-    Name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+
 
 class ProductStatus(models.Model):
-    Name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+
 
 class Product(models.Model):
-    Name = models.CharField(max_length=255)
-    Description = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+    description = models.CharField(max_length=255)
     Category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
     Status = models.ForeignKey(ProductStatus, on_delete=models.CASCADE)
+
 
 class ProductInventoryDetails(models.Model):
     Product = models.ForeignKey(Product, on_delete=models.CASCADE)
     Inventory = models.ForeignKey(Inventory, on_delete=models.CASCADE)
-    Cuantity = models.IntegerField()
+    cuantity = models.IntegerField()
+
 
 class Task(models.Model):
-    Name = models.CharField(max_length=255)
-    Description = models.CharField(max_length=255)
-    Date = models.DateField()
-    Time = models.TimeField()
+    name = models.CharField(max_length=255)
+    description = models.CharField(max_length=255)
+    date = models.DateField()
+    time = models.TimeField()
+    Organization = models.ForeignKey(Organization, on_delete=models.CASCADE) 
 
-    def ListTasks(self):
-        return
-    
-    def AddTask(self):
-        return
-    
-    def EditTask(self):
-        return
-    
-    def DeleteTask(self):
-        return
-    
-    def DirectTask(self):
-        return
 
 class TaskPersonDetails(models.Model):
     Person = models.ForeignKey(Person, on_delete=models.CASCADE)
     Task = models.ForeignKey(Task, on_delete=models.CASCADE)
 
-class Event(models.Model):
-    Name = models.CharField(max_length=255)
-    Description = models.CharField(max_length=255)
-    Date = models.DateField()
-    Time = models.TimeField()
 
-    def ListEvents(self):
-        return
-    
-    def AddEvent(self):
-        return
-    
-    def EditEvent(self):
-        return
+class Event(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.CharField(max_length=255)
+    date = models.DateField()
+    time = models.TimeField()
+    Organization = models.ForeignKey(Organization, on_delete=models.CASCADE) 
+
 
 class EventReport(models.Model):
-    Title = models.CharField(max_length=255)
-    Description = models.CharField(max_length=255)  
+    title = models.CharField(max_length=255)
+    description = models.CharField(max_length=255)  
     Event = models.ForeignKey(Event, on_delete=models.CASCADE)
     User = models.ForeignKey(User, on_delete=models.CASCADE)
 
+
 class Guest(models.Model):
-    Name = models.CharField(max_length=255)
-    LastName = models.CharField(max_length=255)
-    Phone = models.CharField(max_length=255)
+    name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    phone = models.CharField(max_length=255)
     Event = models.ForeignKey(Event, on_delete=models.CASCADE)
+
 
 class EventPersonDetails(models.Model):
     Person = models.ForeignKey(Person, on_delete=models.CASCADE)
     Event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
+
 class Donation(models.Model):
-    Name = models.CharField(max_length=255)
-    Description = models.CharField(max_length=255)
-    Product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    User = models.ForeignKey(User, on_delete=models.CASCADE)
-    Date = models.DateField()
+    description = models.CharField(max_length=255)
+    date = models.DateField()
+    Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
-    def ListDonations(self):
-        return
-    
-    def AddDonation(self):
-        return
-    
-    def EditDonation(self):
-        return
-
-class DonationPersonDetails(models.Model):
-    Person = models.ForeignKey(Person, on_delete=models.CASCADE)
-    Donation = models.ForeignKey(Donation, on_delete=models.CASCADE)
 
 class DonationProductDetails(models.Model):
     Product = models.ForeignKey(Product, on_delete=models.CASCADE)
     Donation = models.ForeignKey(Donation, on_delete=models.CASCADE)
 
+
 class OperationType(models.Model):
     Description = models.CharField(max_length=255)
 
+
 class Operation(models.Model):
-    Description = models.CharField(max_length=255)
-    Date = models.DateField()
-    Time = models.TimeField()
-    User = models.ForeignKey(User, on_delete=models.CASCADE)
+    description = models.CharField(max_length=255)
+    date = models.DateField()
+    time = models.TimeField()
+    Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     Type = models.ForeignKey(OperationType, on_delete=models.CASCADE)
 
-    def ListOperations(self):
-        return
-    
-    def AddOperation(self):
-        return
-    
-    def EditOperation(self):
-        return 
 
 class OperationProductDetails(models.Model):
     Product = models.ForeignKey(Product, on_delete=models.CASCADE)
     Operation = models.ForeignKey(Operation, on_delete=models.CASCADE)
 
+
 class Video(models.Model):
-    Title = models.CharField(max_length=255)
-    Description = models.CharField(max_length=255)
-    Url = models.CharField(max_length=255)
-    User = models.ForeignKey(User, on_delete=models.CASCADE)
-
-    def UploadVideo(self):
-        return
-    
-    def ListVideos(self):
-        return
-    
-    def EditDescription(self):
-        return
-    
-    def EditTitle(self):
-        return
-
-    def DeleteVideo(self):
-        return
-    
-
+    title = models.CharField(max_length=255)
+    description = models.CharField(max_length=255)
+    url = models.CharField(max_length=255)
+    Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
