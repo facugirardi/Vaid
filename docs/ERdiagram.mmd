@@ -31,6 +31,8 @@ Evento ||--|{ Invitado : tiene
 Tarea ||--|{ TareaXPersona : tiene
 EtiquetaXCandidato }|--|| Candidato : tiene
 Candidato ||--|| Persona : es
+Persona ||--|{ PersonaXOrg : tiene
+PersonaXOrg }|--|| Org : tiene
 
     TipoUsuario {
         int idTipoUsuario PK
@@ -66,6 +68,7 @@ Candidato ||--|| Persona : es
         int idProductoXInventario PK
         int idProducto FK
         int idInventario FK
+        int Cantidad 
     }
 
     EstadoProducto{
@@ -122,7 +125,12 @@ Candidato ||--|| Persona : es
         time hora
         int idUsuario FK
     }
-
+    
+    PersonaXOrg{
+	int idPersona FK
+        int idOrg FK
+    }
+ 
     Evento{
         int idEvento PK
         varchar titulo
@@ -153,8 +161,7 @@ Candidato ||--|| Persona : es
         varchar apellido
         varchar telefono
         varchar contrasena
-        int Usuario FK
-        int idCategoriaUsuario FK
+        int IDUsuario FK
     }
 
     Etiqueta{
@@ -177,7 +184,6 @@ Candidato ||--|| Persona : es
         int idCandidato PK
         varchar nombre
         varchar apellido
-        varchar correo
         varchar telefono
         time disponibilidad
         date fechaNacimiento

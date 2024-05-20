@@ -31,6 +31,8 @@ Tarea --> TareaXPersona : tiene
 Candidato --> EtiquetaXCandidato : tiene
 Persona --> PersonaXEtiqueta : tiene
 Candidato --> Persona : es
+Persona --> PersonaXOrg : tiene
+PersonaXOrg --> Org : tiene
 
     class TipoUsuario {
         - STRING tipousuario
@@ -44,9 +46,10 @@ Candidato --> Persona : es
         + cambiarContrasena()
         + crearTarea()
         + crearEvento()
-        + agregarDonacion()
-        + agregarOperacion()
-        + agregarInventario() 
+        + crearDonacion()
+        + crearOperacion()
+        + crearInventario()
+        + crearSede() 
 	+ registrarse()  
     }
 
@@ -65,7 +68,6 @@ Candidato --> Persona : es
     class Candidato {
         - STRING nombre
         - STRING apellido
-        - STRING correo
         - STRING telefono
         - TIME disponibilidad
         - DATE fechaNacimiento
@@ -81,13 +83,19 @@ Candidato --> Persona : es
 
     class Inventario{
 
+	+ asignarSede()
         + listarInventariosPorSede()
         + cambiarCantidad()
     }
 
-        class Producto {
+    class Producto {
         - STRING nombre
         - STRING descripcion
+    }
+    
+    class ProductoXInventario{
+    	- INT Cantidad
+    	
     }
 
     class Categoria {
@@ -124,6 +132,9 @@ Candidato --> Persona : es
 
     class TipoOperacion {
         - STRING descripcion
+    }
+
+    class PersonaXOrg {
     }
 
     class ProductoXOperacion{
@@ -175,7 +186,6 @@ Candidato --> Persona : es
         - STRING nombre
         - STRING apellido
         - STRING telefono
-        - STRING contrasena
     }
 
     class Etiqueta {
