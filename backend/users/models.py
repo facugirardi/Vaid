@@ -4,6 +4,7 @@ from django.contrib.auth.models import (
     AbstractBaseUser,
     PermissionsMixin
 )
+from django.utils import timezone
 
 
 class UserAccountManager(BaseUserManager):
@@ -40,14 +41,14 @@ class UserAccountManager(BaseUserManager):
 
 class UserType(models.Model):
     Usertype = models.CharField(max_length=255)
-    permission_level = models.IntegerField()
+    permission_level = models.IntegerField(default=1) 
 
 
 class UserAccount(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     email = models.EmailField(unique=True, max_length=255)
-    user_type = models.ForeignKey(UserType, on_delete=models.CASCADE)
+    user_type = models.ForeignKey(UserType, on_delete=models.CASCADE, default=1)
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
@@ -78,9 +79,9 @@ class Organization(models.Model):
 
 
 class Candidate(models.Model):
-    phone_number = models.CharField(max_length=255)
-    disponibility = models.TimeField()
-    born_date = models.DateField()
+    phone_number = models.CharField(max_length=255, default='000-000-0000')
+    disponibility = models.TimeField(default=timezone.now) 
+    born_date = models.DateField(default=timezone.now) 
     User = models.ForeignKey(UserAccount, on_delete=models.CASCADE) 
 
 
@@ -90,7 +91,7 @@ class CandidateTagDetails(models.Model):
 
 
 class Person(models.Model):
-    phone_number = models.CharField(max_length=255)
+    phone_number = models.CharField(max_length=255, default='000-000-0000')
     User = models.ForeignKey(UserAccount, on_delete=models.CASCADE) 
 
 
@@ -131,9 +132,9 @@ class ProductInventoryDetails(models.Model):
 
 class Task(models.Model):
     name = models.CharField(max_length=255)
-    description = models.CharField(max_length=255)
-    date = models.DateField()
-    time = models.TimeField()
+    description = models.CharField(max_length=255, default='No description provided')
+    date = models.DateField(default=timezone.now)
+    time = models.TimeField(default=timezone.now)
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE) 
 
 
@@ -144,9 +145,9 @@ class TaskPersonDetails(models.Model):
 
 class Event(models.Model):
     name = models.CharField(max_length=255)
-    description = models.CharField(max_length=255)
-    date = models.DateField()
-    time = models.TimeField()
+    description = models.CharField(max_length=255, default='Details to be announced')
+    date = models.DateField(default=timezone.now)
+    time = models.TimeField(default=timezone.now)
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE) 
 
 
@@ -170,8 +171,8 @@ class EventPersonDetails(models.Model):
 
 
 class Donation(models.Model):
-    description = models.CharField(max_length=255)
-    date = models.DateField()
+    description = models.CharField(max_length=255, default='General donation')
+    date = models.DateField(default=timezone.now)
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
 
@@ -185,9 +186,9 @@ class OperationType(models.Model):
 
 
 class Operation(models.Model):
-    description = models.CharField(max_length=255)
-    date = models.DateField()
-    time = models.TimeField()
+    description = models.CharField(max_length=255, default='Regular operation')
+    date = models.DateField(default=timezone.now)
+    time = models.TimeField(default=timezone.now)
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     Type = models.ForeignKey(OperationType, on_delete=models.CASCADE)
 
@@ -199,6 +200,6 @@ class OperationProductDetails(models.Model):
 
 class Video(models.Model):
     title = models.CharField(max_length=255)
-    description = models.CharField(max_length=255)
-    url = models.CharField(max_length=255)
+    description = models.CharField(max_length=255, default='Video content')
+    url = models.CharField(max_length=255, default='http://example.com')
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
