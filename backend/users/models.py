@@ -154,7 +154,7 @@ class EventReport(models.Model):
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255)  
     Event = models.ForeignKey(Event, on_delete=models.CASCADE)
-    User = models.ForeignKey(User, on_delete=models.CASCADE)
+    User = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
 
 
 class Guest(models.Model):
