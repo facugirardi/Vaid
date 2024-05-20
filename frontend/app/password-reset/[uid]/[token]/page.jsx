@@ -20,7 +20,7 @@ const page = () => {
       >
         <div className="container">
           <div className="d-flex justify-content-center">
-            <h3>Login to your account</h3>
+            <h3>Password Reset2</h3>
             {breaks} {/*borrar cuando se haga el login*/}      
 
           </div>

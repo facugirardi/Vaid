@@ -1,9 +1,10 @@
 "use client";
 import LandingLayout from "@/layouts/LandingLayout";
+import Link from "next/link";
 import { useEffect, useState } from "react";
 
 
-const breaks = Array(10).fill(0).map((_, i) => <br key={i} />); // borrar cuando se haga el signup
+const breaks = Array(10).fill(0).map((_, i) => <br key={i} />); // borrar cuando se haga el login
 
 
 const page = () => {
@@ -19,8 +20,9 @@ const page = () => {
       >
         <div className="container">
           <div className="d-flex justify-content-center">
-            <h3>Sign Up</h3>
-            {breaks} {/*borrar cuando se haga el signup*/}      
+            <h3>Activation</h3>
+            {breaks} {/*borrar cuando se haga el login*/}      
+
           </div>
         </div>
       </section>
