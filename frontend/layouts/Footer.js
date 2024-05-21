@@ -116,7 +116,7 @@ const Footer3 = () => {
                 data-aos-offset={50}
               >
                 <Link href="/">
-                  <img src="assets/images/vaidpng2.png" alt="Logo" style={{ filter: 'brightness(0) invert(1)' }}/>
+                  <img src="/assets/images/vaidpng2.png" alt="Logo" style={{ filter: 'brightness(0) invert(1)' }}/>
                 </Link>
               </div>
             </div>

@@ -1,7 +1,7 @@
 "use client";
 import LandingLayout from "@/layouts/LandingLayout";
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import LoginForm from '@/components/LoginForm/LoginForm';
 
 
 const breaks = Array(10).fill(0).map((_, i) => <br key={i} />); // borrar cuando se haga el login
@@ -20,7 +20,7 @@ const page = () => {
       >
         <div className="container">
           <div className="d-flex justify-content-center">
-            <h3>Login to your account</h3>
+            <LoginForm/>
             {breaks} {/*borrar cuando se haga el login*/}      
 
           </div>

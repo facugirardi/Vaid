@@ -9,6 +9,7 @@ import "@css/slick.min.css";
 import "@css/style.css";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Provider from '@/redux/provider';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,8 +25,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <Preloader />
-        {children}
+        <Provider>
+          <Preloader />
+          {children}
+        </Provider>
       </body>
     </html>
   );
