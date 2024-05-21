@@ -10,7 +10,7 @@ const LoginForm = () => {
                 </div>
 
                 <div className='flex-item'>
-                    <h3>Welcome !</h3>
+                    <h3>Welcome!</h3>
                 </div>
 
                 <div className="input-box flex-item">
@@ -25,7 +25,7 @@ const LoginForm = () => {
 
                 <div className="remember-forgot flex-item">
                     <label><input type="checkbox" />Remember me</label>
-                    <a href='#'>Forgot password ?</a>
+                    <a href='#'>Forgot password?</a>
                 </div>
                 
                 <div className='flex-item'>
