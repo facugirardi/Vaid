@@ -98,6 +98,7 @@ AWS_SES_FROM_EMAIL = key.AWS_SES_FROM_EMAIL
 
 USE_SES_V2 = True
 
+DOMAIN = 'localhost:3000'
 SITE_NAME = 'Vaid'
 
 # Password validation
