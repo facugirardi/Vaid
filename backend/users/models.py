@@ -92,6 +92,7 @@ class CandidateTagDetails(models.Model):
 
 class Person(models.Model):
     phone_number = models.CharField(max_length=255, default='000-000-0000')
+    address = models.CharField(max_length=255, default='Street 123')
     User = models.ForeignKey(UserAccount, on_delete=models.CASCADE) 
 
 
