@@ -1,6 +1,6 @@
 "use client";
+import RegisterForm from "@/components/RegisterForm/RegisterForm";
 import LandingLayout from "@/layouts/LandingLayout";
-import Link from "next/link";
 import { useEffect, useState } from "react";
 
 
@@ -20,7 +20,7 @@ const page = () => {
       >
         <div className="container">
           <div className="d-flex justify-content-center">
-            <h3>Register</h3>
+            <RegisterForm/>
             {breaks} {/*borrar cuando se haga el login*/}      
 
           </div>
