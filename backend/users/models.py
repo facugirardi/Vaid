@@ -80,7 +80,7 @@ class Organization(models.Model):
 
 class Candidate(models.Model):
     phone_number = models.CharField(max_length=255, default='000-000-0000')
-    disponibility = models.TimeField(default=timezone.now) 
+    disponibility = models.TimeField(default=timezone.now) # CAMBIAR
     born_date = models.DateField(default=timezone.now) 
     User = models.ForeignKey(UserAccount, on_delete=models.CASCADE) 
 
@@ -93,8 +93,10 @@ class CandidateTagDetails(models.Model):
 class Person(models.Model):
     phone_number = models.CharField(max_length=255, default='000-000-0000')
     address = models.CharField(max_length=255, default='Street 123')
+    born_date = models.DateField(default=timezone.now) 
+    disponibility = models.TimeField(default=timezone.now) # CAMBIAR
     User = models.ForeignKey(UserAccount, on_delete=models.CASCADE) 
-
+    
 
 class PersonTagDetails(models.Model):
     Person = models.ForeignKey(Person, on_delete=models.CASCADE)

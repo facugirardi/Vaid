@@ -1,0 +1,272 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+}
+
+
+.switchContainer {
+    display: flex;
+    align-items: center;
+    background-color: #D8D8D8;
+    width: 200px;
+    border-radius: 20px;
+    justify-content: center; 
+    margin: auto;
+    cursor: pointer;
+    margin-bottom: 25px;
+  }
+  
+  .switchBtn {
+    font-family:   var(--heading-font);
+    padding: 4px 17.5px;
+    font-weight: 500;
+    border-radius: 20px;
+    transition: background-color 0.3s;
+  }
+  
+  .active {
+    background-color: #2A50CF;
+    color: white;
+  }
+  
+  
+.imgLogo_login{
+    width: 90px;
+    margin-bottom: 20px;
+}
+
+.google-logo{
+    width: 18px;
+    margin-right: 10px;
+}
+
+.cont-sm{
+    display: flex;
+    justify-content: space-between; 
+    width: 100%; 
+}
+
+.sm-input{
+    width: 45%;
+}
+
+.wrapper {
+    width: 32.5%;
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.17);
+    color: black;
+    border-radius: 8px;
+    padding: 30px 33px 10px 33px;
+    display: flex;
+    flex-direction: column; /* Colocar elementos en columna */
+    justify-content: space-between; /* Distribuir espacio uniformemente */
+    height: 100%; /* Ocupar toda la altura del contenedor padre */
+}
+
+.flex-item-logo{
+    flex: 1; /* Cada elemento toma un espacio igual */  
+    display: flex;
+    justify-content: center;  /* Centra el contenido horizontalmente */
+    align-items: center;      /* Centra el contenido verticalmente */
+    flex-direction: column;   /* Alinea el contenido en columna */
+}
+
+.wrapper h1 {
+    font-size: 36px;
+    text-align: center;
+    font-family:   var(--heading-font);
+}
+
+.wrapper h3 {
+    font-weight: 300;
+    font-size: 20px;
+}
+
+.wrapper .input-box {
+    position: relative;
+    width: 100%;
+    height: 45px;
+    margin-top: 5%;
+    margin-bottom: 15%;
+}
+
+.input-box input {
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgb(160, 160, 160);
+    outline: none;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.111);
+    font-size: 16px;
+    font-family:   var(--heading-font);
+    border: 1px solid rgb(160, 160, 160);
+    padding: 20px 45px 20px 20px;
+}
+
+.input-box input::placeholder{
+    color: rgba(100, 100, 100, 0.629);
+    font-size: 12.5px;
+    font-family:   var(--heading-font);
+}
+
+.input-box .icon{
+    position: absolute;
+    right: 20px;
+    top: 22px;
+    transform: translateY(-30%);
+    font-size: 16px;
+}
+
+.wrapper .remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11.5px;
+    font-family:   var(--base-font);
+    margin-bottom: 5%;
+    margin-top: 17%;
+    color: rgb(83, 83, 83);
+
+}
+
+.remember-forgot label input {
+    margin-right: 4px;
+}
+
+.label_input{
+    font-size: 13.5px !important; 
+    font-family:   var(--heading-font);
+    color: #000000;
+}
+
+.remember-forgot a {
+    color: rgb(83, 83, 83);
+    text-decoration: none;
+}
+
+.remember-forgot a:hover {
+    text-decoration: underline;
+}
+
+.wrapper button {
+    width: 100%;
+    height: 45px;
+    background-color: #2A50CF;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
+    cursor: pointer;
+    font-size: 16px;
+    color: rgb(255, 255, 255);
+    font-family:   var(--heading-font);
+    font-weight: 500;
+    font-size: 14px !important;
+}
+
+.btn_cont{
+    margin-top: 70px;
+}
+
+.wrapper button:hover {
+    background-color: #1e3890;
+    transition: .2s ease;
+}
+
+.google-button{
+    margin-top: 20px;
+    background-color: #e4e4e4 !important;
+    color: rgb(0, 0, 0) !important; 
+    display: flex;
+    justify-content: center;  /* Centra el contenido horizontalmente */
+    align-items: center;      /* Centra el contenido verticalmente */
+    flex-direction: row;   /* Alinea el contenido en columna */
+    font-size: 14px !important;
+}
+
+.google-button:hover{
+    background-color: #d4d4d4 !important;
+    transition: .2s ease;
+}
+
+.google-button .iconGoogle {
+    position: center;
+    right: 10px;
+    top: 15px;
+    transform: translateY(-45%);
+}
+
+.wrapper .register-link {
+    font-size: 14,5px;
+    text-align: center;
+    margin: 20px 0 15px;
+}
+
+.register-link p {
+    font-family:   var(--base-font);
+    color: #7a7a7a;
+    text-decoration: none;
+    font-weight: 300;
+    font-size: 14px;
+}
+
+
+.register-link p a {
+    color: #2A50CF;
+    font-family:   var(--base-font);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.register-link p a:hover {          
+    text-decoration: underline;
+}
+
+
+@media (max-width: 1200px) {
+    .wrapper {
+        width: 45%;
+      }
+}
+
+@media (max-width: 991px) {
+    .wrapper {
+        width: 60%;
+      }
+}
+
+@media (max-width: 768px) {
+    .wrapper {
+        width: 75%;
+      }
+}
+
+@media (max-width: 450px) {
+    .wrapper {
+        width: 80%;
+      }
+}
+@media (max-width: 415px) {
+    .wrapper {
+        width: 85%;
+      }
+
+    .wrapper .input-box {
+        margin-top: 7.5%;
+        margin-bottom: 20%;
+    }
+}
+
+@media (max-width: 360px) {
+    .wrapper {
+        width: 100%;
+      }
+
+    .wrapper .input-box {
+        margin-top: 7.5%;
+        margin-bottom: 20%;
+    }
+}
