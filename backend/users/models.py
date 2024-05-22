@@ -48,7 +48,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     email = models.EmailField(unique=True, max_length=255)
-    user_type = models.ForeignKey(UserType, on_delete=models.CASCADE, default=1)
+    user_type = models.IntegerField(default=1)
 
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)

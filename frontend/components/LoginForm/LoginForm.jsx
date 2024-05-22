@@ -37,7 +37,7 @@ const LoginForm = () => {
                 </div>
                 
                 <div className='register-link flex-item'>
-                    <p>Don't have an account? <a href='#'>Register</a></p>
+                    <p>Don't have an account? <a href='/auth/register'>Register</a></p>
                 </div>
                 
             </form>
