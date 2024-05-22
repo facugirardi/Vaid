@@ -15,12 +15,12 @@ const LoginForm = () => {
 
                 <div className="input-box flex-item">
                     <label className='label_input'>Email</label>
-                    <input type="text" placeholder='Enter your email' required />
+                    <input value={email} type="text" placeholder='Enter your email' required />
                 </div>
 
                 <div className="input-box flex-item">
                     <label className='label_input'>Password</label>
-                    <input type="password" placeholder='Enter your password' required />
+                    <input value={password} type="password" placeholder='Enter your password' required />
                 </div>
 
                 <div className="remember-forgot flex-item">
