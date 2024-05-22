@@ -9,9 +9,10 @@ import "@css/slick.min.css";
 import "@css/style.css";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Provider from '@/redux/provider';
+import CustomProvider from "@/redux/provider";
 import { Setup } from '@/components/utils'
- 
+import CustomPersist from "@/redux/persistgate";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
@@ -26,11 +27,13 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <Provider>
-          <Setup />
-          <Preloader />
-          {children}
-        </Provider>
+        <CustomProvider>
+          <CustomPersist>
+            <Setup />
+            <Preloader />
+            {children}
+          </CustomPersist>
+        </CustomProvider>
       </body>
     </html>
   );

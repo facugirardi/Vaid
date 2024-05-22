@@ -1,10 +1,48 @@
-import React from 'react';
+'use client';
+
+import React, { useState, useEffect } from 'react';
 import './LoginForm.css';
+import { useLoginMutation } from '@/redux/features/authApiSlice';
+import { useRouter } from 'next/navigation';
+import { setAuth } from '@/redux/features/authSlice'
+import { useAppDispatch } from '@/redux/hooks';
 
 const LoginForm = () => {
+    const dispatch = useAppDispatch();
+    const { push } = useRouter();
+    const [login, { isLoading }] = useLoginMutation();
+
+    const [formData, setFormData] = useState({
+        email : '',
+        password : '',
+    });
+
+    const { email, password } = formData
+
+    const onChange = (event) => {
+        const { name, value } = event.target;
+        setFormData({...formData, [name]: value });
+    }
+
+    const onSubmit = (event) => {
+        event.preventDefault();
+
+        login({ email, password })
+            .unwrap()
+            .then(() => {
+                dispatch(setAuth()); 
+                push('/dashboard');
+
+            })
+            .catch(() => {
+                toast.error('Failed to login. Please try again.')
+            })
+    }
+
+
     return (
         <div className='wrapper'>
-            <form action= "">
+            <form onSubmit={onSubmit}>
                 <div className='flex-item-logo'>
                     <img src="/assets/images/vaidpng3.png" alt="" className='imgLogo_login'/>
                 </div>
@@ -15,17 +53,17 @@ const LoginForm = () => {
 
                 <div className="input-box flex-item">
                     <label className='label_input'>Email</label>
-                    <input type="text" placeholder='Enter your email' required />
+                    <input onChange={onChange} value={email} name='email' type="text" placeholder='Enter your email' required />
                 </div>
 
                 <div className="input-box flex-item">
                     <label className='label_input'>Password</label>
-                    <input type="password" placeholder='Enter your password' required />
+                    <input onChange={onChange} value={password} name='password' type="password" placeholder='Enter your password' required />
                 </div>
 
                 <div className="remember-forgot flex-item">
                     <label><input type="checkbox" />Remember me</label>
-                    <a href='#'>Forgot password?</a>
+                    <a href='/password-reset'>Forgot password?</a>
                 </div>
                 
                 <div className='flex-item'>

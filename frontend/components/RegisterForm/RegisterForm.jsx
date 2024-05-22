@@ -4,9 +4,11 @@ import React, { useState, useEffect } from 'react';
 import './RegisterForm.css';
 import { useRegisterMutation } from '@/redux/features/authApiSlice';
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 import Spinner from '@/components/common/Spinner';
 
 const RegisterForm = () => {
+    const { push } = useRouter();
     const [register, { isLoading }] = useRegisterMutation();
 
     const [formData, setFormData] = useState({
@@ -32,6 +34,8 @@ const RegisterForm = () => {
             .unwrap()
             .then(() => {
                 toast.success('Please check email to verify your account.')
+                push('/auth/login');
+
             })
             .catch(() => {
                 toast.error('Failed to register an account. Please try again.')

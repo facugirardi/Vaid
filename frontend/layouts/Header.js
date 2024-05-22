@@ -3,6 +3,11 @@ import useClickOutside from "@/utility/useClickOutside";
 import Link from "next/link";
 import { Fragment, useState } from "react";
 import { Accordion } from "react-bootstrap";
+import { useAppSelector, useAppDispatch } from '@/redux/hooks';
+import { useLogoutMutation } from "@/redux/features/authApiSlice";
+import { logout as setLogout } from '@/redux/features/authSlice'; 
+import { useRouter } from 'next/navigation';
+
 
 const Header = ({ header, onePage }) => {
   switch (header) {
@@ -17,6 +22,24 @@ const Header = ({ header, onePage }) => {
 export default Header;
 
 const Header3 = ({ onePage }) => {
+  const { push } = useRouter();
+
+  const dispatch = useAppDispatch();
+  const [logout] = useLogoutMutation();
+  const { isAuthenticated } = useAppSelector(state => state.auth);
+
+  const handleLogout = () => {
+    logout()
+      .unwrap()
+      .then(() => {
+        dispatch(setLogout())
+      })
+      .catch(() => {
+        push('/');
+
+      })
+  }
+
   const menus = [
     { id: 1, href: "/#home", title: "Home" },
     { id: 2, href: "/#about", title: "about" },
@@ -52,14 +75,27 @@ const Header3 = ({ onePage }) => {
               {/* Main Menu End*/}
             </div>
             {/* Menu Button */}
-            <div className="menu-btns ms-lg-auto">
-              <Link href="/auth/login" className="light-btn">
-                Login
-              </Link>
-              <Link href="/auth/register" className="theme-btn style-two">
-                Sign Up <i className="far fa-arrow-right" />
-              </Link>
-            </div>
+            {isAuthenticated
+              ? <div className="menu-btns ms-lg-auto">
+                  <button onClick={handleLogout} className="light-btn">
+                    Logout
+                  </button>
+                  <Link href="/dashboard" className="theme-btn style-two">
+                    Dashboard <i className="far fa-arrow-right" />
+                  </Link>
+                </div>
+
+              : <div className="menu-btns ms-lg-auto">
+                  <Link href="/auth/login" className="light-btn">
+                    Login
+                  </Link>
+                  <Link href="/auth/register" className="theme-btn style-two">
+                    Sign Up <i className="far fa-arrow-right" />
+                  </Link>
+                </div>
+              }
+
+
           </div>
         </div>
       </div>
