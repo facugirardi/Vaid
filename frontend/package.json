@@ -24,6 +24,7 @@
     "react-redux": "^9.1.2",
     "react-slick": "^0.30.2",
     "react-toastify": "^10.0.5",
-    "react-visibility-sensor": "^5.1.1"
+    "react-visibility-sensor": "^5.1.1",
+    "redux-persist": "^6.0.0"
   }
 }
