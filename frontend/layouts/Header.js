@@ -7,7 +7,7 @@ import { useAppSelector, useAppDispatch } from '@/redux/hooks';
 import { useLogoutMutation } from "@/redux/features/authApiSlice";
 import { logout as setLogout } from '@/redux/features/authSlice'; 
 import { useRouter } from 'next/navigation';
-
+import { toast } from "react-toastify";
 
 const Header = ({ header, onePage }) => {
   switch (header) {
@@ -33,10 +33,12 @@ const Header3 = ({ onePage }) => {
       .unwrap()
       .then(() => {
         dispatch(setLogout())
+        toast.success('Logged out successfully.');
+        push('/auth/login');
       })
       .catch(() => {
         push('/');
-
+        toast.error('There was an error. Please try again.');
       })
   }
 
