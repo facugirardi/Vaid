@@ -6,6 +6,7 @@ import { useLoginMutation } from '@/redux/features/authApiSlice';
 import { useRouter } from 'next/navigation';
 import { setAuth } from '@/redux/features/authSlice'
 import { useAppDispatch } from '@/redux/hooks';
+import { toast } from 'react-toastify';
 
 const LoginForm = () => {
     const dispatch = useAppDispatch();
@@ -34,8 +35,27 @@ const LoginForm = () => {
                 push('/dashboard');
 
             })
-            .catch(() => {
-                toast.error('Failed to login. Please try again.')
+            .catch((error) => {
+                console.log(error); // Muestra el error en la consola
+            
+                if (error.data && typeof error.data === 'object') {
+                    Object.keys(error.data).forEach(key => {
+                        const messages = error.data[key];
+                        if (Array.isArray(messages)) {
+                            messages.forEach(message => {
+                                toast.error(message); // Muestra cada mensaje de error individualmente
+                            });
+                        } else {
+                            toast.error(messages); // Muestra un mensaje directo
+                        }
+                    });
+                } else if (error.message) {
+                    // Si solo hay un mensaje de error general
+                    toast.error(error.message);
+                } else {
+                    // Mensaje de error genérico si no hay información específica
+                    toast.error('Failed to login. Please try again.');
+                }
             })
     }
 
