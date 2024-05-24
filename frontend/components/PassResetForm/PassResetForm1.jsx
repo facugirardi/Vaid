@@ -65,7 +65,7 @@ const PassResetForm1 = () => {
                 </div>
 
                 <div className='flex-item'>
-                <button type="submit">Send</button>
+                <button type="submit" className='btn-pass'>Send</button>
                 </div>
 
                 

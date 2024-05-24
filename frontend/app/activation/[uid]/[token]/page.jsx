@@ -7,8 +7,6 @@ import { useEffect, useState } from "react";
 import { useActivationMutation } from "@/redux/features/authApiSlice";
 import { toast } from 'react-toastify';
 
-const breaks = Array(10).fill(0).map((_, i) => <br key={i} />); // borrar cuando se haga el login
-
 
 const page = ({ params }) => {
   const { push } = useRouter();

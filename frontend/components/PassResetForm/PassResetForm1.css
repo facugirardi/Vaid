@@ -128,10 +128,12 @@ body{
     font-family:   var(--heading-font);
     font-weight: 500;
     font-size: 14px !important;
+}
+
+.btn-pass{
     margin-top: 20px;
     margin-bottom: 40px;
 }
-
 .wrapper button:hover {
     background-color: #1e3890;
     transition: .2s ease;

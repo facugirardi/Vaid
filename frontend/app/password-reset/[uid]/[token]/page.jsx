@@ -99,7 +99,7 @@ const page = ( { params } ) => {
                 </div>
 
                 <div className='flex-item'>
-                <button type="submit">Change</button>
+                <button type="submit" className="btn-pass">Change</button>
                 </div>
 
                 
