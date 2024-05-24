@@ -87,7 +87,7 @@ const LoginForm = () => {
                 </div>
                 
                 <div className='flex-item'>
-                <button type="submit">Login</button>
+                <button type="submit">{isLoading ? <Spinner sm /> : 'Login'}</button>
                 </div>
 
                 <div className='flex-item'>
