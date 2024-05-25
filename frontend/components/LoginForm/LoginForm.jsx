@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation';
 import { setAuth } from '@/redux/features/authSlice'
 import { useAppDispatch } from '@/redux/hooks';
 import { toast } from 'react-toastify';
+import Spinner from '@/components/common/Spinner';
 
 const LoginForm = () => {
     const dispatch = useAppDispatch();
@@ -87,7 +88,7 @@ const LoginForm = () => {
                 </div>
                 
                 <div className='flex-item'>
-                <button type="submit">Login</button>
+                <button type="submit" >{isLoading ? <Spinner sm /> : 'Login'}</button>
                 </div>
 
                 <div className='flex-item'>

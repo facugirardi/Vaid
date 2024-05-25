@@ -2,7 +2,7 @@
 import LandingLayout from "@/layouts/LandingLayout";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-
+import PassResetForm1 from '@/components/PassResetForm/PassResetForm1';
 
 const breaks = Array(10).fill(0).map((_, i) => <br key={i} />); // borrar cuando se haga el login
 
@@ -20,7 +20,7 @@ const page = () => {
       >
         <div className="container">
           <div className="d-flex justify-content-center">
-            <h3>Password Reset</h3>
+            <PassResetForm1 />
             {breaks} {/*borrar cuando se haga el login*/}      
 
           </div>
@@ -31,3 +31,4 @@ const page = () => {
   );
 };
 export default page;
+
