@@ -6,6 +6,7 @@ import { useRegisterMutation } from '@/redux/features/authApiSlice';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import Spinner from '@/components/common/Spinner';
+import googleAuth from '@/utility/google-auth';
 
 const RegisterForm = () => {
     const { push } = useRouter();
@@ -119,7 +120,7 @@ const RegisterForm = () => {
                 </div>
 
                 <div className='flex-item'>
-                <button type="submit" className='google-button'><img src="/assets/images/google.png" alt="" className='google-logo'/>Continue with Google</button>
+                <button type="submit" onClick={googleAuth} className='google-button'><img src="/assets/images/google.png" alt="" className='google-logo'/>Continue with Google</button>
                 </div>
                 
                 <div className='register-link flex-item'>

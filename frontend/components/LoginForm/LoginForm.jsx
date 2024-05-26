@@ -8,6 +8,7 @@ import { setAuth } from '@/redux/features/authSlice'
 import { useAppDispatch } from '@/redux/hooks';
 import { toast } from 'react-toastify';
 import Spinner from '@/components/common/Spinner';
+import googleAuth from '@/utility/google-auth';
 
 const LoginForm = () => {
     const dispatch = useAppDispatch();
@@ -92,7 +93,7 @@ const LoginForm = () => {
                 </div>
 
                 <div className='flex-item'>
-                <button type="submit" className='google-button'><img src="/assets/images/google.png" alt="" className='google-logo'/>Login with Google</button>
+                <button type="submit" onClick={googleAuth} className='google-button'><img src="/assets/images/google.png" alt="" className='google-logo'/>Login with Google</button>
                 </div>
                 
                 <div className='register-link flex-item'>
