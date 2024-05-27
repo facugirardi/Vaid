@@ -1,33 +1,68 @@
 "use client";
 import LandingLayout from "@/layouts/LandingLayout";
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import { jwtDecode } from 'jwt-decode';
 
 
 const breaks = Array(10).fill(0).map((_, i) => <br key={i} />); // borrar cuando se haga el login
 
 
 const page = () => {
+  const [userDetails, setUserDetails] = useState(null);
+
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    let userInfo = null;
+
+    if (token) {
+      userInfo = jwtDecode(token);
+      fetchUserDetails(userInfo.user_id);
+    }
+
     document.querySelector("body").classList.add("home-three");
+
+    // Cleanup to remove class when component unmounts
   }, []);
-  const [active, setActive] = useState("collapse1");
+
+  async function fetchUserDetails(userId) {
+    const token = localStorage.getItem('token');
+    try {
+      const response = await fetch(`http://localhost:8000/api/user/${userId}/`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      if (!response.ok) {
+        throw new Error('Failed to fetch user details');
+      }
+      const userDetails = await response.json();
+      setUserDetails(userDetails);
+    } catch (error) {
+      console.error('Error fetching user details:', error);
+    }
+  }
+
   return (
     <LandingLayout header footer bodyClass={"home-three"} onePage>
-      {/* Signup area start */}
-      <section
-        className="hero-area-three bgs-cover bgc-lighter pt-210 rpt-150 pb-100"
-      >
+      <section className="hero-area-three bgs-cover bgc-lighter pt-210 rpt-150 pb-100">
         <div className="container">
           <div className="d-flex justify-content-center">
-            <h3>Dashboard</h3>
-            {breaks} {/*borrar cuando se haga el login*/}      
-
+            {userDetails && (
+              <div>
+                <p>ID: {userDetails.id}</p>
+                <p>First Name: {userDetails.first_name}</p>
+                <p>Last Name: {userDetails.last_name}</p>
+                <p>Email: {userDetails.email}</p>
+              </div>
+            )}
+            {breaks}
           </div>
         </div>
       </section>
-      {/* Signup area End */}
     </LandingLayout>
   );
 };
+
 export default page;

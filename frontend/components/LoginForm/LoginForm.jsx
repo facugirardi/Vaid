@@ -29,16 +29,16 @@ const LoginForm = () => {
 
     const onSubmit = (event) => {
         event.preventDefault();
-
+    
         login({ email, password })
             .unwrap()
-            .then(() => {
-                dispatch(setAuth()); 
-                push('/dashboard');
-
+            .then((response) => {
+                localStorage.setItem('token', response.access); // Guarda el token en el almacenamiento local
+                dispatch(setAuth()); // Suponiendo que esto actualiza el estado de la autenticación
+                push('/dashboard'); // Redirige al dashboard
             })
             .catch((error) => {
-                console.log(error); // Muestra el error en la consola
+                console.log(error);
             
                 if (error.data && typeof error.data === 'object') {
                     Object.keys(error.data).forEach(key => {
@@ -58,9 +58,9 @@ const LoginForm = () => {
                     // Mensaje de error genérico si no hay información específica
                     toast.error('Failed to login. Please try again.');
                 }
-            })
+            });
     }
-
+    
 
     return (
         <div className='wrapper'>
