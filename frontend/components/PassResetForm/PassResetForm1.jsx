@@ -23,25 +23,21 @@ const PassResetForm1 = () => {
             .then(() => {
                 toast.success('If there is an existing account with that credentials, you will receive an email with a reset link')
             })
-            .catch((error) => {
-                console.log(error); // Muestra el error en la consola
-            
+            .catch((error) => {            
                 if (error.data && typeof error.data === 'object') {
                     Object.keys(error.data).forEach(key => {
                         const messages = error.data[key];
                         if (Array.isArray(messages)) {
                             messages.forEach(message => {
-                                toast.error(message); // Muestra cada mensaje de error individualmente
+                                toast.error(message);
                             });
                         } else {
-                            toast.error(messages); // Muestra un mensaje directo
+                            toast.error(messages);
                         }
                     });
                 } else if (error.message) {
-                    // Si solo hay un mensaje de error general
                     toast.error(error.message);
                 } else {
-                    // Mensaje de error genérico si no hay información específica
                     toast.error('Failed to send request. Please try again.');
                 }
             })
