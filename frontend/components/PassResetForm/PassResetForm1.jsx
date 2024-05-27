@@ -21,7 +21,7 @@ const PassResetForm1 = () => {
         resetPassword(email)
             .unwrap()
             .then(() => {
-                toast.success('Request sent, check your email for reset link')
+                toast.success('If there is an existing account with that credentials, you will receive an email with a reset link')
             })
             .catch((error) => {
                 console.log(error); // Muestra el error en la consola
