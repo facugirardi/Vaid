@@ -120,7 +120,7 @@ const RegisterForm = () => {
                 </div>
 
                 <div className='flex-item'>
-                <button type="submit" onClick={googleAuth} className='google-button'><img src="/assets/images/google.png" alt="" className='google-logo'/>Continue with Google</button>
+                <button onClick={googleAuth} className='google-button'><img src="/assets/images/google.png" alt="" className='google-logo'/>Continue with Google</button>
                 </div>
                 
                 <div className='register-link flex-item'>

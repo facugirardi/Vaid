@@ -37,8 +37,9 @@ const Header3 = ({ onePage }) => {
         push('/auth/login');
       })
       .catch(() => {
-        push('/');
-        toast.error('There was an error. Please try again.');
+        dispatch(setLogout())
+        toast.success('Logged out successfully.');
+        push('/auth/login');
       })
   }
 
