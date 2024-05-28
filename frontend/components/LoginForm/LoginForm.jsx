@@ -32,8 +32,7 @@ const LoginForm = () => {
     
         login({ email, password })
             .unwrap()
-            .then((response) => {
-                localStorage.setItem('token', response.access); // Guarda el token en el almacenamiento local
+            .then(() => {
                 dispatch(setAuth()); // Suponiendo que esto actualiza el estado de la autenticación
                 push('/dashboard'); // Redirige al dashboard
             })

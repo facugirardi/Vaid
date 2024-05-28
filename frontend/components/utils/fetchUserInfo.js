@@ -1,26 +1,30 @@
+const [userDetails, setUserDetails] = useState(null);
+const token = localStorage.getItem('token');
+let userInfo = null;
 
-
-
-
-
-
-
-export default async function fetchUserDetails(userId) {
-    const token = localStorage.getItem('token');
-    try {
-        const response = await fetch(`http://localhost:8000/api/user/${userId}/`, {
-            method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            }
-        });
-        if (!response.ok) {
-            throw new Error('Failed to fetch user details');
-        }
-        const userDetails = await response.json();
-        return userDetails;
-    } catch (error) {
-        return null;
-    }
+if (token) {
+  userInfo = jwtDecode(token);
+  fetchUserDetails(userInfo.user_id);
 }
+
+const fetchUserData = async (token) => {
+    try {
+      const response = await fetch('http://localhost:8000/auth/users/me/', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Token ${token}`
+        }
+      });
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const userData = await response.json();
+      console.log(userData); 
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+  

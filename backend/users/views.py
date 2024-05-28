@@ -11,25 +11,6 @@ from rest_framework_simplejwt.views import (
 from rest_framework.permissions import IsAuthenticated
 from .models import UserAccount as User
 
-class UserDetailView(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request, pk, format=None):
-        if request.user.pk != pk and not request.user.is_superuser:
-            return Response(status=status.HTTP_403_FORBIDDEN)
-
-        try:
-            user = User.objects.get(pk=pk)
-            return Response({
-                'id': user.id,
-                'email': user.email,
-                'first_name': user.first_name,
-                'last_name':user.last_name,
-            })
-        except User.DoesNotExist:
-            return Response(status=status.HTTP_404_NOT_FOUND)
-
-
 class CustomProviderAuthView(ProviderAuthView):
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
@@ -125,7 +106,7 @@ class CustomTokenVerifyView(TokenVerifyView):
         return super().post(request, *args, **kwargs)
 
 
-class LogoutView(APIView):
+class LogoutView(APIView): 
     def post(self, request, *args, **kwargs):
         response = Response(status=status.HTTP_204_NO_CONTENT)
         response.delete_cookie('access')
