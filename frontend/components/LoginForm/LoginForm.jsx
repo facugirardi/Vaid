@@ -33,8 +33,8 @@ const LoginForm = () => {
         login({ email, password })
             .unwrap()
             .then(() => {
-                dispatch(setAuth()); // Suponiendo que esto actualiza el estado de la autenticación
-                push('/dashboard'); // Redirige al dashboard
+                dispatch(setAuth()); 
+                push('/dashboard');
             })
             .catch((error) => {
                 console.log(error);
@@ -44,17 +44,15 @@ const LoginForm = () => {
                         const messages = error.data[key];
                         if (Array.isArray(messages)) {
                             messages.forEach(message => {
-                                toast.error(message); // Muestra cada mensaje de error individualmente
+                                toast.error(message); 
                             });
                         } else {
-                            toast.error(messages); // Muestra un mensaje directo
+                            toast.error(messages);
                         }
                     });
                 } else if (error.message) {
-                    // Si solo hay un mensaje de error general
                     toast.error(error.message);
                 } else {
-                    // Mensaje de error genérico si no hay información específica
                     toast.error('Failed to login. Please try again.');
                 }
             });
