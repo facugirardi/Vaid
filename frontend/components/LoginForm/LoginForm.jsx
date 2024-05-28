@@ -9,6 +9,7 @@ import { useAppDispatch } from '@/redux/hooks';
 import { toast } from 'react-toastify';
 import Spinner from '@/components/common/Spinner';
 import googleAuth from '@/utility/google-auth';
+import { jwtDecode } from 'jwt-decode';
 
 const LoginForm = () => {
     const dispatch = useAppDispatch();
@@ -34,6 +35,15 @@ const LoginForm = () => {
             .unwrap()
             .then((response) => {
                 localStorage.setItem('token', response.access);
+                const token = localStorage.getItem('token');
+                let userInfo = null;
+
+                if (token) {
+                    userInfo = jwtDecode(token);
+                    localStorage.setItem('id', userInfo.user_id);
+                  }
+            
+
                 dispatch(setAuth()); 
                 push('/dashboard');
             })

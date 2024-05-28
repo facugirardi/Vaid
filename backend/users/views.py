@@ -93,7 +93,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
 class CustomTokenRefreshView(TokenRefreshView):
     def post(self, request, *args, **kwargs):
         refresh_token = request.COOKIES.get('refresh')
-
+        print(refresh_token)
         if refresh_token:
             request.data['refresh'] = refresh_token
 

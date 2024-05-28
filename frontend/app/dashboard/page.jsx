@@ -2,7 +2,6 @@
 "use client";
 import LandingLayout from "@/layouts/LandingLayout";
 import { useEffect, useState } from "react";
-import { jwtDecode } from 'jwt-decode';
 
 
 const breaks = Array(10).fill(0).map((_, i) => <br key={i} />); // borrar cuando se haga el login
@@ -10,13 +9,11 @@ const breaks = Array(10).fill(0).map((_, i) => <br key={i} />); // borrar cuando
 
 const page = () => {
   const [userDetails, setUserDetails] = useState(null);
-  const token = localStorage.getItem('token');
-  let userInfo = null;
+  const id = localStorage.getItem('id');
 
   useEffect(() => {
-    if (token) {
-      userInfo = jwtDecode(token);
-      fetchUserDetails(userInfo.user_id);
+    if (id) {
+      fetchUserDetails(id);
     }
   
     document.querySelector("body").classList.add("home-three");

@@ -33,12 +33,14 @@ const Header3 = ({ onePage }) => {
       .unwrap()
       .then(() => {
         localStorage.removeItem('token');
+        localStorage.removeItem('id');
         dispatch(setLogout())
         toast.success('Logged out successfully.');
         push('/auth/login');
       })
       .catch(() => {
         localStorage.removeItem('token');
+        localStorage.removeItem('id');
         dispatch(setLogout())
         toast.success('Logged out successfully.');
         push('/auth/login');
@@ -439,12 +441,14 @@ const MobileMenu = ({ sidebar, onePage, menus }) => {
       .unwrap()
       .then(() => {
         localStorage.removeItem('token');
+        localStorage.removeItem('id');
         dispatch(setLogout())
         toast.success('Logged out successfully.');
         push('/auth/login');
       })
       .catch(() => {
         localStorage.removeItem('token');
+        localStorage.removeItem('id');
         dispatch(setLogout())
         toast.success('Logged out successfully.');
         push('/auth/login');
@@ -478,12 +482,12 @@ const MobileMenu = ({ sidebar, onePage, menus }) => {
               ? 
               <>
                 <li><a onClick={handleLogout}>Logout</a></li>
-                <li><a href="/dashboard">Dashboard</a></li>      
+                <li><Link href="/dashboard">Dashboard</Link></li>      
               </>
               :
               <>
-                <li><a href="/auth/login">Login</a></li>      
-                <li><a href="/auth/register">Sign Up</a></li>      
+                <li><Link href="/auth/login">Login</Link></li>      
+                <li><Link href="/auth/register">Sign Up</Link></li>      
               </>
               }
         </ul>
