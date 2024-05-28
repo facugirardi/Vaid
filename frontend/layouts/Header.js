@@ -32,11 +32,13 @@ const Header3 = ({ onePage }) => {
     logout()
       .unwrap()
       .then(() => {
+        localStorage.removeItem('token');
         dispatch(setLogout())
         toast.success('Logged out successfully.');
         push('/auth/login');
       })
       .catch(() => {
+        localStorage.removeItem('token');
         dispatch(setLogout())
         toast.success('Logged out successfully.');
         push('/auth/login');
@@ -436,11 +438,13 @@ const MobileMenu = ({ sidebar, onePage, menus }) => {
     logout()
       .unwrap()
       .then(() => {
+        localStorage.removeItem('token');
         dispatch(setLogout())
         toast.success('Logged out successfully.');
         push('/auth/login');
       })
       .catch(() => {
+        localStorage.removeItem('token');
         dispatch(setLogout())
         toast.success('Logged out successfully.');
         push('/auth/login');
