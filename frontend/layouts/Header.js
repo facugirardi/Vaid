@@ -426,6 +426,27 @@ const NavSearch = () => {
 };
 
 const MobileMenu = ({ sidebar, onePage, menus }) => {
+  const { push } = useRouter();
+
+  const dispatch = useAppDispatch();
+  const [logout] = useLogoutMutation();
+  const { isAuthenticated } = useAppSelector(state => state.auth);
+
+  const handleLogout = () => {
+    logout()
+      .unwrap()
+      .then(() => {
+        dispatch(setLogout())
+        toast.success('Logged out successfully.');
+        push('/auth/login');
+      })
+      .catch(() => {
+        dispatch(setLogout())
+        toast.success('Logged out successfully.');
+        push('/auth/login');
+      })
+  }
+
   const [activeMenu, setActiveMenu] = useState("");
   const [multiMenu, setMultiMenu] = useState("");
   const activeMenuSet = (value) =>
@@ -449,6 +470,18 @@ const MobileMenu = ({ sidebar, onePage, menus }) => {
               <a href={`#${menu.href}`}>{menu.title}</a>
             </li>
           ))}
+            {isAuthenticated
+              ? 
+              <>
+                <li><a onClick={handleLogout}>Logout</a></li>
+                <li><a href="/dashboard">Dashboard</a></li>      
+              </>
+              :
+              <>
+                <li><a href="/auth/login">Login</a></li>      
+                <li><a href="/auth/register">Sign Up</a></li>      
+              </>
+              }
         </ul>
       ) : (
         <ul className={`${sidebar ? "sidebar-menu" : "navigation"} clearfix`}>
