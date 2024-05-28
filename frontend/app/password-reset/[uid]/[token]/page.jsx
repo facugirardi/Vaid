@@ -92,8 +92,16 @@ const page = ( { params } ) => {
                     <input onChange={onChange} value={new_password} name='new_password' type="password" placeholder='Enter new password' required />
                 </div>
 
+                <div className="password-requirements">
+                    <p className="text-password">Your password needs:</p>
+                    <ul>
+                      <li className="li-requirements">At least 8 characters</li>
+                      <li className="li-requirements">At least 1 letter</li>
+                      <li className="li-requirements">At least 1 special character (ex. !; *; /.)</li>
+                    </ul>
+                </div>
 
-                <div className="input-box flex-item">
+                <div className="input-box input-box-2 flex-item">
                     <label className='label_input'>Confirm your new password</label>
                     <input onChange={onChange}  value={re_new_password} name='re_new_password' type="password" placeholder='Confirm new password' required />
                 </div>
