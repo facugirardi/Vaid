@@ -9,6 +9,7 @@ import { useAppDispatch } from '@/redux/hooks';
 import { toast } from 'react-toastify';
 import Spinner from '@/components/common/Spinner';
 import googleAuth from '@/utility/google-auth';
+import { jwtDecode } from 'jwt-decode';
 
 const LoginForm = () => {
     const dispatch = useAppDispatch();
@@ -29,38 +30,45 @@ const LoginForm = () => {
 
     const onSubmit = (event) => {
         event.preventDefault();
-
+    
         login({ email, password })
             .unwrap()
-            .then(() => {
+            .then((response) => {
+                localStorage.setItem('token', response.access);
+                const token = localStorage.getItem('token');
+                let userInfo = null;
+
+                if (token) {
+                    userInfo = jwtDecode(token);
+                    localStorage.setItem('id', userInfo.user_id);
+                  }
+            
+
                 dispatch(setAuth()); 
                 push('/dashboard');
-
             })
             .catch((error) => {
-                console.log(error); // Muestra el error en la consola
+                console.log(error);
             
                 if (error.data && typeof error.data === 'object') {
                     Object.keys(error.data).forEach(key => {
                         const messages = error.data[key];
                         if (Array.isArray(messages)) {
                             messages.forEach(message => {
-                                toast.error(message); // Muestra cada mensaje de error individualmente
+                                toast.error(message); 
                             });
                         } else {
-                            toast.error(messages); // Muestra un mensaje directo
+                            toast.error(messages);
                         }
                     });
                 } else if (error.message) {
-                    // Si solo hay un mensaje de error general
                     toast.error(error.message);
                 } else {
-                    // Mensaje de error genérico si no hay información específica
                     toast.error('Failed to login. Please try again.');
                 }
-            })
+            });
     }
-
+    
 
     return (
         <div className='wrapper'>

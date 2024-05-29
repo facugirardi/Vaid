@@ -150,7 +150,7 @@ DJOSER = {
 }
 
 AUTH_COOKIE = 'access'
-AUTH_COOKIE_MAX_AGE = 60 * 60 * 24
+AUTH_COOKIE_MAX_AGE = 10 * 365 * 24 * 60 * 60 
 AUTH_COOKIE_SECURE = False # Cambiar a TRUE en produccion
 AUTH_COOKIE_HTTP_ONLY = True
 AUTH_COOKIE_PATH = '/'

@@ -32,11 +32,15 @@ const Header3 = ({ onePage }) => {
     logout()
       .unwrap()
       .then(() => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('id');
         dispatch(setLogout())
         toast.success('Logged out successfully.');
         push('/auth/login');
       })
       .catch(() => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('id');
         dispatch(setLogout())
         toast.success('Logged out successfully.');
         push('/auth/login');
@@ -426,6 +430,31 @@ const NavSearch = () => {
 };
 
 const MobileMenu = ({ sidebar, onePage, menus }) => {
+  const { push } = useRouter();
+
+  const dispatch = useAppDispatch();
+  const [logout] = useLogoutMutation();
+  const { isAuthenticated } = useAppSelector(state => state.auth);
+
+  const handleLogout = () => {
+    logout()
+      .unwrap()
+      .then(() => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('id');
+        dispatch(setLogout())
+        toast.success('Logged out successfully.');
+        push('/auth/login');
+      })
+      .catch(() => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('id');
+        dispatch(setLogout())
+        toast.success('Logged out successfully.');
+        push('/auth/login');
+      })
+  }
+
   const [activeMenu, setActiveMenu] = useState("");
   const [multiMenu, setMultiMenu] = useState("");
   const activeMenuSet = (value) =>
@@ -449,6 +478,18 @@ const MobileMenu = ({ sidebar, onePage, menus }) => {
               <a href={`#${menu.href}`}>{menu.title}</a>
             </li>
           ))}
+            {isAuthenticated
+              ? 
+              <>
+                <li><a onClick={handleLogout}>Logout</a></li>
+                <li><Link href="/dashboard">Dashboard</Link></li>      
+              </>
+              :
+              <>
+                <li><Link href="/auth/login">Login</Link></li>      
+                <li><Link href="/auth/register">Sign Up</Link></li>      
+              </>
+              }
         </ul>
       ) : (
         <ul className={`${sidebar ? "sidebar-menu" : "navigation"} clearfix`}>
