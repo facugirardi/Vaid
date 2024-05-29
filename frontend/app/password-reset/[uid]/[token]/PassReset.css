@@ -189,6 +189,42 @@ body{
     text-decoration: underline;
 }
 
+.password-requirements{
+    margin-top: -12.5px;
+    margin-left: 7.5px;
+}
+
+.text-password{
+    font-size: 12px;
+    font-family:   var(--base-font);
+    color: #888888;
+    text-decoration: none;
+    font-weight: 300;
+    margin-bottom: 5px;
+}
+
+.li-requirements{
+    font-size: 10px;
+    font-family:   var(--base-font);
+    color: #888888;
+    text-decoration: none;
+    font-weight: 300;
+    margin-left: 5px;
+    margin-top: -15px;
+}
+
+.text-requirements{
+    font-size: 12px;
+    font-family:   var(--base-font);
+    color: #7a7a7a;
+    text-decoration: none;
+    font-weight: 300;
+    font-size: 12px;
+}
+
+.input-box-2{
+    margin-top: -0.5px !important;
+}
 
 @media (max-width: 1200px) {
     .wrapper {
