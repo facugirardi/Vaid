@@ -1,30 +1,26 @@
 const [userDetails, setUserDetails] = useState(null);
-const token = localStorage.getItem('token');
-let userInfo = null;
+const id = localStorage.getItem('id');
 
-if (token) {
-  userInfo = jwtDecode(token);
-  fetchUserDetails(userInfo.user_id);
+
+if (id) {
+  fetchUserDetails(id);
 }
 
-const fetchUserData = async (token) => {
-    try {
-      const response = await fetch('http://localhost:8000/auth/users/me/', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Token ${token}`
-        }
-      });
-  
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
+async function fetchUserDetails(userId) {
+  const token = localStorage.getItem('token');
+  try {
+    const response = await fetch(`http://localhost:8000/api/user/${userId}/`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
       }
-  
-      const userData = await response.json();
-      console.log(userData); 
-    } catch (error) {
-      console.error('Error fetching user data:', error);
+    });
+    if (!response.ok) {
+      throw new Error('Failed to fetch user details');
     }
-  };
-  
+    const userDetails = await response.json();
+    setUserDetails(userDetails);
+  } catch (error) {
+    console.error('Error fetching user details:', error);
+  }
+}

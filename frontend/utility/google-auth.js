@@ -17,7 +17,7 @@ export default async function googleAuth(){
 		});
 		const data = await res.json();
 
-		if (res.status === 200 && typeof window !== 'undefined') {
+		if (res.ok) {
 			window.location.replace(data.authorization_url);
 		} else {
 			toast.error('Something went wrong');
