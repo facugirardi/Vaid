@@ -18,9 +18,10 @@ const RegisterForm = () => {
         email : '',
         password : '',
         re_password : ''
-    });
-
-    const { first_name, last_name, email, password, re_password } = formData
+        });
+    
+    console.log(formData)
+    const { first_name, last_name, email, password, re_password} = formData
 
 
     const onChange = (event) => {
@@ -34,57 +35,40 @@ const RegisterForm = () => {
         register({ first_name, last_name, email, password, re_password })
             .unwrap()
             .then(() => {
+
                 toast.success('Please check email to verify your account.')
                 push('/auth/login');
 
             })
             .catch((error) => {
-                console.log(error); // Muestra el error en la consola
+                console.log(error); 
             
                 if (error.data && typeof error.data === 'object') {
                     Object.keys(error.data).forEach(key => {
                         const messages = error.data[key];
                         if (Array.isArray(messages)) {
                             messages.forEach(message => {
-                                toast.error(message); // Muestra cada mensaje de error individualmente
+                                toast.error(message);
                             });
                         } else {
-                            toast.error(messages); // Muestra un mensaje directo
+                            toast.error(messages); 
                         }
                     });
                 } else if (error.message) {
-                    // Si solo hay un mensaje de error general
                     toast.error(error.message);
                 } else {
-                    // Mensaje de error genérico si no hay información específica
                     toast.error('Failed to register an account. Please try again.');
                 }
             })
     }
 
 
-    const [isActive, setIsActive] = useState(true); 
 
-    const toggleSwitch = () => {
-      setIsActive(!isActive);
-    };
-  
     return (
         <div className='wrapper'>
             <form onSubmit={onSubmit}>
                 <div className='flex-item-logo'>
                     <img src="/assets/images/vaidpng3.png" alt="" className='imgLogo_login'/>
-                </div>
-
-                <div className='flex-item'>
-                    <div className='switchContainer' onClick={toggleSwitch}>
-                        <div className={`switchBtn ${isActive ? 'active' : ''}`}>
-                            Organization
-                        </div>
-                        <div className={`switchBtn ${!isActive ? 'active' : ''}`}>
-                            User
-                        </div>
-                    </div>
                 </div>
 
                 <div className="cont-sm input-box flex-item">

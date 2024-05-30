@@ -36,7 +36,7 @@ body{
   
 .imgLogo_login{
     width: 90px;
-    margin-bottom: 26px;
+    margin-bottom: 20px;
 }
 
 .google-logo{
@@ -55,7 +55,7 @@ body{
 }
 
 .wrapper {
-    width: 36%;
+    width: 35%;
     background-color: white;
     border: 1px solid rgba(0, 0, 0, 0.17);
     color: black;
