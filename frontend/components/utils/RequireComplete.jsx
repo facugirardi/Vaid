@@ -6,12 +6,12 @@ import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 
 export default function RequireComplete({ children }) {
     const { push } = useRouter();
-    const { data: user, isFetching } = useRetrieveUserQuery();
+    const { data: user } = useRetrieveUserQuery();
     const [isCompleted, setIsCompleted] = useState(null);
 
     useEffect(() => {
-        let isMounted = true;  // Para evitar actualizar el estado si el componente se desmonta
-        const checkCompletion = async () => {
+        let isMounted = true; 
+        const checkComplete = async () => {
             if (user?.id && isMounted) {
                 try {
                     const response = await fetch(`http://localhost:8000/api/user/${user.id}/check-complete`, {
@@ -33,18 +33,16 @@ export default function RequireComplete({ children }) {
             }
         };
 
-        checkCompletion();
+        checkComplete();
 
         return () => {
-            isMounted = false;  // Limpiar el efecto para evitar actualizaciones de estado en un componente desmontado
+            isMounted = false; 
         };
-    }, [user?.id]);  // Dependencia que controla la re-ejecución de useEffect
+    }, [user?.id]); 
 
     if (isCompleted === false) {
         push('/');
         return null;
     }
-
-    // Renderizar hijos solo si isCompleted es verdaderamente true
     return isCompleted ? <>{children}</> : null;
 }
