@@ -9,6 +9,18 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView,
 )
 from .models import UserAccount as User
+from rest_framework.permissions import AllowAny  
+
+class CheckCompleteView(APIView):
+    permission_classes = [AllowAny]  
+
+    def get(self, request, *args, **kwargs):
+        user_id = kwargs.get('user_id')
+        try:
+            user = User.objects.get(id=user_id)
+            return Response({'is_completed': user.is_completed})
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=404)
 
 class CustomProviderAuthView(ProviderAuthView):
     def post(self, request, *args, **kwargs):
