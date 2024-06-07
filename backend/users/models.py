@@ -75,6 +75,7 @@ class Tag(models.Model):
 class Organization(models.Model):
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
+    country = models.CharField(max_length=255)
     website = models.CharField(max_length=255)
 
 
@@ -95,6 +96,7 @@ class Person(models.Model):
     address = models.CharField(max_length=255, default='Street 123')
     born_date = models.DateField(default=timezone.now) 
     disponibility = models.TimeField(default=timezone.now) # CAMBIAR
+    country = models.CharField(max_length=255)
     User = models.ForeignKey(UserAccount, on_delete=models.CASCADE) 
     
 
