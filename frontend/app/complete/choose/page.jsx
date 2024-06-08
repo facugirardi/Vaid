@@ -4,23 +4,52 @@ import React, { useState } from 'react';
 import LandingLayout from "@/layouts/LandingLayout";
 import './choose.css'
 import Image from 'next/image';
+import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
+import { useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 
 const breaks = Array(4).fill(0).map((_, i) => <br key={i} />); 
 
 const page = () => {
 const [selection, setSelection] = useState(null);
+const { push } = useRouter();
+const { data: user } = useRetrieveUserQuery();
 
   const handleSelect = (option) => {
     setSelection(option);
   };
 
-  const handleContinue = () => {
-    if (selection === 'organization') {
-      console.log('Continuar como Organización');
-    } else if (selection === 'user') {
-      console.log('Continuar como Usuario');
+  const handleContinue = async () => {
+    if (!selection) {
+      toast.error('Select an option.'); 
+      return;
+    }
+  
+    const userType = selection === 'organization' ? 2 : 1;
+  
+    try {
+      const response = await fetch(`http://localhost:8000/api/user/${user.id}/complete`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_type: userType,
+          is_completed: 1
+        })
+      });
+  
+      if (!response.ok) {
+        toast.error('Network response was not ok.'); 
+      }
+  
+      push('/dashboard');
+      
+    } catch (error) {
+      toast.error('Failed to update user. Error: ', error); 
     }
   };
+
 
   return (
     <LandingLayout header footer bodyClass={"home-three"} onePage>

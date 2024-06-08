@@ -10,6 +10,34 @@ from rest_framework_simplejwt.views import (
 )
 from .models import UserAccount as User
 from rest_framework.permissions import AllowAny  
+from django.http import JsonResponse
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+import json
+from django.http import Http404
+
+# @method_decorator(csrf_exempt, name='dispatch')
+class UserTypeUpdate(APIView):
+    permission_classes = [AllowAny]  
+    def patch(self, request, pk):
+        try:
+            data = json.loads(request.body)
+            user = User.objects.get(pk=pk)
+            user_type = data.get('user_type')
+            is_completed = data.get('is_completed')
+
+            if user_type is not None:
+                user.user_type = user_type 
+            if is_completed is not None:
+                user.is_completed = is_completed
+
+            user.save()
+            return JsonResponse({'message': 'User updated successfully'}, status=200)
+        except User.DoesNotExist:
+            raise Http404("User not found")
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+
 
 class CheckCompleteView(APIView):
     permission_classes = [AllowAny]  
