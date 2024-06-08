@@ -33,7 +33,7 @@ const [selection, setSelection] = useState(null);
                 <div className='cont-btns-choose'>
                 <button className='btn-gen' onClick={() => handleSelect('organization')}
                     style={{
-                    backgroundColor: selection === 'organization' ? '#F2F2F2' : 'white',
+                    backgroundColor: selection === 'organization' ? '#F1F1F1' : 'white',
                     marginRight: '35px'  
                     }}
                 >
@@ -51,7 +51,7 @@ const [selection, setSelection] = useState(null);
                 <button className='btn-gen' onClick={() => handleSelect('user')}
 
                     style={{
-                    backgroundColor: selection === 'user' ? '#F2F2F2' : 'white',
+                    backgroundColor: selection === 'user' ? '#F1F1F1' : 'white',
                     marginLeft: '35px' 
                     }}
                 >
