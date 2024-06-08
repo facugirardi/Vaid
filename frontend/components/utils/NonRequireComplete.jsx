@@ -40,9 +40,9 @@ export default function RequireComplete({ children }) {
         };
     }, [user?.id]); 
 
-    if (isCompleted === false) {
-        push('/complete/choose');
+    if (isCompleted === true) {
+        push('/dashboard');
         return null;
     }
-    return isCompleted ? <>{children}</> : null;
+    return isCompleted ? null :  <>{children}</> ;
 }
