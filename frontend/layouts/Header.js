@@ -32,15 +32,11 @@ const Header3 = ({ onePage }) => {
     logout()
       .unwrap()
       .then(() => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('id');
         dispatch(setLogout())
         toast.success('Logged out successfully.');
         push('/auth/login');
       })
       .catch(() => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('id');
         dispatch(setLogout())
         toast.success('Logged out successfully.');
         push('/auth/login');

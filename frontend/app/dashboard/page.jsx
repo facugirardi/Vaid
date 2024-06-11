@@ -1,43 +1,25 @@
+// page.jsx
+'use client'
 
-"use client";
-import LandingLayout from "@/layouts/LandingLayout";
-import { useEffect, useState } from "react";
-import { useRetrieveUserQuery } from "@/redux/features/authApiSlice";
-import Preloader from "@/components/Preloader";
+import React from 'react';
+import { Provider } from 'react-redux';
+import { wrapper } from '@/redux/store'; // Asegúrate de que la ruta al store es correcta
+import Layout from '@/layouts/dashboard/index';
+import BreadcrumbItem from '@/common/BreadcrumbItem';
+import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 
-const breaks = Array(10).fill(0).map((_, i) => <br key={i} />); // borrar cuando se haga el login
+const Page = () => {
+    const { data: user, isError, isLoading } = useRetrieveUserQuery();
 
+    if (isLoading) return <p>Loading...</p>;
+    if (isError || !user) return <p>Error loading user data!</p>;
 
-const page = () => {
-	const { data: user, isLoading, isFetching } = useRetrieveUserQuery();
-
-  useEffect(() => {
-  
-    document.querySelector("body").classList.add("home-three");
-
-  }, []);
-
-  return (
-    <>
-    {isLoading || isFetching 
-      ? <Preloader />
-      : (
-        <LandingLayout header footer bodyClass="home-three" onePage>
-          <section className="hero-area-three bgs-cover bgc-lighter pt-210 rpt-150 pb-100">
-            <div className="container">
-              <div className="d-flex justify-content-center">
-                <p>
-                  ID: {user?.id} | Name: {user?.first_name} {user?.last_name} | Email: {user?.email} 
-                </p>
-                {breaks}
-              </div>
-            </div>
-          </section>
-        </LandingLayout>
-      )
-    }
-  </>  
-  );
+    return (
+        <Layout>
+            <BreadcrumbItem mainTitle="Dashboard" subTitle="Home" />
+            <p>ID: {user.id} | Name: {user.first_name} {user.last_name} | Email: {user.email}</p>
+        </Layout>
+    );
 };
 
-export default page;
+export default Page;

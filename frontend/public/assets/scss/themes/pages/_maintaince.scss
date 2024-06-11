@@ -1,0 +1,66 @@
+/**  =====================
+   21. Maintaince css start
+==========================  **/
+.error-card {
+  box-shadow: none;
+  text-align: center;
+  border: none;
+  background: transparent;
+  overflow: hidden;
+  max-width: 580px;
+  margin-top: 30px;
+
+  .error-image-block {
+    position: relative;
+    text-align: center;
+    display: inline-flex;
+  }
+  @include media-breakpoint-down(md) {
+    margin-left: 20px;
+    margin-right: 20px;
+    .f-20 {
+      font-size: 14px;
+    }
+  }
+}
+
+.soon-card {
+  border: none;
+  background: transparent;
+  margin-top: 30px;
+  
+  .timer-block {
+    .avtar {
+      &.card {
+        width: 80px;
+        height: 80px;
+      }
+      margin: 5px 0;
+      position: relative;
+      overflow: hidden;
+      flex-direction: column;
+      border: 1px solid var(--bs-border-color);
+      padding-bottom: 25px;
+      padding-top: 25px;
+    }
+    @include media-breakpoint-down(lg) {
+      .avtar {
+        &.card {
+          margin-left: 0;
+          margin-right: 0;
+          width: 60px;
+          height: 60px;
+        }
+      }
+    }
+  }
+  @include media-breakpoint-down(md) {
+    margin-left: 20px;
+    margin-right: 20px;
+
+  }
+}
+
+/**  =====================
+   21. Maintaince css end
+==========================  **/
