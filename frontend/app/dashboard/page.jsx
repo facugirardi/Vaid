@@ -2,8 +2,6 @@
 'use client'
 
 import React from 'react';
-import { Provider } from 'react-redux';
-import { wrapper } from '@/redux/store'; // Asegúrate de que la ruta al store es correcta
 import Layout from '@/layouts/dashboard/index';
 import BreadcrumbItem from '@/common/BreadcrumbItem';
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';

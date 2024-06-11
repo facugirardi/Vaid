@@ -100,11 +100,11 @@ const RegisterForm = () => {
 
                 
                 <div className='flex-item btn_cont'>
-                <button type="submit">{isLoading ? <Spinner sm /> : 'Continue'}</button>
+                <button type="submit">{isLoading ? <Spinner sm /> : 'Register'}</button>
                 </div>
 
                 <div className='flex-item'>
-                <button onClick={googleAuth} className='google-button'><img src="/assets/images/google.png" alt="" className='google-logo'/>Continue with Google</button>
+                <button onClick={googleAuth} className='google-button'><img src="/assets/images/google.png" alt="" className='google-logo'/>Register with Google</button>
                 </div>
                 
                 <div className='register-link flex-item'>
