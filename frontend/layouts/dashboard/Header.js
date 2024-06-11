@@ -2,14 +2,12 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 //import images
-import navCardBg from "@/public/assets/images/layout/nav-card-bg.svg";
-import logoDark from "@/public/assets/images/logo-dark.svg";
-import logoLight from "@/public/assets/images/logo-white.svg";
+import logoDark from "@/public/assets/images/vaidpng2.png";
+import logoLight from "@/public/assets/images/vaidpng2.png";
 import avatar2 from "@/public/assets/images/user/avatar-2.jpg";
 import SimpleBar from "simplebar-react";
 import { menuItems } from "./MenuData";
 import NestedMenu from "./NestedMenu";
-import { Dropdown } from "react-bootstrap";
 
 const Header = ({ themeMode }) => {
   return (
@@ -19,12 +17,12 @@ const Header = ({ themeMode }) => {
           <div className="m-header">
             <Link href="/" className="b-brand text-primary">
               {themeMode === "dark" ?
-                <Image src={logoLight} alt="logo" className="logo-lg landing-logo" />
+                <Image src={logoLight} alt="logo" width={90} className="logo-lg landing-logo" />
                 :
-                <Image src={logoDark} alt="logo" className="logo-lg landing-logo" />
+                <Image src={logoDark} alt="logo" width={90} className="logo-lg landing-logo" />
               }
               <span className="badge bg-brand-color-2 rounded-pill ms-2 theme-version">
-                v1.0
+                Demo v1.0
               </span>
             </Link>
           </div>
