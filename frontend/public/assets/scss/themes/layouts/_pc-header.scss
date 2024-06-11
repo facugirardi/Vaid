@@ -4,7 +4,7 @@
 
 .pc-header {
   background: var(--pc-header-background) !important;
-  color: var(--pc-header-color) !important;
+  color: var(--pc-header-color);
   min-height: $header-height;
   box-shadow: var(--pc-header-shadow) !important;
   backdrop-filter: blur(7px) !important;
