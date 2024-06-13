@@ -6,9 +6,6 @@ const Footer = () => {
         <footer className="pc-footer">
             <div className="footer-wrapper container-fluid">
                 <div className="row">
-                    <div className="col-sm-6 my-1">
-                        <p className="m-0">Made by Vaid Team</p>
-                    </div>
                     <div className="col-sm-6 ms-auto my-1">
                         <ul className="list-inline footer-link mb-0 justify-content-sm-end d-flex">
                             <li className="list-inline-item"><Link href="/">Home</Link></li>

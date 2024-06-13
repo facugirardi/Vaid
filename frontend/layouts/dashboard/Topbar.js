@@ -105,7 +105,6 @@ const TopBar = ({ handleOffcanvasToggle, changeThemeMode, toogleSidebarHide, too
                                                             <select className="form-select bg-transparent form-select-sm border-0 shadow-none">
                                                                 <option value="1">English</option>
                                                                 <option value="2">Spain</option>
-                                                                <option value="3">Arabic</option>
                                                             </select>
                                                         </span>
                                                     </div>
