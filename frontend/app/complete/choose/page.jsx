@@ -42,8 +42,16 @@ const { data: user } = useRetrieveUserQuery();
       if (!response.ok) {
         toast.error('Network response was not ok.'); 
       }
-  
-      push('/dashboard');
+
+      if(selection === 'organization'){
+        push('/complete/organization');
+      }
+      else if(selection === 'user'){
+        push('/complete/user')
+      }
+      else{
+        push('/')
+      }
       
     } catch (error) {
       toast.error('Failed to update user. Error: ', error); 
