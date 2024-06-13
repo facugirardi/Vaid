@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import LandingLayout from "@/layouts/LandingLayout";
 import './choose.css'
 import Image from 'next/image';
-import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 
@@ -13,7 +12,6 @@ const breaks = Array(4).fill(0).map((_, i) => <br key={i} />);
 const page = () => {
 const [selection, setSelection] = useState(null);
 const { push } = useRouter();
-const { data: user } = useRetrieveUserQuery();
 
   const handleSelect = (option) => {
     setSelection(option);
@@ -24,24 +22,31 @@ const { data: user } = useRetrieveUserQuery();
       toast.error('Select an option.'); 
       return;
     }
+
+
+    // import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
   
-    const userType = selection === 'organization' ? 2 : 1;
+    // const { data: user } = useRetrieveUserQuery();
+
+    // try {
+    //   const response = await fetch(`http://localhost:8000/api/user/${user.id}/complete`, {
+    //     method: 'PATCH',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({
+    //       user_type: userType,
+    //       is_completed: 1
+    //     })
+    //   });
   
-    try {
-      const response = await fetch(`http://localhost:8000/api/user/${user.id}/complete`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          user_type: userType,
-          is_completed: 1
-        })
-      });
-  
-      if (!response.ok) {
-        toast.error('Network response was not ok.'); 
-      }
+    //   if (!response.ok) {
+    //     toast.error('Network response was not ok.'); 
+    //   }
+    // } catch (error) {
+    //   toast.error('Failed to update user. Error: ', error); 
+    // }
+
 
       if(selection === 'organization'){
         push('/complete/organization');
@@ -53,9 +58,7 @@ const { data: user } = useRetrieveUserQuery();
         push('/')
       }
       
-    } catch (error) {
-      toast.error('Failed to update user. Error: ', error); 
-    }
+    
   };
 
 
