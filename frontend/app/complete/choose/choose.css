@@ -23,6 +23,7 @@ body{
     text-align: left;
     cursor: pointer;
     border: 1px solid #3D3D3D;
+    background-color: white;
     border-radius: 7px;
     font-size: 16.5px;
     font-weight:500;

@@ -73,8 +73,9 @@ const { push } = useRouter();
                 <div className='cont-btns-choose'>
                 <button className='btn-gen' onClick={() => handleSelect('organization')}
                     style={{
-                    backgroundColor: selection === 'organization' ? '#F1F1F1' : 'white',
-                    marginRight: '35px'  
+                      border: selection === 'organization' ? '1px solid #2A50CF' : '1px solid #3D3D3D',
+                      backgroundColor: selection === 'organization' ? '#f4f4f4' : 'white',
+                      marginRight: '35px'  
                     }}
                 >
                         <Image
@@ -90,8 +91,9 @@ const { push } = useRouter();
                 </button>
                 <button className='btn-gen' onClick={() => handleSelect('user')}
 
-                    style={{
-                    backgroundColor: selection === 'user' ? '#F1F1F1' : 'white',
+                    style={{    
+                    border: selection === 'user' ? '1px solid #2A50CF' : '1px solid #3D3D3D',
+                    backgroundColor: selection === 'user' ? '#f4f4f4' : 'white',
                     marginLeft: '35px' 
                     }}
                 >
