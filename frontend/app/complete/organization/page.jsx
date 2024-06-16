@@ -18,6 +18,8 @@ const page = () => {
     const [preview, setPreview] = useState(null);
 
     
+
+
   const onFileChange = event => {
       if (event.target.files && event.target.files[0]) {
           setFile(event.target.files[0]);
@@ -27,10 +29,9 @@ const page = () => {
          setPreview(null);
       }
   };
-  return (
 
 
-      
+  return (      
 
 
     <LandingLayout header footer bodyClass={"home-three"} onePage>
@@ -67,13 +68,12 @@ const page = () => {
 
                 <div className="input-box flex-item">
                     <label className='label_input'>Organization Name</label>
-                    <input name='name' type="text" placeholder='Enter the name of your organization' required />
+                    <input name='org-name' type="text" placeholder='Enter the name of your organization' required />
                 </div>
-
 
                 <div className="input-box flex-item">
                     <label className='label_input'>Country</label>
-                    <input name='website' type="text" placeholder='Enter your country' />
+                    <input name='country' type="text" placeholder='Enter your country' required />
                 </div>
 
                 <div className="input-box flex-item">
