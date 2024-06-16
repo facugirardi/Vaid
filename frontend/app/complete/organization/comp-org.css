@@ -18,7 +18,7 @@ body{
 }
 
 .wrapper-complete-user {
-    width: 35%;
+    width: 32.5%;
     background-color: white;
     border: 1px solid rgba(0, 0, 0, 0.17);
     color: black;
@@ -36,6 +36,23 @@ body{
     justify-content: center;  /* Centra el contenido horizontalmente */
     align-items: center;      /* Centra el contenido verticalmente */
     flex-direction: column;   /* Alinea el contenido en columna */
+}
+
+.upl-label{
+
+  color: #212121 !important;
+
+}
+
+.flex-item-upload{
+    flex: 1;
+    height: 100% !important;
+    /* Cada elemento toma un espacio igual */  
+    display: flex;
+    justify-content: center;  /* Centra el contenido horizontalmente */
+    align-items: center;      /* Centra el contenido verticalmente */
+    flex-direction: column;   /* Alinea el contenido en columna */
+    margin-bottom: -5px !important;
 }
 
 .wrapper-complete-user h1 {
@@ -192,6 +209,43 @@ body{
 
 .register-link p a:hover {          
     text-decoration: underline;
+}
+
+
+
+
+
+.upload-button {
+    border: 1px solid #212121;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    cursor: pointer;
+    overflow: hidden;
+    background-color: #f3f3f3;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.upload-button:hover {
+    background-color: #f0f0f0;
+}
+
+.preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.icon-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px; /* Ajusta según el tamaño del icono deseado */
 }
 
 

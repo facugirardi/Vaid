@@ -7,13 +7,26 @@ import Image from 'next/image';
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
+import FeatherIcon from "feather-icons-react";
 
 const breaks = Array(4).fill(0).map((_, i) => <br key={i} />); 
 
 const page = () => {
     const { push } = useRouter();
     const { data: user } = useRetrieveUserQuery();
+    const [file, setFile] = useState(null);
+    const [preview, setPreview] = useState(null);
 
+    
+  const onFileChange = event => {
+      if (event.target.files && event.target.files[0]) {
+          setFile(event.target.files[0]);
+         setPreview(URL.createObjectURL(event.target.files[0]));
+      } else {
+         setFile(null);
+         setPreview(null);
+      }
+  };
   return (
 
 
@@ -33,6 +46,25 @@ const page = () => {
                     <img src="/assets/images/vaidpng3.png" alt="" className='imgLogo_login'/>
                 </div>
 
+
+                <div className="input-box flex-item-upload">
+
+
+                <label htmlFor="upload-button" className="upload-button">
+                    {preview ? (
+                        <img src={preview} alt="Preview" className="preview-img" />
+                    ) : (
+                        <div className="icon-container">
+                        <FeatherIcon icon="upload" />
+                        </div>
+                    )}
+                    <input id="upload-button" type="file" onChange={onFileChange} style={{ display: 'none' }} />
+                </label>
+                 <label className='label_input upl-label'>Click to upload a picture</label>
+                </div>
+
+
+
                 <div className="input-box flex-item">
                     <label className='label_input'>Organization Name</label>
                     <input name='name' type="text" placeholder='Enter the name of your organization' required />
@@ -40,8 +72,8 @@ const page = () => {
 
 
                 <div className="input-box flex-item">
-                    <label className='label_input'>Website (Optional)</label>
-                    <input name='website' type="text" placeholder='Enter your website' />
+                    <label className='label_input'>Country</label>
+                    <input name='website' type="text" placeholder='Enter your country' />
                 </div>
 
                 <div className="input-box flex-item">
