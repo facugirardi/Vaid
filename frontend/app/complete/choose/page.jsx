@@ -69,7 +69,7 @@ const { push } = useRouter();
       >
         <div className="container">
         <div className='flex-item-logo'>
-          <h3>Join as Organization or User</h3>
+        <h3>Join as Organization or User</h3>
                 <div className='cont-btns-choose'>
                 <button className='btn-gen' onClick={() => handleSelect('organization')}
                     style={{

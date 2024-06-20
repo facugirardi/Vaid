@@ -13,13 +13,10 @@ import FeatherIcon from "feather-icons-react";
 const breaks = Array(4).fill(0).map((_, i) => <br key={i} />); 
 
 const page = () => {
-    const { push } = useRouter();
-    const { data: user } = useRetrieveUserQuery();
-    const [file, setFile] = useState(null);
-    const [preview, setPreview] = useState(null);
-
-    
-
+  const { push } = useRouter();
+  const { data: user } = useRetrieveUserQuery();
+  const [file, setFile] = useState(null);
+  const [preview, setPreview] = useState(null);
 
   const onFileChange = event => {
       if (event.target.files && event.target.files[0]) {
@@ -31,6 +28,53 @@ const page = () => {
       }
   };
 
+    
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        const formData = new FormData();
+        formData.append('country', event.target['country'].value);
+        formData.append('phone_number', event.target['phone_number'].value);
+        formData.append('description', event.target['description'].value);
+        formData.append('user_id', user.id);
+        if (file) {
+            formData.append('file', file);
+        }
+
+        try {
+            const response = await fetch('http://localhost:8000/api/user/person', {
+                method: 'POST',
+                body: formData
+            });
+
+            if (response.ok) {
+                // Update user status after creating the user
+                const completionResponse = await fetch(`http://localhost:8000/api/user/${user.id}/complete`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_type: 1,
+                        is_completed: 1
+                    })
+                });
+
+                if (completionResponse.ok) {
+                    push('/dashboard');
+                } else {
+                    toast.error('Network response was not ok.');
+                }
+            } else {
+                const errorData = await response.json();
+                toast.error(`Failed to create organization: ${errorData.error}`);
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            toast.error('Error submitting form');
+        }
+    };
+  
 
   return (      
 
@@ -43,7 +87,7 @@ const page = () => {
           <div className="d-flex justify-content-center">
 
               <div className='wrapper-complete-user'>
-            <form >
+            <form onSubmit={handleSubmit}>
                 <div className='flex-item-logo'>
                     <img src="/assets/images/vaidpng3.png" alt="" className='imgLogo_login'/>
                 </div>
@@ -74,7 +118,7 @@ const page = () => {
 
                 <div className="input-box flex-item">
                     <label className='label_input'>Phone Number</label>
-                    <input name='phone' type="text" placeholder='Enter your phone number' required />
+                    <input name='phone_number' type="text" placeholder='Enter your phone number' required />
                 </div>
 
                 <div className="input-box flex-item">
