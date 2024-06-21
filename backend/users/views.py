@@ -101,6 +101,18 @@ class UserTypeUpdate(APIView):
             return JsonResponse({'error': str(e)}, status=400)
 
 
+class CheckUserType(APIView):
+    permission_classes = [AllowAny]  
+
+    def get(self, request, *args, **kwargs):
+        user_id = kwargs.get('user_id')
+        try:
+            user = User.objects.get(id=user_id)
+            return Response({'user_type': user.user_type})
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=404)
+
+
 class CheckCompleteView(APIView):
     permission_classes = [AllowAny]  
 

@@ -9,6 +9,7 @@ from .views import (
     UserTypeUpdate,
     CreateOrganization,
     CreatePerson,
+    CheckUserType,
 )
 
 urlpatterns = [
@@ -17,6 +18,7 @@ urlpatterns = [
         CustomProviderAuthView.as_view(),
         name='provider-auth'
     ),
+    path('user/<int:user_id>/check-usertype', CheckUserType.as_view()),
     path('user/person', CreatePerson.as_view()),
     path('user/organization', CreateOrganization.as_view()),
     path('user/<int:pk>/complete', UserTypeUpdate.as_view()),
