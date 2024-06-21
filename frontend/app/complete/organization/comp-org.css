@@ -17,8 +17,8 @@ body{
     margin-right: 10px;
 }
 
-.wrapper {
-    width: 35%;
+.wrapper-complete-user {
+    width: 32.5%;
     background-color: white;
     border: 1px solid rgba(0, 0, 0, 0.17);
     color: black;
@@ -38,18 +38,35 @@ body{
     flex-direction: column;   /* Alinea el contenido en columna */
 }
 
-.wrapper h1 {
+.upl-label{
+
+  color: #212121 !important;
+
+}
+
+.flex-item-upload{
+    flex: 1;
+    height: 100% !important;
+    /* Cada elemento toma un espacio igual */  
+    display: flex;
+    justify-content: center;  /* Centra el contenido horizontalmente */
+    align-items: center;      /* Centra el contenido verticalmente */
+    flex-direction: column;   /* Alinea el contenido en columna */
+    margin-bottom: -5px !important;
+}
+
+.wrapper-complete-user h1 {
     font-size: 36px;
     text-align: center;
     font-family:   var(--heading-font);
 }
 
-.wrapper h3 {
+.wrapper-complete-user h3 {
     font-weight: 300;
     font-size: 20px;
 }
 
-.wrapper .input-box {
+.wrapper-complete-user .input-box {
     position: relative;
     width: 100%;
     height: 50px;
@@ -70,7 +87,21 @@ body{
     padding: 20px 45px 20px 20px;
     margin-top: 7px;
 }
+.input-box-in{
 
+  
+    width: 100%;
+    height: 100%;
+    border: 1px solid rgb(160, 160, 160);
+    outline: none;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.111);
+    font-size: 16px;
+    font-family:   var(--heading-font);
+    border: 1px solid rgb(160, 160, 160);
+    padding: 20px 45px 20px 20px;
+    margin-top: 7px;
+}
 .input-box input::placeholder{
     color: rgba(100, 100, 100, 0.629);
     font-size: 12.5px;
@@ -85,7 +116,7 @@ body{
     font-size: 16px;
 }
 
-.wrapper .remember-forgot {
+.wrapper-complete-user .remember-forgot {
     display: flex;
     justify-content: space-between;
     font-size: 11.5px;
@@ -115,7 +146,7 @@ body{
     text-decoration: underline;
 }
 
-.wrapper button {
+.wrapper-complete-user button {
     width: 100%;
     height: 45px;
     background-color: #2A50CF;
@@ -129,12 +160,21 @@ body{
     font-family:   var(--heading-font);
     font-weight: 500;
     font-size: 14px !important;
+    margin-top: 60px;
+    margin-bottom: 30px;
 }
 
-.wrapper button:hover {
+.wrapper-complete-user button:hover {
     background-color: #1e3890;
     transition: .2s ease;
 }
+
+.description-org{
+  height: 180% !important;
+} 
+
+ 
+
 
 .google-button{
     margin-top: 20px;
@@ -186,47 +226,85 @@ body{
 }
 
 
+
+
+
+.upload-button {
+    border: 1px solid #212121;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    cursor: pointer;
+    overflow: hidden;
+    background-color: #f3f3f3;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.upload-button:hover {
+    background-color: #f0f0f0;
+}
+
+.preview-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.icon-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px; /* Ajusta según el tamaño del icono deseado */
+}
+
+
 @media (max-width: 1200px) {
-    .wrapper {
+    .wrapper-complete-user {
         width: 45%;
       }
 }
 
 @media (max-width: 991px) {
-    .wrapper {
+    .wrapper-complete-user {
         width: 60%;
       }
 }
 
 @media (max-width: 768px) {
-    .wrapper {
+    .wrapper-complete-user {
         width: 75%;
       }
 }
 
 @media (max-width: 450px) {
-    .wrapper {
+    .wrapper-complete-user {
         width: 80%;
       }
 }
 @media (max-width: 415px) {
-    .wrapper {
+    .wrapper-complete-user {
         width: 85%;
       }
 
-    .wrapper .input-box {
+    .wrapper-complete-user .input-box {
         margin-top: 7.5%;
         margin-bottom: 20%;
     }
 }
 
 @media (max-width: 360px) {
-    .wrapper {
+    .wrapper-complete-user {
         width: 100%;
       }
 
-    .wrapper .input-box {
+    .wrapper-complete-user .input-box {
         margin-top: 7.5%;
         margin-bottom: 20%;
     }
 }
+

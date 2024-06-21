@@ -34,7 +34,7 @@ const LoginForm = () => {
             .unwrap()
             .then((response) => {
                 dispatch(setAuth()); 
-                push('/dashboard');
+                push('/');
             })
             .catch((error) => {
                 console.log(error);

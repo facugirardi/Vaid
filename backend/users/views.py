@@ -15,6 +15,68 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 import json
 from django.http import Http404
+from rest_framework.permissions import IsAuthenticated
+from .models import Organization, Person
+
+
+
+class CreatePerson(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        try:
+            data = request.data
+            user_id = data.get('user_id')
+            user = User.objects.get(id=user_id)
+            
+            person = Person(
+                phone_number=data.get('phone_number'),
+                country=data.get('country'),
+                description=data.get('description'),
+                User=user  # Usuario obtenido por ID
+            )
+            person.save()
+
+            return Response({'message': 'Person created successfully'}, status=status.HTTP_201_CREATED)
+
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CreateOrganization(APIView):
+    permission_classes = [AllowAny]  
+
+    def post(self, request):
+        try:
+            data = request.data
+            
+
+            user_id = data.get('user_id')
+            if not user_id:
+                return Response({'error': 'User ID is required'}, status=status.HTTP_400_BAD_REQUEST)
+            
+        
+            try:
+                user = User.objects.get(id=user_id)
+            except User.DoesNotExist:
+                return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+            
+            # Crear la organización
+            organization = Organization(
+                name=data.get('name'),
+                description=data.get('description'),
+                country=data.get('country'),
+                website=data.get('website', ''),
+                User=user
+            )
+            organization.save()
+
+            return Response({'message': 'Organization created successfully'}, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 # @method_decorator(csrf_exempt, name='dispatch')
 class UserTypeUpdate(APIView):

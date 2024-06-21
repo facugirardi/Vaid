@@ -8,7 +8,7 @@ const BreadcrumbItem = ({ mainTitle, subTitle }) => {
   return (
     <React.Fragment>
     <Head>
-      <title>{subTitle} | Light Able NextJs Dashboard Template</title>
+      <title>{subTitle} | Vaid</title>
     </Head>
     <div className="page-header">
       <div className="page-block">

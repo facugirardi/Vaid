@@ -317,7 +317,7 @@ input[type=checkbox], input[type=radio] {
   direction: ltr; }
 
 /*** Preloader style ** */
-.preloader {
+.preloader21 {
   position: fixed;
   left: 0;
   top: 0;
@@ -336,7 +336,7 @@ input[type=checkbox], input[type=radio] {
   background-color: #fff;
   background-repeat: no-repeat;
   background-position: center center; }
-  .preloader .custom-loader {
+  .preloader21 .custom-loader2 {
     width: 75px;
     height: 75px;
     border-radius: 50%;
