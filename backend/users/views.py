@@ -16,8 +16,54 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from django.http import Http404
 from rest_framework.permissions import IsAuthenticated
-from .models import Organization, Person
+from .models import Organization, Person, Image
+from .serializers import ImageSerializer
 
+
+class RetrieveImageView(APIView):
+    def get(self, request, format=None):
+        try:
+            if Image.objects.all().exists():
+                images = Image.objects.all()
+                images = ImageSerializer(images, many=True)
+                return Response(
+                    {'images': images.data},
+                    status=status.HTTP_200_OK
+                )
+
+        except:
+            return Response(
+                {'error': 'Error retrieving image'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+class UploadImageView(APIView):
+
+    permission_classes = [AllowAny]
+    def post(self, request):
+        try:
+            data = self.request.data
+            user_id = data.get('user_id')                
+            user = User.objects.get(id=user_id) 
+
+            image = data['image']
+            
+            Image.objects.create(
+                    image = image,
+                    User = user
+                )
+            
+            return Response(
+                    {'success': 'Image Uploaded Successfully'},
+                    status=status.HTTP_201_CREATED
+
+                )
+        except:
+            return Response(
+                {'error': 'Error Uploading Image'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                
+            )
 
 
 class CreatePerson(APIView):

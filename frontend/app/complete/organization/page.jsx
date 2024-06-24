@@ -1,4 +1,5 @@
-"use client"
+
+"use client";
 import React, { useState } from 'react';
 import LandingLayout from "@/layouts/LandingLayout";
 import './comp-org.css';
@@ -7,10 +8,10 @@ import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import FeatherIcon from "feather-icons-react";
+import axios from 'axios';
 
 const Page = () => {
     const { push } = useRouter();
-
     const { data: user } = useRetrieveUserQuery();
     const [file, setFile] = useState(null);
     const [preview, setPreview] = useState(null);
@@ -25,7 +26,9 @@ const Page = () => {
         }
     };
 
-    
+ 
+
+  
 const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -33,53 +36,71 @@ const handleSubmit = async (event) => {
     formData.append('name', event.target['org-name'].value);
     formData.append('description', event.target['description'].value);
     formData.append('country', event.target['country'].value);
-    formData.append('user_id', user.id); 
-//    if (file) {
-//        formData.append('file', file);
-//    }
+    formData.append('user_id', user.id);
+
+    const formData2 = new FormData();
+    if (file) {
+        formData2.append('image', file);
+    }
+    formData2.append('user_id', user.id);
 
     try {
-        const response = await fetch('http://localhost:8000/api/user/organization', {
-            method: 'POST',
-            body: formData
-      });
+        const response = await axios.post('http://localhost:8000/api/upload-image', formData2, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'multipart/form-data',
+            }
+        });
 
-        if (response.ok) {
-           
+        if (response.status === 201) {
+            try {
+                const response = await fetch('http://localhost:8000/api/user/organization', {
+                    method: 'POST',
+                    body: formData,
+                });
 
+                if (response.ok) {
+                    try {
+                        const response = await fetch(`http://localhost:8000/api/user/${user.id}/complete`, {
+                            method: 'PATCH',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                user_type: 2,
+                                is_completed: 1,
+                            }),
+                        });
 
-        try {
-         const response = await fetch(`http://localhost:8000/api/user/${user.id}/complete`, {
-         method: 'PATCH',
-         headers: {
-           'Content-Type': 'application/json',
-         },
-         body: JSON.stringify({
-           user_type: 2,
-           is_completed: 1
-         })
-       });
-        if(response.ok){
-            push('/dashboard');
-          }
-          
-        if (!response.ok) {
-         toast.error('Network response was not ok.'); 
-       }
-     } catch (error) {
-       toast.error('Failed to update user. Error: ', error); 
-     }
-
-        
-      } else {
-            const errorData = await response.json();
-            toast.error(`Failed to create organization: ${errorData.error}`);
+                        if (response.ok) {
+                            push('/dashboard');
+                        } else {
+                            toast.error('Network response was not ok.');
+                        }
+                    } catch (error) {
+                        toast.error('Failed to update user. Error: ', error);
+                    }
+                } else {
+                    const errorData = await response.json();
+                    toast.error(`Failed to create organization: ${errorData.error}`);
+                }
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                toast.error('Error submitting form');
+            }
+        } else {
+            toast.error('Error uploading image.');
         }
     } catch (error) {
-        console.error('Error submitting form:', error);
-        toast.error('Error submitting form');
+        console.error('Error submitting image: ', error);
+        toast.error('Error submitting image');
     }
 };
+
+
+
+
+
 
     return (
         <LandingLayout header footer bodyClass={"home-three"} onePage>
@@ -126,6 +147,6 @@ const handleSubmit = async (event) => {
             </section>
         </LandingLayout>
     );
-}
+};
 
 export default Page;

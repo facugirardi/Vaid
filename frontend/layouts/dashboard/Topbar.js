@@ -141,7 +141,7 @@ const TopBar = ({ handleOffcanvasToggle, changeThemeMode, toogleSidebarHide, too
                                                     <Dropdown.Item>
                                                         <span className="d-flex align-items-center">
                                                             <i className="ph-duotone ph-sign-out"></i>
-                                                            <span><a onClick={handleLogout}>Logout</a></span>
+                                                            <a onClick={handleLogout}>Logout</a>
                                                         </span>
                                                     </Dropdown.Item>
                                                 </li>
