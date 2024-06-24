@@ -83,18 +83,18 @@ const Header3 = ({ onePage }) => {
                   <button onClick={handleLogout} className="light-btn">
                     Logout
                   </button>
-                  <Link href="/dashboard" className="theme-btn style-two">
+                  <a href="/dashboard" className="theme-btn style-two">
                     Dashboard <i className="far fa-arrow-right" />
-                  </Link>
+                  </a>
                 </div>
 
               : <div className="menu-btns ms-lg-auto">
-                  <Link href="/auth/login" className="light-btn">
+                  <a href="/auth/login" className="light-btn">
                     Login
-                  </Link>
-                  <Link href="/auth/register" className="theme-btn style-two">
+                  </a>
+                  <a href="/auth/register" className="theme-btn style-two">
                     Sign Up <i className="far fa-arrow-right" />
-                  </Link>
+                  </a>
                 </div>
               }
 
