@@ -8,8 +8,13 @@ import avatar2 from "@/public/assets/images/user/avatar-2.jpg";
 import SimpleBar from "simplebar-react";
 import { menuItems } from "./MenuData";
 import NestedMenu from "./NestedMenu";
+import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 
 const Header = ({ themeMode }) => {
+
+  
+  const { data: user, isError, isLoading } = useRetrieveUserQuery();
+
   return (
     <React.Fragment>
       <nav className="pc-sidebar" id="pc-sidebar-hide">
@@ -46,7 +51,7 @@ const Header = ({ themeMode }) => {
                   />
                 </div>
                 <div className="flex-grow-1 ms-3 me-2">
-                  <h6 className="mb-0">Facundo Girardi</h6>
+                  <h6 className="mb-0">{user.first_name} {user.last_name}</h6>
                   <small>Administrator</small>
                 </div>
               </div>

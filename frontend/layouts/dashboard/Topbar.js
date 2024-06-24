@@ -6,6 +6,7 @@ import { useDispatch } from "react-redux";
 import Image from "next/image";
 import SimpleBar from "simplebar-react";
 
+import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 //import images
 import avatar1 from "@/public/assets/images/user/avatar-1.jpg";
 import avatar2 from "@/public/assets/images/user/avatar-2.jpg";
@@ -13,6 +14,7 @@ import avatar3 from "@/public/assets/images/user/avatar-3.jpg";
 
 const TopBar = ({ handleOffcanvasToggle, changeThemeMode, toogleSidebarHide, toogleMobileSidebarHide }) => {
 
+    const { data: user, isError, isLoading } = useRetrieveUserQuery();
     const dispatch = useDispatch();
     // Function to handle theme mode change
     const handleThemeChange = (value) => {
@@ -84,8 +86,8 @@ const TopBar = ({ handleOffcanvasToggle, changeThemeMode, toogleSidebarHide, too
                                                             <Image src={avatar2} alt="user-image" width={50} className="wid-50 rounded-circle" />
                                                         </div>
                                                         <div className="flex-grow-1 mx-3">
-                                                            <h5 className="mb-0">Facundo Girardi</h5>
-                                                            <a className="link-primary" href="mailto:facugirardi22@gmail.com">facugirardi22@gmail.com</a>
+                                                            <h5 className="mb-0">{user.first_name} {user.last_name}</h5>
+                                                            <a className="link-primary">{user.email}</a>
                                                         </div>
                                                     </div>
                                                 </li>
