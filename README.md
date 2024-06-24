@@ -2,12 +2,13 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-<img src="frontend/public/assets/images/vaidpng.png" alt="Logo" width="80" height="80">
+<img src="frontend/public/assets/images/vaid.png" alt="Logo" width="100" height="100">
+    <br />
+    <br />
 
-<h3 align="center">Vaid</h3>
 
   <p align="center">
-    AI Management Solutions for Nonprofitable Organizations.
+    Vaid - AI Management Solutions for Nonprofitable Organizations
     <br />
     <br />
   </p>
