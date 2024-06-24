@@ -1,11 +1,8 @@
-<a name="readme-top"></a>
 
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/github_username/repo_name">
-    <img src="frontend/public/assets/images/vaidpng.png" alt="Logo" width="80" height="80">
-  </a>
+<img src="frontend/public/assets/images/vaidpng.png" alt="Logo" width="80" height="80">
 
 <h3 align="center">Vaid</h3>
 
