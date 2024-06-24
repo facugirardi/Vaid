@@ -5,7 +5,13 @@ import { Dropdown } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import Image from "next/image";
 import SimpleBar from "simplebar-react";
+import { useLogoutMutation } from "@/redux/features/authApiSlice";
+import { logout as setLogout } from '@/redux/features/authSlice'; 
+import { useRouter } from 'next/navigation';
+import { toast } from "react-toastify";
 
+
+import { useAppSelector, useAppDispatch } from '@/redux/hooks';
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 //import images
 import avatar1 from "@/public/assets/images/user/avatar-1.jpg";
@@ -20,6 +26,26 @@ const TopBar = ({ handleOffcanvasToggle, changeThemeMode, toogleSidebarHide, too
     const handleThemeChange = (value) => {
         dispatch(changeThemeMode(value));
     };
+    const { push } = useRouter();
+
+    const dispatch2 = useAppDispatch();
+    const [logout] = useLogoutMutation();
+    const { isAuthenticated } = useAppSelector(state => state.auth);
+
+    const handleLogout = () => {
+    logout()
+      .unwrap()
+      .then(() => {
+        dispatch2(setLogout())
+        toast.success('Logged out successfully.');
+        push('/auth/login');
+      })
+      .catch(() => {
+        dispatch2(setLogout())
+        toast.success('Logged out successfully.');
+        push('/auth/login');
+      })
+    }
 
     const [isDropdownOpen, setDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
@@ -115,7 +141,7 @@ const TopBar = ({ handleOffcanvasToggle, changeThemeMode, toogleSidebarHide, too
                                                     <Dropdown.Item>
                                                         <span className="d-flex align-items-center">
                                                             <i className="ph-duotone ph-sign-out"></i>
-                                                            <span>Logout</span>
+                                                            <span><a onClick={handleLogout}>Logout</a></span>
                                                         </span>
                                                     </Dropdown.Item>
                                                 </li>
