@@ -84,25 +84,6 @@ const Header = ({ themeMode }) => {
             </ul>
           </SimpleBar>
           {/* </div> */}
-          <div className="card pc-user-card">
-            <div className="card-body">
-              <div className="d-flex align-items-center">
-                <div className="flex-shrink-0">
-                  <Image
-                    src={avatar2}
-                    alt="user-image"
-                    className="user-avtar wid-45 rounded-circle"
-                    width={45}
-                    height={45}
-                  />
-                </div>
-                <div className="flex-grow-1 ms-3 me-2">
-                  <h6 className="mb-0">{user.first_name} {user.last_name}</h6>
-                  <small>Administrator</small>
-                </div>
-              </div>
-            </div>
-          </div>
         </div>
       </nav>
     </React.Fragment>
