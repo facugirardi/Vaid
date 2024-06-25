@@ -21,19 +21,38 @@ from .serializers import ImageSerializer
 
 
 class RetrieveImageView(APIView):
-    def get(self, request, format=None):
+    permission_classes = [AllowAny]
+    def get(self, request):
         try:
-            if Image.objects.all().exists():
-                images = Image.objects.all()
-                images = ImageSerializer(images, many=True)
+            user_id = request.query_params.get('user_id')
+            if not user_id:
                 return Response(
-                    {'images': images.data},
-                    status=status.HTTP_200_OK
+                    {'error': 'User ID is required'},
+                    status=status.HTTP_400_BAD_REQUEST
                 )
 
-        except:
+            user = User.objects.get(id=user_id)
+            images = Image.objects.filter(User=user)
+
+            if images.exists():
+                images_serializer = ImageSerializer(images, many=True)
+                return Response(
+                    {'images': images_serializer.data},
+                    status=status.HTTP_200_OK
+                )
+            else:
+                return Response(
+                    {'error': 'No images found for the specified user'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+        except User.DoesNotExist:
             return Response(
-                {'error': 'Error retrieving image'},
+                {'error': 'User not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            return Response(
+                {'error': f'Error retrieving image: {str(e)}'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 

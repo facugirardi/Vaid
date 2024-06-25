@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 //import images
 import logoDark from "@/public/assets/images/vaidpng2.png";
 import logoLight from "@/public/assets/images/vaidpng2.png";
-import avatar2 from "@/public/assets/images/user/avatar-2.jpg";
+import avatar from "@/public/assets/images/user/avatar-2.jpg";
 import SimpleBar from "simplebar-react";
 import { menuItems } from "./MenuData";
 import NestedMenu from "./NestedMenu";
@@ -12,8 +12,53 @@ import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 
 const Header = ({ themeMode }) => {
 
-  
-  const { data: user, isError, isLoading } = useRetrieveUserQuery();
+ 
+    const { data: user, isError, isFetching, isLoading } = useRetrieveUserQuery();
+    const [avatar2, setImage] = useState(avatar);
+
+    const backendUrl = 'http://localhost:8000'; // Cambia esto a la URL de tu backend
+    
+   const fetchImage = async () => 
+        {
+        const formData = new FormData();
+        formData.append('user_id', user.id);
+        try {
+            const response = await fetch(`http://localhost:8000/api/retrieve-logo?user_id=${user.id}`, {
+                method: 'GET',
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+
+                if (data.images.length > 0) {
+                    console.log(data.images)
+                    const imageUrl = `${backendUrl}${data.images[0].image}`;
+
+                    if (imageUrl) {
+                        console.log("Image URL:", imageUrl); // Verificar la URL de la imagen en la consola
+                        setImage(imageUrl); // Asegúrate de usar la propiedad correcta
+                    } else {
+                        setImage(avatar); // Usar imagen por defecto si no se encuentra imagen
+                    }
+                } else {
+                    toast.error('No image found for the specified user');
+                }
+            } else {
+                toast.error('Error fetching image');
+            }
+        } catch (error) {
+            toast.error('Error fetching image');
+        }
+    };
+
+    if(!isFetching){
+    useEffect(() => {
+        fetchImage();
+       
+    }, []);
+    }
+
+
 
   return (
     <React.Fragment>
@@ -48,6 +93,7 @@ const Header = ({ themeMode }) => {
                     alt="user-image"
                     className="user-avtar wid-45 rounded-circle"
                     width={45}
+                    height={45}
                   />
                 </div>
                 <div className="flex-grow-1 ms-3 me-2">
