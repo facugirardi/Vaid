@@ -9,6 +9,7 @@ import { toast } from 'react-toastify';
 import FeatherIcon from "feather-icons-react";
 import { countries } from "@/common/countries";
 import axios from 'axios';
+import Image from 'next/image';
 
 const Page = () => {
     const { push } = useRouter();
@@ -25,9 +26,6 @@ const Page = () => {
             setPreview(null);
         }
     };
-
- 
-
   
 const handleSubmit = async (event) => {
     event.preventDefault();
@@ -121,7 +119,8 @@ const handleSubmit = async (event) => {
                                                 <FeatherIcon icon="upload" />
                                             </div>
                                         )}
-                                        <input id="upload-button" type="file" onCha nge={onFileChange} style={{ display: 'none' }} />
+                                        <input id="upload-button" type="file" onChange={onFileChange} style={{ display: 'none' }} />
+                    
                                     </label>
                                     <label className='label_input upl-label'>Click to upload a picture</label>
                                 </div>

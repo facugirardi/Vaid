@@ -28,20 +28,20 @@ const page = () => {
                             <Image src={cellProps.getValue()} alt="user image" className="img-radius align-top m-r-15" width={40} />
                             <div className="d-inline-block">
                                 <h6 className="m-b-0">{cellProps.row.original.Name}</h6>
-                                <p className="m-b-0 text-primary">Android developer</p>
+                                <p className="m-b-0 text-primary">Candidate</p>
                             </div>
                         </div>
                     )
                 }, 
             },
             {
-                header: "Position",
-                accessorKey: "Position",
+                header: "Disponibility",
+                accessorKey: "Disponibility",
                 enableColumnFilter: false,
             },
             {
-                header: "Office",
-                accessorKey: "Office",
+                header: "Country",
+                accessorKey: "Country",
                 enableColumnFilter: false,
             },
             {
@@ -50,19 +50,19 @@ const page = () => {
                 enableColumnFilter: false,
             },
             {
-                header: "Start date",
-                accessorKey: "Startdate",
+                header: "Request Date",
+                accessorKey: "Requestdate",
                 enableColumnFilter: false,
             },
             {
-                header: "Status",
+                header: "Interviewed",
                 enableColumnFilter: false,
-                accessorKey: "status",
+                accessorKey: "Interviewed",
                 cell: (cellProps) => {
                     return (
                         <>
                             {
-                                cellProps.getValue() === "Active" ?
+                                cellProps.getValue() === "Yes" ?
                                     <span className="badge bg-light-success">{cellProps.getValue()}</span>
                                     :
                                     <span className="badge bg-light-danger">{cellProps.getValue()}</span>
@@ -70,7 +70,7 @@ const page = () => {
                             <div className="overlay-edit">
                                 <ul className="list-inline mb-0">
                                     <li className="list-inline-item m-0"><Link href="#" className="avtar avtar-s btn btn-primary"><i className="ti ti-plus f-18"></i></Link></li>
-                                    <li className="list-inline-item m-0"><Link href="#" className="avtar avtar-s btn bg-white btn-link-danger"><i className="ti ti-cross f-18"></i></Link></li>
+                                    <li className="list-inline-item m-0"><Link href="#" className="avtar avtar-s btn bg-white btn-link-danger"><i className="ti ti-minus f-18"></i></Link></li>
                   
                                 </ul>
                             </div>
@@ -89,7 +89,7 @@ const page = () => {
 
     return (
         <Layout>
-            <BreadcrumbItem mainTitle="Human Resources" subTitle="Candidates" />
+            <BreadcrumbItem mainTitle="Human Resources" subTitle="Candidate List" />
             
             <Row>
                 <Col sm={12}>
