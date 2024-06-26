@@ -71,7 +71,7 @@ const handleSubmit = async (event) => {
                         });
 
                         if (response.ok) {
-                            push('/dashboard');
+                            window.location.href = '/dashboard';
                         } else {
                             toast.error('Network response was not ok.');
                         }

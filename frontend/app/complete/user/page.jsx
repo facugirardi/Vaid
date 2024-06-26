@@ -11,6 +11,7 @@ import { toast } from 'react-toastify';
 import FeatherIcon from "feather-icons-react";
 import axios from 'axios';
 
+import { countries } from "@/common/countries";
 const breaks = Array(4).fill(0).map((_, i) => <br key={i} />); 
 
 const page = () => {
@@ -73,7 +74,7 @@ const page = () => {
                         });
 
                         if (response.ok) {
-                            push('/dashboard');
+                            window.location.href = '/dashboard';
                         } else {
                             toast.error('Network response was not ok.');
                         }
@@ -134,7 +135,11 @@ const page = () => {
 
                 <div className="input-box flex-item">
                     <label className='label_input'>Country</label>
-                    <input name='country' type="text" placeholder='Enter your country' required />
+                    <select name='country' className='country_label' required>
+                        {countries.map((country, index) => (
+                            <option key={index} value={country.name}>{country.name}</option>
+                        ))}
+                    </select>
                 </div>
 
                 <div className="input-box flex-item">

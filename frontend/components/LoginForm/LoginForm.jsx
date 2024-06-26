@@ -34,7 +34,7 @@ const LoginForm = () => {
             .unwrap()
             .then((response) => {
                 dispatch(setAuth()); 
-                push('/');
+                window.location.href = '/';
             })
             .catch((error) => {
                 console.log(error);

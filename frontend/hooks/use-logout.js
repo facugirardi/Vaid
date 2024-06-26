@@ -17,14 +17,14 @@ const handleLogout = () => {
       localStorage.removeItem('id');
       dispatch(setLogout())
       toast.success('Logged out successfully.');
-      push('/auth/login');
+      window.location.href = '/auth/login';
     })
     .catch(() => {
       localStorage.removeItem('token');
       localStorage.removeItem('id');
       dispatch(setLogout())
       toast.success('Logged out successfully.');
-      push('/auth/login');
+      window.location.href = '/auth/login';
     })
 }
 
