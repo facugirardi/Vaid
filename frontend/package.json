@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.2.5",
+    "@tanstack/match-sorter-utils": "^8.15.1",
+    "@tanstack/react-table": "^8.17.3",
     "aos": "^2.3.4",
     "async-mutex": "^0.5.0",
     "axios": "^1.7.2",
