@@ -11,7 +11,6 @@ const LandingLayout = ({ children, header, footer, bodyClass, onePage }) => {
   });
 
   useEffect(() => {
-    niceSelect();
     document.querySelector("body").classList = bodyClass;
   }, []);
 

@@ -3,11 +3,11 @@
 import React, { useState } from 'react';
 import LandingLayout from "@/layouts/LandingLayout";
 import './comp-org.css';
-import Image from 'next/image';
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import FeatherIcon from "feather-icons-react";
+import { countries } from "@/common/countries";
 import axios from 'axios';
 
 const Page = () => {
@@ -121,7 +121,7 @@ const handleSubmit = async (event) => {
                                                 <FeatherIcon icon="upload" />
                                             </div>
                                         )}
-                                        <input id="upload-button" type="file" onChange={onFileChange} style={{ display: 'none' }} />
+                                        <input id="upload-button" type="file" onCha nge={onFileChange} style={{ display: 'none' }} />
                                     </label>
                                     <label className='label_input upl-label'>Click to upload a picture</label>
                                 </div>
@@ -131,7 +131,11 @@ const handleSubmit = async (event) => {
                                 </div>
                                 <div className="input-box flex-item">
                                     <label className='label_input'>Country</label>
-                                    <input name='country' type="text" placeholder='Enter your country' required />
+                                    <select name='country' className='country_label' required>
+                                        {countries.map((country, index) => (
+                                            <option key={index} value={country.name}>{country.name}</option>
+                                        ))}
+                                    </select>
                                 </div>
                                 <div className="input-box flex-item">
                                     <label className='label_input'>Description</label>
