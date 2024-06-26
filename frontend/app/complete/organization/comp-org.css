@@ -262,6 +262,16 @@ body{
     font-size: 24px; /* Ajusta según el tamaño del icono deseado */
 }
 
+.country_label{
+    padding: 14px 10px;
+ 
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.111);
+    font-size: 16px;
+
+    border: 1px solid rgb(160, 160, 160);
+
+}
 
 @media (max-width: 1200px) {
     .wrapper-complete-user {

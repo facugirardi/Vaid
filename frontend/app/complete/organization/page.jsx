@@ -1,12 +1,12 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState,  } from 'react';
 import LandingLayout from "@/layouts/LandingLayout";
 import './comp-org.css';
-import Image from 'next/image';
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import FeatherIcon from "feather-icons-react";
+import { countries } from "@/common/countries";
 
 const Page = () => {
     const { push } = useRouter();
@@ -25,61 +25,47 @@ const Page = () => {
         }
     };
 
-    
-const handleSubmit = async (event) => {
-    event.preventDefault();
+    const handleSubmit = async (event) => {
+        event.preventDefault();
 
-    const formData = new FormData();
-    formData.append('name', event.target['org-name'].value);
-    formData.append('description', event.target['description'].value);
-    formData.append('country', event.target['country'].value);
-    formData.append('user_id', user.id); 
-//    if (file) {
-//        formData.append('file', file);
-//    }
-
-    try {
-        const response = await fetch('http://localhost:8000/api/user/organization', {
-            method: 'POST',
-            body: formData
-      });
-
-        if (response.ok) {
-           
-
+        const formData = new FormData();
+        formData.append('name', event.target['org-name'].value);
+        formData.append('description', event.target['description'].value);
+        formData.append('country', event.target['country'].value);
+        formData.append('user_id', user.id);
 
         try {
-         const response = await fetch(`http://localhost:8000/api/user/${user.id}/complete`, {
-         method: 'PATCH',
-         headers: {
-           'Content-Type': 'application/json',
-         },
-         body: JSON.stringify({
-           user_type: 2,
-           is_completed: 1
-         })
-       });
-        if(response.ok){
-            push('/dashboard');
-          }
-          
-        if (!response.ok) {
-         toast.error('Network response was not ok.'); 
-       }
-     } catch (error) {
-       toast.error('Failed to update user. Error: ', error); 
-     }
+            const response = await fetch('http://localhost:8000/api/user/organization', {
+                method: 'POST',
+                body: formData
+            });
 
-        
-      } else {
-            const errorData = await response.json();
-            toast.error(`Failed to create organization: ${errorData.error}`);
+            if (response.ok) {
+                const completeResponse = await fetch(`http://localhost:8000/api/user/${user.id}/complete`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_type: 2,
+                        is_completed: 1
+                    })
+                });
+
+                if (completeResponse.ok) {
+                    push('/dashboard');
+                } else {
+                    toast.error('Failed to update user status');
+                }
+            } else {
+                const errorData = await response.json();
+                toast.error(`Failed to create organization: ${errorData.error}`);
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            toast.error('Error submitting form');
         }
-    } catch (error) {
-        console.error('Error submitting form:', error);
-        toast.error('Error submitting form');
-    }
-};
+    };
 
     return (
         <LandingLayout header footer bodyClass={"home-three"} onePage>
@@ -100,7 +86,7 @@ const handleSubmit = async (event) => {
                                                 <FeatherIcon icon="upload" />
                                             </div>
                                         )}
-                                        <input id="upload-button" type="file" onChange={onFileChange} style={{ display: 'none' }} />
+                                        <input id="upload-button" type="file" onCha nge={onFileChange} style={{ display: 'none' }} />
                                     </label>
                                     <label className='label_input upl-label'>Click to upload a picture</label>
                                 </div>
@@ -110,7 +96,11 @@ const handleSubmit = async (event) => {
                                 </div>
                                 <div className="input-box flex-item">
                                     <label className='label_input'>Country</label>
-                                    <input name='country' type="text" placeholder='Enter your country' required />
+                                    <select name='country' className='country_label' required>
+                                        {countries.map((country, index) => (
+                                            <option key={index} value={country.name}>{country.name}</option>
+                                        ))}
+                                    </select>
                                 </div>
                                 <div className="input-box flex-item">
                                     <label className='label_input'>Description</label>
