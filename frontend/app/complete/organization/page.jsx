@@ -122,14 +122,14 @@ const handleSubmit = async (event) => {
                                         <input id="upload-button" type="file" onChange={onFileChange} style={{ display: 'none' }} />
                     
                                     </label>
-                                    <label className='label_input upl-label'>Click to upload a picture</label>
+                                    <label className='label_input upl-label'>Click to upload a picture *</label>
                                 </div>
                                 <div className="input-box flex-item">
-                                    <label className='label_input'>Organization Name</label>
+                                    <label className='label_input'>Organization Name *</label>
                                     <input name='org-name' type="text" placeholder='Enter the name of your organization' required />
                                 </div>
                                 <div className="input-box flex-item">
-                                    <label className='label_input'>Country</label>
+                                    <label className='label_input'>Country *</label>
                                     <select name='country' className='country_label' required>
                                         {countries.map((country, index) => (
                                             <option key={index} value={country.name}>{country.name}</option>
@@ -137,7 +137,7 @@ const handleSubmit = async (event) => {
                                     </select>
                                 </div>
                                 <div className="input-box flex-item">
-                                    <label className='label_input'>Description</label>
+                                    <label className='label_input'>Description *</label>
                                     <input className='description-org' name='description' type="text" placeholder='Enter a description' required />
                                 </div>
                                 <div className='flex-item'>

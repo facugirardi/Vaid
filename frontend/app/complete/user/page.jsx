@@ -128,13 +128,13 @@ const page = () => {
                     )}
                     <input id="upload-button" type="file" onChange={onFileChange} style={{ display: 'none' }} />
                 </label>
-                 <label className='label_input upl-label'>Click to upload a picture</label>
+                 <label className='label_input upl-label'>Click to upload a picture *</label>
                 </div>
 
 
 
                 <div className="input-box flex-item">
-                    <label className='label_input'>Country</label>
+                    <label className='label_input'>Country *</label>
                     <select name='country' className='country_label' required>
                         {countries.map((country, index) => (
                             <option key={index} value={country.name}>{country.name}</option>
@@ -143,12 +143,12 @@ const page = () => {
                 </div>
 
                 <div className="input-box flex-item">
-                    <label className='label_input'>Phone Number</label>
+                    <label className='label_input'>Phone Number *</label>
                     <input name='phone_number' type="text" placeholder='Enter your phone number' required />
                 </div>
 
                 <div className="input-box flex-item">
-                    <label className='label_input'>Tell us about yourself!</label>
+                    <label className='label_input'>Tell us about yourself! *</label>
                     <input name='description' className='description-org' type="text" placeholder='Enter a description' required />
                 </div>
                 <div className='flex-item'>
