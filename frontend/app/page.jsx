@@ -129,9 +129,9 @@ const page = () => {
             data-aos-duration={1000}
             data-aos-offset={50}
           >
-            <a href="#">
+            <a href="https://vasodeleche.org/" target="_blank">
               <img
-                src="assets/images/client-logos/client-logo-two2.png"
+                src="assets/images/client-logos/vaso.png"
                 alt="Client Logo"
               />
             </a>
@@ -143,9 +143,9 @@ const page = () => {
             data-aos-duration={1000}
             data-aos-offset={50}
           >
-            <a href="#">
+            <a href="https://vasodeleche.org/" target="_blank">
               <img
-                src="assets/images/client-logos/client-logo-two3.png"
+                src="assets/images/client-logos/vaso.png"
                 alt="Client Logo"
               />
             </a>
@@ -157,9 +157,9 @@ const page = () => {
             data-aos-duration={1000}
             data-aos-offset={50}
           >
-            <a href="#">
+            <a href="https://vasodeleche.org/" target="_blank">
               <img
-                src="assets/images/client-logos/client-logo-two4.png"
+                src="assets/images/client-logos/vaso.png"
                 alt="Client Logo"
               />
             </a>
@@ -171,9 +171,9 @@ const page = () => {
             data-aos-duration={1000}
             data-aos-offset={50}
           >
-            <a href="#">
+            <a href="https://vasodeleche.org/" target="_blank">
               <img
-                src="assets/images/client-logos/client-logo-two5.png"
+                src="assets/images/client-logos/vaso.png"
                 alt="Client Logo"
               />
             </a>
@@ -185,9 +185,9 @@ const page = () => {
             data-aos-duration={1000}
             data-aos-offset={50}
           >
-            <a href="#">
+            <a href="https://vasodeleche.org/" target="_blank">
               <img
-                src="assets/images/client-logos/client-logo-two6.png"
+                src="assets/images/client-logos/vaso.png"
                 alt="Client Logo"
               />
             </a>
@@ -199,9 +199,9 @@ const page = () => {
             data-aos-duration={1000}
             data-aos-offset={50}
           >
-            <a href="#">
+            <a href="https://vasodeleche.org/" target="_blank">
               <img
-                src="assets/images/client-logos/client-logo-two7.png"
+                src="assets/images/client-logos/vaso.png"
                 alt="Client Logo"
               />
             </a>
@@ -213,9 +213,9 @@ const page = () => {
             data-aos-duration={1000}
             data-aos-offset={50}
           >
-            <a href="#">
+            <a href="https://vasodeleche.org/" target="_blank">
               <img
-                src="assets/images/client-logos/client-logo-two8.png"
+                src="assets/images/client-logos/vaso.png"
                 alt="Client Logo"
               />
             </a>

@@ -16,8 +16,73 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from django.http import Http404
 from rest_framework.permissions import IsAuthenticated
-from .models import Organization, Person
+from .models import Organization, Person, Image
+from .serializers import ImageSerializer
 
+
+class RetrieveImageView(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request):
+        try:
+            user_id = request.query_params.get('user_id')
+            if not user_id:
+                return Response(
+                    {'error': 'User ID is required'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            user = User.objects.get(id=user_id)
+            images = Image.objects.filter(User=user)
+
+            if images.exists():
+                images_serializer = ImageSerializer(images, many=True)
+                return Response(
+                    {'images': images_serializer.data},
+                    status=status.HTTP_200_OK
+                )
+            else:
+                return Response(
+                    {'error': 'No images found for the specified user'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+        except User.DoesNotExist:
+            return Response(
+                {'error': 'User not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            return Response(
+                {'error': f'Error retrieving image: {str(e)}'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+class UploadImageView(APIView):
+
+    permission_classes = [AllowAny]
+    def post(self, request):
+        try:
+            data = self.request.data
+            user_id = data.get('user_id')                
+            user = User.objects.get(id=user_id) 
+
+            image = data['image']
+            
+            Image.objects.create(
+                    image = image,
+                    User = user
+                )
+            
+            return Response(
+                    {'success': 'Image Uploaded Successfully'},
+                    status=status.HTTP_201_CREATED
+
+                )
+        except:
+            return Response(
+                {'error': 'Error Uploading Image'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                
+            )
 
 
 class CreatePerson(APIView):

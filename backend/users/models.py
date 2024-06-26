@@ -209,3 +209,12 @@ class Video(models.Model):
     description = models.CharField(max_length=255, default='Video content')
     url = models.CharField(max_length=255, default='http://example.com')
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+
+
+class Image(models.Model):
+    image = models.ImageField(upload_to='images/')
+    alt = models.CharField(max_length=255, default='logo')
+    User = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.alt

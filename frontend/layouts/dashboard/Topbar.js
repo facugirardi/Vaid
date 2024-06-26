@@ -1,6 +1,6 @@
 import { THEME_MODE } from "@/common/layoutConfig";
 import Link from "next/link";
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { Dropdown } from "react-bootstrap";
 import { useDispatch } from "react-redux";
 import Image from "next/image";
@@ -11,16 +11,57 @@ import { useRouter } from 'next/navigation';
 import { toast } from "react-toastify";
 
 
+import avatar from "@/public/assets/images/user/avatar-2.jpg";
 import { useAppSelector, useAppDispatch } from '@/redux/hooks';
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 //import images
-import avatar1 from "@/public/assets/images/user/avatar-1.jpg";
-import avatar2 from "@/public/assets/images/user/avatar-2.jpg";
-import avatar3 from "@/public/assets/images/user/avatar-3.jpg";
 
 const TopBar = ({ handleOffcanvasToggle, changeThemeMode, toogleSidebarHide, toogleMobileSidebarHide }) => {
 
-    const { data: user, isError, isLoading } = useRetrieveUserQuery();
+    const { data: user, isError, isFetching, isLoading } = useRetrieveUserQuery();
+    const [avatar2, setImage] = useState(avatar);
+
+    const backendUrl = 'http://localhost:8000'; // Cambia esto a la URL de tu backend
+    
+   const fetchImage = async () => 
+        {
+        const formData = new FormData();
+        formData.append('user_id', user.id);
+        try {
+            const response = await fetch(`http://localhost:8000/api/retrieve-logo?user_id=${user.id}`, {
+                method: 'GET',
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+
+                if (data.images.length > 0) {
+                    console.log(data.images)
+                    const imageUrl = `${backendUrl}${data.images[0].image}`;
+
+                    if (imageUrl) {
+                        console.log("Image URL:", imageUrl); // Verificar la URL de la imagen en la consola
+                        setImage(imageUrl); // Asegúrate de usar la propiedad correcta
+                    } else {
+                        setImage(avatar); // Usar imagen por defecto si no se encuentra imagen
+                    }
+                } else {
+                    toast.error('No image found for the specified user');
+                }
+            } else {
+                toast.error('Error fetching image');
+            }
+        } catch (error) {
+            toast.error('Error fetching image');
+        }
+    };
+
+    if(!isFetching){
+    useEffect(() => {
+        fetchImage();
+       
+    }, []);
+    }
     const dispatch = useDispatch();
     // Function to handle theme mode change
     const handleThemeChange = (value) => {
@@ -97,7 +138,7 @@ const TopBar = ({ handleOffcanvasToggle, changeThemeMode, toogleSidebarHide, too
                             <Dropdown as="li" className="pc-h-item header-user-profile">
                                 <Dropdown.Toggle className="pc-head-link arrow-none me-0" data-bs-toggle="dropdown" href="#"
                                     aria-haspopup="false" data-bs-auto-close="outside" aria-expanded="false" style={{ border: "none" }}>
-                                    <Image src={avatar2} alt="user-image" width={40} className="user-avtar" />
+                                    <Image src={avatar2} alt="logo" width={40} height={40} className="user-avtar" />
                                 </Dropdown.Toggle>
                                 <Dropdown.Menu className="dropdown-user-profile dropdown-menu-end pc-h-dropdown">
                                     <div className="dropdown-header d-flex align-items-center justify-content-between">
@@ -109,7 +150,7 @@ const TopBar = ({ handleOffcanvasToggle, changeThemeMode, toogleSidebarHide, too
                                                 <li className="list-group-item">
                                                     <div className="d-flex align-items-center">
                                                         <div className="flex-shrink-0">
-                                                            <Image src={avatar2} alt="user-image" width={50} className="wid-50 rounded-circle" />
+                                                            <Image src={avatar2} alt="logo" width={50} height={50} className="wid-50 rounded-circle" />
                                                         </div>
                                                         <div className="flex-grow-1 mx-3">
                                                             <h5 className="mb-0">{user.first_name} {user.last_name}</h5>
@@ -141,7 +182,7 @@ const TopBar = ({ handleOffcanvasToggle, changeThemeMode, toogleSidebarHide, too
                                                     <Dropdown.Item>
                                                         <span className="d-flex align-items-center">
                                                             <i className="ph-duotone ph-sign-out"></i>
-                                                            <span><a onClick={handleLogout}>Logout</a></span>
+                                                            <a onClick={handleLogout}>Logout</a>
                                                         </span>
                                                     </Dropdown.Item>
                                                 </li>

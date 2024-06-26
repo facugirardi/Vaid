@@ -9,6 +9,7 @@ import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 import FeatherIcon from "feather-icons-react";
+import axios from 'axios';
 
 const breaks = Array(4).fill(0).map((_, i) => <br key={i} />); 
 
@@ -37,44 +38,64 @@ const page = () => {
         formData.append('phone_number', event.target['phone_number'].value);
         formData.append('description', event.target['description'].value);
         formData.append('user_id', user.id);
+        const formData2 = new FormData();
         if (file) {
-            formData.append('file', file);
+          formData2.append('image', file);
         }
+        formData2.append('user_id', user.id);
 
-        try {
-            const response = await fetch('http://localhost:8000/api/user/person', {
-                method: 'POST',
-                body: formData
-            });
+    try {
+        const response = await axios.post('http://localhost:8000/api/upload-image', formData2, {
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'multipart/form-data',
+            }
+        });
 
-            if (response.ok) {
-                // Update user status after creating the user
-                const completionResponse = await fetch(`http://localhost:8000/api/user/${user.id}/complete`, {
-                    method: 'PATCH',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        user_type: 1,
-                        is_completed: 1
-                    })
+        if (response.status === 201) {
+            try {
+                const response = await fetch('http://localhost:8000/api/user/person', {
+                    method: 'POST',
+                    body: formData,
                 });
 
-                if (completionResponse.ok) {
-                    push('/dashboard');
+                if (response.ok) {
+                    try {
+                        const response = await fetch(`http://localhost:8000/api/user/${user.id}/complete`, {
+                            method: 'PATCH',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                user_type: 1,
+                                is_completed: 1,
+                            }),
+                        });
+
+                        if (response.ok) {
+                            push('/dashboard');
+                        } else {
+                            toast.error('Network response was not ok.');
+                        }
+                    } catch (error) {
+                        toast.error('Failed to update user. Error: ', error);
+                    }
                 } else {
-                    toast.error('Network response was not ok.');
+                    const errorData = await response.json();
+                    toast.error(`Failed to create user: ${errorData.error}`);
                 }
-            } else {
-                const errorData = await response.json();
-                toast.error(`Failed to create organization: ${errorData.error}`);
+            } catch (error) {
+                console.error('Error submitting form:', error);
+                toast.error('Error submitting form');
             }
-        } catch (error) {
-            console.error('Error submitting form:', error);
-            toast.error('Error submitting form');
+        } else {
+            toast.error('Error uploading image.');
         }
-    };
-  
+    } catch (error) {
+        console.error('Error submitting image: ', error);
+        toast.error('Error submitting image');
+    }
+};
 
   return (      
 
