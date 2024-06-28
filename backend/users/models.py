@@ -81,21 +81,17 @@ class Organization(models.Model):
     User = models.ForeignKey(UserAccount, on_delete=models.CASCADE) 
 
 class Candidate(models.Model):
-    phone_number = models.CharField(max_length=255, default='000-000-0000')
-    disponibility = models.TimeField(default=timezone.now) # CAMBIAR
-    born_date = models.DateField(default=timezone.now) 
-    User = models.ForeignKey(UserAccount, on_delete=models.CASCADE) 
-
-
-class CandidateTagDetails(models.Model):
-    Candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
-    Tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
+    #responses
+    #request date
+    Person = models.ForeignKey(Person, on_delete=models.CASCADE) 
+    Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
 
 class Person(models.Model):
     phone_number = models.CharField(max_length=255, default='000-000-0000')
     address = models.CharField(max_length=255, default='')
-    disponibility = models.TimeField(default=timezone.now) # CAMBIAR
+    disponibility = models.ChaField(default='')
+    born_date = models.DateField(default=timezone.now)
     country = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     User = models.ForeignKey(UserAccount, on_delete=models.CASCADE) 
