@@ -1,20 +1,30 @@
-// page.jsx
+
 "use client"
 
-import React, { ReactElement, useMemo } from "react";
+import React, { useState, ReactElement, useMemo } from "react";
 import Layout from '@/layouts/dashboard/index';
 import BreadcrumbItem from '@/common/BreadcrumbItem';
+import './candidates-list.css';
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 import TableContainer from '@/common/TableContainer';
-import { Card, Col, Row } from "react-bootstrap";
+import { Card, Col, Row, Modal, Button } from "react-bootstrap";
 import Image from "next/image";
-import Link from "next/link";
 
 import { userData } from "@/common/JsonData";
 
-const page = () => {
+const Page = () => {
+    const [showModal, setShowModal] = useState(false);
+    const [selectedCandidate, setSelectedCandidate] = useState(null);
 
-    console.log(userData)
+    const handleShowModal = (candidate) => {
+        setSelectedCandidate(candidate);
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setSelectedCandidate(null);
+    };
 
     const columns = useMemo(
         () => [
@@ -24,7 +34,7 @@ const page = () => {
                 accessorKey: "avatar",
                 cell: (cellProps) => {
                     return (
-                        <div className="d-inline-block align-middle" >
+                        <div className="d-inline-block align-middle">
                             <Image src={cellProps.getValue()} alt="user image" className="img-radius align-top m-r-15" width={40} />
                             <div className="d-inline-block">
                                 <h6 className="m-b-0">{cellProps.row.original.Name}</h6>
@@ -32,7 +42,7 @@ const page = () => {
                             </div>
                         </div>
                     )
-                }, 
+                },
             },
             {
                 header: "Disponibility",
@@ -69,19 +79,20 @@ const page = () => {
                             }
                             <div className="overlay-edit">
                                 <ul className="list-inline mb-0">
-                                    <li className="list-inline-item m-0"><Link href="#" className="avtar avtar-s btn btn-primary"><i className="ti ti-plus f-18"></i></Link></li>
-                                    <li className="list-inline-item m-0"><Link href="#" className="avtar avtar-s btn bg-white btn-link-danger"><i className="ti ti-minus f-18"></i></Link></li>
-                  
+                                    <li className="list-inline-item m-0">
+                                        <Button className="avtar avtar-s btn btn-primary" onClick={() => handleShowModal(cellProps.row.original)}>
+                                            <i className="ti ti-plus f-18"></i>
+                                        </Button>
+                                    </li>
                                 </ul>
                             </div>
                         </>
-                    
-
                     )
                 },
             },
         ], []
-    )
+    );
+
     const { data: user, isError, isLoading } = useRetrieveUserQuery();
 
     if (isLoading) return <p>Loading...</p>;
@@ -108,11 +119,36 @@ const page = () => {
                         </Card.Body>
                     </Card>
                 </Col>
-
             </Row>
 
+            <Modal show={showModal} onHide={handleCloseModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Candidate Information</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {selectedCandidate && (
+                        <div>
+                            <p><strong>Name:</strong> {selectedCandidate.Name}</p>
+                            <p><strong>Disponibility:</strong> {selectedCandidate.Disponibility}</p>
+                            <p><strong>Country:</strong> {selectedCandidate.Country}</p>
+                            <p><strong>Age:</strong> {selectedCandidate.Age}</p>
+                            <p><strong>Request Date:</strong> {selectedCandidate.Requestdate}</p>
+                            <p><strong>Interviewed:</strong> {selectedCandidate.Interviewed}</p>
+                        </div>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" className="button-cancel" onClick={handleCloseModal}>
+                        Reject
+                    </Button>
+
+                    <Button variant="secondary" className="button-ok" onClick={handleCloseModal}>
+                        Accept
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </Layout>
     );
 };
 
-export default page;
+export default Page;
