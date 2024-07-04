@@ -1,20 +1,32 @@
 
 "use client"
 
-import React, { useState, ReactElement, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Layout from '@/layouts/dashboard/index';
 import BreadcrumbItem from '@/common/BreadcrumbItem';
 import './candidates-list.css';
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 import TableContainer from '@/common/TableContainer';
 import { Card, Col, Row, Modal, Button } from "react-bootstrap";
-import Image from "next/image";
-
-import { userData } from "@/common/JsonData";
+import axios from 'axios';
 
 const Page = () => {
     const [showModal, setShowModal] = useState(false);
     const [selectedCandidate, setSelectedCandidate] = useState(null);
+    const [candidates, setCandidates] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('http://localhost:8000/api/candidate-details');
+                console.log('Fetched candidates:', response.data);
+                setCandidates(response.data);
+            } catch (error) {
+                console.error('Error fetching candidate details:', error);
+            }
+        };
+        fetchData();
+    }, []);
 
     const handleShowModal = (candidate) => {
         setSelectedCandidate(candidate);
@@ -33,11 +45,12 @@ const Page = () => {
                 enableColumnFilter: false,
                 accessorKey: "avatar",
                 cell: (cellProps) => {
+
+                    const row = cellProps.row.original;
                     return (
                         <div className="d-inline-block align-middle">
-                            <Image src={cellProps.getValue()} alt="user image" className="img-radius align-top m-r-15" width={40} />
                             <div className="d-inline-block">
-                                <h6 className="m-b-0">{cellProps.row.original.Name}</h6>
+                                <h6 className="m-b-0">{row.first_name} {row.last_name}</h6>
                                 <p className="m-b-0 text-primary">Candidate</p>
                             </div>
                         </div>
@@ -46,12 +59,12 @@ const Page = () => {
             },
             {
                 header: "Disponibility",
-                accessorKey: "Disponibility",
+                accessorKey: "disponibility",
                 enableColumnFilter: false,
             },
             {
                 header: "Country",
-                accessorKey: "Country",
+                accessorKey: "country",
                 enableColumnFilter: false,
             },
             {
@@ -61,13 +74,13 @@ const Page = () => {
             },
             {
                 header: "Request Date",
-                accessorKey: "Requestdate",
+                accessorKey: "request_date",
                 enableColumnFilter: false,
             },
             {
                 header: "Interviewed",
                 enableColumnFilter: false,
-                accessorKey: "Interviewed",
+                accessorKey: "interviewed",
                 cell: (cellProps) => {
                     return (
                         <>
@@ -93,6 +106,8 @@ const Page = () => {
         ], []
     );
 
+
+
     const { data: user, isError, isLoading } = useRetrieveUserQuery();
 
     if (isLoading) return <p>Loading...</p>;
@@ -108,7 +123,7 @@ const Page = () => {
                         <Card.Body>
                             <TableContainer
                                 columns={(columns || [])}
-                                data={(userData || [])}
+                                data={(candidates || [])}
                                 isGlobalFilter={true}
                                 isBordered={false}
                                 customPageSize={5}
@@ -128,12 +143,9 @@ const Page = () => {
                 <Modal.Body>
                     {selectedCandidate && (
                         <div>
-                            <p><strong>Name:</strong> {selectedCandidate.Name}</p>
-                            <p><strong>Disponibility:</strong> {selectedCandidate.Disponibility}</p>
-                            <p><strong>Country:</strong> {selectedCandidate.Country}</p>
-                            <p><strong>Age:</strong> {selectedCandidate.Age}</p>
-                            <p><strong>Request Date:</strong> {selectedCandidate.Requestdate}</p>
-                            <p><strong>Interviewed:</strong> {selectedCandidate.Interviewed}</p>
+                            <p><strong>Name:</strong> {selectedCandidate.first_name} {selectedCandidate.last_name}</p>
+                            <p><strong>Disponibility:</strong> {selectedCandidate.disponibility}</p>
+                            <p><strong>Country:</strong> {selectedCandidate.country}</p>
                         </div>
                     )}
                 </Modal.Body>

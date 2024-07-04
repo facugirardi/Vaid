@@ -12,6 +12,7 @@ from .views import (
     CheckUserType,
     RetrieveImageView,
     UploadImageView,
+    CandidateDetailView,
 )
 
 urlpatterns = [
@@ -20,6 +21,8 @@ urlpatterns = [
         CustomProviderAuthView.as_view(),
         name='provider-auth'
     ),
+    
+    path('candidate-details', CandidateDetailView.as_view()),
     path('retrieve-logo', RetrieveImageView.as_view()),
     path('upload-image', UploadImageView.as_view()),
     path('user/<int:user_id>/check-usertype', CheckUserType.as_view()),
