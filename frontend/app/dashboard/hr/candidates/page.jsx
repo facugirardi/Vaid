@@ -68,8 +68,8 @@ const Page = () => {
                 enableColumnFilter: false,
             },
             {
-                header: "Age",
-                accessorKey: "Age",
+                header: "Born Date",
+                accessorKey: "born_date",
                 enableColumnFilter: false,
             },
             {
@@ -85,10 +85,10 @@ const Page = () => {
                     return (
                         <>
                             {
-                                cellProps.getValue() === "Yes" ?
-                                    <span className="badge bg-light-success">{cellProps.getValue()}</span>
+                                cellProps.getValue() === "True" ?
+                                    <span className="badge bg-light-success">Yes</span>
                                     :
-                                    <span className="badge bg-light-danger">{cellProps.getValue()}</span>
+                                    <span className="badge bg-light-danger">No</span>
                             }
                             <div className="overlay-edit">
                                 <ul className="list-inline mb-0">
@@ -146,6 +146,9 @@ const Page = () => {
                             <p><strong>Name:</strong> {selectedCandidate.first_name} {selectedCandidate.last_name}</p>
                             <p><strong>Disponibility:</strong> {selectedCandidate.disponibility}</p>
                             <p><strong>Country:</strong> {selectedCandidate.country}</p>
+                            <p><strong>Born Date:</strong> {selectedCandidate.born_date}</p>
+                            <p><strong>Request Date:</strong> {selectedCandidate.request_date}</p>
+                            <p><strong>Form Responses:</strong></p>
                         </div>
                     )}
                 </Modal.Body>

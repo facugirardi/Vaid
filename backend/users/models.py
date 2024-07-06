@@ -92,6 +92,8 @@ class Person(models.Model):
 
 class Candidate(models.Model):
     #responses
+
+    interviewed = models.BooleanField(default=False)
     request_date = models.DateField(default=timezone.now)
     Person = models.ForeignKey(Person, on_delete=models.CASCADE) 
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
