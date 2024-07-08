@@ -30,12 +30,36 @@ const Page = () => {
 
     const handleShowModal = (candidate) => {
         setSelectedCandidate(candidate);
+        console.log(candidate)
+        console.log(selectedCandidate)
         setShowModal(true);
     };
 
     const handleCloseModal = () => {
         setShowModal(false);
         setSelectedCandidate(null);
+    };
+
+    const handleApprove = async () => {
+        if (!selectedCandidate) return;
+        try {
+            await axios.post(`http://localhost:8000/api/candidate/${selectedCandidate.id}/approve/`);
+            setCandidates(candidates.filter(candidate => candidate.id !== selectedCandidate.id));
+            handleCloseModal();
+        } catch (error) {
+            console.error('Error approving candidate:', error);
+        }
+    };
+
+    const handleReject = async () => {
+        if (!selectedCandidate) return;
+        try {
+            await axios.delete(`http://localhost:8000/api/candidate/${selectedCandidate.id}/reject/`);
+            setCandidates(candidates.filter(candidate => candidate.id !== selectedCandidate.id));
+            handleCloseModal();
+        } catch (error) {
+            console.error('Error rejecting candidate:', error);
+        }
     };
 
     const columns = useMemo(
@@ -45,7 +69,6 @@ const Page = () => {
                 enableColumnFilter: false,
                 accessorKey: "avatar",
                 cell: (cellProps) => {
-
                     const row = cellProps.row.original;
                     return (
                         <div className="d-inline-block align-middle">
@@ -54,7 +77,7 @@ const Page = () => {
                                 <p className="m-b-0 text-primary">Candidate</p>
                             </div>
                         </div>
-                    )
+                    );
                 },
             },
             {
@@ -84,11 +107,10 @@ const Page = () => {
                 cell: (cellProps) => {
                     return (
                         <>
-                            {
-                                cellProps.getValue() === "True" ?
-                                    <span className="badge bg-light-success">Yes</span>
-                                    :
-                                    <span className="badge bg-light-danger">No</span>
+                            {cellProps.getValue() === "True" ?
+                                <span className="badge bg-light-success">Yes</span>
+                                :
+                                <span className="badge bg-light-danger">No</span>
                             }
                             <div className="overlay-edit">
                                 <ul className="list-inline mb-0">
@@ -100,13 +122,11 @@ const Page = () => {
                                 </ul>
                             </div>
                         </>
-                    )
+                    );
                 },
             },
         ], []
     );
-
-
 
     const { data: user, isError, isLoading } = useRetrieveUserQuery();
 
@@ -122,8 +142,8 @@ const Page = () => {
                     <Card className="border-0 table-card user-profile-list">
                         <Card.Body>
                             <TableContainer
-                                columns={(columns || [])}
-                                data={(candidates || [])}
+                                columns={columns}
+                                data={candidates}
                                 isGlobalFilter={true}
                                 isBordered={false}
                                 customPageSize={5}
@@ -153,12 +173,12 @@ const Page = () => {
                     )}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" className="button-cancel" onClick={handleCloseModal}>
+                    <Button variant="secondary" className="button-cancel" onClick={handleReject}>
                         Reject
                     </Button>
 
-                    <Button variant="secondary" className="button-ok" onClick={handleCloseModal}>
-                        Accept
+                    <Button variant="secondary" className="button-ok" onClick={handleApprove}>
+                        Approve
                     </Button>
                 </Modal.Footer>
             </Modal>

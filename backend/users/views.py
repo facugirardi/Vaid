@@ -20,6 +20,45 @@ from .models import Organization, Person, Image
 from .serializers import *
 
 
+
+
+class ApproveCandidate(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, candidate_id):
+        try:
+            candidate = Candidate.objects.get(id=candidate_id)
+            person = candidate.Person
+            organization = candidate.Organization
+
+            # Crear PersonOrganizationDetails
+            PersonOrganizationDetails.objects.create(Person=person, Organization=organization)
+
+            # Eliminar el candidato
+            candidate.delete()
+
+            return Response({'message': 'Candidate approved and added to organization'}, status=status.HTTP_200_OK)
+        except Candidate.DoesNotExist:
+            return Response({'error': 'Candidate not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class RejectCandidate(APIView):
+    permission_classes = [AllowAny]
+
+    def delete(self, request, candidate_id):
+        try:
+            candidate = Candidate.objects.get(id=candidate_id)
+            candidate.delete()
+
+            return Response({'message': 'Candidate rejected and deleted'}, status=status.HTTP_200_OK)
+        except Candidate.DoesNotExist:
+            return Response({'error': 'Candidate not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
 class CandidateDetailView(generics.ListAPIView):
 
     permission_classes = [AllowAny]

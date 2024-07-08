@@ -89,6 +89,10 @@ class Person(models.Model):
     description = models.CharField(max_length=255)
     User = models.ForeignKey(UserAccount, on_delete=models.CASCADE) 
     
+class PersonOrganizationDetails(models.Model):
+    Person = models.ForeignKey(Person, on_delete=models.CASCADE)
+    Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+
 
 class Candidate(models.Model):
     #responses

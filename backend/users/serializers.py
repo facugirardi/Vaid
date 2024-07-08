@@ -17,7 +17,7 @@ class CandidateDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Candidate
-        fields = ['first_name', 'last_name', 'disponibility', 'country', 'request_date', 'user_id', 'born_date', 'interviewed']
+        fields = ['first_name', 'last_name', 'disponibility', 'country', 'request_date', 'user_id', 'born_date', 'interviewed', 'id']
 
 
 class PersonSerializer(serializers.ModelSerializer):
