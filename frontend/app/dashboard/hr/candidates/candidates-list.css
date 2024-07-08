@@ -1,0 +1,23 @@
+.button-cancel{
+  background-color: white;
+  border: #f44336 1px solid;
+  color: black;
+  transition: all .3s ease;
+}
+
+.button-cancel:hover{
+  background-color: #f44336;
+  color: white;
+  border: #f44336 1px solid;
+}
+
+.button-ok{
+  background-color: #2A50CF;
+  border: #2A50CF 1px solid;
+  transition: all .3s ease;
+}
+
+.button-ok:hover{
+  background-color: #2f20cf;
+  border: #2F20CF 1px solid;
+}

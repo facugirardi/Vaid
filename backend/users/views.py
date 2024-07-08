@@ -1,7 +1,7 @@
 from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics
 from djoser.social.views import ProviderAuthView
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
@@ -17,7 +17,53 @@ import json
 from django.http import Http404
 from rest_framework.permissions import IsAuthenticated
 from .models import Organization, Person, Image
-from .serializers import ImageSerializer
+from .serializers import *
+
+
+
+
+class ApproveCandidate(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, candidate_id):
+        try:
+            candidate = Candidate.objects.get(id=candidate_id)
+            person = candidate.Person
+            organization = candidate.Organization
+
+            # Crear PersonOrganizationDetails
+            PersonOrganizationDetails.objects.create(Person=person, Organization=organization)
+
+            # Eliminar el candidato
+            candidate.delete()
+
+            return Response({'message': 'Candidate approved and added to organization'}, status=status.HTTP_200_OK)
+        except Candidate.DoesNotExist:
+            return Response({'error': 'Candidate not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class RejectCandidate(APIView):
+    permission_classes = [AllowAny]
+
+    def delete(self, request, candidate_id):
+        try:
+            candidate = Candidate.objects.get(id=candidate_id)
+            candidate.delete()
+
+            return Response({'message': 'Candidate rejected and deleted'}, status=status.HTTP_200_OK)
+        except Candidate.DoesNotExist:
+            return Response({'error': 'Candidate not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CandidateDetailView(generics.ListAPIView):
+
+    permission_classes = [AllowAny]
+    queryset = Candidate.objects.all()
+    serializer_class = CandidateDetailSerializer
 
 
 class RetrieveImageView(APIView):

@@ -1,20 +1,66 @@
-// page.jsx
+
 "use client"
 
-import React, { ReactElement, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Layout from '@/layouts/dashboard/index';
 import BreadcrumbItem from '@/common/BreadcrumbItem';
+import './candidates-list.css';
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 import TableContainer from '@/common/TableContainer';
-import { Card, Col, Row } from "react-bootstrap";
-import Image from "next/image";
-import Link from "next/link";
+import { Card, Col, Row, Modal, Button } from "react-bootstrap";
+import axios from 'axios';
 
-import { userData } from "@/common/JsonData";
+const Page = () => {
+    const [showModal, setShowModal] = useState(false);
+    const [selectedCandidate, setSelectedCandidate] = useState(null);
+    const [candidates, setCandidates] = useState([]);
 
-const page = () => {
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('http://localhost:8000/api/candidate-details');
+                console.log('Fetched candidates:', response.data);
+                setCandidates(response.data);
+            } catch (error) {
+                console.error('Error fetching candidate details:', error);
+            }
+        };
+        fetchData();
+    }, []);
 
-    console.log(userData)
+    const handleShowModal = (candidate) => {
+        setSelectedCandidate(candidate);
+        console.log(candidate)
+        console.log(selectedCandidate)
+        setShowModal(true);
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setSelectedCandidate(null);
+    };
+
+    const handleApprove = async () => {
+        if (!selectedCandidate) return;
+        try {
+            await axios.post(`http://localhost:8000/api/candidate/${selectedCandidate.id}/approve/`);
+            setCandidates(candidates.filter(candidate => candidate.id !== selectedCandidate.id));
+            handleCloseModal();
+        } catch (error) {
+            console.error('Error approving candidate:', error);
+        }
+    };
+
+    const handleReject = async () => {
+        if (!selectedCandidate) return;
+        try {
+            await axios.delete(`http://localhost:8000/api/candidate/${selectedCandidate.id}/reject/`);
+            setCandidates(candidates.filter(candidate => candidate.id !== selectedCandidate.id));
+            handleCloseModal();
+        } catch (error) {
+            console.error('Error rejecting candidate:', error);
+        }
+    };
 
     const columns = useMemo(
         () => [
@@ -23,65 +69,65 @@ const page = () => {
                 enableColumnFilter: false,
                 accessorKey: "avatar",
                 cell: (cellProps) => {
+                    const row = cellProps.row.original;
                     return (
-                        <div className="d-inline-block align-middle" >
-                            <Image src={cellProps.getValue()} alt="user image" className="img-radius align-top m-r-15" width={40} />
+                        <div className="d-inline-block align-middle">
                             <div className="d-inline-block">
-                                <h6 className="m-b-0">{cellProps.row.original.Name}</h6>
+                                <h6 className="m-b-0">{row.first_name} {row.last_name}</h6>
                                 <p className="m-b-0 text-primary">Candidate</p>
                             </div>
                         </div>
-                    )
-                }, 
+                    );
+                },
             },
             {
                 header: "Disponibility",
-                accessorKey: "Disponibility",
+                accessorKey: "disponibility",
                 enableColumnFilter: false,
             },
             {
                 header: "Country",
-                accessorKey: "Country",
+                accessorKey: "country",
                 enableColumnFilter: false,
             },
             {
-                header: "Age",
-                accessorKey: "Age",
+                header: "Born Date",
+                accessorKey: "born_date",
                 enableColumnFilter: false,
             },
             {
                 header: "Request Date",
-                accessorKey: "Requestdate",
+                accessorKey: "request_date",
                 enableColumnFilter: false,
             },
             {
                 header: "Interviewed",
                 enableColumnFilter: false,
-                accessorKey: "Interviewed",
+                accessorKey: "interviewed",
                 cell: (cellProps) => {
                     return (
                         <>
-                            {
-                                cellProps.getValue() === "Yes" ?
-                                    <span className="badge bg-light-success">{cellProps.getValue()}</span>
-                                    :
-                                    <span className="badge bg-light-danger">{cellProps.getValue()}</span>
+                            {cellProps.getValue() === "True" ?
+                                <span className="badge bg-light-success">Yes</span>
+                                :
+                                <span className="badge bg-light-danger">No</span>
                             }
                             <div className="overlay-edit">
                                 <ul className="list-inline mb-0">
-                                    <li className="list-inline-item m-0"><Link href="#" className="avtar avtar-s btn btn-primary"><i className="ti ti-plus f-18"></i></Link></li>
-                                    <li className="list-inline-item m-0"><Link href="#" className="avtar avtar-s btn bg-white btn-link-danger"><i className="ti ti-minus f-18"></i></Link></li>
-                  
+                                    <li className="list-inline-item m-0">
+                                        <Button className="avtar avtar-s btn btn-primary" onClick={() => handleShowModal(cellProps.row.original)}>
+                                            <i className="ti ti-plus f-18"></i>
+                                        </Button>
+                                    </li>
                                 </ul>
                             </div>
                         </>
-                    
-
-                    )
+                    );
                 },
             },
         ], []
-    )
+    );
+
     const { data: user, isError, isLoading } = useRetrieveUserQuery();
 
     if (isLoading) return <p>Loading...</p>;
@@ -96,8 +142,8 @@ const page = () => {
                     <Card className="border-0 table-card user-profile-list">
                         <Card.Body>
                             <TableContainer
-                                columns={(columns || [])}
-                                data={(userData || [])}
+                                columns={columns}
+                                data={candidates}
                                 isGlobalFilter={true}
                                 isBordered={false}
                                 customPageSize={5}
@@ -108,11 +154,36 @@ const page = () => {
                         </Card.Body>
                     </Card>
                 </Col>
-
             </Row>
 
+            <Modal show={showModal} onHide={handleCloseModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Candidate Information</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {selectedCandidate && (
+                        <div>
+                            <p><strong>Name:</strong> {selectedCandidate.first_name} {selectedCandidate.last_name}</p>
+                            <p><strong>Disponibility:</strong> {selectedCandidate.disponibility}</p>
+                            <p><strong>Country:</strong> {selectedCandidate.country}</p>
+                            <p><strong>Born Date:</strong> {selectedCandidate.born_date}</p>
+                            <p><strong>Request Date:</strong> {selectedCandidate.request_date}</p>
+                            <p><strong>Form Responses:</strong></p>
+                        </div>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" className="button-cancel" onClick={handleReject}>
+                        Reject
+                    </Button>
+
+                    <Button variant="secondary" className="button-ok" onClick={handleApprove}>
+                        Approve
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </Layout>
     );
 };
 
-export default page;
+export default Page;
