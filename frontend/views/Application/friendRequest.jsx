@@ -1,7 +1,11 @@
 import React from "react";
 import { Card, Col, Row, Tab } from "react-bootstrap";
+import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 
 const FriendsRequest = () => {
+
+    const { data: user } = useRetrieveUserQuery();
+    
     return (
         <React.Fragment>
             <Tab.Pane eventKey="friendsRequest" id="friends" role="tabpanel" aria-labelledby="friends-tab">
@@ -15,7 +19,7 @@ const FriendsRequest = () => {
                                 <p className="mb-0 text-muted">Full Name</p>
                             </Col>
                             <Col md={6}>
-                                <h6 className="mb-0">Akshay Handge</h6>
+                                <h6 className="mb-0">{user.first_name} {user.last_name}</h6>
                             </Col>
                         </Row>
                         <Row className="g-3 mt-0">

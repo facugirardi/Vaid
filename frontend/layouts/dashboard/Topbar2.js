@@ -1,4 +1,3 @@
-
 import { THEME_MODE } from "@/common/layoutConfig";
 import Link from "next/link";
 import React, { useRef, useState, useEffect } from "react";
@@ -10,14 +9,14 @@ import { useLogoutMutation } from "@/redux/features/authApiSlice";
 import { logout as setLogout } from '@/redux/features/authSlice'; 
 import { useRouter } from 'next/navigation';
 import { toast } from "react-toastify";
-import './topbar2.css'
+
 
 import avatar from "@/public/assets/images/user/avatar-2.jpg";
 import { useAppSelector, useAppDispatch } from '@/redux/hooks';
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 //import images
 
-const TopBar2 = ({ handleOffcanvasToggle, changeThemeMode, toogleSidebarHide, toogleMobileSidebarHide }) => {
+const TopBar = ({ handleOffcanvasToggle, changeThemeMode, toogleSidebarHide, toogleMobileSidebarHide }) => {
 
     const { data: user, isError, isFetching, isLoading } = useRetrieveUserQuery();
     const [avatar2, setImage] = useState(avatar);
@@ -101,11 +100,27 @@ const TopBar2 = ({ handleOffcanvasToggle, changeThemeMode, toogleSidebarHide, to
     };
     return (
         <React.Fragment>
-            <header className="pc-header" style={{ position:'inline !important' }}>
+            <header className="pc-header">
                 <div className="header-wrapper">
 
                     <div className="ms-auto">
                         <ul className="list-unstyled">
+                            <Dropdown as="li" className="pc-h-item">
+                                <Dropdown.Toggle as="a" className="pc-head-link arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button"
+                                    aria-haspopup="false" aria-expanded="false">
+                                    <i className="ph-duotone ph-sun-dim"></i>
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu className="dropdown-menu-end pc-h-dropdown">
+                                    <Dropdown.Item onClick={() => handleThemeChange(THEME_MODE.DARK)}>
+                                        <i className="ph-duotone ph-moon"></i>
+                                        <span>Dark</span>
+                                    </Dropdown.Item>
+                                    <Dropdown.Item onClick={() => handleThemeChange(THEME_MODE.LIGHT)}>
+                                        <i className="ph-duotone ph-sun-dim"></i>
+                                        <span>Light</span>
+                                    </Dropdown.Item>
+                                </Dropdown.Menu>
+                                </Dropdown>
                             <Dropdown as="li" className="pc-h-item header-user-profile">
                                 <Dropdown.Toggle className="pc-head-link arrow-none me-0" data-bs-toggle="dropdown" href="#"
                                     aria-haspopup="false" data-bs-auto-close="outside" aria-expanded="false" style={{ border: "none" }}>
@@ -133,7 +148,7 @@ const TopBar2 = ({ handleOffcanvasToggle, changeThemeMode, toogleSidebarHide, to
                                                 <Dropdown.Item>
                                                         <span className="d-flex align-items-center">
                                                             <i className="ph-duotone ph-user-circle"></i>
-                                                            <a>Profile</a>
+                                                            <a href='/dashboard'>Profile</a>
                                                         </span>
                                                     </Dropdown.Item>
                                                     <div className="dropdown-item">
@@ -170,5 +185,5 @@ const TopBar2 = ({ handleOffcanvasToggle, changeThemeMode, toogleSidebarHide, to
     );
 };
 
-export default TopBar2;
+export default TopBar;
 

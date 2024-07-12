@@ -2,7 +2,7 @@
 'use client'
 
 import React, {useEffect} from 'react';
-import Layout from '@/layouts/dashboard/index';
+import Layout from '@/layouts/dashboard/index2';
 import BreadcrumbItem from '@/common/BreadcrumbItem';
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 import './profile.css'
