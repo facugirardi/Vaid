@@ -29,7 +29,7 @@ const Friends = () => {
                                                         <Image className="rounded-circle img-thumbnail img-fluid wid-80" src={item.img} alt="User image" />
                                                     </div>
                                                     <div className="my-3">
-                                                        <h5 className="mb-0">William Bond</h5>
+                                                        <h5 className="mb-0">Organization</h5>
                                                     </div>
                                                 </div>
                                                 <Row className="g-2">

@@ -24,26 +24,18 @@ const FriendsRequest = () => {
                         </Row>
                         <Row className="g-3 mt-0">
                             <Col md={4}>
-                                <p className="mb-0 text-muted">Father&apos;s Name</p>
+                                <p className="mb-0 text-muted">Country</p>
                             </Col>
                             <Col md={6}>
-                                <h6 className="mb-0">Mr. Deepak Handge</h6>
+                                <h6 className="mb-0">Argentina</h6>
                             </Col>
                         </Row>
                         <Row className="g-3 mt-0">
                             <Col md={4}>
-                                <p className="mb-0 text-muted">Address</p>
+                                <p className="mb-0 text-muted">City</p>
                             </Col>
                             <Col md={6}>
-                                <h6 className="mb-0">Street 110-B Kalani Bag, Dewas, M.P. INDIA</h6>
-                            </Col>
-                        </Row>
-                        <Row className="g-3 mt-0">
-                            <Col md={4}>
-                                <p className="mb-0 text-muted">Zip Code</p>
-                            </Col>
-                            <Col md={6}>
-                                <h6 className="mb-0">12345</h6>
+                                <h6 className="mb-0">Cordoba</h6>
                             </Col>
                         </Row>
                         <Row className="g-3 mt-0">
@@ -51,7 +43,7 @@ const FriendsRequest = () => {
                                 <p className="mb-0 text-muted">Phone</p>
                             </Col>
                             <Col md={6}>
-                                <h6 className="mb-0">+0 123456789 , +0 123456789</h6>
+                                <h6 className="mb-0">+0 123456789</h6>
                             </Col>
                         </Row>
                         <Row className="g-3 mt-0">
@@ -62,43 +54,24 @@ const FriendsRequest = () => {
                                 <h6 className="mb-0"><a href="mailto:support@example.com" className="link-primary">support@example.com</a></h6>
                             </Col>
                         </Row>
-                        <Row className="g-3 mt-0">
-                            <Col md={4}>
-                                <p className="mb-0 text-muted">Website</p>
-                            </Col>
-                            <Col md={6}>
-                                <h6 className="mb-0"><a href="#" className="link-primary">http://example.com</a></h6>
-                            </Col>
-                        </Row>
                     </Card.Body>
                 </Card>
                 <Card>
                     <Card.Header>
-                        <h5>other Information</h5>
+                        <h5>Other Information</h5>
                     </Card.Header>
                     <Card.Body>
                         <Row className="g-3">
                             <Col md={4}>
-                                <p className="mb-0 text-muted">Occupation</p>
+                                <p className="mb-0 text-muted">Description</p>
                             </Col>
                             <Col md={6}>
-                                <h6 className="mb-0">Designer</h6>
-                            </Col>
-                        </Row>
-                        <Row className="g-3 mt-0">
-                            <Col md={4}>
-                                <p className="mb-0 text-muted">Skills</p>
-                            </Col>
-                            <Col md={6}>
-                                <h6 className="mb-0">C#, Javascript, Scss</h6>
-                            </Col>
-                        </Row>
-                        <Row className="g-3 mt-0">
-                            <Col md={4}>
-                                <p className="mb-0 text-muted">Jobs</p>
-                            </Col>
-                            <Col md={6}>
-                                <h6 className="mb-0">Phoenixcoded</h6>
+                                <h6 className="mb-0">I live in Cordoba but i grew up in Rio do Janeiro, Brazil.
+I speak fluid Spanish and natal Portuguese. 
+I have two childs, Carla 12 years old and Marcos 4 years old.
+Im working in “Pocito” construction, as foreman. My purpose in life is to help people because I know how it feels to be homeless.
+
+                </h6>
                             </Col>
                         </Row>
                     </Card.Body>

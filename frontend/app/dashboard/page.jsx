@@ -22,9 +22,11 @@ const Page = () => {
 
     return (
         <Layout>
-            <BreadcrumbItem mainTitle="Dashboard" subTitle="Profile" />
+            <BreadcrumbItem mainTitle="Dashboard" subTitle="" />
             <Row>
-                <Col sm={12}>
+                              
+              <Col sm={2}></Col> 
+              <Col sm={8}>
                     <SocialProfile />
                     <Tab.Container defaultActiveKey="friendsRequest">
                         <SocialTab />
@@ -37,9 +39,10 @@ const Page = () => {
                         </Row>
                     </Tab.Container>
                 </Col>
+                <Col sm={2}></Col> 
+
             </Row >
         </Layout>
     );
 };
-
 export default Page;
