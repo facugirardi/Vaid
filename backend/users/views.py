@@ -21,6 +21,35 @@ from .serializers import *
 
 
 
+class RetrievePersonView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, user_id):
+        try:
+            user = User.objects.get(id=user_id)
+            person = Person.objects.get(User=user)
+            person_serializer = PersonSerializer(person)
+            return Response(
+                {'person': person_serializer.data},
+                status=status.HTTP_200_OK
+            )
+        except User.DoesNotExist:
+            return Response(
+                {'error': 'User not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Person.DoesNotExist:
+            return Response(
+                {'error': 'Person not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            return Response(
+                {'error': f'Error retrieving person: {str(e)}'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+        
 
 class ApproveCandidate(APIView):
     permission_classes = [AllowAny]
