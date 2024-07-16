@@ -1,18 +1,41 @@
-
 import Image from "next/image";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, Col, Row, Tab } from "react-bootstrap";
-import '@/app/dashboard/profile.css'
+import '@/app/dashboard/profile.css';
 // img
 import avatar1 from "@/public/assets/images/user/avatar-1.jpg";
+import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 
-const Friends = () => {
+const Friends = ({ userId }) => {
+    const [organizations, setOrganizations] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const { data: user } = useRetrieveUserQuery();
 
-    const friendsImg = [
-        { id: 1, img: avatar1 },
-        { id: 2, img: avatar1 },
-        { id: 3, img: avatar1 },
-    ]
+    useEffect(() => {
+        // Función para obtener las organizaciones del usuario
+        const fetchOrganizations = async () => {
+            try {
+                const response = await fetch(`http://localhost:8000/api/user/${user.id}/organizations`);
+                const data = await response.json();
+                if (response.ok) {
+                    setOrganizations(data.organizations);
+                } else {
+                    console.error('Error fetching organizations:', data.error);
+                }
+            } catch (error) {
+                console.error('Error fetching organizations:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchOrganizations();
+    }, [userId]);
+
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <React.Fragment>
             <Tab.Pane eventKey="friendsRequest">
@@ -20,25 +43,41 @@ const Friends = () => {
                     <Card.Body>
                         <Row>
                             {
-                                (friendsImg || [])?.map((item, index) => (
-                                    <Col xl={6} xxl={4} key={index}>
-                                        <Card className="border shadow-none">
-                                            <Card.Body>
-                                                <div className="text-center">
-                                                    <div className="chat-avtar d-sm-inline-flex">
-                                                        <Image className="rounded-circle img-thumbnail img-fluid wid-80" src={item.img} alt="User image" />
+                                organizations.length > 0 ? (
+                                    organizations.map((org, index) => (
+                                        <Col xl={6} xxl={4} key={index}>
+                                            <Card className="border shadow-none">
+                                                <Card.Body>
+                                                    <div className="text-center">
+                                                        <div className="chat-avtar d-sm-inline-flex">
+                                                            <Image 
+                                                                className="rounded-circle img-thumbnail img-fluid wid-80" 
+                                                                src={org.image || avatar1} 
+                                                                alt={org.name || "Organization image"} 
+                                                            />
+                                                        </div>
+                                                        <div className="my-3">
+                                                            <h5 className="mb-0">{org.name}</h5>
+                                                        </div>
                                                     </div>
-                                                    <div className="my-3">
-                                                        <h5 className="mb-0">Organization</h5>
-                                                    </div>
-                                                </div>
-                                                <Row className="g-2">
-                                                    <Col xs={6}><div className="d-grid"><button className="btn btn-primary buttonorg_perf">Enter</button></div></Col>
-                                                </Row>
-                                            </Card.Body>
-                                        </Card>
+                                                    <Row className="g-2">
+                                                        <Col xs={6}>
+                                                            <div className="d-grid">
+                                                                <button className="btn btn-primary buttonorg_perf">Enter</button>
+                                                            </div>
+                                                        </Col>
+                                                    </Row>
+                                                </Card.Body>
+                                            </Card>
+                                        </Col>
+                                    ))
+                                ) : (
+                                    <Col>
+                                        <div className="text-center">
+                                            <h6>No organizations found for this user.</h6>
+                                        </div>
                                     </Col>
-                                ))
+                                )
                             }
                         </Row>
                     </Card.Body>
@@ -46,7 +85,6 @@ const Friends = () => {
             </Tab.Pane>
         </React.Fragment>
     );
-
 }
 
 export default Friends;

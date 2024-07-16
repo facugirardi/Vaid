@@ -20,6 +20,34 @@ from .models import Organization, Person, Image
 from .serializers import *
 
 
+class RetrieveUserOrganizations(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, user_id):
+        try:
+            user = User.objects.get(id=user_id)
+            person = Person.objects.get(User=user)
+            organizations = Organization.objects.filter(personorganizationdetails__Person=person)
+            organization_serializer = OrganizationSerializer(organizations, many=True)
+            return Response(
+                {'organizations': organization_serializer.data},
+                status=status.HTTP_200_OK
+            )
+        except User.DoesNotExist:
+            return Response(
+                {'error': 'User not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Person.DoesNotExist:
+            return Response(
+                {'error': 'Person not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            return Response(
+                {'error': f'Error retrieving organizations: {str(e)}'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 class RetrievePersonView(APIView):
     permission_classes = [AllowAny]
