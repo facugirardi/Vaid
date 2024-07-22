@@ -17,8 +17,8 @@
 @media (max-width: 767px) {
 .img-profile-avtar{
     height: 80px !important;
-    width: 14% !important;
-
+    width:28% !important;
+    margin-top: 20px !important;
     margin-right: 0px !important;
 }
 }
@@ -27,7 +27,7 @@
 @media (max-width: 568px) {
 .img-profile-avtar{
     height: 50px !important;
-    width: 10% !important;
+    width: 14% !important;
 
     margin-right: 0px !important;
 }
