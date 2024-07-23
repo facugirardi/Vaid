@@ -102,20 +102,6 @@ const TopBar = ({ handleOffcanvasToggle, changeThemeMode, toogleSidebarHide, too
         <React.Fragment>
             <header className="pc-header">
                 <div className="header-wrapper">
-                    <div className="me-auto pc-mob-drp">
-                        <ul className="list-unstyled">
-                            <li className="pc-h-item pc-sidebar-collapse">
-                                <Link href="#" className="pc-head-link ms-0" id="sidebar-hide" onClick={toogleSidebarHide}>
-                                    <i className="ti ti-menu-2"></i>
-                                </Link>
-                            </li>
-                            <li className="pc-h-item pc-sidebar-popup">
-                                <Link href="#" className="pc-head-link ms-0" id="mobile-collapse" onClick={toogleMobileSidebarHide}>
-                                    <i className="ti ti-menu-2"></i>
-                                </Link>
-                            </li>
-                        </ul>
-                    </div>
 
                     <div className="ms-auto">
                         <ul className="list-unstyled">
