@@ -41,7 +41,7 @@ const Suggestions = ({ userId }) => {
         <React.Fragment>
             <Tab.Pane eventKey="friendsRequests">
                         <Row>
-                            <h5>Suggestions</h5>
+                            <h5 className='suggestionsTitle'>Suggestions</h5>
                             <h1></h1><h1></h1>
                             {
                                 organizations.length > 0 ? (
