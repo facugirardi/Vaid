@@ -10,6 +10,10 @@ const SocialTab = () => {
                     <Nav variant="tabs" className="profile-tabs" id="myTab" role="tablist">
 
                         <Nav.Item>
+                            <Nav.Link eventKey="friendsRequests" id="friends-tab">
+                                <i className="ph-duotone ph-user-circle-plus me-2"></i>Organizations
+                            </Nav.Link>
+
                             <Nav.Link eventKey="friendsRequest" id="friends-tab">
                                 <i className="ph-duotone ph-user-circle-plus me-2"></i>User Details
                             </Nav.Link>
