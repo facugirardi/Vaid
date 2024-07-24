@@ -17,6 +17,7 @@ from .views import (
     RejectCandidate,
     RetrievePersonView,
     RetrieveUserOrganizations,
+    OrgView,
 )
 
 urlpatterns = [
@@ -25,6 +26,8 @@ urlpatterns = [
         CustomProviderAuthView.as_view(),
         name='provider-auth'
     ),
+
+    path('user/all-organizations/', OrgView.as_view()),
     path('user/<int:user_id>/organizations/', RetrieveUserOrganizations.as_view()),
     path('person/<int:user_id>/', RetrievePersonView.as_view()),
     path('candidate/<int:candidate_id>/approve/', ApproveCandidate.as_view()),

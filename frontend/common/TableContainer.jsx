@@ -155,12 +155,6 @@ const TableContainer = ({
               </label>
             </div>
             <div className="datatable-search">
-              <DebouncedInput
-                value={globalFilter ?? ""}
-                onChange={(value) => setGlobalFilter(String(value))}
-                className="form-control search"
-                placeholder={SearchPlaceholder}
-              />
             </div>
           </div>
         </React.Fragment>

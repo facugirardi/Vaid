@@ -16,7 +16,9 @@
 .suggestionsTitle{
     margin-left: 26.5px;
 }
-
+.g-2{
+    margin-top: 20px !important;
+}
 @media (max-width: 767px) {
   .img-profile-avtar{
     height: 70px !important;

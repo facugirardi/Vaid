@@ -116,6 +116,13 @@ class RejectCandidate(APIView):
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 
+
+class OrgView(generics.ListAPIView):
+
+    permission_classes = [AllowAny]
+    queryset = Organization.objects.all()
+    serializer_class = OrganizationSerializer
+
 class CandidateDetailView(generics.ListAPIView):
 
     permission_classes = [AllowAny]
