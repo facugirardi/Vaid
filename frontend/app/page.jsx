@@ -178,48 +178,7 @@ const page = () => {
               />
             </a>
           </div>
-          <div
-            className="client-logo-item"
-            data-aos="fade-up"
-            data-aos-delay={250}
-            data-aos-duration={1000}
-            data-aos-offset={50}
-          >
-            <a href="https://vasodeleche.org/" target="_blank">
-              <img
-                src="assets/images/client-logos/vaso.png"
-                alt="Client Logo"
-              />
-            </a>
-          </div>
-          <div
-            className="client-logo-item"
-            data-aos="fade-up"
-            data-aos-delay={300}
-            data-aos-duration={1000}
-            data-aos-offset={50}
-          >
-            <a href="https://vasodeleche.org/" target="_blank">
-              <img
-                src="assets/images/client-logos/vaso.png"
-                alt="Client Logo"
-              />
-            </a>
-          </div>
-          <div
-            className="client-logo-item"
-            data-aos="fade-up"
-            data-aos-delay={350}
-            data-aos-duration={1000}
-            data-aos-offset={50}
-          >
-            <a href="https://vasodeleche.org/" target="_blank">
-              <img
-                src="assets/images/client-logos/vaso.png"
-                alt="Client Logo"
-              />
-            </a>
-          </div>
+
         </div>
       </section>
       {/* Client Logos Area End */}
