@@ -17,6 +17,7 @@ from .views import (
     RejectCandidate,
     RetrievePersonView,
     RetrieveUserOrganizations,
+    TaskListView
 )
 
 urlpatterns = [
@@ -41,4 +42,7 @@ urlpatterns = [
     path('jwt/refresh/', CustomTokenRefreshView.as_view()),
     path('jwt/verify/', CustomTokenVerifyView.as_view()),
     path('logout/', LogoutView.as_view()),
+
+    path('organizations/<str:name>/tasks/', TaskListView.as_view(), name='task-list'),
+
 ]
