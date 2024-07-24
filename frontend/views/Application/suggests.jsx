@@ -1,3 +1,4 @@
+
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import { Card, Col, Row, Tab } from "react-bootstrap";
@@ -6,7 +7,7 @@ import '@/app/dashboard/profile.css';
 import avatar1 from "@/public/assets/images/user/avatar-1.jpg";
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 
-const Friends = ({ userId }) => {
+const Suggestions = ({ userId }) => {
     const [organizations, setOrganizations] = useState([]);
     const [loading, setLoading] = useState(true);
     const { data: user } = useRetrieveUserQuery();
@@ -39,15 +40,13 @@ const Friends = ({ userId }) => {
     return (
         <React.Fragment>
             <Tab.Pane eventKey="friendsRequests">
-                <Card>
-                    <Card.Body>
                         <Row>
-                            <h5>Your Organizations</h5>
+                            <h5>Suggestions</h5>
                             <h1></h1><h1></h1>
                             {
                                 organizations.length > 0 ? (
                                     organizations.map((org, index) => (
-                                        <Col xl={6} xxl={4} key={index}>
+                                        <Col xl={4} xxl={3} key={index}>
                                             <Card className="border shadow-none">
                                                 <Card.Body>
                                                     <div className="text-center">
@@ -76,17 +75,15 @@ const Friends = ({ userId }) => {
                                 ) : (
                                     <Col>
                                         <div className="text-center">
-                                            <h6>No organizations found for this user.</h6>
+                                            <h6>No suggestions found for this user.</h6>
                                         </div>
                                     </Col>
                                 )
                             }
                         </Row>
-                    </Card.Body>
-                </Card>
             </Tab.Pane>
         </React.Fragment>
     );
 }
 
-export default Friends;
+export default Suggestions;

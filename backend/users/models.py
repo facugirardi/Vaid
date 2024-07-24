@@ -95,7 +95,7 @@ class PersonOrganizationDetails(models.Model):
 
 
 class Candidate(models.Model):
-    #responses
+    #responses (cuando esten las preguntas del formulario, agregar las respuestas)
 
     interviewed = models.BooleanField(default=False)
     request_date = models.DateField(default=timezone.now)
@@ -152,6 +152,9 @@ class TaskPersonDetails(models.Model):
     Person = models.ForeignKey(Person, on_delete=models.CASCADE)
     Task = models.ForeignKey(Task, on_delete=models.CASCADE)
 
+class TaskTagDetails(models.Model):
+    Tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
+    Task = models.ForeignKey(Task, on_delete=models.CASCADE)
 
 class Event(models.Model):
     name = models.CharField(max_length=255)
