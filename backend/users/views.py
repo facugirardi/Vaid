@@ -409,6 +409,23 @@ class TaskListView(APIView):
         tasks = Task.objects.filter(Organization=organization)
         serializer = TaskSerializer(tasks, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    
+    def post(self, request, name):
+        
+        try:
+            organization = Organization.objects.get(name=name)
+        except Organization.DoesNotExist:
+            return Response({'error': 'Organization not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        data = request.data.copy()
+        data['Organization'] = organization.id  # Asociar la tarea a la organización obtenida de la URL
+
+        serializer = TaskSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 '''
     def post(self, request):
