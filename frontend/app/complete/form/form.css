@@ -1,0 +1,21 @@
+.small-checkbox .form-check-input {
+    transform: scale(0.4); /* Ajusta el tamaño como desees */
+    height: 62px;
+}
+
+.label-checkbox {
+    font-size: 2.3rem;
+    align-items: center;
+    margin-left: -20px; /* Ajusta el tamaño como desees */
+}
+
+.height-checkbox {
+    height: auto;
+    padding: 10px 0;
+    margin-top: auto; /* Ajusta el tamaño como desees */
+}
+
+.height-checkbox textarea {
+    height: 120px;
+}
+
