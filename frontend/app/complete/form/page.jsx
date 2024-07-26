@@ -79,7 +79,7 @@ const Page = () => {
                                             <Nav.Item className="nav-item" data-target-form="#educationDetailForm">
                                                 <Nav.Link eventKey="tab-3" href="#educationDetail" data-bs-toggle="tab" data-toggle="tab" className="nav-link icon-btn">
                                                     <i className="ph-duotone ph-user"></i>
-                                                    <span className="d-none d-sm-inline">Volunteering Preferences</span>
+                                                    <span className="d-none d-sm-inline">Volunteer Preferences</span>
                                                 </Nav.Link>
                                             </Nav.Item>
 
@@ -275,7 +275,7 @@ const Page = () => {
                                             <Tab.Pane eventKey="tab-3" className="tab-pane" id="educationDetail">
                                                 <form id="educationForm" method="post" action="#">
                                                     <div className="text-center">
-                                                        <h3 className="mb-2">Volunteering Preferences</h3>
+                                                        <h3 className="mb-2">Volunteer Preferences</h3>
                                                         <small className="text-muted">Tell us about your goals and motivations for volunteering.</small>
                                                     </div>
                                                     <div className="row">
@@ -287,20 +287,23 @@ const Page = () => {
                                                                 <div className="label-checkbox">
                                                                 <Form.Check
                                                                     inline
-                                                                    type="checkbox"
+                                                                    type="radio"
+                                                                    name="modality"
                                                                     label="In-person"
                                                                     className="small-checkbox"
                                                                 />
                                                                 <Form.Check
                                                                     inline
-                                                                    type="checkbox"
+                                                                    type="radio"
+                                                                    name="modality"
                                                                     id="customCheckinlh2"
                                                                     label="Virtual"
                                                                     className="small-checkbox"
                                                                 />
                                                                 <Form.Check
                                                                     inline
-                                                                    type="checkbox"
+                                                                    type="radio"
+                                                                    name="modality"
                                                                     id="customCheckinlh3"
                                                                     label="Both types"
                                                                     className="small-checkbox"
@@ -308,7 +311,7 @@ const Page = () => {
                                                                 </div>
                                                             </Col>
                                                         </div>
-                                                        </div>
+                                                    </div>
 
                                                         <div className="col-md-12">
                                                             <div className="mb-3">
