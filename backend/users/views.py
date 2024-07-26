@@ -443,6 +443,7 @@ class TaskUpdateDestroyView(APIView):
             task = Task.objects.get(pk=pk)
         except Task.DoesNotExist:
             return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
+        
         serializer = TaskSerializer(task)
         return Response(serializer.data)
         
@@ -454,14 +455,7 @@ class TaskUpdateDestroyView(APIView):
             return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
 
         data = request.data.copy()
-        ''''
-        if 'organization' in data:
-            try:
-                organization = Organization.objects.get(name=data['Organization'])
-                data['Organization'] = organization.id
-            except Organization.DoesNotExist:
-                return Response({'error': 'Organization not found'}, status=status.HTTP_404_NOT_FOUND)
-        '''    
+        
         serializer = TaskSerializer(task, data=data, partial=True)
         
         if serializer.is_valid():
@@ -474,5 +468,6 @@ class TaskUpdateDestroyView(APIView):
             task = Task.objects.get(pk=pk)
         except Task.DoesNotExist:
             return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
+        
         task.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
