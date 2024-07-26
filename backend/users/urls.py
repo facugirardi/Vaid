@@ -18,6 +18,8 @@ from .views import (
     RetrievePersonView,
     RetrieveUserOrganizations,
     OrgView,
+    TaskListView,
+    TaskUpdateDestroyView,
 )
 
 urlpatterns = [
@@ -44,4 +46,6 @@ urlpatterns = [
     path('jwt/refresh/', CustomTokenRefreshView.as_view()),
     path('jwt/verify/', CustomTokenVerifyView.as_view()),
     path('logout/', LogoutView.as_view()),
+    path('organizations/<str:name>/tasks/', TaskListView.as_view(), name='task-list'),
+    path('organizations/tasks/<int:pk>', TaskUpdateDestroyView.as_view(), name='task-update-delete'),
 ]
