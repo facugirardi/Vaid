@@ -38,10 +38,12 @@ const Friends = ({ userId }) => {
 
     return (
         <React.Fragment>
-            <Tab.Pane eventKey="friendsRequest">
+            <Tab.Pane eventKey="friendsRequests">
                 <Card>
                     <Card.Body>
                         <Row>
+                            <h5>Your Organizations</h5>
+                            <h1></h1><h1></h1>
                             {
                                 organizations.length > 0 ? (
                                     organizations.map((org, index) => (
