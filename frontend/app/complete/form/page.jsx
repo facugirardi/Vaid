@@ -78,7 +78,7 @@ const Page = () => {
 
                                             <Nav.Item className="nav-item" data-target-form="#educationDetailForm">
                                                 <Nav.Link eventKey="tab-3" href="#educationDetail" data-bs-toggle="tab" data-toggle="tab" className="nav-link icon-btn">
-                                                    <i className="ph-duotone ph-graduation-cap"></i>
+                                                    <i className="ph-duotone ph-user"></i>
                                                     <span className="d-none d-sm-inline">Volunteering Preferences</span>
                                                 </Nav.Link>
                                             </Nav.Item>
