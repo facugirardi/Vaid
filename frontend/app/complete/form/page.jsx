@@ -150,8 +150,8 @@ const Page = () => {
                                                         </div>
                                                         <div className="col-sm-6">
                                                             <div className="form-group">
-                                                                <label className="form-label">Street Number</label>
-                                                                <input type="text" className="form-control" placeholder="Enter Street Number" />
+                                                                <Form.Label>Street Number</Form.Label>
+                                                                <Form.Control type="number" defaultValue="30" />
                                                             </div>
                                                         </div>
                                                         <div className="col-sm-6">
