@@ -65,7 +65,7 @@ const Friends = ({ userId }) => {
                                                     <Row className="g-2">
                                                         <Col xs={6}>
                                                             <div className="d-grid">
-                                                                <a  className="btn btn-primary buttonorg_perf" href={`dashboard/${org.name}/home`}>Enter</a>
+                                                                <a  className="btn btn-primary buttonorg_perf" href={`dashboard/${org.id}/home`}>Enter</a>
                                                             </div>
                                                         </Col>
                                                     </Row>

@@ -9,7 +9,7 @@ import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 
 const Page = () => {
     
-    const [organizationName, setOrganizationName] = useState("");
+    const [organizationId, setOrganizationId] = useState("");
 
     useEffect(() => {
         // Get the current URL
@@ -21,7 +21,7 @@ const Page = () => {
         // Find the segment after 'dashboard'
         const dashboardIndex = pathSegments.indexOf('dashboard');
         if (dashboardIndex !== -1 && pathSegments.length > dashboardIndex + 1) {
-            setOrganizationName(pathSegments[dashboardIndex + 1]);
+            setOrganizationId(pathSegments[dashboardIndex + 1]);
         }
     }, []);
 
@@ -33,7 +33,7 @@ const Page = () => {
     return (
         <Layout>
             <BreadcrumbItem mainTitle="Dashboard" subTitle="Home" />
-            <h4>{organizationName}</h4>
+            <h4>{organizationId}</h4>
             <p>ID: {user.id} | Name: {user.first_name} {user.last_name} | Email: {user.email}</p>
         </Layout>
     );
