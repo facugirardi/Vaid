@@ -20,6 +20,37 @@ from .models import Organization, Person, Image
 from .serializers import *
 
 
+class RetrieveOrganizationView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, user_id):
+        try:
+            user = User.objects.get(id=user_id)
+            organization = Organization.objects.get(User=user)
+            
+            return Response(
+                {'name': organization.name,
+                 'description':organization.description},
+                status=status.HTTP_200_OK
+            )
+        except User.DoesNotExist:
+            return Response(
+                {'error': 'User not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Organization.DoesNotExist:
+            return Response(
+                {'error': 'Organization not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            return Response(
+                {'error': f'Error retrieving organization: {str(e)}'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+
 class RetrieveUserOrganizations(APIView):
     permission_classes = [AllowAny]
 
@@ -407,9 +438,9 @@ class LogoutView(APIView):
 class TaskListView(APIView):
     permission_classes = [AllowAny]
 
-    def get(self, request, name):
+    def get(self, request, pk):
         try:
-            organization = Organization.objects.get(name=name)
+            organization = Organization.objects.get(id=pk)
         except Organization.DoesNotExist:
             return Response({'error': 'Organization not found'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -418,10 +449,10 @@ class TaskListView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     
-    def post(self, request, name):
+    def post(self, request, pk):
         
         try:
-            organization = Organization.objects.get(name=name)
+            organization = Organization.objects.get(id=pk)
         except Organization.DoesNotExist:
             return Response({'error': 'Organization not found'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -440,7 +471,7 @@ class TaskUpdateDestroyView(APIView):
 
     def get(self, request, pk):
         try:
-            task = Task.objects.get(pk=pk)
+            task = Task.objects.get(id=pk)
         except Task.DoesNotExist:
             return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
         
@@ -450,7 +481,7 @@ class TaskUpdateDestroyView(APIView):
 
     def put(self, request, pk):
         try:
-            task = Task.objects.get(pk=pk)
+            task = Task.objects.get(id=pk)
         except Task.DoesNotExist:
             return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -465,7 +496,7 @@ class TaskUpdateDestroyView(APIView):
 
     def delete(self, request, pk):
         try:
-            task = Task.objects.get(pk=pk)
+            task = Task.objects.get(id=pk)
         except Task.DoesNotExist:
             return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
         

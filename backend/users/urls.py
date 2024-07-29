@@ -20,6 +20,7 @@ from .views import (
     OrgView,
     TaskListView,
     TaskUpdateDestroyView,
+    RetrieveOrganizationView,
 )
 
 urlpatterns = [
@@ -29,6 +30,7 @@ urlpatterns = [
         name='provider-auth'
     ),
 
+    path('organization/<int:user_id>/', RetrieveOrganizationView.as_view()),
     path('user/all-organizations/', OrgView.as_view()),
     path('user/<int:user_id>/organizations/', RetrieveUserOrganizations.as_view()),
     path('person/<int:user_id>/', RetrievePersonView.as_view()),
