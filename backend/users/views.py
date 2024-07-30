@@ -154,7 +154,7 @@ class OrgView(generics.ListAPIView):
     queryset = Organization.objects.all()
     serializer_class = OrganizationSerializer
 
-class CandidateDetailView(generics.ListAPIView):
+class CandidateDetailView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request, organization_id):
@@ -163,7 +163,7 @@ class CandidateDetailView(generics.ListAPIView):
         except Organization.DoesNotExist:
             return Response({'error': 'Organization not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        candidates = Candidate.objects.filter(organization=organization)
+        candidates = Candidate.objects.filter(Organization=organization)
         serializer = CandidateDetailSerializer(candidates, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -523,3 +523,72 @@ class OrganizationMembersView(APIView):
         
         except Organization.DoesNotExist:
             return Response({'error': 'Organization not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+
+class EventListView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, pk):
+        try:
+            organization = Organization.objects.get(id=pk)
+        except Organization.DoesNotExist:
+            return Response({'error': 'Organization not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        events = Event.objects.filter(Organization=organization)
+        serializer = EventSerializer(events, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    #Se puede postear un evento a la vez ya que, sino gernera erro en la linea 550
+    def post(self, request, pk):
+        
+        try:
+            organization = Organization.objects.get(id=pk)
+        except Organization.DoesNotExist:
+            return Response({'error': 'Organization not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        data = request.data.copy()
+        data['Organization'] = organization.id # Asociar la tarea a la organización obtenida de la URL
+
+        serializer = EventSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class EventUpdateDestroyView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, pk):
+        try:
+            event = Event.objects.get(id=pk)
+        except Event.DoesNotExist:
+            return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = EventSerializer(event)
+        return Response(serializer.data)
+        
+
+    def put(self, request, pk):
+        try:
+            event = Event.objects.get(id=pk)
+        except Event.DoesNotExist:
+            return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        data = request.data.copy()
+        
+        serializer = EventSerializer(event, data=data, partial=True)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        try:
+            event = Event.objects.get(id=pk)
+        except Event.DoesNotExist:
+            return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+        event.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

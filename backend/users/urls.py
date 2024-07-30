@@ -21,7 +21,9 @@ from .views import (
     TaskListView,
     TaskUpdateDestroyView,
     RetrieveOrganizationView,
-    OrganizationMembersView
+    OrganizationMembersView,
+    EventListView,
+    EventUpdateDestroyView,
 )
 
 urlpatterns = [
@@ -37,7 +39,7 @@ urlpatterns = [
     path('person/<int:user_id>/', RetrievePersonView.as_view()),
     path('candidate/<int:candidate_id>/approve/', ApproveCandidate.as_view()),
     path('candidate/<int:candidate_id>/reject/', RejectCandidate.as_view()),
-    path('candidate-details/<int: organization_id>/', CandidateDetailView.as_view()),
+    path('candidate-details/<int:organization_id>/', CandidateDetailView.as_view()),
     path('retrieve-logo', RetrieveImageView.as_view()),
     path('upload-image', UploadImageView.as_view()),
     path('user/<int:user_id>/check-usertype', CheckUserType.as_view()),
@@ -49,7 +51,9 @@ urlpatterns = [
     path('jwt/refresh/', CustomTokenRefreshView.as_view()),
     path('jwt/verify/', CustomTokenVerifyView.as_view()),
     path('logout/', LogoutView.as_view()),
-    path('organizations/<str:name>/tasks/', TaskListView.as_view(), name='task-list'),
+    path('organizations/<int:pk>/tasks/', TaskListView.as_view(), name='task-list'),
     path('organizations/tasks/<int:pk>', TaskUpdateDestroyView.as_view(), name='task-update-delete'),
-    path('organizations/<int:organization_id>/members/', OrganizationMembersView.as_view(), name='organization-members'),
+    path('organizations/<int:pk>/members/', OrganizationMembersView.as_view(), name='organization-members'),
+    path('organizations/<int:pk>/events/', EventListView.as_view(), name='event-list'),
+    path('organizations/events/<int:pk>', EventUpdateDestroyView.as_view(), name='event-update-delete'),
 ]
