@@ -37,7 +37,7 @@ urlpatterns = [
     path('person/<int:user_id>/', RetrievePersonView.as_view()),
     path('candidate/<int:candidate_id>/approve/', ApproveCandidate.as_view()),
     path('candidate/<int:candidate_id>/reject/', RejectCandidate.as_view()),
-    path('candidate-details', CandidateDetailView.as_view()),
+    path('candidate-details/<int: organization_id>/', CandidateDetailView.as_view()),
     path('retrieve-logo', RetrieveImageView.as_view()),
     path('upload-image', UploadImageView.as_view()),
     path('user/<int:user_id>/check-usertype', CheckUserType.as_view()),

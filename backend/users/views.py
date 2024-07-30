@@ -149,16 +149,23 @@ class RejectCandidate(APIView):
 
 
 class OrgView(generics.ListAPIView):
-
+    
     permission_classes = [AllowAny]
     queryset = Organization.objects.all()
     serializer_class = OrganizationSerializer
 
 class CandidateDetailView(generics.ListAPIView):
-
     permission_classes = [AllowAny]
-    queryset = Candidate.objects.all()
-    serializer_class = CandidateDetailSerializer
+
+    def get(self, request, organization_id):
+        try:
+            organization = Organization.objects.get(id=organization_id)
+        except Organization.DoesNotExist:
+            return Response({'error': 'Organization not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        candidates = Candidate.objects.filter(organization=organization)
+        serializer = CandidateDetailSerializer(candidates, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class RetrieveImageView(APIView):
