@@ -111,8 +111,8 @@ const Page = () => {
                                                             <div className="row">
                                                                 <div className="col-sm-6">
                                                                     <div className="form-group">
-                                                                        <Form.Label>Age</Form.Label>
-                                                                        <Form.Control type="number" defaultValue="30" />
+                                                                    <Form.Label htmlFor="example-datemax">Date of Birth</Form.Label>
+                                                                    <Form.Control type="date" id="example-datemax"/>
                                                                     </div>
                                                                 </div>
                                                                 <div className="col-sm-6">
