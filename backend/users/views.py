@@ -502,3 +502,17 @@ class TaskUpdateDestroyView(APIView):
         
         task.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class OrganizationMembersView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, organization_id):
+        try:
+            organization = Organization.objects.get(id=organization_id)
+            members = Person.objects.filter(Organization=organization)
+            serializer = PersonSerializer(members, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        except Organization.DoesNotExist:
+            return Response({'error': 'Organization not found'}, status=status.HTTP_404_NOT_FOUND)

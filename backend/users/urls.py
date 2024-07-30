@@ -21,6 +21,7 @@ from .views import (
     TaskListView,
     TaskUpdateDestroyView,
     RetrieveOrganizationView,
+    OrganizationMembersView
 )
 
 urlpatterns = [
@@ -50,4 +51,5 @@ urlpatterns = [
     path('logout/', LogoutView.as_view()),
     path('organizations/<str:name>/tasks/', TaskListView.as_view(), name='task-list'),
     path('organizations/tasks/<int:pk>', TaskUpdateDestroyView.as_view(), name='task-update-delete'),
+    path('organizations/<int:organization_id>/members/', OrganizationMembersView.as_view(), name='organization-members'),
 ]
