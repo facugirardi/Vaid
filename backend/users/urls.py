@@ -21,6 +21,8 @@ from .views import (
     TaskListView,
     TaskUpdateDestroyView,
     RetrieveOrganizationView,
+    RetrieveOrganizationExtView,
+    RetrieveImageOrgView,
 )
 
 urlpatterns = [
@@ -30,6 +32,8 @@ urlpatterns = [
         name='provider-auth'
     ),
 
+    path('retrieve-logo-org', RetrieveImageOrgView.as_view()),
+    path('organization-ext/<int:user_id>/', RetrieveOrganizationExtView.as_view()),
     path('organization/<int:user_id>/', RetrieveOrganizationView.as_view()),
     path('user/all-organizations/', OrgView.as_view()),
     path('user/<int:user_id>/organizations/', RetrieveUserOrganizations.as_view()),
