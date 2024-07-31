@@ -68,9 +68,6 @@ class TagType(models.Model):
     name = models.CharField(max_length=255)
 
 
-class Tag(models.Model):
-    name = models.CharField(max_length=255)
-    TagType = models.ForeignKey(TagType, on_delete=models.CASCADE) 
 
 
 class Organization(models.Model):
@@ -79,6 +76,11 @@ class Organization(models.Model):
     country = models.CharField(max_length=255)
     website = models.CharField(max_length=255)
     User = models.ForeignKey(UserAccount, on_delete=models.CASCADE) 
+
+class Tag(models.Model):
+    name = models.CharField(max_length=255)
+    TagType = models.ForeignKey(TagType, on_delete=models.CASCADE) 
+    Organization = models.ForeignKey(Organization, on_delete=models.CASCADE, default=1)
 
 class Person(models.Model):
     phone_number = models.CharField(max_length=255, default='000-000-0000')

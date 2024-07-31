@@ -18,6 +18,7 @@ from django.http import Http404
 from rest_framework.permissions import IsAuthenticated
 from .models import Organization, Person, Image
 from .serializers import *
+from django.shortcuts import get_object_or_404
 
 
 class RetrieveOrganizationExtView(APIView):
@@ -662,3 +663,64 @@ class EventUpdateDestroyView(APIView):
         
         event.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+
+class TagListCreateAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, organization_id):
+        organization = get_object_or_404(Organization, id=organization_id)
+        tags = Tag.objects.filter(organization=organization)
+        serializer = TagSerializer(tags, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, organization_id):
+        organization = get_object_or_404(Organization, id=organization_id)
+        data = request.data.copy()
+        data['Organization'] = organization.id
+        serializer = TagSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class TagDetailAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get_object(self, organization_id, pk):
+        return get_object_or_404(Tag, pk=pk, organization_id=organization_id)
+
+    def get(self, request, organization_id, pk):
+        tag = self.get_object(organization_id, pk)
+        serializer = TagSerializer(tag)
+        return Response(serializer.data)
+
+    def put(self, request, organization_id, pk):
+        tag = self.get_object(organization_id, pk)
+        data = request.data.copy()
+        data['Organization'] = organization_id
+        serializer = TagSerializer(tag, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, organization_id, pk):
+        tag = self.get_object(organization_id, pk)
+        tag.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+class AssignTagToTaskAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, task_id):
+        task = get_object_or_404(Task, id=task_id)
+        data = request.data.copy()
+        data['task'] = task.id
+        
+        serializer = TaskTagDetailsSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

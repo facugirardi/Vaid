@@ -26,6 +26,8 @@ from .views import (
     OrganizationMembersView,
     EventListView,
     EventUpdateDestroyView,
+    TagListCreateAPIView,
+    TagDetailAPIView
 )
 
 urlpatterns = [
@@ -57,7 +59,12 @@ urlpatterns = [
     path('logout/', LogoutView.as_view()),
     path('organizations/<int:pk>/tasks/', TaskListView.as_view(), name='task-list'),
     path('organizations/tasks/<int:pk>', TaskUpdateDestroyView.as_view(), name='task-update-delete'),
+    
     path('organizations/<int:pk>/members/', OrganizationMembersView.as_view(), name='organization-members'),
+    
     path('organizations/<int:pk>/events/', EventListView.as_view(), name='event-list'),
     path('organizations/events/<int:pk>', EventUpdateDestroyView.as_view(), name='event-update-delete'),
+
+    path('organizations/<int:organization_id>/tags/', TagListCreateAPIView.as_view(), name='tag-list-create'),
+    path('organizations/<int:organization_id>/tags/<int:pk>/', TagDetailAPIView.as_view(), name='tag-detail')
 ]

@@ -45,3 +45,18 @@ class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = '__all__'
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = '__all__'
+
+class PersonTagDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PersonTagDetails
+        fields = '__all__'
+
+class TaskTagDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TaskTagDetails
+        fields = '__all__'
