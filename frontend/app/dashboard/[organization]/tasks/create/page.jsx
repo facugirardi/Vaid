@@ -1,58 +1,83 @@
 // page.jsx
 'use client'
 
-import React, { ReactElement, useEffect, useState } from "react";
-import Layout from '@/layouts/dashboard/index2';
-import BreadcrumbItem from '@/common/BreadcrumbItem';
+import React,  { ReactElement } from "react";
+import Layout from '@/layouts/dashboard/index';
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
-import { ProgressBar, TabContainer, Col, Form, Card, Nav, Row, Tab } from "react-bootstrap";
-import './form.css';
-import ava2 from "@/public/assets/images/user/avatar-2.jpg";
-import Image from "next/image";
-
-const Page = () => {
+import { Card, Button, Form, InputGroup, Col, Row, Link} from 'react-bootstrap';
+import BreadcrumbItem from '@/common/BreadcrumbItem';
+import { useState } from 'react';
+import './create.css';
 
 
-    const { data: user, isError, isLoading } = useRetrieveUserQuery();
-    const [key, setKey] = useState('tab-1');
-    const [progress, setProgress] = useState(25);
-    const totalTabs = 4;
-
-    useEffect(() => {
-        // Calculate progress when the component mounts
-        const calculateProgress = () => {
-          return ((parseInt(key.split('-')[1]) - 1) / (totalTabs - 1)) * 100;
-        };
-        setProgress(calculateProgress());
-      }, [key, totalTabs]);
-
-    const handleTabSelect = (k) => {
-        setKey(k);
-    };
-
-    const handleNext = () => {
-        const nextKey = parseInt(key.split('-')[1]) + 1;
-        setKey(`tab-${nextKey}`);
-    };
-
-    const handlePrevious = () => {
-        const previousKey = parseInt(key.split('-')[1]) - 1;
-        setKey(`tab-${previousKey}`);
-    };
 
 
-    
+const page = () => {
+    const { data: user, isLoading, isError } = useRetrieveUserQuery();
 
     if (isLoading) return <p>Loading...</p>;
     if (isError || !user) return <p>Error loading user data!</p>;
 
     return (
         <Layout>
+            <BreadcrumbItem mainTitle="Dashboard" subTitle="Task" />
             <Row>
-                <Col>
-                    <BreadcrumbItem />
-                </Col>
+            <Card>
+                <div id="sticky-action" className="sticky-action">
+                    <Card.Header>
+                        <Row className="align-items-center">
+                            <Col sm={6}>
+                                <h4>Create Task</h4>
+                            </Col>
+                            <Col sm={6} className="text-sm-end mt-3 mt-sm-0">
+                                <Button variant="success" type="reset">
+                                    Submit
+                                </Button>
+                                <Button variant="light-secondary" type="reset">
+                                    Cancel
+                                </Button>
+                            </Col>
+                        </Row>
+                    </Card.Header>
+                </div>
+                
+                <Card.Body>
+
+                    <h5>Form controls</h5>
+                    <hr />
+                    <Row>
+                        <Col md={6}>
+                            <Form onSubmit={(event) => event.preventDefault()}>
+                                <div className="form-group">
+                                    <Col md={6}>
+                                    <Form.Label>Title</Form.Label>
+                                    <Form.Control
+                                        type="title"
+                                        placeholder="Enter a title"
+                                    />
+                                    <Form.Label>Description</Form.Label>
+                                    <Form.Control
+                                        type="description"
+                                        placeholder="Enter a description"
+                                    />
+                                    <label className="form-label">Category</label>
+                                        <select className="form-select">
+                                        <option>a</option>
+                                        <option>b</option>
+                                        <option>c</option>
+                                        </select>
+                                    </Col>
+                            
+                                </div>
+
+                            </Form>
+                        </Col>
+                    </Row>
+                </Card.Body>
+            </Card>
+
             </Row>
         </Layout>
     ); 
-}
+} 
+export default page;
