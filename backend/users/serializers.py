@@ -35,6 +35,12 @@ class TaskSerializer(serializers.ModelSerializer):
         model = Task
         fields = '__all__'
 
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserAccount
+        fields = '__all__'
+
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
