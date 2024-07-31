@@ -508,9 +508,9 @@ class LogoutView(APIView):
 class TaskListView(APIView):
     permission_classes = [AllowAny]
 
-    def get(self, request, name):
+    def get(self, request, pk):
         try:
-            organization = Organization.objects.get(name=name)
+            organization = Organization.objects.get(id=pk)
         except Organization.DoesNotExist:
             return Response({'error': 'Organization not found'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -519,10 +519,10 @@ class TaskListView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
     
     
-    def post(self, request, name):
+    def post(self, request, pk):
         
         try:
-            organization = Organization.objects.get(name=name)
+            organization = Organization.objects.get(id=pk)
         except Organization.DoesNotExist:
             return Response({'error': 'Organization not found'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -541,7 +541,7 @@ class TaskUpdateDestroyView(APIView):
 
     def get(self, request, pk):
         try:
-            task = Task.objects.get(pk=pk)
+            task = Task.objects.get(id=pk)
         except Task.DoesNotExist:
             return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
         serializer = TaskSerializer(task)
@@ -550,7 +550,7 @@ class TaskUpdateDestroyView(APIView):
 
     def put(self, request, pk):
         try:
-            task = Task.objects.get(pk=pk)
+            task = Task.objects.get(id=pk)
         except Task.DoesNotExist:
             return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -572,7 +572,7 @@ class TaskUpdateDestroyView(APIView):
 
     def delete(self, request, pk):
         try:
-            task = Task.objects.get(pk=pk)
+            task = Task.objects.get(id=pk)
         except Task.DoesNotExist:
             return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
         task.delete()
