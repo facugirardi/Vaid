@@ -20,17 +20,18 @@ from .models import Organization, Person, Image
 from .serializers import *
 
 
-class RetrieveOrganizationView(APIView):
+class RetrieveOrganizationExtView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request, user_id):
         try:
-            user = User.objects.get(id=user_id)
-            organization = Organization.objects.get(User=user)
+            organization = Organization.objects.get(id=user_id)
             
             return Response(
                 {'name': organization.name,
-                 'description':organization.description},
+                 'description':organization.description,
+                 'country':organization.country,
+                 'userId':organization.User.id},
                 status=status.HTTP_200_OK
             )
         except User.DoesNotExist:
@@ -49,6 +50,35 @@ class RetrieveOrganizationView(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+class RetrieveOrganizationView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, user_id):
+        try:
+            user = User.objects.get(id=user_id)
+            organization = Organization.objects.get(User=user)
+            
+            return Response(
+                {'name': organization.name,
+                 'description':organization.description,
+                 'country':organization.country},
+                status=status.HTTP_200_OK
+            )
+        except User.DoesNotExist:
+            return Response(
+                {'error': 'User not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Organization.DoesNotExist:
+            return Response(
+                {'error': 'Organization not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            return Response(
+                {'error': f'Error retrieving organization: {str(e)}'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
 
 class RetrieveUserOrganizations(APIView):
@@ -88,8 +118,10 @@ class RetrievePersonView(APIView):
             user = User.objects.get(id=user_id)
             person = Person.objects.get(User=user)
             person_serializer = PersonSerializer(person)
+            user_serializer = UserSerializer(user) 
             return Response(
-                {'person': person_serializer.data},
+                {'person': person_serializer.data,
+                 'user': user_serializer.data},
                 status=status.HTTP_200_OK
             )
         except User.DoesNotExist:
@@ -161,10 +193,48 @@ class CandidateDetailView(generics.ListAPIView):
     serializer_class = CandidateDetailSerializer
 
 
+class RetrieveImageOrgView(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request):
+        try:
+            user_id = request.query_params.get('user_id')
+            if not user_id:
+                return Response(
+                    {'error': 'User ID is required'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            organization = Organization.objects.get(id=user_id) 
+            images = Image.objects.filter(User=organization.User)
+
+            if images.exists():
+                images_serializer = ImageSerializer(images, many=True)
+                return Response(
+                    {'images': images_serializer.data},
+                    status=status.HTTP_200_OK
+                )
+            else:
+                return Response(
+                    {'error': 'No images found for the specified user'},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+        except User.DoesNotExist:
+            return Response(
+                {'error': 'User not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            return Response(
+                {'error': f'Error retrieving image: {str(e)}'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
 class RetrieveImageView(APIView):
     permission_classes = [AllowAny]
     def get(self, request):
         try:
+    
             user_id = request.query_params.get('user_id')
             if not user_id:
                 return Response(

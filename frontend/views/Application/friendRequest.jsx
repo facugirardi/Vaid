@@ -179,7 +179,7 @@ const FriendsRequest = () => {
                   <p className="mb-0 text-muted">Country</p>
                 </Col>
                 <Col md={6}>
-                  <h6 className="mb-0">Argentina</h6>
+                  <h6 className="mb-0">{organization.country}</h6>
                 </Col>
               </Row>
               <Row className="g-3 mt-0">
