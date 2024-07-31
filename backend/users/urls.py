@@ -17,6 +17,10 @@ from .views import (
     RejectCandidate,
     RetrievePersonView,
     RetrieveUserOrganizations,
+    OrgView,
+    TaskListView,
+    TaskUpdateDestroyView,
+    RetrieveOrganizationView,
 )
 
 urlpatterns = [
@@ -25,6 +29,9 @@ urlpatterns = [
         CustomProviderAuthView.as_view(),
         name='provider-auth'
     ),
+
+    path('organization/<int:user_id>/', RetrieveOrganizationView.as_view()),
+    path('user/all-organizations/', OrgView.as_view()),
     path('user/<int:user_id>/organizations/', RetrieveUserOrganizations.as_view()),
     path('person/<int:user_id>/', RetrievePersonView.as_view()),
     path('candidate/<int:candidate_id>/approve/', ApproveCandidate.as_view()),
@@ -41,4 +48,6 @@ urlpatterns = [
     path('jwt/refresh/', CustomTokenRefreshView.as_view()),
     path('jwt/verify/', CustomTokenVerifyView.as_view()),
     path('logout/', LogoutView.as_view()),
+    path('organizations/<str:name>/tasks/', TaskListView.as_view(), name='task-list'),
+    path('organizations/tasks/<int:pk>', TaskUpdateDestroyView.as_view(), name='task-update-delete'),
 ]

@@ -38,10 +38,12 @@ const Friends = ({ userId }) => {
 
     return (
         <React.Fragment>
-            <Tab.Pane eventKey="friendsRequest">
+            <Tab.Pane eventKey="friendsRequests">
                 <Card>
                     <Card.Body>
                         <Row>
+                            <h5>Your Organizations</h5>
+                            <h1></h1><h1></h1>
                             {
                                 organizations.length > 0 ? (
                                     organizations.map((org, index) => (
@@ -63,7 +65,7 @@ const Friends = ({ userId }) => {
                                                     <Row className="g-2">
                                                         <Col xs={6}>
                                                             <div className="d-grid">
-                                                                <a  className="btn btn-primary buttonorg_perf" href={`dashboard/${org.name}/home`}>Enter</a>
+                                                                <a  className="btn btn-primary buttonorg_perf" href={`dashboard/${org.id}/home`}>Enter</a>
                                                             </div>
                                                         </Col>
                                                     </Row>

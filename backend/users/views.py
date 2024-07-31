@@ -20,6 +20,37 @@ from .models import Organization, Person, Image
 from .serializers import *
 
 
+class RetrieveOrganizationView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, user_id):
+        try:
+            user = User.objects.get(id=user_id)
+            organization = Organization.objects.get(User=user)
+            
+            return Response(
+                {'name': organization.name,
+                 'description':organization.description},
+                status=status.HTTP_200_OK
+            )
+        except User.DoesNotExist:
+            return Response(
+                {'error': 'User not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Organization.DoesNotExist:
+            return Response(
+                {'error': 'Organization not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            return Response(
+                {'error': f'Error retrieving organization: {str(e)}'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+
 class RetrieveUserOrganizations(APIView):
     permission_classes = [AllowAny]
 
@@ -115,6 +146,13 @@ class RejectCandidate(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
+
+
+class OrgView(generics.ListAPIView):
+
+    permission_classes = [AllowAny]
+    queryset = Organization.objects.all()
+    serializer_class = OrganizationSerializer
 
 class CandidateDetailView(generics.ListAPIView):
 
@@ -394,3 +432,78 @@ class LogoutView(APIView):
         response.delete_cookie('refresh')
 
         return response
+
+
+# tasksViews
+class TaskListView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, pk):
+        try:
+            organization = Organization.objects.get(id=pk)
+        except Organization.DoesNotExist:
+            return Response({'error': 'Organization not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        tasks = Task.objects.filter(Organization=organization)
+        serializer = TaskSerializer(tasks, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    
+    def post(self, request, pk):
+        
+        try:
+            organization = Organization.objects.get(id=pk)
+        except Organization.DoesNotExist:
+            return Response({'error': 'Organization not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        data = request.data.copy()
+        data['Organization'] = organization.id  # Asociar la tarea a la organización obtenida de la URL
+
+        serializer = TaskSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class TaskUpdateDestroyView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, pk):
+        try:
+            task = Task.objects.get(id=pk)
+        except Task.DoesNotExist:
+            return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
+        serializer = TaskSerializer(task)
+        return Response(serializer.data)
+        
+
+    def put(self, request, pk):
+        try:
+            task = Task.objects.get(id=pk)
+        except Task.DoesNotExist:
+            return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        data = request.data.copy()
+        ''''
+        if 'organization' in data:
+            try:
+                organization = Organization.objects.get(name=data['Organization'])
+                data['Organization'] = organization.id
+            except Organization.DoesNotExist:
+                return Response({'error': 'Organization not found'}, status=status.HTTP_404_NOT_FOUND)
+        '''    
+        serializer = TaskSerializer(task, data=data, partial=True)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        try:
+            task = Task.objects.get(id=pk)
+        except Task.DoesNotExist:
+            return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
+        task.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
