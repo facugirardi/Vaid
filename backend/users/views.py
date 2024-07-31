@@ -16,9 +16,8 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from django.http import Http404
 from rest_framework.permissions import IsAuthenticated
-from .models import Organization, Person, Image
+from .models import Organizations, Person, Image
 from .serializers import *
-
 
 class RetrieveUserOrganizations(APIView):
     permission_classes = [AllowAny]
@@ -27,8 +26,8 @@ class RetrieveUserOrganizations(APIView):
         try:
             user = User.objects.get(id=user_id)
             person = Person.objects.get(User=user)
-            organizations = Organization.objects.filter(personorganizationdetails__Person=person)
-            organization_serializer = OrganizationSerializer(organizations, many=True)
+            organizations = Organizations.objects.filter(personorganizationdetails__Person=person)
+            organization_serializer = OrganizationsSerializer(organizations, many=True)
             return Response(
                 {'organizations': organization_serializer.data},
                 status=status.HTTP_200_OK
@@ -232,7 +231,7 @@ class CreateOrganization(APIView):
                 return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
             
             # Crear la organización
-            organization = Organization(
+            organization = Organizations(
                 name=data.get('name'),
                 description=data.get('description'),
                 country=data.get('country'),
@@ -394,3 +393,122 @@ class LogoutView(APIView):
         response.delete_cookie('refresh')
 
         return response
+
+#-------------------------Inventario---------------------------------------
+
+class OrganizationsListCreate(generics.ListCreateAPIView):
+    permission_classes = [AllowAny]
+
+    queryset = Organizations.objects.all()
+    serializer_class = OrganizationsSerializer
+
+class OrganizationsRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [AllowAny]
+
+    queryset = Organizations.objects.all()
+    serializer_class = OrganizationsSerializer
+
+class HeadquartersListCreate(generics.ListCreateAPIView):
+    permission_classes = [AllowAny]
+
+    queryset = Headquarters.objects.all()
+    serializer_class = HeadquartersSerializer
+
+class HeadquartersRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [AllowAny]
+
+    queryset = Headquarters.objects.all()
+    serializer_class = HeadquartersSerializer
+
+class StatusesListCreate(generics.ListCreateAPIView):
+    permission_classes = [AllowAny]
+
+    queryset = Statuses.objects.all()
+    serializer_class = StatusSerializer
+
+class StatusesRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [AllowAny]
+
+    queryset = Statuses.objects.all()
+    serializer_class = StatusSerializer
+
+class CategoriesListCreate(generics.ListCreateAPIView):
+    permission_classes = [AllowAny]
+
+    queryset = Categories.objects.all()
+    serializer_class = CategorySerializer
+
+class CategoriesRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [AllowAny]
+
+    queryset = Categories.objects.all()
+    serializer_class = CategorySerializer
+
+class ProductsListCreate(generics.ListCreateAPIView):
+    permission_classes = [AllowAny]
+
+    queryset = Products.objects.all()
+    serializer_class = ProductSerializer
+
+class ProductsRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [AllowAny]
+
+    queryset = Products.objects.all()
+    serializer_class = ProductSerializer
+
+class InventoriesListCreate(generics.ListCreateAPIView):
+    permission_classes = [AllowAny]
+
+    queryset = Inventories.objects.all()
+    serializer_class = InventoriesSerializer
+
+class InventoriesRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [AllowAny]
+
+    queryset = Inventories.objects.all()
+    serializer_class = InventoriesSerializer
+
+class ProductInventoryDetailsListCreate(generics.ListCreateAPIView):
+    permission_classes = [AllowAny]
+
+    queryset = ProductInventoryDetails.objects.all()
+    serializer_class = ProductInventoryDetailsSerializer
+
+class ProductInventoryDetailsRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [AllowAny]
+
+    queryset = ProductInventoryDetails.objects.all()
+    serializer_class = ProductInventoryDetailsSerializer
+
+class OrganizationDetailsView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, pk):
+        try:
+            organization = Organizations.objects.get(pk=pk)
+        except Organizations.DoesNotExist:
+            return Response({"error": "Organization not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        headquarters = Headquarters.objects.filter(Organizations=organization)
+        headquarters_serializer = HeadquartersSerializer(headquarters, many=True)
+
+        inventories = Inventories.objects.filter(Headquarters__Organizations=organization)
+        inventories_serializer = InventoriesSerializer(inventories, many=True)
+
+        productinventorydetails = ProductInventoryDetails.objects.filter(Inventory__Headquarters__Organizations=organization)
+        productinventorydetails_serializer = ProductInventoryDetailsSerializer(productinventorydetails, many=True)
+
+        products = Products.objects.filter(
+            productinventorydetails__Inventory__Headquarters__Organizations=organization
+        ).distinct()
+        products_serializer = ProductSerializer(products, many=True)
+
+        return Response({
+            "organization": organization.name,
+            "headquarters": headquarters_serializer.data,
+            "inventories": inventories_serializer.data,
+            "productinventorydetails": productinventorydetails_serializer.data,
+            "products": products_serializer.data,
+        })
+
+#-------------------------------------------------------------------------

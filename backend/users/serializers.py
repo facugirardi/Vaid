@@ -19,14 +19,44 @@ class CandidateDetailSerializer(serializers.ModelSerializer):
         model = Candidate
         fields = ['first_name', 'last_name', 'disponibility', 'country', 'request_date', 'user_id', 'born_date', 'interviewed', 'id']
 
-
 class PersonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Person
         fields = '__all__'
 
-class OrganizationSerializer(serializers.ModelSerializer):
+#---------------------------------------------------------------------
+
+class HeadquartersSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Organization
+        model = Headquarters
         fields = '__all__'
 
+class OrganizationsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Organizations
+        fields = '__all__'
+
+class StatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Statuses
+        fields = '__all__'
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Categories
+        fields = '__all__'
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Products
+        fields = '__all__'
+
+class InventoriesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Inventories
+        fields = '__all__'
+
+class ProductInventoryDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductInventoryDetails
+        fields = '__all__'

@@ -17,6 +17,16 @@ from .views import (
     RejectCandidate,
     RetrievePersonView,
     RetrieveUserOrganizations,
+
+    OrganizationsListCreate, OrganizationsRetrieveUpdateDestroy,
+    HeadquartersListCreate, HeadquartersRetrieveUpdateDestroy,
+    StatusesListCreate, StatusesRetrieveUpdateDestroy,
+    CategoriesListCreate, CategoriesRetrieveUpdateDestroy,
+    ProductsListCreate, ProductsRetrieveUpdateDestroy,
+    InventoriesListCreate, InventoriesRetrieveUpdateDestroy,
+    ProductInventoryDetailsListCreate, ProductInventoryDetailsRetrieveUpdateDestroy,
+
+    OrganizationDetailsView
 )
 
 urlpatterns = [
@@ -41,4 +51,21 @@ urlpatterns = [
     path('jwt/refresh/', CustomTokenRefreshView.as_view()),
     path('jwt/verify/', CustomTokenVerifyView.as_view()),
     path('logout/', LogoutView.as_view()),
+
+    path('organizations/', OrganizationsListCreate.as_view()),
+    path('organizations/<int:pk>/', OrganizationsRetrieveUpdateDestroy.as_view()),
+    path('headquarters/', HeadquartersListCreate.as_view()),
+    path('headquarters/<int:pk>/', HeadquartersRetrieveUpdateDestroy.as_view()),
+    path('statuses/', StatusesListCreate.as_view()),
+    path('statuses/<int:pk>/', StatusesRetrieveUpdateDestroy.as_view()),
+    path('categories/', CategoriesListCreate.as_view()),
+    path('categories/<int:pk>/', CategoriesRetrieveUpdateDestroy.as_view()),
+    path('products/', ProductsListCreate.as_view()),
+    path('products/<int:pk>/', ProductsRetrieveUpdateDestroy.as_view()),
+    path('inventories/', InventoriesListCreate.as_view()),
+    path('inventories/<int:pk>/', InventoriesRetrieveUpdateDestroy.as_view()),
+    path('productinventorydetails/', ProductInventoryDetailsListCreate.as_view()),
+    path('productinventorydetails/<int:pk>/', ProductInventoryDetailsRetrieveUpdateDestroy.as_view()),
+
+    path('inventory/<int:pk>/', OrganizationDetailsView.as_view()),
 ]

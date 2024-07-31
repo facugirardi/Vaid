@@ -73,12 +73,13 @@ class Tag(models.Model):
     TagType = models.ForeignKey(TagType, on_delete=models.CASCADE) 
 
 
-class Organization(models.Model):
+class Organizations(models.Model):
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     country = models.CharField(max_length=255)
     website = models.CharField(max_length=255)
-    User = models.ForeignKey(UserAccount, on_delete=models.CASCADE) 
+    User = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+
 
 class Person(models.Model):
     phone_number = models.CharField(max_length=255, default='000-000-0000')
@@ -88,10 +89,11 @@ class Person(models.Model):
     country = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
     User = models.ForeignKey(UserAccount, on_delete=models.CASCADE) 
-    
+
+
 class PersonOrganizationDetails(models.Model):
     Person = models.ForeignKey(Person, on_delete=models.CASCADE)
-    Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    Organization = models.ForeignKey(Organizations, on_delete=models.CASCADE)
 
 
 class Candidate(models.Model):
@@ -100,9 +102,7 @@ class Candidate(models.Model):
     interviewed = models.BooleanField(default=False)
     request_date = models.DateField(default=timezone.now)
     Person = models.ForeignKey(Person, on_delete=models.CASCADE) 
-    Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-
-
+    Organizations = models.ForeignKey(Organizations, on_delete=models.CASCADE)
 
 
 class PersonTagDetails(models.Model):
@@ -110,34 +110,35 @@ class PersonTagDetails(models.Model):
     Tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
 
 
-class Headquarter(models.Model):
+class Headquarters(models.Model):
     name = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
-    
-
-class Inventory(models.Model):
-    Headquarter = models.ForeignKey(Headquarter, on_delete=models.CASCADE)
+    Organizations = models.ForeignKey(Organizations, on_delete=models.CASCADE)
 
 
-class ProductCategory(models.Model):
+class Inventories(models.Model):
+    Headquarters = models.ForeignKey(Headquarters, on_delete=models.CASCADE)
+
+
+class Categories(models.Model):
     name = models.CharField(max_length=255)
 
 
-class ProductStatus(models.Model):
+class Statuses(models.Model):
     name = models.CharField(max_length=255)
 
 
-class Product(models.Model):
+class Products(models.Model):
     name = models.CharField(max_length=255)
-    description = models.CharField(max_length=255)
-    Category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
-    Status = models.ForeignKey(ProductStatus, on_delete=models.CASCADE)
+    description = models.TextField(blank=True, null=True)
+    Category = models.ForeignKey(Categories, on_delete=models.CASCADE)
+    Status = models.ForeignKey(Statuses, on_delete=models.CASCADE)
 
 
 class ProductInventoryDetails(models.Model):
-    Product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    Inventory = models.ForeignKey(Inventory, on_delete=models.CASCADE)
-    cuantity = models.IntegerField()
+    Product = models.ForeignKey(Products, on_delete=models.CASCADE)
+    Inventory = models.ForeignKey(Inventories, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=0)
 
 
 class Task(models.Model):
@@ -145,7 +146,7 @@ class Task(models.Model):
     description = models.CharField(max_length=255, default='No description provided')
     date = models.DateField(default=timezone.now)
     time = models.TimeField(default=timezone.now)
-    Organization = models.ForeignKey(Organization, on_delete=models.CASCADE) 
+    Organization = models.ForeignKey(Organizations, on_delete=models.CASCADE) 
 
 
 class TaskPersonDetails(models.Model):
@@ -158,7 +159,7 @@ class Event(models.Model):
     description = models.CharField(max_length=255, default='Details to be announced')
     date = models.DateField(default=timezone.now)
     time = models.TimeField(default=timezone.now)
-    Organization = models.ForeignKey(Organization, on_delete=models.CASCADE) 
+    Organization = models.ForeignKey(Organizations, on_delete=models.CASCADE) 
 
 
 class EventReport(models.Model):
@@ -183,11 +184,11 @@ class EventPersonDetails(models.Model):
 class Donation(models.Model):
     description = models.CharField(max_length=255, default='General donation')
     date = models.DateField(default=timezone.now)
-    Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    Organization = models.ForeignKey(Organizations, on_delete=models.CASCADE)
 
 
 class DonationProductDetails(models.Model):
-    Product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    Product = models.ForeignKey(Products, on_delete=models.CASCADE)
     Donation = models.ForeignKey(Donation, on_delete=models.CASCADE)
 
 
@@ -199,12 +200,12 @@ class Operation(models.Model):
     description = models.CharField(max_length=255, default='Regular operation')
     date = models.DateField(default=timezone.now)
     time = models.TimeField(default=timezone.now)
-    Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    Organization = models.ForeignKey(Organizations, on_delete=models.CASCADE)
     Type = models.ForeignKey(OperationType, on_delete=models.CASCADE)
 
 
 class OperationProductDetails(models.Model):
-    Product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    Product = models.ForeignKey(Products, on_delete=models.CASCADE)
     Operation = models.ForeignKey(Operation, on_delete=models.CASCADE)
 
 
@@ -212,7 +213,7 @@ class Video(models.Model):
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255, default='Video content')
     url = models.CharField(max_length=255, default='http://example.com')
-    Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    Organization = models.ForeignKey(Organizations, on_delete=models.CASCADE)
 
 
 class Image(models.Model):
