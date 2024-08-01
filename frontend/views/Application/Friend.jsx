@@ -63,11 +63,24 @@ const Friends = ({ userId }) => {
                                                         </div>
                                                     </div>
                                                     <Row className="g-2">
-                                                        <Col xs={6}>
-                                                            <div className="d-grid">
-                                                                <a  className="btn btn-primary buttonorg_perf" href={`dashboard/${org.id}/home`}>Enter</a>
-                                                            </div>
-                                                        </Col>
+                                                <Col xs={6}>
+                                                    <div className="d-flex justify-content-between">
+                                                        <a
+                                                            className="btn btn-primary buttonorg_perf"
+                                                            href={`dashboard/${org.id}/home`}   
+                                                            size="sm"
+                                                        >
+                                                            Enter
+                                                        </a> 
+                                                        <a
+                                                            className="btn btn-outline-primary buttonorg_perf"
+                                                            href={`dashboard/${org.id}/organization`}
+                                                            size="sm"
+                                                        >
+                                                            Profile
+                                                        </a>
+                                                    </div>
+                                                </Col>
                                                     </Row>
                                                 </Card.Body>
                                             </Card>

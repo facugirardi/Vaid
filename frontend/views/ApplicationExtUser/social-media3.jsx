@@ -105,7 +105,6 @@ const SocialProfile = () => {
           }
 
           const data = await response.json();
-          console.log('Fetched userDetails:', data); // Logging fetched data
           setUserDetails(data);
         } catch (error) {
           toast.error(`Failed to retrieve user. Error: ${error.message}`);

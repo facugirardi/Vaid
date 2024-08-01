@@ -15,18 +15,35 @@ const Page = () => {
     const [selectedCandidate, setSelectedCandidate] = useState(null);
     const [candidates, setCandidates] = useState([]);
 
+    const [organizationId, setOrganizationId] = useState("");
+
     useEffect(() => {
+        // Get the current URL
+        const currentUrl = window.location.href;
+        // Use URL constructor to parse the URL
+        const url = new URL(currentUrl);
+        // Split the pathname into segments
+        const pathSegments = url.pathname.split('/');
+        // Find the segment after 'dashboard'
+        const dashboardIndex = pathSegments.indexOf('dashboard');
+        if (dashboardIndex !== -1 && pathSegments.length > dashboardIndex + 1) {
+            setOrganizationId(pathSegments[dashboardIndex + 1]);
+        }
+    }, []);
+
+    useEffect(() => {
+      if(organizationId){
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:8000/api/candidate-details');
+                const response = await axios.get(`http://localhost:8000/api/candidate-details/${organizationId}/`);
                 console.log('Fetched candidates:', response.data);
                 setCandidates(response.data);
             } catch (error) {
                 console.error('Error fetching candidate details:', error);
             }
         };
-        fetchData();
-    }, []);
+        fetchData();}
+    }, [organizationId]);
 
     const handleShowModal = (candidate) => {
         setSelectedCandidate(candidate);

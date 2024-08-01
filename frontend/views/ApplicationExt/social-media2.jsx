@@ -4,9 +4,9 @@ import { Card, Col, Row } from "react-bootstrap";
 import Link from "next/link";
 
 import '@/app/dashboard/profile.css'
-import { toast } from "react-toastify";
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
-// img
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 import profileCover from "@/public/assets/images/backgrounds/counter.png"
 import avatar from "@/public/assets/images/user/avatar-5.jpg";
 
@@ -17,6 +17,59 @@ const SocialProfile = () => {
   const [userType, setUserType] = useState(null);
   const backendUrl = 'http://localhost:8000'; // Cambia esto a la URL de tu backend
   const [organizationId, setOrganizationId] = useState(null);
+  const { push } = useRouter();
+  const [userDetails, setUserDetails] = useState(null);
+
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      if (user.id) {
+        try {
+          const response = await fetch(`http://localhost:8000/api/person/${user.id}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+
+          if (response.status === 404) {
+            push('/not-found');
+            return;
+          }
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+
+          const data = await response.json();
+          setUserDetails(data);
+        } catch (error) {
+          toast.error(`Failed to retrieve user. Error: ${error.message}`);
+        }
+      }
+    };
+
+    if (user.id) {
+      fetchUserDetails();
+    }
+  }, [user.id]);
+
+    const handleApply = async (orgId) => {
+        if (userDetails.user.is_form === true) {
+            try {
+                const response = await fetch(`http://localhost:8000/api/user/${user.id}/apply-org/${orgId}`);
+                const data = await response.json();
+                if (response.ok) {
+                    toast.success('Join request sent successfully! Wait for approval!');
+                } else {
+                    toast.error('Error sending join request. Contact support.');
+                }
+            } catch (error) {
+                console.error('Error: ', error);
+            }
+        } else {
+            push('/complete/form');
+        }
+    };
+
 
   const checkComplete = async () => {
     if (user?.id) {
@@ -69,11 +122,9 @@ const SocialProfile = () => {
           const data = await response.json();
 
           if (data.images.length > 0) {
-            console.log(data.images);
             const imageUrl = `${backendUrl}${data.images[0].image}`;
 
             if (imageUrl) {
-              console.log("Image URL:", imageUrl); // Verificar la URL de la imagen en la consola
               setImage(imageUrl); // Asegúrate de usar la propiedad correcta
             } else {
               setImage(avatar); // Usar imagen por defecto si no se encuentra imagen
@@ -143,7 +194,9 @@ const SocialProfile = () => {
                   <Row className="g-1 text-center">
                     <Col xs={6}>
                       {userType === 1 ? (
-                        <a className="btn btn-primary" href={`/`}>Apply</a>
+                        <a className="btn btn-primary applybtn" onClick={
+                          () => handleApply(organizationId)
+                        }>Apply</a>
                       ) : (
                         <h5 className="mb-0">‎</h5>
                       )}

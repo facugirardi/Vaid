@@ -8,7 +8,7 @@ import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 import './profile.css';
 import Friends from '@/views/Application/Friend';
 import FriendsRequest from '@/views/ApplicationExtUser/friendRequest3';
-import SocialTab from '@/views/Application/social-tab';
+import SocialTab from '@/views/ApplicationExtUser/social-tab3';
 import SocialProfile from '@/views/ApplicationExtUser/social-media3';
 import Suggestions from '@/views/Application/suggests';
 import { Col, Row, Tab } from 'react-bootstrap';

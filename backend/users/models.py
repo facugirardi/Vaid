@@ -54,7 +54,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_completed = models.BooleanField(default=False)
-
+    is_form = models.BooleanField(default=False)
     objects = UserAccountManager()
 
     USERNAME_FIELD = 'email'
@@ -81,14 +81,25 @@ class Organization(models.Model):
     User = models.ForeignKey(UserAccount, on_delete=models.CASCADE) 
 
 class Person(models.Model):
+    User = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=255, default='000-000-0000')
     address = models.CharField(max_length=255, default='')
     disponibility = models.CharField(max_length=255, default='')
     born_date = models.DateField(default=timezone.now)
     country = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
-    User = models.ForeignKey(UserAccount, on_delete=models.CASCADE) 
-    
+    profession = models.CharField(max_length=255, blank=True, null=True)
+    experience = models.TextField(blank=True, null=True)
+    street_name = models.CharField(max_length=255, blank=True, null=True)
+    street_number = models.CharField(max_length=255, blank=True, null=True)
+    city = models.CharField(max_length=255, blank=True, null=True)
+    available_days = models.JSONField(default=list) 
+    available_times = models.JSONField(default=list)  
+    modality = models.CharField(max_length=255, blank=True, null=True)
+    topics = models.CharField(max_length=255, blank=True, null=True)
+    goals = models.TextField(blank=True, null=True)
+    motivations = models.TextField(blank=True, null=True)
+
 class PersonOrganizationDetails(models.Model):
     Person = models.ForeignKey(Person, on_delete=models.CASCADE)
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)

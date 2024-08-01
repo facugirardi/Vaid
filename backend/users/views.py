@@ -20,6 +20,90 @@ from .models import Organization, Person, Image
 from .serializers import *
 
 
+
+class ApplyOrgView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, user_id, org_id):
+        try:
+
+            if not user_id or not org_id:
+                return Response(
+                    {'error': 'user_id and org_id are required'},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+
+            user = User.objects.get(id=user_id)
+            organization = Organization.objects.get(id=org_id)
+            person = Person.objects.get(User=user)
+
+            candidate, created = Candidate.objects.get_or_create(Person=person, Organization=organization)
+
+            if created:
+                return Response(
+                    {'message': 'Candidate successfully added to the organization!'},
+                    status=status.HTTP_201_CREATED
+                )
+            else:
+                return Response(
+                    {'message': 'Already applied to this organization.'},
+                    status=status.HTTP_200_OK
+                )
+
+        except User.DoesNotExist:
+            return Response(
+                {'error': 'User not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Organization.DoesNotExist:
+            return Response(
+                {'error': 'Organization not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Person.DoesNotExist:
+            return Response(
+                {'error': 'Person not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            return Response(
+                {'error': f'Error applying to organization: {str(e)}'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
+
+class UserFormView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, user_id):
+        try:
+            data = request.data
+            user = User.objects.get(id=user_id)
+            person = Person.objects.get(User=user)
+            
+            person.date_of_birth = data.get('dateOfBirth')
+            person.profession = data.get('profession')
+            person.experience = data.get('experience')
+            person.street_name = data.get('street')
+            person.city = data.get('city')
+            person.available_days = data.get('availableDays')
+            person.available_times = data.get('availableTimes')
+            person.modality = data.get('modality')
+            person.topics = data.get('topics')
+            person.goals = data.get('goals')
+            person.motivations = data.get('motivations')
+            person.save()
+
+            user.is_form = True
+            user.save()
+            return Response({'message': 'Form data saved successfully!'}, status=status.HTTP_201_CREATED)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Person.DoesNotExist:
+            return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
 class RetrieveOrganizationExtView(APIView):
     permission_classes = [AllowAny]
 

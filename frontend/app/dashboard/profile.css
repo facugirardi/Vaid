@@ -4,7 +4,12 @@
 
 .buttonorg_perf{
     margin-left: 50% !important;
-    margin-right: -50% !important
+    margin-right: -50% !important;
+}
+
+.applybtn{
+    color: #fff !important;
+
 }
 
 .img-profile-avtar{

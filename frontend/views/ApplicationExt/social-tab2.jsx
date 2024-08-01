@@ -45,11 +45,8 @@ const SocialTab = () => {
                 </Nav.Link>
               ) : (
                 <>
-                  <Nav.Link eventKey="friendsRequests" id="friends-tab">
-                    <i className="ph-duotone ph-user-circle-plus me-2"></i>Organizations
-                  </Nav.Link>
                   <Nav.Link eventKey="friendsRequest" id="friends-tab">
-                    <i className="ph-duotone ph-user-circle-plus me-2"></i>User Details
+                    <i className="ph-duotone ph-user-circle-plus me-2"></i>Details
                   </Nav.Link>
                 </>
               )}

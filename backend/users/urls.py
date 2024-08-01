@@ -26,6 +26,8 @@ from .views import (
     OrganizationMembersView,
     EventListView,
     EventUpdateDestroyView,
+    UserFormView,
+    ApplyOrgView,
 )
 
 urlpatterns = [
@@ -35,6 +37,8 @@ urlpatterns = [
         name='provider-auth'
     ),
 
+    path('user/<int:user_id>/apply-org/<int:org_id>/', ApplyOrgView.as_view()),
+    path('user/form/<int:user_id>/', UserFormView.as_view()),
     path('retrieve-logo-org', RetrieveImageOrgView.as_view()),
     path('organization-ext/<int:user_id>/', RetrieveOrganizationExtView.as_view()),
     path('organization/<int:user_id>/', RetrieveOrganizationView.as_view()),
