@@ -68,8 +68,6 @@ class TagType(models.Model):
     name = models.CharField(max_length=255)
 
 
-
-
 class Organization(models.Model):
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=255)

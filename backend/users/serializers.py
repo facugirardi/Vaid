@@ -60,3 +60,7 @@ class TaskTagDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaskTagDetails
         fields = '__all__'
+
+class AssignTagsToPersonSerializer(serializers.Serializer):
+    tags = serializers.ListField(child=serializers.IntegerField())
+    person = serializers.PrimaryKeyRelatedField(queryset=Person.objects.all())

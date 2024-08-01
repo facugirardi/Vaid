@@ -711,16 +711,33 @@ class TagDetailAPIView(APIView):
         tag.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     
-class AssignTagToTaskAPIView(APIView):
+
+class PersonTagsAPIView(APIView):
     permission_classes = [AllowAny]
 
-    def post(self, request, task_id):
-        task = get_object_or_404(Task, id=task_id)
-        data = request.data.copy()
-        data['task'] = task.id
+    def get(self, request, user_id):
+        try:
+            # Obtener todas las etiquetas asociadas a la persona
+            person_tags = PersonTagDetails.objects.filter(Person__id=user_id)
+            tags = [detail.Tag for detail in person_tags]  # Obtener solo las etiquetas
+
+            # Serializar las etiquetas
+            serializer = TagSerializer(tags, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Person.DoesNotExist:
+            return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
         
-        serializer = TaskTagDetailsSerializer(data=data)
+    def post(self, request, user_id):
+        person = get_object_or_404(Person, id=user_id)
+        data = request.data.copy()
+        data['person'] = person.id
+
+        serializer = AssignTagsToPersonSerializer(data=data)
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            tags = serializer.validated_data['tags']
+            for tag_id in tags:
+                tag = get_object_or_404(Tag, id=tag_id)
+                PersonTagDetails.objects.create(Person=person, Tag=tag)
+
+            return Response({'message': 'Tags assigned successfully'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
