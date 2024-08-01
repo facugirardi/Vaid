@@ -75,7 +75,7 @@ class Tag(models.Model):
 
 class Organizations(models.Model):
     name = models.CharField(max_length=255)
-    description = models.CharField(max_length=255)
+    description = models.TextField(blank=True, null=True)
     country = models.CharField(max_length=255)
     website = models.CharField(max_length=255)
     User = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
@@ -181,15 +181,16 @@ class EventPersonDetails(models.Model):
     Event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
 
-class Donation(models.Model):
+class Donations(models.Model):
     description = models.CharField(max_length=255, default='General donation')
     date = models.DateField(default=timezone.now)
-    Organization = models.ForeignKey(Organizations, on_delete=models.CASCADE)
+    Headquarter = models.ForeignKey(Headquarters, on_delete=models.CASCADE)
 
 
 class DonationProductDetails(models.Model):
     Product = models.ForeignKey(Products, on_delete=models.CASCADE)
-    Donation = models.ForeignKey(Donation, on_delete=models.CASCADE)
+    Donation = models.ForeignKey(Donations, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=0)
 
 
 class OperationType(models.Model):

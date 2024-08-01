@@ -60,3 +60,13 @@ class ProductInventoryDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProductInventoryDetails
         fields = '__all__'
+
+class DonationsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Donations
+        fields = '__all__'
+
+class DonationProductDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DonationProductDetails
+        fields = '__all__'

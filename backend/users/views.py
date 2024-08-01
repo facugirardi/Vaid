@@ -394,8 +394,8 @@ class LogoutView(APIView):
 
         return response
 
-#-------------------------Inventario---------------------------------------
-
+#CRUD:
+#Organizaciones
 class OrganizationsListCreate(generics.ListCreateAPIView):
     permission_classes = [AllowAny]
 
@@ -408,6 +408,7 @@ class OrganizationsRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Organizations.objects.all()
     serializer_class = OrganizationsSerializer
 
+#Sedes
 class HeadquartersListCreate(generics.ListCreateAPIView):
     permission_classes = [AllowAny]
 
@@ -420,6 +421,7 @@ class HeadquartersRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Headquarters.objects.all()
     serializer_class = HeadquartersSerializer
 
+#Estados del productos
 class StatusesListCreate(generics.ListCreateAPIView):
     permission_classes = [AllowAny]
 
@@ -432,6 +434,7 @@ class StatusesRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Statuses.objects.all()
     serializer_class = StatusSerializer
 
+#Categorias de los productos
 class CategoriesListCreate(generics.ListCreateAPIView):
     permission_classes = [AllowAny]
 
@@ -444,6 +447,7 @@ class CategoriesRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Categories.objects.all()
     serializer_class = CategorySerializer
 
+#Productos
 class ProductsListCreate(generics.ListCreateAPIView):
     permission_classes = [AllowAny]
 
@@ -456,6 +460,7 @@ class ProductsRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Products.objects.all()
     serializer_class = ProductSerializer
 
+#Inventarios
 class InventoriesListCreate(generics.ListCreateAPIView):
     permission_classes = [AllowAny]
 
@@ -468,6 +473,7 @@ class InventoriesRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
     queryset = Inventories.objects.all()
     serializer_class = InventoriesSerializer
 
+# Detalles entre Productos y Inventarios
 class ProductInventoryDetailsListCreate(generics.ListCreateAPIView):
     permission_classes = [AllowAny]
 
@@ -480,35 +486,98 @@ class ProductInventoryDetailsRetrieveUpdateDestroy(generics.RetrieveUpdateDestro
     queryset = ProductInventoryDetails.objects.all()
     serializer_class = ProductInventoryDetailsSerializer
 
-class OrganizationDetailsView(APIView):
+# Donaciones
+class DonationsListCreate(generics.ListCreateAPIView):
     permission_classes = [AllowAny]
 
-    def get(self, request, pk):
-        try:
-            organization = Organizations.objects.get(pk=pk)
-        except Organizations.DoesNotExist:
-            return Response({"error": "Organization not found"}, status=status.HTTP_404_NOT_FOUND)
+    queryset = Donations.objects.all()
+    serializer_class = DonationsSerializer
 
-        headquarters = Headquarters.objects.filter(Organizations=organization)
-        headquarters_serializer = HeadquartersSerializer(headquarters, many=True)
+class DonationsRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [AllowAny]
 
-        inventories = Inventories.objects.filter(Headquarters__Organizations=organization)
-        inventories_serializer = InventoriesSerializer(inventories, many=True)
+    queryset = Donations.objects.all()
+    serializer_class = DonationsSerializer
 
-        productinventorydetails = ProductInventoryDetails.objects.filter(Inventory__Headquarters__Organizations=organization)
-        productinventorydetails_serializer = ProductInventoryDetailsSerializer(productinventorydetails, many=True)
+# Detalles entre Donaciones y Productos
+class DonationProductDetailsListCreate(generics.ListCreateAPIView):
+    permission_classes = [AllowAny]
 
-        products = Products.objects.filter(
-            productinventorydetails__Inventory__Headquarters__Organizations=organization
-        ).distinct()
-        products_serializer = ProductSerializer(products, many=True)
+    queryset = DonationProductDetails.objects.all()
+    serializer_class = DonationProductDetailsSerializer
 
-        return Response({
-            "organization": organization.name,
-            "headquarters": headquarters_serializer.data,
-            "inventories": inventories_serializer.data,
-            "productinventorydetails": productinventorydetails_serializer.data,
-            "products": products_serializer.data,
-        })
+class DonationProductDetailsRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [AllowAny]
 
-#-------------------------------------------------------------------------
+    queryset = DonationProductDetails.objects.all()
+    serializer_class = DonationProductDetailsSerializer
+
+
+# Visulizacion del inventario por id de la organizacion (opcional) (si hay muchos datos, no funciona)
+# class OrganizationDetailsView(APIView):
+#     permission_classes = [AllowAny]
+
+#     def get(self, request, pk):
+#         try:
+#             organization = Organizations.objects.get(pk=pk)
+#         except Organizations.DoesNotExist:
+#             return Response({"error": "Organization not found"}, status=status.HTTP_404_NOT_FOUND)
+
+#         headquarters = Headquarters.objects.filter(Organizations=organization)
+#         headquarters_serializer = HeadquartersSerializer(headquarters, many=True)
+
+#         inventories = Inventories.objects.filter(Headquarters__Organizations=organization)
+#         inventories_serializer = InventoriesSerializer(inventories, many=True)
+
+#         productinventorydetails = ProductInventoryDetails.objects.filter(Inventory__Headquarters__Organizations=organization)
+#         productinventorydetails_serializer = ProductInventoryDetailsSerializer(productinventorydetails, many=True)
+
+#         products = Products.objects.filter(
+#             productinventorydetails__Inventory__Headquarters__Organizations=organization
+#         ).distinct()
+#         products_serializer = ProductSerializer(products, many=True)
+
+#         return Response({
+#             "organization": organization.name,
+#             "headquarters": headquarters_serializer.data,
+#             "inventories": inventories_serializer.data,
+#             "productinventorydetails": productinventorydetails_serializer.data,
+#             "products": products_serializer.data,
+#         })
+
+# Visualizacion de las donaciones de la sede a la que le donaron (opcional)
+# class OrganizationHeadquartersDonationsView(APIView):
+#     permission_classes = [AllowAny]
+
+#     def get(self, request, pk):
+#         try:
+#             organization = Organizations.objects.get(pk=pk)
+#         except Organizations.DoesNotExist:
+#             return Response({"error": "Organization not found"}, status=status.HTTP_404_NOT_FOUND)
+
+#         # Obtener todas las sedes de la organización
+#         headquarters = Headquarters.objects.filter(Organizations=organization)
+
+#         # Filtrar donaciones dirigidas a las sedes de la organización
+#         donation_list = []
+#         for headquarter in headquarters:
+#             donations = Donations.objects.filter(Headquarters=headquarter)
+
+#             for donation in donations:
+#                 # Obtener detalles de los productos donados
+#                 donation_product_details = DonationProductDetails.objects.filter(Donation=donation)
+#                 product_details = [
+#                     {
+#                         "Product": detail.Product.name,
+#                         "quantity": detail.quantity
+#                     } for detail in donation_product_details
+#                 ]
+
+#                 # Añadir la información relevante de cada donación
+#                 donation_list.append({
+#                     "description": donation.description,
+#                     "Headquarters": headquarter.name,
+#                     "products": product_details
+#                 })
+
+#         return Response(donation_list, status=status.HTTP_200_OK)

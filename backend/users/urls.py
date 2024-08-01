@@ -18,6 +18,7 @@ from .views import (
     RetrievePersonView,
     RetrieveUserOrganizations,
 
+    #CRUD
     OrganizationsListCreate, OrganizationsRetrieveUpdateDestroy,
     HeadquartersListCreate, HeadquartersRetrieveUpdateDestroy,
     StatusesListCreate, StatusesRetrieveUpdateDestroy,
@@ -25,8 +26,12 @@ from .views import (
     ProductsListCreate, ProductsRetrieveUpdateDestroy,
     InventoriesListCreate, InventoriesRetrieveUpdateDestroy,
     ProductInventoryDetailsListCreate, ProductInventoryDetailsRetrieveUpdateDestroy,
+    DonationsListCreate, DonationsRetrieveUpdateDestroy,
+    DonationProductDetailsListCreate, DonationProductDetailsRetrieveUpdateDestroy,
 
-    OrganizationDetailsView
+    # Visulizaciones: 
+    # OrganizationDetailsView,
+    # OrganizationDonationsView,
 )
 
 urlpatterns = [
@@ -52,6 +57,7 @@ urlpatterns = [
     path('jwt/verify/', CustomTokenVerifyView.as_view()),
     path('logout/', LogoutView.as_view()),
 
+    #CRUD:
     path('organizations/', OrganizationsListCreate.as_view()),
     path('organizations/<int:pk>/', OrganizationsRetrieveUpdateDestroy.as_view()),
     path('headquarters/', HeadquartersListCreate.as_view()),
@@ -66,6 +72,12 @@ urlpatterns = [
     path('inventories/<int:pk>/', InventoriesRetrieveUpdateDestroy.as_view()),
     path('productinventorydetails/', ProductInventoryDetailsListCreate.as_view()),
     path('productinventorydetails/<int:pk>/', ProductInventoryDetailsRetrieveUpdateDestroy.as_view()),
+    path('donations/', DonationsListCreate.as_view()),
+    path('donations/<int:pk>/', DonationsRetrieveUpdateDestroy.as_view()),
+    path('donationproductdetails/', DonationProductDetailsListCreate.as_view()),
+    path('donationproductdetails/<int:pk>/', DonationProductDetailsRetrieveUpdateDestroy.as_view()),
 
-    path('inventory/<int:pk>/', OrganizationDetailsView.as_view()),
+    # Visulizaciones URLs
+    # path('inventory/<int:pk>/', OrganizationDetailsView.as_view()),
+    # path('donation/<int:pk>/', OrganizationDonationsView.as_view()),
 ]
