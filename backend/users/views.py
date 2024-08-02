@@ -743,3 +743,41 @@ class PersonTagsAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class HeadquarterListCreateView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, organization_id):
+        headquarters = Headquarter.objects.filter(Organization__id=organization_id)
+        serializer = HeadquarterSerializer(headquarters, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, organization_id):
+        serializer = HeadquarterSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(Organization=organization_id)  # Asegúrate de que el usuario tiene la organización
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class HeadquarterDetailUpdateDestroyView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self, organization_id, pk):
+        return get_object_or_404(Headquarter, pk=pk, Organization_id=organization_id)
+
+    def get(self, request, organization_id, pk):
+        headquarter = self.get_object(organization_id, pk)
+        serializer = HeadquarterSerializer(headquarter)
+        return Response(serializer.data)
+
+    def put(self, request, organization_id, pk):
+        headquarter = self.get_object(organization_id, pk)
+        serializer = HeadquarterSerializer(headquarter, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, organization_id, pk):
+        headquarter = self.get_object(organization_id, pk)
+        headquarter.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

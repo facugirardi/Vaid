@@ -65,3 +65,32 @@ class AssignTagsToPersonSerializer(serializers.Serializer):
     tags = serializers.ListField(child=serializers.IntegerField())
     person = serializers.PrimaryKeyRelatedField(queryset=Person.objects.all())
 
+class HeadquarterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Headquarter
+        fields = '__all__'
+
+class InventorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Inventory
+        fields = '__all__'
+
+class ProductCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductCategory
+        fields = '__all__'
+
+class ProductStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductStatus
+        fields = '__all__'
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = '__all__'
+
+class ProductInventoryDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductInventoryDetails
+        fields = '__all__'

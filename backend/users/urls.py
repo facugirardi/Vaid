@@ -29,6 +29,7 @@ from .views import (
     TagListCreateAPIView,
     TagDetailAPIView,
     PersonTagsAPIView,
+    HeadquarterListCreateView,
 )
 
 urlpatterns = [
@@ -71,4 +72,5 @@ urlpatterns = [
 
     path('user/<int:user_id>/tags/', PersonTagsAPIView.as_view(), name='tags-to-person'),
 
+    path('headquarters/<int:organization_id>/', HeadquarterListCreateView.as_view(), name='headquarter-list-create'),
 ]
