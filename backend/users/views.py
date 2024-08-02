@@ -671,7 +671,7 @@ class TagListCreateAPIView(APIView):
 
     def get(self, request, organization_id):
         organization = get_object_or_404(Organization, id=organization_id)
-        tags = Tag.objects.filter(organization=organization)
+        tags = Tag.objects.filter(Organization=organization)
         serializer = TagSerializer(tags, many=True)
         return Response(serializer.data)
 
@@ -689,7 +689,7 @@ class TagDetailAPIView(APIView):
     permission_classes = [AllowAny]
 
     def get_object(self, organization_id, pk):
-        return get_object_or_404(Tag, pk=pk, organization_id=organization_id)
+        return get_object_or_404(Tag, pk=pk, Organization_id=organization_id)
 
     def get(self, request, organization_id, pk):
         tag = self.get_object(organization_id, pk)
@@ -741,3 +741,5 @@ class PersonTagsAPIView(APIView):
 
             return Response({'message': 'Tags assigned successfully'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+

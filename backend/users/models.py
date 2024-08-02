@@ -113,6 +113,7 @@ class PersonTagDetails(models.Model):
 class Headquarter(models.Model):
     name = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
+    Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     
 
 class Inventory(models.Model):

@@ -64,3 +64,4 @@ class TaskTagDetailsSerializer(serializers.ModelSerializer):
 class AssignTagsToPersonSerializer(serializers.Serializer):
     tags = serializers.ListField(child=serializers.IntegerField())
     person = serializers.PrimaryKeyRelatedField(queryset=Person.objects.all())
+
