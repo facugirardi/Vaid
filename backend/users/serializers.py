@@ -24,36 +24,34 @@ class PersonSerializer(serializers.ModelSerializer):
         model = Person
         fields = '__all__'
 
-#---------------------------------------------------------------------
-
-class HeadquartersSerializer(serializers.ModelSerializer):
+class HeadquarterSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Headquarters
+        model = Headquarter
         fields = '__all__'
 
-class OrganizationsSerializer(serializers.ModelSerializer):
+class OrganizationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Organizations
+        model = Organization
         fields = '__all__'
 
-class StatusSerializer(serializers.ModelSerializer):
+class ProductStatusSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Statuses
+        model = ProductStatus
         fields = '__all__'
 
-class CategorySerializer(serializers.ModelSerializer):
+class ProductCategorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Categories
+        model = ProductCategory
         fields = '__all__'
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Products
+        model = Product
         fields = '__all__'
 
-class InventoriesSerializer(serializers.ModelSerializer):
+class InventorySerializer(serializers.ModelSerializer):
     class Meta:
-        model = Inventories
+        model = Inventory
         fields = '__all__'
 
 class ProductInventoryDetailsSerializer(serializers.ModelSerializer):
@@ -61,12 +59,27 @@ class ProductInventoryDetailsSerializer(serializers.ModelSerializer):
         model = ProductInventoryDetails
         fields = '__all__'
 
-class DonationsSerializer(serializers.ModelSerializer):
+class DonationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Donations
+        model = Donation
         fields = '__all__'
 
 class DonationProductDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = DonationProductDetails
+        fields = '__all__'
+
+class TaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Task
+        fields = '__all__'
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserAccount
+        fields = '__all__'
+
+class EventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Event
         fields = '__all__'
