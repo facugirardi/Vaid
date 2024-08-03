@@ -28,6 +28,7 @@ from .views import (
     EventUpdateDestroyView,
     UserFormView,
     ApplyOrgView,
+    PersonOrganizationDetailsDeleteView,
 )
 
 urlpatterns = [
@@ -37,6 +38,7 @@ urlpatterns = [
         name='provider-auth'
     ),
 
+    path('person-organization-details/<int:person_id>/<int:organization_id>/delete/', PersonOrganizationDetailsDeleteView.as_view()),
     path('user/<int:user_id>/apply-org/<int:org_id>/', ApplyOrgView.as_view()),
     path('user/form/<int:user_id>/', UserFormView.as_view()),
     path('retrieve-logo-org', RetrieveImageOrgView.as_view()),
@@ -61,7 +63,7 @@ urlpatterns = [
     path('logout/', LogoutView.as_view()),
     path('organizations/<int:pk>/tasks/', TaskListView.as_view(), name='task-list'),
     path('organizations/tasks/<int:pk>', TaskUpdateDestroyView.as_view(), name='task-update-delete'),
-    path('organizations/<int:pk>/members/', OrganizationMembersView.as_view(), name='organization-members'),
+    path('organizations/<int:organization_id>/members/', OrganizationMembersView.as_view(), name='organization-members'),
     path('organizations/<int:pk>/events/', EventListView.as_view(), name='event-list'),
     path('organizations/events/<int:pk>', EventUpdateDestroyView.as_view(), name='event-update-delete'),
 ]

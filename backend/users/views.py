@@ -18,9 +18,23 @@ from django.http import Http404
 from rest_framework.permissions import IsAuthenticated
 from .models import Organization, Person, Image
 from .serializers import *
+from django.shortcuts import get_object_or_404
 
 
+class PersonOrganizationDetailsDeleteView(generics.GenericAPIView):
+    permission_classes = [AllowAny]
+    
+    def delete(self, request, *args, **kwargs):
+        person_id = kwargs.get('person_id')
+        organization_id = kwargs.get('organization_id')
 
+        try:
+            detail = PersonOrganizationDetails.objects.get(Person_id=person_id, Organization_id=organization_id)
+            detail.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except PersonOrganizationDetails.DoesNotExist:
+            return Response({'error': 'Details not found'}, status=status.HTTP_404_NOT_FOUND)
+                            
 class ApplyOrgView(APIView):
     permission_classes = [AllowAny]
 
@@ -665,19 +679,18 @@ class TaskUpdateDestroyView(APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
+
 class OrganizationMembersView(APIView):
     permission_classes = [AllowAny]
-
-    def get(self, request, organization_id):
-        try:
-            organization = Organization.objects.get(id=organization_id)
-            members = Person.objects.filter(Organization=organization)
-            serializer = PersonSerializer(members, many=True)
-            return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    def get(self, request, organization_id, *args, **kwargs):
+        organization = get_object_or_404(Organization, id=organization_id)
         
-        except Organization.DoesNotExist:
-            return Response({'error': 'Organization not found'}, status=status.HTTP_404_NOT_FOUND)
+        person_org_details = PersonOrganizationDetails.objects.filter(Organization=organization)
+        members = [details.Person for details in person_org_details]
         
+        serializer = PersonSerializer(members, many=True)
+        return Response(serializer.data)
 
 class EventListView(APIView):
     permission_classes = [AllowAny]

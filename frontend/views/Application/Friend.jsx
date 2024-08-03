@@ -64,16 +64,16 @@ const Friends = ({ userId }) => {
                                                     </div>
                                                     <Row className="g-2">
                                                 <Col xs={6}>
-                                                    <div className="d-flex justify-content-between">
+                                                    <div className="d-flex justify-content-between cont-btn-ent">
                                                         <a
-                                                            className="btn btn-primary buttonorg_perf"
+                                                            className="btn btn-primary buttonorg_perf2"
                                                             href={`dashboard/${org.id}/home`}   
                                                             size="sm"
                                                         >
                                                             Enter
                                                         </a> 
                                                         <a
-                                                            className="btn btn-outline-primary buttonorg_perf"
+                                                            className="btn btn-outline-primary buttonorg_perf2"
                                                             href={`dashboard/${org.id}/organization`}
                                                             size="sm"
                                                         >

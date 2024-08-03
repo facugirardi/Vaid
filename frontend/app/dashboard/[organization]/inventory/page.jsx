@@ -4,6 +4,8 @@ import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faEllipsisV, faPlus, faPen } from '@fortawesome/free-solid-svg-icons';
 import './styles.css'; 
+import Layout from '@/layouts/dashboard/index';
+import BreadcrumbItem from '@/common/BreadcrumbItem';
 
 const Headquarters = () => {
   return (
@@ -182,21 +184,21 @@ const History = () => {
 
 const Page = () => {
   return (
-    <div className="dashboard">
-      <header className="header">
-        <nav>Dashboard &gt; Resources &gt; Inventory</nav>
-        <h1>Inventory</h1>
-      </header>
-      <div className="main-content">
-        <div className="left-column">
-          <Headquarters />
-          <History />
+    <Layout>
+      <BreadcrumbItem mainTitle="Resource Management" subTitle="Inventory" />
+      <div className="container">
+
+        <div className='row'>
+          <div className="col-md-6">
+            <Headquarters />
+            <History />
+          </div>
+          <div className="col-md-6">
+            <Inventory />
         </div>
-        <div className="right-column">
-          <Inventory />
         </div>
       </div>
-    </div>
+    </Layout>
   );
 };
 
