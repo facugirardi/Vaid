@@ -1,0 +1,39 @@
+.text-white {
+    margin-right: 10px;
+}
+
+.separator {
+    text-align: center;
+    margin-top: 30px !important;
+    margin-bottom: 20px !important;
+}
+
+.saprator {
+    position: relative;
+    text-align: center;
+    margin-top: 30px !important; /* Ajusta el margen según sea necesario */
+    margin-bottom: 10px; /* Ajusta el margen según sea necesario */
+}
+
+.ver-mas {
+    background-color: #ffffff; /* Color de fondo para el texto "ver más" */
+    padding: 5px 10px; /* Ajusta el relleno según sea necesario */
+    position: relative;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.saprator::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    border-top: 1px solid #ccc; /* Color de la línea */
+    z-index: 0;
+}
+
+.ver-mas:hover{
+    color: rgb(125, 123, 139);
+    transition: .1s;
+}

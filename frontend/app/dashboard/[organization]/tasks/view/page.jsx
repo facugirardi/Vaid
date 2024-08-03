@@ -1,58 +1,64 @@
-// page.jsx
-'use client'
+'use client';
 
-import React, { ReactElement, useEffect, useState } from "react";
-import Layout from '@/layouts/dashboard/index2';
+import React from "react";
+import Layout from '@/layouts/dashboard/index';
 import BreadcrumbItem from '@/common/BreadcrumbItem';
-import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
-import { ProgressBar, TabContainer, Col, Form, Card, Nav, Row, Tab } from "react-bootstrap";
-import './form.css';
-import ava2 from "@/public/assets/images/user/avatar-2.jpg";
 import Image from "next/image";
+import { userCard } from "@/common/JsonData"; 
+import './viewTask.css';
+import { Button, Card, Col, Collapse, Form, InputGroup, Modal, Row, Table } from "react-bootstrap";
 
 const Page = () => {
-
-
-    const { data: user, isError, isLoading } = useRetrieveUserQuery();
-    const [key, setKey] = useState('tab-1');
-    const [progress, setProgress] = useState(25);
-    const totalTabs = 4;
-
-    useEffect(() => {
-        // Calculate progress when the component mounts
-        const calculateProgress = () => {
-          return ((parseInt(key.split('-')[1]) - 1) / (totalTabs - 1)) * 100;
-        };
-        setProgress(calculateProgress());
-      }, [key, totalTabs]);
-
-    const handleTabSelect = (k) => {
-        setKey(k);
-    };
-
-    const handleNext = () => {
-        const nextKey = parseInt(key.split('-')[1]) + 1;
-        setKey(`tab-${nextKey}`);
-    };
-
-    const handlePrevious = () => {
-        const previousKey = parseInt(key.split('-')[1]) - 1;
-        setKey(`tab-${previousKey}`);
-    };
-
-
-    
-
-    if (isLoading) return <p>Loading...</p>;
-    if (isError || !user) return <p>Error loading user data!</p>;
-
     return (
         <Layout>
+            <BreadcrumbItem mainTitle="Tasks" subTitle="View Tasks" />
             <Row>
-                <Col>
-                    <BreadcrumbItem />
-                </Col>
+                {
+                    (userCard || []).map((item, index) => (
+                        <Col md={6} xl={4} key={index}>
+                            <Card className="user-card">
+                                <Card.Body>
+                                    <div className="user-cover-bg">
+                                        <Image 
+                                            src={item.bgImage} 
+                                            alt="image" 
+                                            className="img-fluid" 
+                                            width={500} 
+                                            height={200}
+                                        />
+                                        <div className="cover-data">
+                                            <div className="d-inline-flex align-items-center">
+                                                <span className="text-white"> Pending</span>
+                                                <i className="chat-badge bg-danger"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="separator mb-3">
+                                        <span className="task-name">Task Name</span>
+                                    </div>
+                                    <div>
+                                        <Form.Group>
+                                            <Row>
+                                                <Col>
+                                                    <Form.Control type="date" />
+                                                </Col>
+                                                <Col>
+                                                    <Form.Control type="time" />
+                                                </Col>
+                                            </Row>
+                                        </Form.Group>
+                                    </div>
+                                    <div className="saprator my-2">
+                                        <span className="ver-mas">view more</span>
+                                    </div>
+                                </Card.Body>
+                            </Card>
+                        </Col>
+                    ))
+                }
             </Row>
         </Layout>
-    ); 
+    );
 }
+
+export default Page;
