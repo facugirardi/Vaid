@@ -172,11 +172,13 @@ class TaskTagDetails(models.Model):
 
 class Event(models.Model):
     name = models.CharField(max_length=255)
-    description = models.CharField(max_length=255, default='Details to be announced')
-    date = models.DateField(default=timezone.now)
-    time = models.TimeField(default=timezone.now)
+    description = models.TextField()
+    date = models.DateField()
+    endDate = models.DateField()
+    time = models.TimeField()
+    endTime = models.TimeField()
+    file = models.FileField(upload_to='events/', null=True, blank=True)
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE) 
-
 
 class EventReport(models.Model):
     title = models.CharField(max_length=255)
