@@ -36,11 +36,15 @@ class OrganizationSerializer(serializers.ModelSerializer):
         model = Organization
         fields = '__all__'
 
+
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
         model = Task
         fields = '__all__'
-
+        extra_kwargs = {
+            'date': {'required': True},
+            'endDate': {'required': True}
+        }
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

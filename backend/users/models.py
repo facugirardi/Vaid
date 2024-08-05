@@ -153,9 +153,12 @@ class ProductInventoryDetails(models.Model):
 
 class Task(models.Model):
     name = models.CharField(max_length=255)
-    description = models.CharField(max_length=255, default='No description provided')
-    date = models.DateField(default=timezone.now)
-    time = models.TimeField(default=timezone.now)
+    description = models.TextField()
+    date = models.DateField()
+    endDate = models.DateField()
+    time = models.TimeField()
+    endTime = models.TimeField()
+    file = models.FileField(upload_to='tasks/', null=True, blank=True)
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE) 
 
 
