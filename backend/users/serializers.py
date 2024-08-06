@@ -86,11 +86,16 @@ class ProductStatusSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ProductSerializer(serializers.ModelSerializer):
+    Category = ProductCategorySerializer()
+    Status = ProductStatusSerializer()
+        
     class Meta:
         model = Product
         fields = '__all__'
 
 class ProductInventoryDetailsSerializer(serializers.ModelSerializer):
+    Product = ProductSerializer()
+    
     class Meta:
         model = ProductInventoryDetails
         fields = '__all__'

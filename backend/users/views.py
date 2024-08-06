@@ -759,7 +759,7 @@ class HeadquarterListCreateView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class HeadquarterDetailUpdateDestroyView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get_object(self, organization_id, pk):
         return get_object_or_404(Headquarter, pk=pk, Organization_id=organization_id)
@@ -781,3 +781,50 @@ class HeadquarterDetailUpdateDestroyView(APIView):
         headquarter = self.get_object(organization_id, pk)
         headquarter.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ProductView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = ProductSerializer(data=request.data)
+        
+        if serializer.is_valid():
+            product = serializer.save()
+            return Response(ProductSerializer(product).data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request):
+        products = Product.objects.all()
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    
+class ProductForHeadquarterView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, headquarter_id):
+        data = request.data
+        try:
+            inventory = Inventory.objects.get(Headquarter_id=headquarter_id)
+        except Inventory.DoesNotExist:
+            return Response({'error': 'Inventory for specified headquarter not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        data['Inventory'] = inventory.id
+        serializer = ProductInventoryDetailsSerializer(data=data)
+
+        if serializer.is_valid():
+            product_inventory_details = serializer.save()
+            return Response(ProductInventoryDetailsSerializer(product_inventory_details).data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def get(self, request, headquarter_id):
+        try:
+            inventory = Inventory.objects.get(Headquarter_id=headquarter_id)
+        except Inventory.DoesNotExist:
+            return Response({'error': 'Inventory for specified headquarter not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        product_inventory_details = ProductInventoryDetails.objects.filter(Inventory=inventory)
+        serializer = ProductInventoryDetailsSerializer(product_inventory_details, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

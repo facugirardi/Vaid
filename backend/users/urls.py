@@ -30,6 +30,10 @@ from .views import (
     TagDetailAPIView,
     PersonTagsAPIView,
     HeadquarterListCreateView,
+    ProductForHeadquarterView,
+    ProductView,
+    HeadquarterDetailUpdateDestroyView,
+    ProductForHeadquarterView
 )
 
 urlpatterns = [
@@ -72,5 +76,11 @@ urlpatterns = [
 
     path('user/<int:user_id>/tags/', PersonTagsAPIView.as_view(), name='tags-to-person'),
 
-    path('headquarters/<int:organization_id>/', HeadquarterListCreateView.as_view(), name='headquarter-list-create'),
+    path('headquarters/<int:organization_id>/', HeadquarterListCreateView.as_view(), name='headquarter-list'),
+    path('headquarters/<int:organization_id>/edit/<int:pk>/', HeadquarterDetailUpdateDestroyView.as_view(), name='headquarter-update-delete'),
+
+    path('products/', ProductView.as_view(), name='product-list'),
+
+    path('headquarters/<int:headquarter_id>/products/', ProductForHeadquarterView.as_view(), name='product-headquarter'),
+
 ]
