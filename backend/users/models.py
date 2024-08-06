@@ -226,3 +226,11 @@ class Image(models.Model):
 
     def __str__(self):
         return self.alt
+
+
+class History(models.Model):
+    user_id = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+    action = models.CharField(max_length=255)
+    description = models.CharField(max_length=255)
+    headquarter_id = models.ForeignKey(Headquarter, on_delete=models.CASCADE)
+    date = models.DateField(default=timezone.now)

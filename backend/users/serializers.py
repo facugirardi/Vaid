@@ -88,7 +88,7 @@ class ProductStatusSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer):
     Category = ProductCategorySerializer()
     Status = ProductStatusSerializer()
-        
+
     class Meta:
         model = Product
         fields = '__all__'
@@ -98,4 +98,9 @@ class ProductInventoryDetailsSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = ProductInventoryDetails
+        fields = '__all__'
+
+class HistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = History
         fields = '__all__'

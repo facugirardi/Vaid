@@ -828,3 +828,51 @@ class ProductForHeadquarterView(APIView):
         product_inventory_details = ProductInventoryDetails.objects.filter(Inventory=inventory)
         serializer = ProductInventoryDetailsSerializer(product_inventory_details, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
+class OrganizationHistoryView(APIView):
+    parmission_classes = [AllowAny]
+
+    def get(self, request, organization_id):
+        try:
+            # Verificar que la organización existe
+            organization = Organization.objects.get(id=organization_id)
+            
+            # Filtrar el historial de acciones de la ONG
+            history_records = History.objects.filter(headquarter_id__Organization=organization)
+            serializer = HistorySerializer(history_records, many=True)
+            
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        except Organization.DoesNotExist:
+            return Response({'error': 'Organization not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+    def post(self, request):
+        serializer = HistorySerializer(data=request.data)
+        
+        if serializer.is_valid():
+            user_id = serializer.validated_data.get('user_id')
+            headquarter_id = serializer.validated_data.get('headquarter_id')
+
+            # Verificar que el usuario y la sede existen
+            try:
+                user = UserAccount.objects.get(id=user_id)
+                headquarter = Headquarter.objects.get(id=headquarter_id)
+                
+                # Crear el historial
+                history = History.objects.create(
+                    user_id=user,
+                    action=serializer.validated_data['action'],
+                    description=serializer.validated_data['description'],
+                    headquarter_id=headquarter
+                )
+                
+                return Response({'message': 'Action recorded successfully', 'id': history.id}, status=status.HTTP_201_CREATED)
+
+            except UserAccount.DoesNotExist:
+                return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+            except Headquarter.DoesNotExist:
+                return Response({'error': 'Headquarter not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+    
