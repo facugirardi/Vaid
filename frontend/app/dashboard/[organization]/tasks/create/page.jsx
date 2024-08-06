@@ -135,7 +135,7 @@ const handleSubmit = async (event) => {
 
     return (
         <Layout>
-            <BreadcrumbItem mainTitle="Dashboard" subTitle="Task" />
+            <BreadcrumbItem mainTitle="Tasks" subTitle="Task" />
             <Row>
                 <Card>
                     <div id="sticky-action" className="sticky-action">

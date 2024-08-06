@@ -1,3 +1,4 @@
+
 .text-white {
     margin-right: 10px;
 }
@@ -34,6 +35,128 @@
 }
 
 .ver-mas:hover{
-    color: rgb(125, 123, 139);
-    transition: .1s;
+    font-weight: bold;
+    scale: 1.15;
+    transition: .3s;
+}
+
+.bg-success{
+   background-color: #4ddb20 !important;
+}
+
+.bg-danger{
+   background-color: #f03e05 !important;
+}
+
+.modal-content {
+    border-radius: 15px;
+    padding: 20px;
+    background-color: #fff;
+    border: none;
+}
+
+.modal-header {
+    border-bottom: none;
+}
+
+.modal-header .close {
+    padding: 0;
+    margin: 0;
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.modal-body {
+    font-size: 1rem;
+    color: #333;
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.modal-body .image-container {
+    margin-right: 20px;
+}
+
+.modal-body .details-container {
+    flex: 1;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-control {
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+.button-take {
+    background-color: #2A50CF;
+    color: #fff;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: .3s;
+    border: none;
+    width: 100px;
+}
+.button-take:hover{
+  background-color: blue;
+}
+
+.button-close {
+    background-color: #fff;
+    color: #000000;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    border: none;
+    width: 100px;
+    transition: .3s;
+    margin-left: 20px;
+    border: 1px solid #fff;
+}
+.button-close:hover{
+  border:.5px solid #000000 !important;
+}
+.img-popup-event{
+  width: 415px !important;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.img-task-list{
+  width: 455px !important;
+  height: 185px !important;
+}
+
+.title-modal-12{
+  font-size: 1rem !important;
+  color: #363636;
+  font-weight: 300 !important;
+}
+
+.title2-modal{
+  margin-top: -20px !important;
+  font-size: 1.4rem !important;
+  color: #5F5F5F;
+}
+
+.title3-modal{
+  margin-top: -10px !important;
+  font-size: 1rem !important;
+  color: #5F5F5F;
+}
+.title-dates{
+  color: #363636 !important;
+  font-weight: 300 !important;
+  font-size: 1rem !important;
+  margin-bottom: 0px !important;
 }

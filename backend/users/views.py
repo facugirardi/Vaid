@@ -20,7 +20,6 @@ from .models import Organization, Person, Image
 from .serializers import *
 from django.shortcuts import get_object_or_404
 
-
 class PersonOrganizationDetailsDeleteView(generics.GenericAPIView):
     permission_classes = [AllowAny]
     
@@ -34,7 +33,8 @@ class PersonOrganizationDetailsDeleteView(generics.GenericAPIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except PersonOrganizationDetails.DoesNotExist:
             return Response({'error': 'Details not found'}, status=status.HTTP_404_NOT_FOUND)
-                            
+                           
+
 class ApplyOrgView(APIView):
     permission_classes = [AllowAny]
 
@@ -275,7 +275,6 @@ class RejectCandidate(APIView):
             return Response({'error': 'Candidate not found'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
-
 
 
 class OrgView(generics.ListAPIView):
