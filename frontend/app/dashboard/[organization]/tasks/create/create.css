@@ -69,7 +69,17 @@
   .textarea-task{
     height: 148px !important;
   }
+  .submit-task{
+    background-color: #2A50CF;
+    border-color: #2A50CF;
+  }
 
-  .botontask{
-    margin-left: 25px;
+  .submit-task:hover{
+    background-color: #2A50FF;
+    border-color: #2A50FF;
+  }
+
+  .submit-task:active{
+    background-color: #2A50FF !important;
+    border-color: #2A50FF !important;
   }

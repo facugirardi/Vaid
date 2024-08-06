@@ -2,9 +2,23 @@
     margin-bottom: 0 !important;
 }
 
+.cont-btn-ent{
+  margin-right: -50%;
+  margin-left: 50%;
+}
+
 .buttonorg_perf{
-    margin-left: 50% !important;
-    margin-right: -50% !important
+    margin-left: 40% !important;
+    margin-right: -60% !important;
+}
+
+.buttonorg_perf2{
+    width: 100px !important;
+}
+
+.applybtn{
+    color: #fff !important;
+
 }
 
 .img-profile-avtar{

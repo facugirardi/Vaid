@@ -102,7 +102,7 @@ class SpecialCharPasswordValidator:
     """
 
     def validate(self, password, user=None):
-        special_char_regex = r'[!@#$%&+-.=<>?]'
+        special_char_regex = r'[!@#$%&+-.=<>?*]'
         if re.search(special_char_regex, password):
             pass
         else:
