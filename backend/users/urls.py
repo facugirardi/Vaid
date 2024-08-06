@@ -73,8 +73,8 @@ urlpatterns = [
     path('logout/', LogoutView.as_view()),
 
     #CRUD:
-    path('organization/', OrganizationListCreate.as_view()),
-    path('organization/<int:pk>/', OrganizationRetrieveUpdateDestroy.as_view()),
+    path('organizations/', OrganizationListCreate.as_view()),
+    path('organizations/<int:pk>/', OrganizationRetrieveUpdateDestroy.as_view()),
     path('headquarter/', HeadquarterListCreate.as_view()),
     path('headquarter/<int:pk>/', HeadquarterRetrieveUpdateDestroy.as_view()),
     path('status/', ProductStatusListCreate.as_view()),
@@ -82,7 +82,7 @@ urlpatterns = [
     path('category/', ProductCategoryListCreate.as_view()),
     path('category/<int:pk>/', ProductCategoryRetrieveUpdateDestroy.as_view()),
     path('product/', ProductListCreate.as_view()),
-    path('products/<int:pk>/', ProductRetrieveUpdateDestroy.as_view()),
+    path('product/<int:pk>/', ProductRetrieveUpdateDestroy.as_view()),
     path('inventory/', InventoryListCreate.as_view()),
     path('inventory/<int:pk>/', InventoryRetrieveUpdateDestroy.as_view()),
     path('productinventorydetails/', ProductInventoryDetailsListCreate.as_view()),
