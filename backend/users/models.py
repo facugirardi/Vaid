@@ -54,7 +54,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_completed = models.BooleanField(default=False)
-
+    is_form = models.BooleanField(default=False)
     objects = UserAccountManager()
 
     USERNAME_FIELD = 'email'
@@ -81,14 +81,25 @@ class Organization(models.Model):
     User = models.ForeignKey(UserAccount, on_delete=models.CASCADE) 
 
 class Person(models.Model):
+    User = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
     phone_number = models.CharField(max_length=255, default='000-000-0000')
     address = models.CharField(max_length=255, default='')
     disponibility = models.CharField(max_length=255, default='')
     born_date = models.DateField(default=timezone.now)
     country = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
-    User = models.ForeignKey(UserAccount, on_delete=models.CASCADE) 
-    
+    profession = models.CharField(max_length=255, blank=True, null=True)
+    experience = models.TextField(blank=True, null=True)
+    street_name = models.CharField(max_length=255, blank=True, null=True)
+    street_number = models.CharField(max_length=255, blank=True, null=True)
+    city = models.CharField(max_length=255, blank=True, null=True)
+    available_days = models.JSONField(default=list) 
+    available_times = models.JSONField(default=list)  
+    modality = models.CharField(max_length=255, blank=True, null=True)
+    topics = models.CharField(max_length=255, blank=True, null=True)
+    goals = models.TextField(blank=True, null=True)
+    motivations = models.TextField(blank=True, null=True)
+
 class PersonOrganizationDetails(models.Model):
     Person = models.ForeignKey(Person, on_delete=models.CASCADE)
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
@@ -142,9 +153,13 @@ class ProductInventoryDetails(models.Model):
 
 class Task(models.Model):
     name = models.CharField(max_length=255)
-    description = models.CharField(max_length=255, default='No description provided')
-    date = models.DateField(default=timezone.now)
-    time = models.TimeField(default=timezone.now)
+    description = models.TextField()
+    date = models.DateField()
+    endDate = models.DateField()
+    time = models.TimeField()
+    endTime = models.TimeField()
+    file = models.FileField(upload_to='tasks/', null=True, blank=True)
+    state = models.CharField(max_length=255)
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE) 
 
 
@@ -158,11 +173,14 @@ class TaskTagDetails(models.Model):
 
 class Event(models.Model):
     name = models.CharField(max_length=255)
-    description = models.CharField(max_length=255, default='Details to be announced')
-    date = models.DateField(default=timezone.now)
-    time = models.TimeField(default=timezone.now)
+    description = models.TextField()
+    date = models.DateField()
+    endDate = models.DateField()
+    time = models.TimeField()
+    endTime = models.TimeField()
+    file = models.FileField(upload_to='events/', null=True, blank=True)
+    state = models.CharField(max_length=255)
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE) 
-
 
 class EventReport(models.Model):
     title = models.CharField(max_length=255)

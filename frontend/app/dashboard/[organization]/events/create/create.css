@@ -1,0 +1,86 @@
+
+  .image-upload {
+    border: 100px;
+    border-radius: 100px;
+  }
+
+
+  .input-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
+
+
+  .upload-button {
+    border: 2px dashed #ccc;
+    border-radius: 5px;
+    width: 290px;
+    height: 290px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .preview-img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 5px;
+  }
+
+
+
+  /* create.css */
+  .upload-box {
+    width: 100%;
+    height: 300px;
+    border: 2px dashed #ccc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+
+  .upload-box:hover {
+    border-color: #888;
+  }
+
+  .preview-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+
+  .form-group-label {
+    margin-top: 10px;
+  }
+
+  .form-select {
+    margin-top: 10px;
+  }
+
+  .form-group-2 .form-label-2 {
+    margin-top: 10px;
+  }
+
+  .textarea-task{
+    height: 148px !important;
+  }
+  .submit-task{
+    background-color: #2A50CF;
+    border-color: #2A50CF;
+  }
+
+  .submit-task:hover{
+    background-color: #2A50FF;
+    border-color: #2A50FF;
+  }
+
+  .submit-task:active{
+    background-color: #2A50FF !important;
+    border-color: #2A50FF !important;
+  }

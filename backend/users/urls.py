@@ -21,6 +21,14 @@ from .views import (
     TaskListView,
     TaskUpdateDestroyView,
     RetrieveOrganizationView,
+    RetrieveOrganizationExtView,
+    RetrieveImageOrgView,
+    OrganizationMembersView,
+    EventListView,
+    EventUpdateDestroyView,
+    UserFormView,
+    ApplyOrgView,
+    PersonOrganizationDetailsDeleteView,
 )
 
 urlpatterns = [
@@ -30,13 +38,18 @@ urlpatterns = [
         name='provider-auth'
     ),
 
+    path('person-organization-details/<int:person_id>/<int:organization_id>/delete/', PersonOrganizationDetailsDeleteView.as_view()),
+    path('user/<int:user_id>/apply-org/<int:org_id>/', ApplyOrgView.as_view()),
+    path('user/form/<int:user_id>/', UserFormView.as_view()),
+    path('retrieve-logo-org', RetrieveImageOrgView.as_view()),
+    path('organization-ext/<int:user_id>/', RetrieveOrganizationExtView.as_view()),
     path('organization/<int:user_id>/', RetrieveOrganizationView.as_view()),
     path('user/all-organizations/', OrgView.as_view()),
     path('user/<int:user_id>/organizations/', RetrieveUserOrganizations.as_view()),
     path('person/<int:user_id>/', RetrievePersonView.as_view()),
     path('candidate/<int:candidate_id>/approve/', ApproveCandidate.as_view()),
     path('candidate/<int:candidate_id>/reject/', RejectCandidate.as_view()),
-    path('candidate-details', CandidateDetailView.as_view()),
+    path('candidate-details/<int:organization_id>/', CandidateDetailView.as_view()),
     path('retrieve-logo', RetrieveImageView.as_view()),
     path('upload-image', UploadImageView.as_view()),
     path('user/<int:user_id>/check-usertype', CheckUserType.as_view()),
@@ -48,6 +61,9 @@ urlpatterns = [
     path('jwt/refresh/', CustomTokenRefreshView.as_view()),
     path('jwt/verify/', CustomTokenVerifyView.as_view()),
     path('logout/', LogoutView.as_view()),
-    path('organizations/<str:name>/tasks/', TaskListView.as_view(), name='task-list'),
+    path('organizations/<int:pk>/tasks/', TaskListView.as_view(), name='task-list'),
     path('organizations/tasks/<int:pk>', TaskUpdateDestroyView.as_view(), name='task-update-delete'),
+    path('organizations/<int:organization_id>/members/', OrganizationMembersView.as_view(), name='organization-members'),
+    path('organizations/<int:pk>/events/', EventListView.as_view(), name='event-list'),
+    path('organizations/events/<int:pk>', EventUpdateDestroyView.as_view(), name='event-update-delete'),
 ]

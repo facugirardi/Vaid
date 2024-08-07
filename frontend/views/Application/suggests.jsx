@@ -1,16 +1,80 @@
 import Image from "next/image";
 import React, { useEffect, useState } from "react";
-import { Card, Col, Row, Tab, Button } from "react-bootstrap";
+import { Card, Col, Row, Tab } from "react-bootstrap";
 import '@/app/dashboard/profile.css';
 // img
 import avatar1 from "@/public/assets/images/user/avatar-1.jpg";
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
+import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
 const Suggestions = ({ userId }) => {
     const [organizations, setOrganizations] = useState([]);
     const [loading, setLoading] = useState(true);
     const { data: user } = useRetrieveUserQuery();
+    const { push } = useRouter();
+    const [userDetails, setUserDetails] = useState(null);
 
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      if (user.id) {
+        try {
+          const response = await fetch(`http://localhost:8000/api/person/${user.id}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+
+          if (response.status === 404) {
+            push('/not-found');
+            return;
+          }
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+
+          const data = await response.json();
+          setUserDetails(data);
+        } catch (error) {
+          toast.error(`Failed to retrieve user. Error: ${error.message}`);
+        }
+      }
+    };
+
+    if (user.id) {
+      fetchUserDetails();
+    }
+  }, [user.id]);
+    
+
+
+const handleApply = async (orgId) => {
+    if (userDetails.user.is_form === true) {
+        try {
+            const response = await fetch(`http://localhost:8000/api/user/${user.id}/apply-org/${orgId}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_id: user.id,
+                    org_id: orgId,
+                }),
+            });
+            const data = await response.json();
+            if (response.ok) {
+                toast.success('Join request sent successfully! Wait for approval!');
+            } else {
+                toast.error('Error sending join request. Contact support.');
+            }
+        } catch (error) {
+            console.error('Error: ', error);
+        }
+    } else {
+        push('/complete/form');
+    }
+};
     useEffect(() => {
         // Function to fetch user's organizations
         const fetchOrganizations = async () => {
@@ -68,15 +132,15 @@ const Suggestions = ({ userId }) => {
                                                 <Col xs={6}>
                                                     <div className="d-flex justify-content-between">
                                                         <a
-                                                            className="btn btn-primary buttonorg_perf"
-                                                            href={`dashboard/${org.name}/home`}   
+                                                            className="btn btn-primary buttonorg_perf applybtn"
+                                                            onClick={() => handleApply(org.id)}   
                                                             size="sm"
                                                         >
-                                                            Enter
+                                                            Apply
                                                         </a> 
                                                         <a
                                                             className="btn btn-outline-primary buttonorg_perf"
-                                                            href={`dashboard/${org.name}/home`}
+                                                            href={`dashboard/${org.id}/organization`}
                                                             size="sm"
                                                         >
                                                             Profile
@@ -100,6 +164,6 @@ const Suggestions = ({ userId }) => {
             </Tab.Pane>
         </React.Fragment>
     );
-}
+};
 
 export default Suggestions;

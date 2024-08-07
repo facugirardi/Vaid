@@ -1,61 +1,74 @@
+import avatar1 from "@/public/assets/images/user/avatar-1.jpg";
+import cover1 from "@/public/assets/images/user/img-user-cover-5.jpg";
 
-import avatar2 from '@/public/assets/images/user/avatar-2.jpg';
-
-export const userData = [
+const userCard = [
     {
-        Name: "Quinn Flynn",
-        avatar: avatar2,
-        Disponibility: "Mon/Tue/Sat",
-        Country: "Argentina",
-        Age: 19,
-        Requestdate: "2011/04/25",
-        Interviewed: "No",
+        id: 1,
+        avatar: avatar1,
+        bgImage: cover1,
+        color: "danger",
+        task_completion: "30%"
     },
     {
-        Name: "Garrett Winters",
-        avatar: avatar2,
-        Disponibility: "Tue/Wed/Thu/Fri/Sat",
-        Country: "Argentina",
-        Age: 63,
-        Requestdate: "2011/07/25",
-        Interviewed: "Yes",
+        id: 2,
+        avatar: avatar1,
+        bgImage: cover1,
+        color: "primary",
+        task_completion: "60%"
     },
     {
-        Name: "Ashton Cox",
-        avatar: avatar2,
-        Disponibility: "Mon/Tue/Wed/Thu/Fri/Sat/Sun",
-        Country: "Brazil",
-        Age: 66,
-        Requestdate: "2009/01/12",
-        Interviewed: "No",
+        id: 3,
+        avatar: avatar1,
+        bgImage: cover1,
+        color: "success",
+        task_completion: "90%"
     },
     {
-        Name: "Cedric Kelly",
-        avatar: avatar2,
-        Disponibility: "Sat/Sun",
-        Country: "Chile",
-        Age: 22,
-        Requestdate: "2012/03/29",
-        Interviewed: "Yes",
+        id: 4,
+        avatar: avatar1,
+        bgImage: cover1,
+        color: "warning",
+        task_completion: "40%"
     },
     {
-        Name: "Airi Satou",
-        avatar: avatar2,
-        Disponibility: "Mon/Wed",
-        Country: "Argentina",
-        Age: 33,
-        Requestdate: "2008/11/28",
-        Interviewed: "No",
+        id: 5,
+        avatar: avatar1,
+        bgImage: cover1,
+        color: "success",
+        task_completion: "90%"
     },
     {
-        Name: "Brielle Williamson",
-        avatar: avatar2,
-        Disponibility: "Tue/Wed",
-        Country: "Argentina",
-        Age: 61,
-        Requestdate: "2012/12/02",
-        Interviewed: "No",
+        id: 6,
+        avatar: avatar1,
+        bgImage: cover1,
+        color: "primary",
+        task_completion: "30%"
     },
+    {
+        id: 7,
+        avatar: avatar1,
+        bgImage: cover1,
+        color: "success",
+        task_completion: "60%"
+    },
+    {
+        id: 8,
+        avatar: avatar1,
+        bgImage: cover1,
+        color: "warning",
+        task_completion: "90%"
+    },
+    {
+        id: 9,
+        avatar: avatar1,
+        bgImage: cover1,
+        color: "success",
+        task_completion: "40%"
+    },
+    // {
+    //     id: 5,
+    //     avatar: avatar5,
+    //     task_completion: "90%"
+    // }
 ];
-
-
+export { userCard };
