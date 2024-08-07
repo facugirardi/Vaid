@@ -125,6 +125,16 @@ const Page = () => {
                                     width={300} 
                                     height={300}
                                 />
+                            <div>
+                          <div className='d-flex justify-content-center'>
+                           <button className="button-take">
+                              Join
+                          </button>
+                          <button className="button-close" onClick={handleCloseModal}>
+                            Close
+                          </button>
+                          </div>
+                          </div>
                             </div>
                             <div className="details-container col-md-7">
                                 <p className='title-modal-12'>Title</p><p className='title2-modal'>{selectedTask.name}</p>
@@ -133,36 +143,29 @@ const Page = () => {
                                     <div className="row">
                                         <div className='col-md-3'>
                                           <p className='title-dates'>Start Date</p>
-                                            <Form.Control type="date" defaultValue={selectedTask.date} />
+                                            <Form.Control type="date" defaultValue={selectedTask.date} readOnly/>
                                         </div>
                                         <div className="col-md-3">
                                           <p className='title-dates'>End Date</p>
-                                          <Form.Control type="date" defaultValue={selectedTask.endDate} />
+                                          <Form.Control type="date" defaultValue={selectedTask.endDate} readOnly/>
                                         </div>
                                         <div className="col-md-3">
                                             <p className='title-dates'>Start Time</p>
-                                            <Form.Control type="time" defaultValue={selectedTask.time} />
+                                            <Form.Control type="time" defaultValue={selectedTask.time} readOnly/>
                                         </div>
                                         <div className="col-md-3">
                                             <p className='title-dates'>End Time</p>
-                                            <Form.Control type="time" defaultValue={selectedTask.endTime} />
+                                            <Form.Control type="time" defaultValue={selectedTask.endTime} readOnly/>
                                         </div>
                                     </div>
                                 </Form.Group>
+                                    <p className='title-modal-12'>Attendance</p><p className='title3-modal'>No attendance found!</p>
                                     </div>
                                     </div>
                             </div>
                         </div>
                     )}
                 </Modal.Body>
-                <Modal.Footer className='d-flex justify-content-center'>
-                    <button className="button-take">
-                        Take
-                    </button>
-                      <button className="button-close" onClick={handleCloseModal}>
-                        Close
-                    </button>
-                </Modal.Footer>
             </Modal>
         </Layout>
     );
