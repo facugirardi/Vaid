@@ -831,7 +831,7 @@ class ProductForHeadquarterView(APIView):
     
 
 class OrganizationHistoryView(APIView):
-    parmission_classes = [AllowAny]
+    permission_classes = [AllowAny]
 
     def get(self, request, organization_id):
         try:
@@ -847,7 +847,7 @@ class OrganizationHistoryView(APIView):
         except Organization.DoesNotExist:
             return Response({'error': 'Organization not found'}, status=status.HTTP_404_NOT_FOUND)
         
-    def post(self, request):
+    def post(self, request, organization_id):
         serializer = HistorySerializer(data=request.data)
         
         if serializer.is_valid():

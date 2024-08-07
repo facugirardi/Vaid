@@ -33,7 +33,8 @@ from .views import (
     ProductForHeadquarterView,
     ProductView,
     HeadquarterDetailUpdateDestroyView,
-    ProductForHeadquarterView
+    ProductForHeadquarterView,
+    OrganizationHistoryView
 )
 
 urlpatterns = [
@@ -83,4 +84,5 @@ urlpatterns = [
 
     path('headquarters/<int:headquarter_id>/products/', ProductForHeadquarterView.as_view(), name='product-headquarter'),
 
+    path('organizations/<int:organization_id>/history/', OrganizationHistoryView.as_view(), name='organization-history')
 ]
