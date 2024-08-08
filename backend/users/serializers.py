@@ -104,3 +104,9 @@ class HistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = History
         fields = '__all__'
+
+class EventPersonSerializer(serializers.ModelSerializer):
+    
+    class Meta:
+        model = EventPersonDetails
+        fields = '__all__'

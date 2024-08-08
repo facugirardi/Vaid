@@ -876,3 +876,61 @@ class OrganizationHistoryView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
     
+
+class EventAttendanceView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        event_id = request.query_params.get('event_id')
+
+        try:
+            event = Event.objects.get(id=event_id)
+            list = EventPersonDetails.objects.filter(Event=event)
+            serializers = EventPersonSerializer(list, many=True)
+            return Response(serializers.data, status=status.HTTP_200_OK)
+
+        except Event.DoesNotExist:
+            return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+
+    def post(self, request):
+        person_id = request.query_params.get('person_id')
+        event_id = request.query_params.get('event_id')
+
+        try:
+            person = Person.objects.get(id=person_id)
+            event = Event.objects.get(id=event_id)
+
+            # Verificar si ya está registrado
+            if EventPersonDetails.objects.filter(Person=person, Event=event).exists():
+                return Response({'error': 'Person is already attending this event'}, status=status.HTTP_400_BAD_REQUEST)
+
+            event_person_details = EventPersonDetails.objects.create(Person=person, Event=event)
+            serializer = EventPersonSerializer(event_person_details)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        except Person.DoesNotExist:
+            return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Event.DoesNotExist:
+            return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    def delete(self, request):
+        person_id = request.query_params.get('person_id')
+        event_id = request.query_params.get('event_id')
+
+        try:
+            person = Person.objects.get(id=person_id)
+            event = Event.objects.get(id=event_id)
+
+            try:
+                event_person_details = EventPersonDetails.objects.get(Person=person, Event=event)
+                event_person_details.delete()
+                return Response(status=status.HTTP_204_NO_CONTENT)
+
+            except EventPersonDetails.DoesNotExist:
+                return Response({'error': 'Person is not attending this event'}, status=status.HTTP_404_NOT_FOUND)
+
+        except Person.DoesNotExist:
+            return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Event.DoesNotExist:
+            return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
