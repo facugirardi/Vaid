@@ -159,6 +159,7 @@ class Task(models.Model):
     time = models.TimeField()
     endTime = models.TimeField()
     file = models.FileField(upload_to='tasks/', null=True, blank=True)
+    state = models.CharField(max_length=255)
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE) 
 
 
@@ -178,6 +179,7 @@ class Event(models.Model):
     time = models.TimeField()
     endTime = models.TimeField()
     file = models.FileField(upload_to='events/', null=True, blank=True)
+    state = models.CharField(max_length=255)
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE) 
 
 class EventReport(models.Model):
