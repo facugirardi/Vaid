@@ -173,7 +173,7 @@ const Page = () => {
                 </Col>
             </Row>
 
-            <Modal show={showModal} onHide={handleCloseModal}>
+            <Modal show={showModal} onHide={handleCloseModal} centered backdropClassName="modal-backdrop">
                 <Modal.Header closeButton>
                     <Modal.Title>Candidate Information</Modal.Title>
                 </Modal.Header>

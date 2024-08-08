@@ -51,7 +51,69 @@ class UserSerializer(serializers.ModelSerializer):
         model = UserAccount
         fields = '__all__'
 
+
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = '__all__'
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = '__all__'
+
+class PersonTagDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PersonTagDetails
+        fields = '__all__'
+
+class TaskTagDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TaskTagDetails
+        fields = '__all__'
+
+class AssignTagsToPersonSerializer(serializers.Serializer):
+    tags = serializers.ListField(child=serializers.IntegerField())
+    person = serializers.PrimaryKeyRelatedField(queryset=Person.objects.all())
+
+class HeadquarterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Headquarter
+        fields = '__all__'
+
+class InventorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Inventory
+        fields = '__all__'
+
+class ProductCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductCategory
+        fields = '__all__'
+
+class ProductStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductStatus
+        fields = '__all__'
+
+class ProductSerializer(serializers.ModelSerializer):
+    Category = ProductCategorySerializer()
+    Status = ProductStatusSerializer()
+
+    class Meta:
+        model = Product
+        fields = '__all__'
+
+class ProductInventoryDetailsSerializer(serializers.ModelSerializer):
+    Product = ProductSerializer()
+
+    class Meta:
+        model = ProductInventoryDetails
+        fields = '__all__'
+
+class HistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = History
+        fields = '__all__'
+

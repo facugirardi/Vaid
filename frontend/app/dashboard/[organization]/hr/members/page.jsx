@@ -164,7 +164,7 @@ return (
             </Col>
         </Row>
 
-        <Modal show={showModal} onHide={handleCloseModal}>
+        <Modal show={showModal} onHide={handleCloseModal} centered backdropClassName="modal-backdrop">
             <Modal.Header closeButton>
                 <Modal.Title>Member Information</Modal.Title>
             </Modal.Header>

@@ -29,6 +29,15 @@ from .views import (
     UserFormView,
     ApplyOrgView,
     PersonOrganizationDetailsDeleteView,
+    TagListCreateAPIView,
+    TagDetailAPIView,
+    PersonTagsAPIView,
+    HeadquarterListCreateView,
+    ProductForHeadquarterView,
+    ProductView,
+    HeadquarterDetailUpdateDestroyView,
+    ProductForHeadquarterView,
+    OrganizationHistoryView,
 )
 
 urlpatterns = [
@@ -66,4 +75,12 @@ urlpatterns = [
     path('organizations/<int:organization_id>/members/', OrganizationMembersView.as_view(), name='organization-members'),
     path('organizations/<int:pk>/events/', EventListView.as_view(), name='event-list'),
     path('organizations/events/<int:pk>', EventUpdateDestroyView.as_view(), name='event-update-delete'),
+    path('organizations/<int:organization_id>/tags/', TagListCreateAPIView.as_view(), name='tag-list-create'),
+    path('organizations/<int:organization_id>/tags/<int:pk>/', TagDetailAPIView.as_view(), name='tag-detail'),
+    path('user/<int:user_id>/tags/', PersonTagsAPIView.as_view(), name='tags-to-person'),
+    path('headquarters/<int:organization_id>/', HeadquarterListCreateView.as_view(), name='headquarter-list'),
+    path('headquarters/<int:organization_id>/edit/<int:pk>/', HeadquarterDetailUpdateDestroyView.as_view(), name='headquarter-update-delete'),
+    path('products/', ProductView.as_view(), name='product-list'),
+    path('headquarters/<int:headquarter_id>/products/', ProductForHeadquarterView.as_view(), name='product-headquarter'),
+    path('organizations/<int:organization_id>/history/', OrganizationHistoryView.as_view(), name='organization-history'),
 ]

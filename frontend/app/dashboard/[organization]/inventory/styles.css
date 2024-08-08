@@ -2,7 +2,6 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background: #f4f4f9;
 }
 
 .dashboard {
@@ -144,3 +143,19 @@ table th {
 .fa-ellipsis-v {
     margin-left: 10px;
 }
+
+.trash-btn{
+  margin-left: 15px !important;
+}
+
+.tr-class{
+  cursor: pointer;
+}
+.modal-backdrop {
+  background-color: transparent;
+}
+
+.modal-open .modal {
+  backdrop-filter: blur(5px); /* Adjust the blur amount as needed */
+}
+

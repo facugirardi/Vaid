@@ -758,3 +758,217 @@ class EventUpdateDestroyView(APIView):
         
         event.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class TagListCreateAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, organization_id):
+        organization = get_object_or_404(Organization, id=organization_id)
+        tags = Tag.objects.filter(Organization=organization)
+        serializer = TagSerializer(tags, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, organization_id):
+        organization = get_object_or_404(Organization, id=organization_id)
+        data = request.data.copy()
+        data['Organization'] = organization.id
+        serializer = TagSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class TagDetailAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get_object(self, organization_id, pk):
+        return get_object_or_404(Tag, pk=pk, Organization_id=organization_id)
+
+    def get(self, request, organization_id, pk):
+        tag = self.get_object(organization_id, pk)
+        serializer = TagSerializer(tag)
+        return Response(serializer.data)
+
+    def put(self, request, organization_id, pk):
+        tag = self.get_object(organization_id, pk)
+        data = request.data.copy()
+        data['Organization'] = organization_id
+        serializer = TagSerializer(tag, data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, organization_id, pk):
+        tag = self.get_object(organization_id, pk)
+        tag.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class PersonTagsAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, user_id):
+        try:
+            # Obtener todas las etiquetas asociadas a la persona
+            person_tags = PersonTagDetails.objects.filter(Person__id=user_id)
+            tags = [detail.Tag for detail in person_tags]  # Obtener solo las etiquetas
+
+            # Serializar las etiquetas
+            serializer = TagSerializer(tags, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Person.DoesNotExist:
+            return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request, user_id):
+        person = get_object_or_404(Person, id=user_id)
+        data = request.data.copy()
+        data['person'] = person.id
+
+        serializer = AssignTagsToPersonSerializer(data=data)
+        if serializer.is_valid():
+            tags = serializer.validated_data['tags']
+            for tag_id in tags:
+                tag = get_object_or_404(Tag, id=tag_id)
+                PersonTagDetails.objects.create(Person=person, Tag=tag)
+
+            return Response({'message': 'Tags assigned successfully'}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class HeadquarterListCreateView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, organization_id):
+        headquarters = Headquarter.objects.filter(Organization__id=organization_id)
+        serializer = HeadquarterSerializer(headquarters, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request, organization_id):
+        serializer = HeadquarterSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save(Organization=organization_id)  # Asegúrate de que el usuario tiene la organización
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class HeadquarterDetailUpdateDestroyView(APIView):
+    permission_classes = [AllowAny]
+
+    def get_object(self, organization_id, pk):
+        return get_object_or_404(Headquarter, pk=pk, Organization_id=organization_id)
+
+    def get(self, request, organization_id, pk):
+        headquarter = self.get_object(organization_id, pk)
+        serializer = HeadquarterSerializer(headquarter)
+        return Response(serializer.data)
+
+    def put(self, request, organization_id, pk):
+        headquarter = self.get_object(organization_id, pk)
+        serializer = HeadquarterSerializer(headquarter, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, organization_id, pk):
+        headquarter = self.get_object(organization_id, pk)
+        headquarter.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ProductView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = ProductSerializer(data=request.data)
+
+        if serializer.is_valid():
+            product = serializer.save()
+            return Response(ProductSerializer(product).data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request):
+        products = Product.objects.all()
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class ProductForHeadquarterView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, headquarter_id):
+        data = request.data
+        try:
+            inventory = Inventory.objects.get(Headquarter_id=headquarter_id)
+        except Inventory.DoesNotExist:
+            return Response({'error': 'Inventory for specified headquarter not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        data['Inventory'] = inventory.id
+        serializer = ProductInventoryDetailsSerializer(data=data)
+
+        if serializer.is_valid():
+            product_inventory_details = serializer.save()
+            return Response(ProductInventoryDetailsSerializer(product_inventory_details).data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def get(self, request, headquarter_id):
+        try:
+            inventory = Inventory.objects.get(Headquarter_id=headquarter_id)
+        except Inventory.DoesNotExist:
+            return Response({'error': 'Inventory for specified headquarter not found'}, status=status.HTTP_404_NOT_FOUND)
+            
+
+        product_inventory_details = ProductInventoryDetails.objects.filter(Inventory=inventory)
+        serializer = ProductInventoryDetailsSerializer(product_inventory_details, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class OrganizationHistoryView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, organization_id):
+        try:
+            # Verificar que la organización existe
+            organization = Organization.objects.get(id=organization_id)
+
+            # Filtrar el historial de acciones de la ONG
+            history_records = History.objects.filter(headquarter_id__Organization=organization)
+            serializer = HistorySerializer(history_records, many=True)
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        except Organization.DoesNotExist:
+            return Response({'error': 'Organization not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request, organization_id):
+        serializer = HistorySerializer(data=request.data)
+
+        if serializer.is_valid():
+            user_id = serializer.validated_data.get('user_id')
+            headquarter_id = serializer.validated_data.get('headquarter_id')
+
+            # Verificar que el usuario y la sede existen
+            try:
+                user = UserAccount.objects.get(id=user_id)
+                headquarter = Headquarter.objects.get(id=headquarter_id)
+
+                # Crear el historial
+                history = History.objects.create(
+                    user_id=user,
+                    action=serializer.validated_data['action'],
+                    description=serializer.validated_data['description'],
+                    headquarter_id=headquarter
+                )
+
+                return Response({'message': 'Action recorded successfully', 'id': history.id}, status=status.HTTP_201_CREATED)
+
+            except UserAccount.DoesNotExist:
+                return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+            except Headquarter.DoesNotExist:
+                return Response({'error': 'Headquarter not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
+
+
