@@ -877,6 +877,9 @@ class OrganizationHistoryView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
     
 
+
+#PROBRAR LA FUNCONES DE ABAJO(Si funciona el query_params y en postman. Sino cambia pasando el user_id por parametro en la url)
+
 class EventAttendanceView(APIView):
     permission_classes = [AllowAny]
 
@@ -960,16 +963,16 @@ class CheckMembershipView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        user_id = request.query_params.get('user_id')
-        organization_id = request.query_params.get('organization_id')
+        user_id = request.query_params.get('person_id')
         event_id = request.query_params.get('event_id')
 
-        try:
-            user = User.objects.get(id=user_id)
-            event = Event.objects.get(id=event_id)
-            organization = Organization.objects.get(id=organization_id)
 
-            if PersonOrganizationDetails.objects.filter(Person__User=user, Organization = organization).exists():
+        try:
+            person = Person.objects.get(id=user_id)
+            event = Event.objects.get(id=event_id)
+            organization = Organization.objects.get(id=event.Organization.id)
+
+            if PersonOrganizationDetails.objects.filter(Person= person, Organization = organization).exists():
                 return Response({'is_member': True, 'event_id': event.id}, status=status.HTTP_200_OK)
             return Response({'is_member': False, 'event_id': event.id}, status=status.HTTP_403_FORBIDDEN)
         
@@ -977,6 +980,52 @@ class CheckMembershipView(APIView):
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
         except Event.DoesNotExist:
             return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
-        except Organization.DoesNotExist:
-            return Response({'error': 'Organization not found'}, status=status.HTTP_404_NOT_FOUND)
+       
 
+class  TaskParticipationView(APIView):
+    permission_classes = [AllowAny]
+    
+    def post(self, request):
+        person_id = request.query_params.get('person_id')
+        task_id = request.query_params.get('task_id')
+
+        if not person_id or not task_id:
+            return Response({'error': 'person_id and task_id are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            person = Person.objects.get(id=person_id)
+            task = Task.objects.get(id=task_id)
+
+            if TaskPersonDetails.objects.filter(Person=person, Task=task).exists():
+                return Response({'error': 'Person is already assigned to this task'}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Crear la instancia de TaskPersonDetails
+            task_person_details = TaskPersonDetails.objects.create(Person=person, Task=task)
+            return Response({'message': 'Task taken successfully', 'task_person_details': TaskPersonDetailsSerializer(task_person_details).data}, status=status.HTTP_201_CREATED)
+
+        except Person.DoesNotExist:
+            return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Task.DoesNotExist:
+            return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+    def delete(self, request):
+        person_id = request.query_params.get('person_id')
+        task_id = request.query_params.get('task_id')
+
+        try:
+            person = Person.objects.get(id=person_id)
+            task = Task.objects.get(id=task_id)
+
+            try:
+                task_person_details = TaskPersonDetails.objects.get(Person=person, Task=task)
+                task_person_details.delete()
+                return Response({'message': 'Task left successfully'}, status=status.HTTP_204_NO_CONTENT)
+
+            except TaskPersonDetails.DoesNotExist:
+                return Response({'error': 'Person is not assigned to this task'}, status=status.HTTP_404_NOT_FOUND)
+
+        except Person.DoesNotExist:
+            return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Task.DoesNotExist:
+            return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)

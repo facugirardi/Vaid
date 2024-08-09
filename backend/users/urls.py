@@ -37,7 +37,8 @@ from .views import (
     OrganizationHistoryView,
     EventAttendanceView,
     CreateInvitationView,
-    CheckMembershipView
+    CheckMembershipView,
+    TaskParticipationView,
 )
 
 urlpatterns = [
@@ -90,4 +91,10 @@ urlpatterns = [
     path('organizations/<int:organization_id>/history/', OrganizationHistoryView.as_view(), name='organization-history'),
 
     path('events/attendance/', EventAttendanceView.as_view(), name='event-attendance'),
+
+    path('organizations/invitations/', CreateInvitationView.as_view(), name='create-invitation'),
+    path('organizations/membership/', CheckMembershipView.as_view(), name='check-membership'),
+
+    path('organizations/tasks/participation/', TaskParticipationView.as_view(), name='task-participation'),
 ]
+#genrar url de los links de las invitaiones

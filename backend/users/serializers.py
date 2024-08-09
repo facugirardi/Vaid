@@ -106,6 +106,7 @@ class HistorySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class EventPersonSerializer(serializers.ModelSerializer):
+    Person = PersonSerializer()
     
     class Meta:
         model = EventPersonDetails
@@ -114,4 +115,9 @@ class EventPersonSerializer(serializers.ModelSerializer):
 class InvitedEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Invitation
+        fields = '__all__'
+
+class TaskPersonDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TaskPersonDetails
         fields = '__all__'
