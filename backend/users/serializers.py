@@ -110,3 +110,8 @@ class EventPersonSerializer(serializers.ModelSerializer):
     class Meta:
         model = EventPersonDetails
         fields = '__all__'
+
+class InvitedEventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Invitation
+        fields = '__all__'

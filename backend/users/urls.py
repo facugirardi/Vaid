@@ -35,7 +35,9 @@ from .views import (
     HeadquarterDetailUpdateDestroyView,
     ProductForHeadquarterView,
     OrganizationHistoryView,
-    EventAttendanceView
+    EventAttendanceView,
+    CreateInvitationView,
+    CheckMembershipView
 )
 
 urlpatterns = [

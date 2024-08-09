@@ -234,3 +234,8 @@ class History(models.Model):
     description = models.CharField(max_length=255)
     headquarter_id = models.ForeignKey(Headquarter, on_delete=models.CASCADE)
     date = models.DateField(default=timezone.now)
+
+
+class Invitation(models.Model):
+    Event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    status = models.BooleanField(default=False)

@@ -934,3 +934,49 @@ class EventAttendanceView(APIView):
             return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
         except Event.DoesNotExist:
             return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+
+class CreateInvitationView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        event_id = request.query_params.get('event_id')
+
+        try:
+            event = Event.objects.get(id=event_id)
+
+            if Invitation.objects.filter(Event=event).exists():
+                return Response({'error': 'Invitation is already attending this event'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            invitation = Invitation.objects.create(Event=event, status=True)
+            serializer = InvitedEventSerializer(invitation)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        except Event.DoesNotExist:
+            return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+
+class CheckMembershipView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        user_id = request.query_params.get('user_id')
+        organization_id = request.query_params.get('organization_id')
+        event_id = request.query_params.get('event_id')
+
+        try:
+            user = User.objects.get(id=user_id)
+            event = Event.objects.get(id=event_id)
+            organization = Organization.objects.get(id=organization_id)
+
+            if PersonOrganizationDetails.objects.filter(Person__User=user, Organization = organization).exists():
+                return Response({'is_member': True, 'event_id': event.id}, status=status.HTTP_200_OK)
+            return Response({'is_member': False, 'event_id': event.id}, status=status.HTTP_403_FORBIDDEN)
+        
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Event.DoesNotExist:
+            return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Organization.DoesNotExist:
+            return Response({'error': 'Organization not found'}, status=status.HTTP_404_NOT_FOUND)
+
