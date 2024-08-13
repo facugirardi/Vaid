@@ -846,11 +846,17 @@ class HeadquarterListCreateView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request, organization_id):
-        serializer = HeadquarterSerializer(data=request.data)
+        organization = get_object_or_404(Organization, pk=organization_id)  # Obtener la instancia de la organización
+
+        data = request.data.copy()  # Hacer una copia de los datos enviados
+        data['Organization'] = organization.id  # Asignar la organización al diccionario de datos
+
+        serializer = HeadquarterSerializer(data=data)
         if serializer.is_valid():
-            serializer.save(Organization=organization_id)  # Asegúrate de que el usuario tiene la organización
+            serializer.save(Organization=organization)  # Pasar la instancia de la organización
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class HeadquarterDetailUpdateDestroyView(APIView):
     permission_classes = [AllowAny]
@@ -893,6 +899,11 @@ class ProductView(APIView):
         products = Product.objects.all()
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def delete(self, request, pk):
+        product = get_object_or_404(Product, pk=pk)
+        product.delete()
+        return Response({"message": "Product deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
 
 class ProductForHeadquarterView(APIView):
     permission_classes = [AllowAny]
@@ -972,3 +983,40 @@ class OrganizationHistoryView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
 
 
+class ProductCreateView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, organization_id, headquarter_id):
+        headquarter = get_object_or_404(Headquarter, pk=headquarter_id, Organization_id=organization_id)
+        inventory, created = Inventory.objects.get_or_create(Headquarter=headquarter)
+        
+        # Obtener el nombre de la categoría desde los datos de la solicitud
+        category_name = request.data.get('Category')
+
+        # Verificar si la categoría existe, si no, crearla
+        category, created = ProductCategory.objects.get_or_create(name=category_name)
+        
+        # Reemplazar el nombre de la categoría con su ID en los datos de la solicitud
+        request.data['Category'] = category.id
+        
+        # Serializar y validar el producto
+        product_serializer = ProductSerializer(data=request.data)
+        
+        if product_serializer.is_valid():
+            print('8')
+            product = product_serializer.save()
+
+            # Crear la entrada de detalles del inventario
+            product_inventory_details = ProductInventoryDetails.objects.create(
+                Product=product,
+                Inventory=inventory,
+                cuantity=request.data.get('quantity', 0)
+            )
+
+            return Response(ProductInventoryDetailsSerializer(product_inventory_details).data, status=status.HTTP_201_CREATED)
+        
+        else:
+            # Si la validación falla, imprime los errores para depuración
+            print('Errores del serializador:', product_serializer.errors)
+        
+        return Response(product_serializer.errors, status=status.HTTP_400_BAD_REQUEST)

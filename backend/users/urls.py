@@ -38,6 +38,7 @@ from .views import (
     HeadquarterDetailUpdateDestroyView,
     ProductForHeadquarterView,
     OrganizationHistoryView,
+    ProductCreateView,
 )
 
 urlpatterns = [
@@ -83,4 +84,6 @@ urlpatterns = [
     path('products/', ProductView.as_view(), name='product-list'),
     path('headquarters/<int:headquarter_id>/products/', ProductForHeadquarterView.as_view(), name='product-headquarter'),
     path('organizations/<int:organization_id>/history/', OrganizationHistoryView.as_view(), name='organization-history'),
+    path('products/<int:pk>/', ProductView.as_view(), name='product-detail-delete'),
+    path('headquarters/<int:organization_id>/<int:headquarter_id>/products/', ProductCreateView.as_view(), name='add-product'),
 ]

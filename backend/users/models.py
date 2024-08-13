@@ -128,7 +128,6 @@ class ProductStatus(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
-    description = models.CharField(max_length=255)
     Category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
     Status = models.ForeignKey(ProductStatus, on_delete=models.CASCADE)
 

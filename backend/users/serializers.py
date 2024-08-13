@@ -79,7 +79,13 @@ class AssignTagsToPersonSerializer(serializers.Serializer):
 class HeadquarterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Headquarter
-        fields = '__all__'
+        fields = ['name', 'address', 'id']  # Omitir el campo Organization si se lo asignará manualmente
+
+    def create(self, validated_data):
+        # Excluir Organization del validated_data
+        organization = validated_data.pop('Organization')
+        headquarter = Headquarter.objects.create(**validated_data, Organization=organization)
+        return headquarter
 
 class InventorySerializer(serializers.ModelSerializer):
 
@@ -98,8 +104,10 @@ class ProductStatusSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ProductSerializer(serializers.ModelSerializer):
-    Category = ProductCategorySerializer()
-    Status = ProductStatusSerializer()
+    Category = serializers.PrimaryKeyRelatedField(queryset=ProductCategory.objects.all())
+    Status = serializers.PrimaryKeyRelatedField(queryset=ProductStatus.objects.all())
+    category_name = serializers.CharField(source='Category.name', read_only=True)
+    status_name = serializers.CharField(source='Status.name', read_only=True)
 
     class Meta:
         model = Product
