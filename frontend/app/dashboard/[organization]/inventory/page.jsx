@@ -64,6 +64,8 @@ const Headquarters = ({ onHeadquarterClick }) => {
   };
 
   const handleSubmit = async (event) => {
+    event.preventDefault();
+
     const formData = new FormData(event.target);
 
     const data = {
@@ -216,6 +218,7 @@ const Inventory = ({ headquarterId, organizationId }) => {
             console.log('Producto borrado con éxito');
             setInventory(inventory.filter(item => item.id !== selectedProduct.id));
             setShowDeleteProductModal(false);
+            
         } else {
             console.error('Error al borrar el producto:', response.status);
         }
@@ -228,11 +231,16 @@ const Inventory = ({ headquarterId, organizationId }) => {
     event.preventDefault();
 
     const formData = new FormData(event.target);
+    let expDate = formData.get('expDate');
+    if (expDate === '') {
+        expDate = null;  // Si la fecha está vacía, establecerla como null
+    }
+
     const data = {
         name: formData.get('name'),
         description: formData.get('description'),
         Category: formData.get('Category'), 
-        expDate: formData.get('expDate'),
+        expDate: expDate,
         Status: 1,
         quantity: parseInt(formData.get('quantity')), 
     };
@@ -357,8 +365,8 @@ const Inventory = ({ headquarterId, organizationId }) => {
               <p><strong>Name:</strong> {selectedProduct.name}</p>
               <p><strong>Category:</strong> {selectedProduct.category_name}</p>
               <p><strong>Status:</strong> {selectedProduct.status_name}</p>
-              <p><strong>Expiration Date:</strong> {selectedProduct.expDate}</p>
-            </div>
+              <p><strong>Expiration Date:</strong> {selectedProduct.expDate ? selectedProduct.expDate : '-'}</p>
+              </div>
           )}
         </Modal.Body>
       </Modal>

@@ -112,6 +112,10 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
+        extra_kwargs = {
+            'expDate': {'required': False, 'allow_null': True}  # Permitir null
+        }
+
 
 class ProductInventoryDetailsSerializer(serializers.ModelSerializer):
     Product = ProductSerializer()
