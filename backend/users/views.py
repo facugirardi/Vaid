@@ -1029,3 +1029,37 @@ class  TaskParticipationView(APIView):
             return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
         except Task.DoesNotExist:
             return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+
+class OperationAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, organization_id, operation_id=None):
+        if operation_id:
+            operation = get_object_or_404(Operation, id=operation_id, Organization_id=organization_id)
+            serializer = OperationSerializer(operation)
+            return Response(serializer.data)
+        else:
+            operations = Operation.objects.filter(Organization_id=organization_id)
+            serializer = OperationSerializer(operations, many=True)
+            return Response(serializer.data)
+
+    def post(self, request, organization_id):
+        request.data['Organization'] = organization_id
+        serializer = OperationSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, organization_id, operation_id):
+        operation = get_object_or_404(Operation, id=operation_id, Organization_id=organization_id)
+        operation.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+class OperationTypeListView(generics.ListAPIView):
+    permission_classes = [AllowAny]
+    queryset = OperationType.objects.all()
+    serializer_class = OperationTypeSerializer
+

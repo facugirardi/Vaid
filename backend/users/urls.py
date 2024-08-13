@@ -39,6 +39,8 @@ from .views import (
     CreateInvitationView,
     CheckMembershipView,
     TaskParticipationView,
+    OperationAPIView,
+    OperationTypeListView
 )
 
 urlpatterns = [
@@ -96,5 +98,11 @@ urlpatterns = [
     path('organizations/membership/', CheckMembershipView.as_view(), name='check-membership'),
 
     path('organizations/tasks/participation/', TaskParticipationView.as_view(), name='task-participation'),
+
+    path('organization/<int:organization_id>/operation/', OperationAPIView.as_view(), name='operation-list-create'),
+    path('organization/<int:organization_id>/operation/<int:operation_id>/', OperationAPIView.as_view(), name='operation-detail-delete'),
+
+    path('organization/operation-type/', OperationTypeListView.as_view(), name='operation-type-list-create'),
+
 ]
 #genrar url de los links de las invitaiones
