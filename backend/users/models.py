@@ -128,6 +128,7 @@ class ProductStatus(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
+    expDate = models.DateField(null=True) 
     Category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
     Status = models.ForeignKey(ProductStatus, on_delete=models.CASCADE)
 
@@ -250,3 +251,16 @@ class PersonTagDetails(models.Model):
 class TaskTagDetails(models.Model):
     Tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
     Task = models.ForeignKey(Task, on_delete=models.CASCADE)
+
+
+class History(models.Model):
+    user_id = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+    action = models.CharField(max_length=255)
+    description = models.CharField(max_length=255)
+    headquarter_id = models.ForeignKey(Headquarter, on_delete=models.CASCADE)
+    date = models.DateField(default=timezone.now)
+
+
+class Invitation(models.Model):
+    Event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    status = models.BooleanField(default=False)

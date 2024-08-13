@@ -4,6 +4,16 @@ body {
     padding: 0;
 }
 
+.hover-button-trash:hover{
+    color: #c81d1d;
+    transition: .2s;
+}
+
+.hover-button:hover{
+    color: #2950CE;
+    transition: .2s;
+}
+
 .dashboard {
     display: flex;
     flex-direction: column;
@@ -151,6 +161,12 @@ table th {
 .tr-class{
   cursor: pointer;
 }
+.tr-class:hover{
+    background-color: #f2f1f6;
+    transition: .2s;
+
+}
+
 .modal-backdrop {
   background-color: transparent;
 }
