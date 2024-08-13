@@ -40,7 +40,8 @@ from .views import (
     CheckMembershipView,
     TaskParticipationView,
     OperationAPIView,
-    OperationTypeListView
+    OperationTypeListView,
+    ProductDetailUpdateDestroyView
 )
 
 urlpatterns = [
@@ -87,6 +88,7 @@ urlpatterns = [
     path('headquarters/<int:organization_id>/edit/<int:pk>/', HeadquarterDetailUpdateDestroyView.as_view(), name='headquarter-update-delete'),
 
     path('products/', ProductView.as_view(), name='product-list'),
+    path('products/<int:pk>/', ProductDetailUpdateDestroyView.as_view(), name='product-update-delete'),
 
     path('headquarters/<int:headquarter_id>/products/', ProductForHeadquarterView.as_view(), name='product-headquarter'),
 
