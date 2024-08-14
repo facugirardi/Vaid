@@ -40,6 +40,8 @@
 }
 
 
+/* components/members.css */
+
 .container {
   max-width: 100%;
   margin: 20px auto;
@@ -223,3 +225,4 @@
 .mt-btn{
   margin-top: 20px !important;
 }
+

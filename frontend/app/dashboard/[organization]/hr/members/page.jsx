@@ -245,6 +245,9 @@ const TagModal = ({ show, handleClose, handleSearch }) => {
                                     <td className="text-center"><i className="ti ti-user"></i> {idx + 1}</td>
                                     <td className="text-center">
                                         <button className="icon-button btn btn-light btn-sm mx-1">
+                                            <i className="ti ti-pencil"></i>
+                                        </button>
+                                        <button className="icon-button btn btn-light btn-sm mx-1">
                                             <i className="ti ti-trash"></i>
                                         </button>
                                     </td>
