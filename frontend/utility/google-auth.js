@@ -4,8 +4,8 @@ export default async function googleAuth(){
     try{
 		const url = `http://localhost:8000/api/o/google-oauth2/?redirect_uri=${
 			process.env.NODE_ENV === 'production'
-				? process.env.NEXT_PUBLIC_REDIRECT_URL
-				: 'http://localhost:3000'
+				? 'http://localhost:3000'
+        : 'http://localhost:3000'
 		}/auth/google`;
 
 		const res = await fetch(url, {

@@ -51,7 +51,122 @@ class UserSerializer(serializers.ModelSerializer):
         model = UserAccount
         fields = '__all__'
 
+
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = '__all__'
+
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = '__all__'
+
+class PersonTagDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PersonTagDetails
+        fields = '__all__'
+
+class TaskTagDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TaskTagDetails
+        fields = '__all__'
+
+class AssignTagsToPersonSerializer(serializers.Serializer):
+    tags = serializers.ListField(child=serializers.IntegerField())
+    person = serializers.PrimaryKeyRelatedField(queryset=Person.objects.all())
+
+class HeadquarterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Headquarter
+        fields = ['name', 'address', 'id']  # Omitir el campo Organization si se lo asignará manualmente
+
+    def create(self, validated_data):
+        # Excluir Organization del validated_data
+        organization = validated_data.pop('Organization')
+        headquarter = Headquarter.objects.create(**validated_data, Organization=organization)
+        return headquarter
+
+class InventorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Inventory
+        fields = '__all__'
+
+class ProductCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductCategory
+        fields = '__all__'
+
+class ProductStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductStatus
+        fields = '__all__'
+
+class ProductSerializer(serializers.ModelSerializer):
+    Category = serializers.PrimaryKeyRelatedField(queryset=ProductCategory.objects.all())
+    Status = serializers.PrimaryKeyRelatedField(queryset=ProductStatus.objects.all())
+    category_name = serializers.CharField(source='Category.name', read_only=True)
+    status_name = serializers.CharField(source='Status.name', read_only=True)
+
+    class Meta:
+        model = Product
+        fields = '__all__'
+        extra_kwargs = {
+            'expDate': {'required': False, 'allow_null': True}  # Permitir null
+        }
+
+
+class ProductInventoryDetailsSerializer(serializers.ModelSerializer):
+    Product = ProductSerializer()
+
+    class Meta:
+        model = ProductInventoryDetails
+        fields = '__all__'
+
+class HistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = History
+        fields = '__all__'
+
+
+class EventPersonSerializer(serializers.ModelSerializer):
+    Person = PersonSerializer()
+
+    class Meta:
+        model = EventPersonDetails
+        fields = '__all__'
+
+class InvitedEventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Invitation
+        fields = '__all__'
+
+class TaskPersonDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TaskPersonDetails
+        fields = '__all__'
+
+class OperationTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OperationType
+        fields = '__all__'
+
+class OperationProductDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OperationProductDetails
+        fields = ['Product', 'Operation']
+
+class OperationSerializer(serializers.ModelSerializer):
+    products = serializers.ListField(child=serializers.IntegerField(), write_only=True)
+
+    class Meta:
+        model = Operation
+        fields = ['id', 'description', 'date', 'time', 'Organization', 'Type', 'products']
+
+    def create(self, validated_data):
+        products_data = validated_data.pop('products')
+        operation = Operation.objects.create(**validated_data)
+        for product_id in products_data:
+            OperationProductDetails.objects.create(Operation=operation, Product_id=product_id)
+        return operation

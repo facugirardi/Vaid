@@ -31,3 +31,257 @@
   padding-bottom: 5px !important;
 }
 
+.modal-backdrop {
+  background-color: transparent;
+}
+
+.modal-open .modal {
+  backdrop-filter: blur(5px); /* Adjust the blur amount as needed */
+}
+
+
+/* components/members.css */
+
+.container {
+  max-width: 100%;
+  margin: 20px auto;
+  border-radius: 8px;
+  padding: 20px;
+  background-color: #fff;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.group:last-child {
+  border-bottom: none;
+}
+
+.icons {
+  display: flex;
+  gap: 10px;
+}
+
+.icons img {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.details-container {
+  margin-top: 20px;
+}
+
+/* Estilos para la sección de búsqueda y botón dentro del modal */
+.d-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.d-grid input.form-control {
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.d-grid button.btn {
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #2A50CF;
+  color: #fff;
+  border: none;
+}
+
+.d-grid button.btn:hover {
+  background-color: #007bff;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+/* Alineación de elementos en el modal */
+.d-flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.details-container .header {
+  margin-top: 20px;
+}
+
+
+.mt-btn{
+  margin-top: 20px !important;
+}
+.modal-backdrop {
+  background-color: transparent;
+}
+
+.modal-open .modal {
+  backdrop-filter: blur(5px); /* Adjust the blur amount as needed */
+}
+
+
+/* components/members.css */
+
+.container {
+  max-width: 100%;
+  margin: 20px auto;
+  border-radius: 8px;
+  padding: 20px;
+  background-color: #fff;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.group:last-child {
+  border-bottom: none;
+}
+
+.icons {
+  display: flex;
+  gap: 10px;
+}
+
+.icons img {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+}
+
+.details-container {
+  margin-top: 20px;
+}
+
+/* Estilos para la sección de búsqueda y botón dentro del modal */
+.d-grid {
+  display: grid;
+  gap: 10px;
+}
+
+.d-grid input.form-control {
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.d-grid button.btn {
+  padding: 10px;
+  border-radius: 10px;
+  background-color: #2A50CF;
+  color: #fff;
+  border: none;
+}
+
+.d-grid button.btn:hover {
+  background-color: #007bff;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+/* Alineación de elementos en el modal */
+.d-flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.details-container .header {
+  margin-top: 20px;
+}
+
+
+.mt-btn{
+  margin-top: 20px !important;
+}
+
+.input-primary {
+  border: 1px solid #dbe0e5 !important;
+  border-radius: 10px !important;
+  padding: 10px !important;
+}
+
+/* Estilos para el switch personalizado */
+.custom-switch-v1 {
+  display: flex;
+  align-items: center;
+}
+
+.custom-switch-v1 .form-check-input {
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.custom-switch-v1 .form-check-label {
+  position: relative;
+  padding-left: 60px; /* Espacio para el switch */
+  cursor: pointer;
+  line-height: 30px;
+}
+
+.custom-switch-v1 .form-check-label::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 25px;
+  background-color: #ccc;
+  border-radius: 15px;
+  transition: background-color 0.3s;
+}
+
+.custom-switch-v1 .form-check-label::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 4px;
+  transform: translateY(-50%);
+  width: 22px;
+  height: 22px;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: transform 0.3s;
+  z-index: 1;
+}
+
+.custom-switch-v1 .form-check-input:checked + .form-check-label::before {
+  background-color: #007bff;
+}
+
+.custom-switch-v1 .form-check-input:checked + .form-check-label::after {
+  transform: translate(25px, -50%);
+}
