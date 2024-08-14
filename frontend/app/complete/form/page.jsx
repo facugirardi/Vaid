@@ -203,10 +203,17 @@ const Page = () => {
                                                                     />
                                                                 </div>
                                                             </div>
-                                                            <div className="col-sm-12">
+                                                            <div className="col-sm-6">
+                                                                <div className="form-group">                                                            <label className="form-label">Did you have a volunteer expierience?</label>
+                                                                    <select className="form-select height-checkbox">
+                                                                        <option>Yes</option>
+                                                                        <option>No</option>
+                                                                    </select>                                                                    
+                                                                </div>
+                                                            </div>
+                                                            <div className="col-sm-6">
                                                                 <div className="form-group">
-                                                                    <div className="height-checkbox">
-                                                                        <label className="form-label">Relevant Experience or Skills</label>
+                                                                        <label className="form-label">Tell us about your experience</label>
                                                                         <textarea
                                                                             className="form-control"
                                                                             name="experience"
@@ -214,7 +221,6 @@ const Page = () => {
                                                                             value={formData.experience}
                                                                             onChange={handleChange}
                                                                         />
-                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -494,16 +500,6 @@ const Page = () => {
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div className="d-flex wizard justify-content-center mt-3">
-                                                        <div className="last">
-                                                            <button
-                                                                className={`btn btn-secondary mt-3 mt-md-0`}
-                                                                onClick={() => setKey(`tab-${totalTabs}`)}
-                                                            >
-                                                                Finish
-                                                            </button>
-                                                        </div>
-                                                    </div>
                                                 </form>
                                             </Tab.Pane>
                                         </Tab.Content>
@@ -517,7 +513,7 @@ const Page = () => {
                                                                     Back To Previous
                                                                 </button>
                                                             </div>
-                                                            <div className="next">
+                                                            <div className="d-flex next">
                                                                 <button
                                                                     className="btn btn-secondary mt-3 mt-md-0"
                                                                     onClick={handleNext}

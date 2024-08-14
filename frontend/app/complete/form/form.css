@@ -12,10 +12,17 @@
 .height-checkbox {
     height: auto;
     padding: 10px 0;
-    margin-top: auto; /* Ajusta el tamaño como desees */
+    margin-top: auto;
+    height: 70px !important;
+    line-height: 1.5;
+    padding: 10px;
+}
+.d-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
 
-.height-checkbox textarea {
-    height: 120px;
-}
+
 
