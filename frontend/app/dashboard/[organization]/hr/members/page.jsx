@@ -6,7 +6,7 @@ import BreadcrumbItem from '@/common/BreadcrumbItem';
 import './members.css';
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 import TableContainer from '@/common/TableContainer';
-import { Button, Card, Col, Form, Row, Modal } from "react-bootstrap";
+import { Card, Col, Row, Modal, Button, Form, ToggleButtonGroup, ToggleButton} from "react-bootstrap";
 import axios from 'axios';
 
 const Page = () => {
@@ -15,6 +15,21 @@ const Page = () => {
     const [candidates, setCandidates] = useState([]);
     const [showTagModal, setShowTagModal] = useState(false);
     const [organizationId, setOrganizationId] = useState("");
+    const [isTagModal, setIsTagModal] = useState(false);
+
+    const [tagName, setTagName] = useState("");
+    const [role, setRole] = useState("member");
+
+    const TagModal = ({ show, handleClose, handleCreateTag }) => {
+    
+        const handleTagSubmit = (event) => {
+            event.preventDefault();
+            handleCreateTag(tagName, role);
+            setTagName("");
+            setRole("member");
+            handleClose();
+        };
+    };
 
     useEffect(() => {
         const currentUrl = window.location.href;
@@ -28,7 +43,7 @@ const Page = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            if(organizationId){
+            if (organizationId) {
                 try {
                     const response = await axios.get(`http://localhost:8000/api/organizations/${organizationId}/members`);
                     console.log('Fetched candidates:', response.data);
@@ -53,10 +68,9 @@ const Page = () => {
         // Lógica para filtrar las tags basadas en el keyword
     };
 
-    const handleShowModal = (candidate) => {
+    const handleShowModal = (candidate, isTag) => {
         setSelectedCandidate(candidate);
-        console.log(candidate)
-        console.log(selectedCandidate)
+        setIsTagModal(isTag);
         setShowModal(true);
     };
 
@@ -68,6 +82,7 @@ const Page = () => {
     const handleCloseModal = () => {
         setShowModal(false);
         setSelectedCandidate(null);
+        setIsTagModal(false);
     };
 
     const handleDelete = async () => {
@@ -81,6 +96,13 @@ const Page = () => {
         } catch (error) {
             console.error('Error deleting PersonOrganizationDetails:', error);
         }
+    };
+
+    const handleTagSubmit = (event) => {
+        event.preventDefault();
+        // Aquí puedes agregar la lógica para enviar la etiqueta al backend o procesarla como sea necesario
+        alert(`Tag '${event.target.tagName.value}' added for ${selectedCandidate.first_name} ${selectedCandidate.last_name}`);
+        handleCloseModal();
     };
 
     const columns = useMemo(
