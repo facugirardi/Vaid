@@ -110,7 +110,7 @@ const Page = () => {
 
 
             {/* Modal Component */}
-            <Modal show={showModal} onHide={handleCloseModal} centered size='xl'>
+            <Modal show={showModal} onHide={handleCloseModal} centered size='xl' backdropClassName="modal-backdrop">
                 <Modal.Header >
                 </Modal.Header>
                 <Modal.Body>

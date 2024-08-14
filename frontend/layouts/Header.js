@@ -84,7 +84,7 @@ const Header3 = ({ onePage }) => {
                     Logout
                   </button>
                   <a href="/dashboard" className="theme-btn style-two">
-                    Dashboard <i className="far fa-arrow-right" />
+                    Profile <i className="far fa-arrow-right" />
                   </a>
                 </div>
 
@@ -118,7 +118,7 @@ const HeaderEmpty = ({ onePage }) => {
           <div className="header-inner py-20 rpy-10 rel d-flex align-items-center">
             <div className="logo-outer">
               <div className="logo">
-                <Link href="#">
+                <Link href="/">
                   <img
                     src="/assets/images/vaidpng2.png"
                     alt="Logo"
@@ -478,7 +478,7 @@ const MobileMenu = ({ sidebar, onePage, menus }) => {
               ? 
               <>
                 <li><a onClick={handleLogout}>Logout</a></li>
-                <li><Link href="/dashboard">Dashboard</Link></li>      
+                <li><Link href="/dashboard">Profile</Link></li>      
               </>
               :
               <>

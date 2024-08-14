@@ -2,7 +2,16 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background: #f4f4f9;
+}
+
+.hover-button-trash:hover{
+    color: #c81d1d;
+    transition: .2s;
+}
+
+.hover-button:hover{
+    color: #2950CE;
+    transition: .2s;
 }
 
 .dashboard {
@@ -144,3 +153,25 @@ table th {
 .fa-ellipsis-v {
     margin-left: 10px;
 }
+
+.trash-btn{
+  margin-left: 15px !important;
+}
+
+.tr-class{
+  cursor: pointer;
+}
+.tr-class:hover{
+    background-color: #f2f1f6;
+    transition: .2s;
+
+}
+
+.modal-backdrop {
+  background-color: transparent;
+}
+
+.modal-open .modal {
+  backdrop-filter: blur(5px); /* Adjust the blur amount as needed */
+}
+
