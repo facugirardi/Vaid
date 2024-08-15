@@ -706,7 +706,6 @@ class EventListView(APIView):
     
     #Se puede postear un evento a la vez ya que, sino gernera erro en la linea 550
     def post(self, request, pk):
-        
         try:
             organization = Organization.objects.get(id=pk)
         except Organization.DoesNotExist:

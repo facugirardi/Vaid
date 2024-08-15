@@ -19,6 +19,7 @@ const CreateTaskPage = () => {
         time: '',
         endTime: '',
         file: null,
+        state: 'Pending'
     });
     const [preview, setPreview] = useState(null);
     const [errors, setErrors] = useState({});
@@ -65,7 +66,7 @@ const CreateTaskPage = () => {
 const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const { name, description, date, endDate, time, endTime, file } = formData;
+    const { name, description, date, endDate, time, endTime, file, state } = formData;
     const newErrors = {};
 
     if (!name) newErrors.name = 'Name is required';
@@ -90,6 +91,7 @@ const handleSubmit = async (event) => {
     if (file) {
         data.append('file', file);
     }
+    data.append('state', state);
 
     try {
         const response = await fetch(`http://localhost:8000/api/organizations/${organizationId}/tasks/`, {
@@ -118,6 +120,7 @@ const handleSubmit = async (event) => {
                     endTime: '',
                     endDate: '',
                     file: null,
+                    state: ''
                 });
                 setPreview(null);
                 setErrors({});
