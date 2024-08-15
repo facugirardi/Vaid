@@ -470,11 +470,11 @@ const Page = () => {
                                                         <h3 className="mb-2">Your Goals</h3>
                                                         <small className="text-muted">Tell us about your goals and motivations for volunteering.</small>
                                                     </div>
-                                                    <div className="col-md-12">
-                                                        <div className="mb-3">
-                                                            <div className="height-checkbox">
-                                                                <label className="form-label" htmlFor="goals">Volunteering Goals</label>
-                                                                <textarea
+                                                    <div className="row mt-4">
+                                                    <div className="col-sm-6">
+                                                        <div className="form-group">
+                                                        <label className="form-label" htmlFor="goals">Volunteering Goals</label>
+                                                            <textarea
                                                                     className="form-control"
                                                                     id="goals"
                                                                     name="goals"
@@ -482,13 +482,11 @@ const Page = () => {
                                                                     value={formData.goals}
                                                                     onChange={handleChange}
                                                                 />
-                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div className="col-md-12">
-                                                        <div className="mb-3">
-                                                            <div className="height-checkbox">
-                                                                <label className="form-label" htmlFor="motivations">Motivations</label>
+                                                    <div className="col-sm-6">
+                                                        <div className="form-group">
+                                                            <label className="form-label" htmlFor="motivations">Motivations</label>
                                                                 <textarea
                                                                     className="form-control"
                                                                     id="motivations"
@@ -497,8 +495,8 @@ const Page = () => {
                                                                     value={formData.motivations}
                                                                     onChange={handleChange}
                                                                 />
-                                                            </div>
                                                         </div>
+                                                    </div>
                                                     </div>
                                                 </form>
                                             </Tab.Pane>
