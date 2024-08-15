@@ -112,6 +112,10 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
+        extra_kwargs = {
+            'expDate': {'required': False, 'allow_null': True}  # Permitir null
+        }
+
 
 class ProductInventoryDetailsSerializer(serializers.ModelSerializer):
     Product = ProductSerializer()
@@ -125,3 +129,44 @@ class HistorySerializer(serializers.ModelSerializer):
         model = History
         fields = '__all__'
 
+
+class EventPersonSerializer(serializers.ModelSerializer):
+    Person = PersonSerializer()
+
+    class Meta:
+        model = EventPersonDetails
+        fields = '__all__'
+
+class InvitedEventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Invitation
+        fields = '__all__'
+
+class TaskPersonDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TaskPersonDetails
+        fields = '__all__'
+
+class OperationTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OperationType
+        fields = '__all__'
+
+class OperationProductDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OperationProductDetails
+        fields = ['Product', 'Operation']
+
+class OperationSerializer(serializers.ModelSerializer):
+    products = serializers.ListField(child=serializers.IntegerField(), write_only=True)
+
+    class Meta:
+        model = Operation
+        fields = ['id', 'description', 'date', 'time', 'Organization', 'Type', 'products']
+
+    def create(self, validated_data):
+        products_data = validated_data.pop('products')
+        operation = Operation.objects.create(**validated_data)
+        for product_id in products_data:
+            OperationProductDetails.objects.create(Operation=operation, Product_id=product_id)
+        return operation

@@ -20,6 +20,7 @@ const CreateTaskPage = () => {
         time: '',
         endTime: '',
         file: null,
+        state: 'Pending',
     });
     const [preview, setPreview] = useState(null);
     const [errors, setErrors] = useState({});
@@ -66,7 +67,7 @@ const CreateTaskPage = () => {
 const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const { name, description, date, endDate, time, endTime, file } = formData;
+    const { name, description, date, endDate, time, endTime, file, state } = formData;
     const newErrors = {};
 
     if (!name) newErrors.name = 'Name is required';
@@ -88,6 +89,7 @@ const handleSubmit = async (event) => {
     data.append('time', time);
     data.append('endTime', endTime);
     data.append('endDate', endDate); // Date only
+    data.append('state', state)
     if (file) {
         data.append('file', file);
     }
@@ -119,6 +121,7 @@ const handleSubmit = async (event) => {
                     endTime: '',
                     endDate: '',
                     file: null,
+                    state: '',
                 });
                 setPreview(null);
                 setErrors({});

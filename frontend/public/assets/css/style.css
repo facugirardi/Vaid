@@ -7,8 +7,16 @@
   padding: 0;
   border: none;
   outline: none;
+  zoom: 100%;
   -webkit-box-shadow: none;
   box-shadow: none; }
+
+  @media (max-width: 1500px) {
+    *{
+    zoom: 98%;
+  }
+  }
+
 
 body {
   color: var(--base-color);

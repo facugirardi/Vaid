@@ -706,7 +706,6 @@ class EventListView(APIView):
     
     #Se puede postear un evento a la vez ya que, sino gernera erro en la linea 550
     def post(self, request, pk):
-        
         try:
             organization = Organization.objects.get(id=pk)
         except Organization.DoesNotExist:
@@ -853,7 +852,8 @@ class HeadquarterListCreateView(APIView):
 
         serializer = HeadquarterSerializer(data=data)
         if serializer.is_valid():
-            serializer.save(Organization=organization)  # Pasar la instancia de la organización
+            headquarter = serializer.save(Organization=organization) 
+            Inventory.objects.create(Headquarter=headquarter)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -990,23 +990,17 @@ class ProductCreateView(APIView):
         headquarter = get_object_or_404(Headquarter, pk=headquarter_id, Organization_id=organization_id)
         inventory, created = Inventory.objects.get_or_create(Headquarter=headquarter)
         
-        # Obtener el nombre de la categoría desde los datos de la solicitud
         category_name = request.data.get('Category')
 
-        # Verificar si la categoría existe, si no, crearla
         category, created = ProductCategory.objects.get_or_create(name=category_name)
         
-        # Reemplazar el nombre de la categoría con su ID en los datos de la solicitud
         request.data['Category'] = category.id
         
-        # Serializar y validar el producto
         product_serializer = ProductSerializer(data=request.data)
         
         if product_serializer.is_valid():
-            print('8')
             product = product_serializer.save()
 
-            # Crear la entrada de detalles del inventario
             product_inventory_details = ProductInventoryDetails.objects.create(
                 Product=product,
                 Inventory=inventory,
@@ -1016,7 +1010,192 @@ class ProductCreateView(APIView):
             return Response(ProductInventoryDetailsSerializer(product_inventory_details).data, status=status.HTTP_201_CREATED)
         
         else:
-            # Si la validación falla, imprime los errores para depuración
             print('Errores del serializador:', product_serializer.errors)
         
         return Response(product_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+#PROBRAR LA FUNCONES DE ABAJO(Si funciona el query_params y en postman. Sino cambia pasando el user_id por parametro en la url)
+
+class EventAttendanceView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        event_id = request.query_params.get('event_id')
+
+        try:
+            event = Event.objects.get(id=event_id)
+            list = EventPersonDetails.objects.filter(Event=event)
+            serializers = EventPersonSerializer(list, many=True)
+            return Response(serializers.data, status=status.HTTP_200_OK)
+
+        except Event.DoesNotExist:
+            return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+    def post(self, request):
+        person_id = request.query_params.get('person_id')
+        event_id = request.query_params.get('event_id')
+
+        try:
+            person = Person.objects.get(id=person_id)
+            event = Event.objects.get(id=event_id)
+
+            # Verificar si ya está registrado
+            if EventPersonDetails.objects.filter(Person=person, Event=event).exists():
+                return Response({'error': 'Person is already attending this event'}, status=status.HTTP_400_BAD_REQUEST)
+
+            event_person_details = EventPersonDetails.objects.create(Person=person, Event=event)
+            serializer = EventPersonSerializer(event_person_details)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        except Person.DoesNotExist:
+            return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Event.DoesNotExist:
+            return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    def delete(self, request):
+        person_id = request.query_params.get('person_id')
+        event_id = request.query_params.get('event_id')
+
+        try:
+            person = Person.objects.get(id=person_id)
+            event = Event.objects.get(id=event_id)
+
+            try:
+                event_person_details = EventPersonDetails.objects.get(Person=person, Event=event)
+                event_person_details.delete()
+                return Response(status=status.HTTP_204_NO_CONTENT)
+
+            except EventPersonDetails.DoesNotExist:
+                return Response({'error': 'Person is not attending this event'}, status=status.HTTP_404_NOT_FOUND)
+
+        except Person.DoesNotExist:
+            return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Event.DoesNotExist:
+            return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class CreateInvitationView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        event_id = request.query_params.get('event_id')
+
+        try:
+            event = Event.objects.get(id=event_id)
+
+            if Invitation.objects.filter(Event=event).exists():
+                return Response({'error': 'Invitation is already attending this event'}, status=status.HTTP_400_BAD_REQUEST)
+
+            invitation = Invitation.objects.create(Event=event, status=True)
+            serializer = InvitedEventSerializer(invitation)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        except Event.DoesNotExist:
+            return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class CheckMembershipView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        user_id = request.query_params.get('person_id')
+        event_id = request.query_params.get('event_id')
+
+
+        try:
+            person = Person.objects.get(id=user_id)
+            event = Event.objects.get(id=event_id)
+            organization = Organization.objects.get(id=event.Organization.id)
+
+            if PersonOrganizationDetails.objects.filter(Person= person, Organization = organization).exists():
+                return Response({'is_member': True, 'event_id': event.id}, status=status.HTTP_200_OK)
+            return Response({'is_member': False, 'event_id': event.id}, status=status.HTTP_403_FORBIDDEN)
+
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Event.DoesNotExist:
+            return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class  TaskParticipationView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        person_id = request.query_params.get('person_id')
+        task_id = request.query_params.get('task_id')
+
+        if not person_id or not task_id:
+            return Response({'error': 'person_id and task_id are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            person = Person.objects.get(id=person_id)
+            task = Task.objects.get(id=task_id)
+
+            if TaskPersonDetails.objects.filter(Person=person, Task=task).exists():
+                return Response({'error': 'Person is already assigned to this task'}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Crear la instancia de TaskPersonDetails
+            task_person_details = TaskPersonDetails.objects.create(Person=person, Task=task)
+            return Response({'message': 'Task taken successfully', 'task_person_details': TaskPersonDetailsSerializer(task_person_details).data}, status=status.HTTP_201_CREATED)
+
+        except Person.DoesNotExist:
+            return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Task.DoesNotExist:
+            return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+    def delete(self, request):
+        person_id = request.query_params.get('person_id')
+        task_id = request.query_params.get('task_id')
+
+        try:
+            person = Person.objects.get(id=person_id)
+            task = Task.objects.get(id=task_id)
+
+            try:
+                task_person_details = TaskPersonDetails.objects.get(Person=person, Task=task)
+                task_person_details.delete()
+                return Response({'message': 'Task left successfully'}, status=status.HTTP_204_NO_CONTENT)
+
+            except TaskPersonDetails.DoesNotExist:
+                return Response({'error': 'Person is not assigned to this task'}, status=status.HTTP_404_NOT_FOUND)
+
+        except Person.DoesNotExist:
+            return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Task.DoesNotExist:
+            return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class OperationAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, organization_id, operation_id=None):
+        if operation_id:
+            operation = get_object_or_404(Operation, id=operation_id, Organization_id=organization_id)
+            serializer = OperationSerializer(operation)
+            return Response(serializer.data)
+        else:
+            operations = Operation.objects.filter(Organization_id=organization_id)
+            serializer = OperationSerializer(operations, many=True)
+            return Response(serializer.data)
+
+    def post(self, request, organization_id):
+        request.data['Organization'] = organization_id
+        serializer = OperationSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, organization_id, operation_id):
+        operation = get_object_or_404(Operation, id=operation_id, Organization_id=organization_id)
+        operation.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class OperationTypeListView(generics.ListAPIView):
+    permission_classes = [AllowAny]
+    queryset = OperationType.objects.all()
+    serializer_class = OperationTypeSerializer

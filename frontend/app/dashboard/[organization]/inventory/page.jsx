@@ -64,6 +64,8 @@ const Headquarters = ({ onHeadquarterClick }) => {
   };
 
   const handleSubmit = async (event) => {
+    event.preventDefault();
+
     const formData = new FormData(event.target);
 
     const data = {
@@ -97,21 +99,27 @@ const Headquarters = ({ onHeadquarterClick }) => {
       <h2>Headquarters</h2>
       <table className='table'>
         <tbody>
-          {headquarters.map(hq => (
-            <tr key={hq.id} className="d-flex tr-class" onClick={() => onHeadquarterClick(hq.id)}>
-              <td className="flex-grow-1 d-flex align-items-center justify-content-start">{hq.name}</td>
-              <td className="flex-grow-1 d-flex align-items-center justify-content-start">{hq.address}</td>
-              <td className="d-flex align-items-center justify-content-end">
-                <button className="edit-button trash-btn" onClick={() => handleDeleteModalShow(hq)}>
-                  <FontAwesomeIcon icon={faTrash} />
-                </button>
-              </td>
-            </tr>
-          ))}
+          {headquarters.length === 0 ? (
+            <>
+            <p>No headquarters available.</p>
+            </>
+          ) : (
+            headquarters.map(hq => (
+              <tr key={hq.id} className="d-flex tr-class" onClick={() => onHeadquarterClick(hq.id)}>
+                <td className="flex-grow-1 d-flex align-items-center justify-content-start">{hq.name}</td>
+                <td className="flex-grow-1 d-flex align-items-center justify-content-start">{hq.address}</td>
+                <td className="d-flex align-items-center justify-content-end">
+                  <button className="edit-button trash-btn" onClick={() => handleDeleteModalShow(hq)}>
+                    <FontAwesomeIcon icon={faTrash} className='hover-button-trash'/>
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
         </tbody>
       </table>
       <button className="add-button" onClick={handleHeadquarterModalShow}>
-        <FontAwesomeIcon icon={faPlus} />
+        <FontAwesomeIcon icon={faPlus} className='hover-button'/>
       </button>
 
       <Modal show={showHeadquarterModal} onHide={handleHeadquarterModalClose} backdropClassName="modal-backdrop" centered size='lg'>
@@ -160,6 +168,7 @@ const Headquarters = ({ onHeadquarterClick }) => {
     </div>
   );
 };
+
 const Inventory = ({ headquarterId, organizationId }) => {
   const [inventory, setInventory] = useState([]);
   const [showInventoryModal, setShowInventoryModal] = useState(false);
@@ -209,6 +218,7 @@ const Inventory = ({ headquarterId, organizationId }) => {
             console.log('Producto borrado con éxito');
             setInventory(inventory.filter(item => item.id !== selectedProduct.id));
             setShowDeleteProductModal(false);
+            
         } else {
             console.error('Error al borrar el producto:', response.status);
         }
@@ -221,10 +231,16 @@ const Inventory = ({ headquarterId, organizationId }) => {
     event.preventDefault();
 
     const formData = new FormData(event.target);
+    let expDate = formData.get('expDate');
+    if (expDate === '') {
+        expDate = null;  // Si la fecha está vacía, establecerla como null
+    }
+
     const data = {
         name: formData.get('name'),
         description: formData.get('description'),
         Category: formData.get('Category'), 
+        expDate: expDate,
         Status: 1,
         quantity: parseInt(formData.get('quantity')), 
     };
@@ -264,7 +280,7 @@ const Inventory = ({ headquarterId, organizationId }) => {
         <br/>
         <p>No products found in the inventory.</p>
           <button className="add-button" onClick={handleInventoryModalShow}>
-            <FontAwesomeIcon icon={faPlus} />
+            <FontAwesomeIcon icon={faPlus} className='hover-button'/>
           </button>
         </>
       ) : (
@@ -288,10 +304,10 @@ const Inventory = ({ headquarterId, organizationId }) => {
                   <td className='text-center'>{item.Product.status_name}</td>
                   <td className='text-center'>
                     <button className="icon-button" onClick={() => handleProductModalShow(item.Product)}>
-                      <FontAwesomeIcon icon={faEye} />
+                      <FontAwesomeIcon icon={faEye} className='hover-button'/>
                     </button>
                     <button className="icon-button" onClick={() => handleDeleteProductModalShow(item.Product)}>
-                      <FontAwesomeIcon icon={faTrash} />
+                      <FontAwesomeIcon icon={faTrash} className='hover-button-trash'/>
                     </button>
                   </td>
                 </tr>
@@ -299,7 +315,7 @@ const Inventory = ({ headquarterId, organizationId }) => {
             </tbody>
           </table>
           <button className="add-button" onClick={handleInventoryModalShow}>
-            <FontAwesomeIcon icon={faPlus} />
+            <FontAwesomeIcon icon={faPlus} className='hover-button'/>
           </button>
         </>
       )}
@@ -321,8 +337,8 @@ const Inventory = ({ headquarterId, organizationId }) => {
                   <input type="number" className="form-control" id="quantity" name="quantity" placeholder='1' required />
                 </div>
                 <div className="mb-3 col-md-3">
-                  <label htmlFor="expDate" className="form-label">Expiration Date</label>
-                  <input type="date" className="form-control" id="expDate" name="expDate" required />
+                  <label htmlFor="expDate" className="form-label">Expiration Date (Optional)</label>
+                  <input type="date" className="form-control" id="expDate" name="expDate" />
                 </div>
                 <div className="mb-3 col-md-3">
                   <label htmlFor="productType" className="form-label">Type</label>
@@ -349,8 +365,8 @@ const Inventory = ({ headquarterId, organizationId }) => {
               <p><strong>Name:</strong> {selectedProduct.name}</p>
               <p><strong>Category:</strong> {selectedProduct.category_name}</p>
               <p><strong>Status:</strong> {selectedProduct.status_name}</p>
-              <p><strong>Expiration Date:</strong></p>
-            </div>
+              <p><strong>Expiration Date:</strong> {selectedProduct.expDate ? selectedProduct.expDate : '-'}</p>
+              </div>
           )}
         </Modal.Body>
       </Modal>
@@ -412,7 +428,7 @@ const Page = () => {
   return (
     <Layout>
       <div className="container">
-        <BreadcrumbItem mainTitle="Resource Management" subTitle="Inventory" />
+        <BreadcrumbItem mainTitle="Resource Management" subTitle="Headquarter Inventory" />
         <div className='row'>
           <div className="col-md-6">
             <Headquarters onHeadquarterClick={handleHeadquarterClick} />
