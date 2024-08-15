@@ -86,12 +86,15 @@ class ProductStatusSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class ProductSerializer(serializers.ModelSerializer):
-    Category = ProductCategorySerializer()
-    Status = ProductStatusSerializer()
+    total_quantity = serializers.SerializerMethodField(required=False)
 
     class Meta:
         model = Product
-        fields = '__all__'
+        fields = ['id', 'name', 'description', 'Category', 'Status', 'total_quantity']
+
+    def get_total_quantity(self, obj):
+        # Calcula la cantidad total si el objeto tiene la anotación total_quantity
+        return getattr(obj, 'total_quantity', None)
 
 class ProductInventoryDetailsSerializer(serializers.ModelSerializer):
     Product = ProductSerializer()

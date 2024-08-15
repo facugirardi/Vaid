@@ -19,6 +19,8 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Organization, Person, Image
 from .serializers import *
 from django.shortcuts import get_object_or_404
+from django.db.models import Sum
+
 
 
 class RetrieveOrganizationExtView(APIView):
@@ -856,8 +858,11 @@ class ProductForHeadquarterView(APIView):
         except Inventory.DoesNotExist:
             return Response({'error': 'Inventory for specified headquarter not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        product_inventory_details = ProductInventoryDetails.objects.filter(Inventory=inventory)
-        serializer = ProductInventoryDetailsSerializer(product_inventory_details, many=True)
+        product_inventory_details = Product.objects.filter(
+            productinventorydetails__Inventory = inventory
+        ).annotate(total_quantity=Sum('productinventorydetails__cuantity')).distinct()
+
+        serializer = ProductSerializer(product_inventory_details, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
     
 
@@ -1094,3 +1099,20 @@ class OperationTypeListView(generics.ListAPIView):
     queryset = OperationType.objects.all()
     serializer_class = OperationTypeSerializer
 
+
+class InventoryView(APIView):
+    permission_classes = [AllowAny]
+    # Obtener productos de una organización específica con la cantidad total
+    def get(self, request, organization_id):
+        # Filtramos los inventarios pertenecientes a la organización
+        inventory_ids = Inventory.objects.filter(Headquarter__Organization_id=organization_id).values_list('id', flat=True)
+        
+        # Anotamos los productos con la suma total de las cantidades
+        products = Product.objects.filter(
+            productinventorydetails__Inventory_id__in=inventory_ids
+        ).annotate(total_quantity=Sum('productinventorydetails__cuantity')).distinct()
+
+        # Serializamos los productos con la cantidad total
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data)
+    

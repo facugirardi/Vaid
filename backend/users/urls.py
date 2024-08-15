@@ -41,7 +41,8 @@ from .views import (
     TaskParticipationView,
     OperationAPIView,
     OperationTypeListView,
-    ProductDetailUpdateDestroyView
+    ProductDetailUpdateDestroyView,
+    InventoryView,
 )
 
 urlpatterns = [
@@ -105,6 +106,8 @@ urlpatterns = [
     path('organization/<int:organization_id>/operation/<int:operation_id>/', OperationAPIView.as_view(), name='operation-detail-delete'),
 
     path('organization/operation-type/', OperationTypeListView.as_view(), name='operation-type-list-create'),
+
+    path('organization/<int:organization_id>/inventory/', InventoryView.as_view(), name='inventory-list'),
 
 ]
 #genrar url de los links de las invitaiones
