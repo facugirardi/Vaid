@@ -30,3 +30,11 @@
   padding-bottom: 5px !important;
 }
 
+.modal-backdrop {
+  background-color: transparent;
+}
+
+.modal-open .modal {
+  backdrop-filter: blur(5px); /* Adjust the blur amount as needed */
+}
+

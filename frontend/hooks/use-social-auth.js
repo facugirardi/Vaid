@@ -22,7 +22,7 @@ export default function useSocialAuth(authenticate, provider) {
 				.then(() => {
 					dispatch(setAuth());
 					toast.success('Logged in');
-					router.push('/');
+					router.push('/dashboard');
 				})
 				.catch(() => {
 					toast.error('Failed to log in');

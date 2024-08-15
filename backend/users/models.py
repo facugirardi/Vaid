@@ -68,11 +68,6 @@ class TagType(models.Model):
     name = models.CharField(max_length=255)
 
 
-class Tag(models.Model):
-    name = models.CharField(max_length=255)
-    TagType = models.ForeignKey(TagType, on_delete=models.CASCADE) 
-
-
 class Organization(models.Model):
     name = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
@@ -114,17 +109,10 @@ class Candidate(models.Model):
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
 
-
-
-class PersonTagDetails(models.Model):
-    Person = models.ForeignKey(Person, on_delete=models.CASCADE)
-    Tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
-
-
 class Headquarter(models.Model):
     name = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
-    
+    Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
 class Inventory(models.Model):
     Headquarter = models.ForeignKey(Headquarter, on_delete=models.CASCADE)
@@ -140,7 +128,7 @@ class ProductStatus(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
-    description = models.CharField(max_length=255)
+    expDate = models.DateField(null=True) 
     Category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
     Status = models.ForeignKey(ProductStatus, on_delete=models.CASCADE)
 
@@ -167,9 +155,6 @@ class TaskPersonDetails(models.Model):
     Person = models.ForeignKey(Person, on_delete=models.CASCADE)
     Task = models.ForeignKey(Task, on_delete=models.CASCADE)
 
-class TaskTagDetails(models.Model):
-    Tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
-    Task = models.ForeignKey(Task, on_delete=models.CASCADE)
 
 class Event(models.Model):
     name = models.CharField(max_length=255)
@@ -243,3 +228,39 @@ class Image(models.Model):
 
     def __str__(self):
         return self.alt
+
+
+class History(models.Model):
+    user_id = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+    action = models.CharField(max_length=255)
+    description = models.CharField(max_length=255)
+    headquarter_id = models.ForeignKey(Headquarter, on_delete=models.CASCADE)
+    date = models.DateField(default=timezone.now)
+
+class Tag(models.Model):
+    name = models.CharField(max_length=255)
+    TagType = models.ForeignKey(TagType, on_delete=models.CASCADE) 
+    Organization = models.ForeignKey(Organization, on_delete=models.CASCADE, default=1)
+
+
+class PersonTagDetails(models.Model):
+    Person = models.ForeignKey(Person, on_delete=models.CASCADE)
+    Tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
+
+
+class TaskTagDetails(models.Model):
+    Tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
+    Task = models.ForeignKey(Task, on_delete=models.CASCADE)
+
+
+class History(models.Model):
+    user_id = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
+    action = models.CharField(max_length=255)
+    description = models.CharField(max_length=255)
+    headquarter_id = models.ForeignKey(Headquarter, on_delete=models.CASCADE)
+    date = models.DateField(default=timezone.now)
+
+
+class Invitation(models.Model):
+    Event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    status = models.BooleanField(default=False)
