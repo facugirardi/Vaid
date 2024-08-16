@@ -17,18 +17,6 @@ from .views import (
     RejectCandidate,
     RetrievePersonView,
     RetrieveUserOrganizations,
-
-    #CRUD
-    OrganizationListCreate, OrganizationRetrieveUpdateDestroy,
-    HeadquarterListCreate, HeadquarterRetrieveUpdateDestroy,
-    ProductStatusListCreate, ProductStatusRetrieveUpdateDestroy,
-    ProductCategoryListCreate, ProductCategoryRetrieveUpdateDestroy,
-    ProductListCreate, ProductRetrieveUpdateDestroy,
-    InventoryListCreate, InventoryRetrieveUpdateDestroy,
-    ProductInventoryDetailsListCreate, ProductInventoryDetailsRetrieveUpdateDestroy,
-    DonationListCreate, DonationRetrieveUpdateDestroy,
-    DonationProductDetailsListCreate, DonationProductDetailsRetrieveUpdateDestroy,
-
     OrgView,
     TaskListView,
     TaskUpdateDestroyView,
@@ -40,6 +28,10 @@ from .views import (
     EventUpdateDestroyView,
     UserFormView,
     ApplyOrgView,
+    
+    OperationListCreateDonationView,
+    OperationUpdateDonationView,
+    OperationDeleteDonationView
 )
 
 urlpatterns = [
@@ -71,30 +63,14 @@ urlpatterns = [
     path('jwt/refresh/', CustomTokenRefreshView.as_view()),
     path('jwt/verify/', CustomTokenVerifyView.as_view()),
     path('logout/', LogoutView.as_view()),
-
-    #CRUD:
-    path('organizations/', OrganizationListCreate.as_view()),
-    path('organizations/<int:pk>/', OrganizationRetrieveUpdateDestroy.as_view()),
-    path('headquarter/', HeadquarterListCreate.as_view()),
-    path('headquarter/<int:pk>/', HeadquarterRetrieveUpdateDestroy.as_view()),
-    path('status/', ProductStatusListCreate.as_view()),
-    path('status/<int:pk>/', ProductStatusRetrieveUpdateDestroy.as_view()),
-    path('category/', ProductCategoryListCreate.as_view()),
-    path('category/<int:pk>/', ProductCategoryRetrieveUpdateDestroy.as_view()),
-    path('product/', ProductListCreate.as_view()),
-    path('product/<int:pk>/', ProductRetrieveUpdateDestroy.as_view()),
-    path('inventory/', InventoryListCreate.as_view()),
-    path('inventory/<int:pk>/', InventoryRetrieveUpdateDestroy.as_view()),
-    path('productinventorydetails/', ProductInventoryDetailsListCreate.as_view()),
-    path('productinventorydetails/<int:pk>/', ProductInventoryDetailsRetrieveUpdateDestroy.as_view()),
-    path('donation/', DonationListCreate.as_view()),
-    path('donation/<int:pk>/', DonationRetrieveUpdateDestroy.as_view()),
-    path('donationproductdetails/', DonationProductDetailsListCreate.as_view()),
-    path('donationproductdetails/<int:pk>/', DonationProductDetailsRetrieveUpdateDestroy.as_view()),
-
     path('organizations/<int:pk>/tasks/', TaskListView.as_view(), name='task-list'),
     path('organizations/tasks/<int:pk>', TaskUpdateDestroyView.as_view(), name='task-update-delete'),
     path('organizations/<int:pk>/members/', OrganizationMembersView.as_view(), name='organization-members'),
     path('organizations/<int:pk>/events/', EventListView.as_view(), name='event-list'),
     path('organizations/events/<int:pk>', EventUpdateDestroyView.as_view(), name='event-update-delete'),
+
+    # Donaciones
+    path('operationlistcreatedonation/', OperationListCreateDonationView.as_view()),
+    path('operationupdatedonation/<int:don_pk>/<int:pro_pk>', OperationUpdateDonationView.as_view()),
+    path('operationdeletedonation/<int:don_pk>', OperationDeleteDonationView.as_view()),
 ]

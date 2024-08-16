@@ -141,8 +141,8 @@ class ProductStatus(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
-    Category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
-    Status = models.ForeignKey(ProductStatus, on_delete=models.CASCADE)
+    Category = models.ForeignKey(ProductCategory, null=True, blank=True, on_delete=models.CASCADE)
+    Status = models.ForeignKey(ProductStatus, null=True, blank=True, on_delete=models.CASCADE)
 
 
 class ProductInventoryDetails(models.Model):
@@ -195,7 +195,7 @@ class EventPersonDetails(models.Model):
 
 
 class Donation(models.Model):
-    description = models.CharField(max_length=255, default='General donation')
+    description = models.TextField(null=True, blank=True)
     date = models.DateField(default=timezone.now)
     Headquarter = models.ForeignKey(Headquarter, on_delete=models.CASCADE)
 
@@ -203,7 +203,7 @@ class Donation(models.Model):
 class DonationProductDetails(models.Model):
     Product = models.ForeignKey(Product, on_delete=models.CASCADE)
     Donation = models.ForeignKey(Donation, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(default=0)
+    quantity = models.FloatField(default=0)
 
 
 class OperationType(models.Model):

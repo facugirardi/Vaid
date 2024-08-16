@@ -9,7 +9,7 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView,
 )
 from .models import UserAccount as User
-from rest_framework.permissions import AllowAny  
+from rest_framework.permissions import AllowAny
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -80,7 +80,7 @@ class UserFormView(APIView):
             data = request.data
             user = User.objects.get(id=user_id)
             person = Person.objects.get(User=user)
-            
+
             person.date_of_birth = data.get('dateOfBirth')
             person.profession = data.get('profession')
             person.experience = data.get('experience')
@@ -110,7 +110,7 @@ class RetrieveOrganizationExtView(APIView):
     def get(self, request, user_id):
         try:
             organization = Organization.objects.get(id=user_id)
-            
+
             return Response(
                 {'name': organization.name,
                  'description':organization.description,
@@ -141,7 +141,7 @@ class RetrieveOrganizationView(APIView):
         try:
             user = User.objects.get(id=user_id)
             organization = Organization.objects.get(User=user)
-            
+
             return Response(
                 {'name': organization.name,
                  'description':organization.description,
@@ -202,7 +202,7 @@ class RetrievePersonView(APIView):
             user = User.objects.get(id=user_id)
             person = Person.objects.get(User=user)
             person_serializer = PersonSerializer(person)
-            user_serializer = UserSerializer(user) 
+            user_serializer = UserSerializer(user)
             return Response(
                 {'person': person_serializer.data,
                  'user': user_serializer.data},
@@ -224,7 +224,7 @@ class RetrievePersonView(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
-        
+
 
 class ApproveCandidate(APIView):
     permission_classes = [AllowAny]
@@ -265,7 +265,7 @@ class RejectCandidate(APIView):
 
 
 class OrgView(generics.ListAPIView):
-    
+
     permission_classes = [AllowAny]
     queryset = Organization.objects.all()
     serializer_class = OrganizationSerializer
@@ -295,7 +295,7 @@ class RetrieveImageOrgView(APIView):
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
-            organization = Organization.objects.get(id=user_id) 
+            organization = Organization.objects.get(id=user_id)
             images = Image.objects.filter(User=organization.User)
 
             if images.exists():
@@ -325,7 +325,7 @@ class RetrieveImageView(APIView):
     permission_classes = [AllowAny]
     def get(self, request):
         try:
-    
+
             user_id = request.query_params.get('user_id')
             if not user_id:
                 return Response(
@@ -364,16 +364,16 @@ class UploadImageView(APIView):
     def post(self, request):
         try:
             data = self.request.data
-            user_id = data.get('user_id')                
-            user = User.objects.get(id=user_id) 
+            user_id = data.get('user_id')
+            user = User.objects.get(id=user_id)
 
             image = data['image']
-            
+
             Image.objects.create(
                     image = image,
                     User = user
                 )
-            
+
             return Response(
                     {'success': 'Image Uploaded Successfully'},
                     status=status.HTTP_201_CREATED
@@ -383,7 +383,7 @@ class UploadImageView(APIView):
             return Response(
                 {'error': 'Error Uploading Image'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
-                
+
             )
 
 
@@ -395,7 +395,7 @@ class CreatePerson(APIView):
             data = request.data
             user_id = data.get('user_id')
             user = User.objects.get(id=user_id)
-            
+
             person = Person(
                 phone_number=data.get('phone_number'),
                 country=data.get('country'),
@@ -413,23 +413,23 @@ class CreatePerson(APIView):
 
 
 class CreateOrganization(APIView):
-    permission_classes = [AllowAny]  
+    permission_classes = [AllowAny]
 
     def post(self, request):
         try:
             data = request.data
-            
+
 
             user_id = data.get('user_id')
             if not user_id:
                 return Response({'error': 'User ID is required'}, status=status.HTTP_400_BAD_REQUEST)
-            
-        
+
+
             try:
                 user = User.objects.get(id=user_id)
             except User.DoesNotExist:
                 return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-            
+
             # Crear la organización
             organization = Organization(
                 name=data.get('name'),
@@ -447,7 +447,7 @@ class CreateOrganization(APIView):
 
 # @method_decorator(csrf_exempt, name='dispatch')
 class UserTypeUpdate(APIView):
-    permission_classes = [AllowAny]  
+    permission_classes = [AllowAny]
     def patch(self, request, pk):
         try:
             data = json.loads(request.body)
@@ -456,7 +456,7 @@ class UserTypeUpdate(APIView):
             is_completed = data.get('is_completed')
 
             if user_type is not None:
-                user.user_type = user_type 
+                user.user_type = user_type
             if is_completed is not None:
                 user.is_completed = is_completed
 
@@ -469,7 +469,7 @@ class UserTypeUpdate(APIView):
 
 
 class CheckUserType(APIView):
-    permission_classes = [AllowAny]  
+    permission_classes = [AllowAny]
 
     def get(self, request, *args, **kwargs):
         user_id = kwargs.get('user_id')
@@ -481,7 +481,7 @@ class CheckUserType(APIView):
 
 
 class CheckCompleteView(APIView):
-    permission_classes = [AllowAny]  
+    permission_classes = [AllowAny]
 
     def get(self, request, *args, **kwargs):
         user_id = kwargs.get('user_id')
@@ -586,7 +586,7 @@ class CustomTokenVerifyView(TokenVerifyView):
         return super().post(request, *args, **kwargs)
 
 
-class LogoutView(APIView): 
+class LogoutView(APIView):
     def post(self, request, *args, **kwargs):
         response = Response(status=status.HTTP_204_NO_CONTENT)
         response.delete_cookie('access')
@@ -608,10 +608,10 @@ class TaskListView(APIView):
         tasks = Task.objects.filter(Organization=organization)
         serializer = TaskSerializer(tasks, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
-    
+
+
     def post(self, request, pk):
-        
+
         try:
             organization = Organization.objects.get(id=pk)
         except Organization.DoesNotExist:
@@ -635,10 +635,10 @@ class TaskUpdateDestroyView(APIView):
             task = Task.objects.get(id=pk)
         except Task.DoesNotExist:
             return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
-        
+
         serializer = TaskSerializer(task)
         return Response(serializer.data)
-        
+
 
     def put(self, request, pk):
         try:
@@ -647,9 +647,9 @@ class TaskUpdateDestroyView(APIView):
             return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
 
         data = request.data.copy()
-        
+
         serializer = TaskSerializer(task, data=data, partial=True)
-        
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -660,7 +660,7 @@ class TaskUpdateDestroyView(APIView):
             task = Task.objects.get(id=pk)
         except Task.DoesNotExist:
             return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
-        
+
         task.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -674,10 +674,10 @@ class OrganizationMembersView(APIView):
             members = Person.objects.filter(Organization=organization)
             serializer = PersonSerializer(members, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        
+
         except Organization.DoesNotExist:
             return Response({'error': 'Organization not found'}, status=status.HTTP_404_NOT_FOUND)
-        
+
 
 class EventListView(APIView):
     permission_classes = [AllowAny]
@@ -691,10 +691,10 @@ class EventListView(APIView):
         events = Event.objects.filter(Organization=organization)
         serializer = EventSerializer(events, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
+
     #Se puede postear un evento a la vez ya que, sino gernera erro en la linea 550
     def post(self, request, pk):
-        
+
         try:
             organization = Organization.objects.get(id=pk)
         except Organization.DoesNotExist:
@@ -708,7 +708,7 @@ class EventListView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
 
 class EventUpdateDestroyView(APIView):
     permission_classes = [AllowAny]
@@ -718,10 +718,10 @@ class EventUpdateDestroyView(APIView):
             event = Event.objects.get(id=pk)
         except Event.DoesNotExist:
             return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
-        
+
         serializer = EventSerializer(event)
         return Response(serializer.data)
-        
+
 
     def put(self, request, pk):
         try:
@@ -730,9 +730,9 @@ class EventUpdateDestroyView(APIView):
             return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
 
         data = request.data.copy()
-        
+
         serializer = EventSerializer(event, data=data, partial=True)
-        
+
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -743,124 +743,210 @@ class EventUpdateDestroyView(APIView):
             event = Event.objects.get(id=pk)
         except Event.DoesNotExist:
             return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
-        
+
         event.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-#CRUD:
-#Organizaciones
-class OrganizationListCreate(generics.ListCreateAPIView):
+# Operation_Donation:
+# List and Create:
+class OperationListCreateDonationView(APIView):
     permission_classes = [AllowAny]
 
-    queryset = Organization.objects.all()
-    serializer_class = OrganizationSerializer
+    def get(self, request):
+        donations = Donation.objects.all()
+        list = []
 
-class OrganizationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
+        for donation in donations:
+            details = DonationProductDetails.objects.filter(Donation=donation)
+            for detail in details:
+                list.append({
+                    "Headquarter": donation.Headquarter.name,
+                    "date": donation.date,
+                    "name": detail.Product.name,
+                    "quantity": detail.quantity,
+                    "category": detail.Product.Category.name,
+                    "description": donation.description
+                })
+
+        return Response(list, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        data = request.data
+
+        Donation_Headquarter = data.get('Headquarter')
+        Donation_date = data.get('date', timezone.now().date())
+        Product_name = data.get('name')
+        Details_quantity = data.get('quantity')
+        Category_name = data.get('category')
+        Donation_description = data.get('description', "")
+
+        try:
+            headquarter = Headquarter.objects.get(id=Donation_Headquarter)
+        except Headquarter.DoesNotExist:
+            return Response({"error": "Headquarter not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        category = ProductCategory.objects.filter(name=Category_name).first()   
+        if not category:                                                                
+            category = ProductCategory.objects.create(name=Category_name)
+
+        product = Product.objects.filter(name=Product_name).first()
+        if not product:
+            product = Product.objects.create(name=Product_name, Category=category)
+
+        donation = Donation.objects.create(
+            Headquarter=headquarter,
+            date=Donation_date,
+            description=Donation_description
+        )
+
+        details = DonationProductDetails.objects.create(
+            Product=product,
+            Donation=donation,
+            quantity=Details_quantity
+        )
+
+        return Response(status=status.HTTP_201_CREATED)
+    
+    def post(self, request):
+        data = request.data
+
+        Donation_id = data.get('Donation')
+        Product_name = data.get('name')
+        Details_quantity = data.get('quantity')
+        Category_name = data.get('category')
+
+        try:
+            donation = Donation.objects.get(id=Donation_id)
+        except Donation.DoesNotExist:
+            return Response({"error": "Donation not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        try:
+            category = ProductCategory.objects.get(name=Category_name).first()
+        except ProductCategory.DoesNotExist:
+            category = ProductCategory.objects.create(name=Category_name)
+
+        try:
+            product = Product.objects.get(name=Product_name).first()
+        except Product.DoesNotExist:
+            product = Product.objects.create(name=Product_name, Category=category)
+
+        details = DonationProductDetails.objects.create(
+            Product=product,
+            Donation=donation,
+            quantity=Details_quantity
+        )
+
+        return Response(status=status.HTTP_201_CREATED)
+
+# Update:
+class OperationUpdateDonationView(APIView):
     permission_classes = [AllowAny]
 
-    queryset = Organization.objects.all()
-    serializer_class = OrganizationSerializer
+    def get(self, request, don_pk, pro_pk):
+        try:
+            details = DonationProductDetails.objects.get(Donation_id=don_pk, Product_id=pro_pk)
+        except DonationProductDetails.DoesNotExist:
+            return Response({"error": "Donation and Product not found."}, status=status.HTTP_404_NOT_FOUND)
 
-#Sedes
-class HeadquarterListCreate(generics.ListCreateAPIView):
+        donation = {
+            "Headquarter": details.Donation.Headquarter.name,
+            "date": details.Donation.date,
+            "name": details.Product.name,
+            "quantity": details.quantity,
+            "category": details.Product.Category.name,
+            "description": details.Donation.description
+        }
+
+        return Response(donation, status=status.HTTP_200_OK)
+
+    def put(self, request, don_pk, pro_pk):
+        data = request.data
+
+        Donation_Headquarter = data.get('Headquarter')
+        Donation_date = data.get('date', timezone.now().date())
+        Product_name = data.get('name')
+        Details_quantity = data.get('quantity')
+        Donation_description = data.get('description', '')
+
+        try:
+            detail = DonationProductDetails.objects.get(Donation_id=don_pk, Product_id=pro_pk)
+            donation = detail.Donation
+        except DonationProductDetails.DoesNotExist:
+            return Response({"error": "Donation and Product details not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        if Donation_Headquarter:
+            try:
+                headquarter = Headquarter.objects.get(id=Donation_Headquarter)
+                donation.Headquarter = headquarter
+            except Headquarter.DoesNotExist:
+                return Response({"error": "Headquarter not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        if Donation_date:
+            donation.date = Donation_date
+        if Donation_description:
+            donation.description = Donation_description
+
+        donation.save()
+
+        if Details_quantity:
+            detail.quantity = Details_quantity
+            detail.save()
+        
+        try:
+            category = ProductCategory.objects.get(name='without category')
+        except ProductCategory.DoesNotExist:
+            category = ProductCategory.objects.create(name='without category')
+
+        try:
+            product = Product.objects.get(name=Product_name)
+        except Product.DoesNotExist:
+            product = Product.objects.create(name=Product_name, Category=category)
+
+        detail.Product = product
+        detail.save()
+
+        return Response({
+            "Headquarter": donation.Headquarter.name,
+            "date": donation.date,
+            "name": product.name,
+            "quantity": detail.quantity,
+            "category": product.Category.name,
+            "description": donation.description
+        }, status=status.HTTP_200_OK)
+
+# Delete:
+class OperationDeleteDonationView(APIView):
     permission_classes = [AllowAny]
 
-    queryset = Headquarter.objects.all()
-    serializer_class = HeadquarterSerializer
+    def get(self, request, don_pk):
+        try:
+            donation = Donation.objects.get(id=don_pk)
+        except Donation.DoesNotExist:
+            return Response({"error": "Donations not found."}, status=status.HTTP_404_NOT_FOUND)
 
-class HeadquarterRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [AllowAny]
+        details = DonationProductDetails.objects.filter(Donation=donation)
 
-    queryset = Headquarter.objects.all()
-    serializer_class = HeadquarterSerializer
+        lists = []
+        for detail in details:
+            lists.append({
+                "Headquarter": donation.Headquarter.name,
+                "date": donation.date,
+                "name": detail.Product.name,
+                "quantity": detail.quantity,
+                "category": detail.Product.Category.name,
+                "description": donation.description
+            })
 
-#Estados del productos
-class ProductStatusListCreate(generics.ListCreateAPIView):
-    permission_classes = [AllowAny]
+        return Response(lists, status=status.HTTP_200_OK)
 
-    queryset = ProductStatus.objects.all()
-    serializer_class = ProductStatusSerializer
+    def delete(self, request, don_pk):
+        try:
+            donation = Donation.objects.get(id=don_pk)
+        except Donation.DoesNotExist:
+            return Response({"error": "Donation not found."}, status=status.HTTP_404_NOT_FOUND)
 
-class ProductStatusRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [AllowAny]
+        DonationProductDetails.objects.filter(Donation=donation).delete()
 
-    queryset = ProductStatus.objects.all()
-    serializer_class = ProductStatusSerializer
+        donation.delete()
 
-#Categorias de los productos
-class ProductCategoryListCreate(generics.ListCreateAPIView):
-    permission_classes = [AllowAny]
-
-    queryset = ProductCategory.objects.all()
-    serializer_class = ProductCategorySerializer
-
-class ProductCategoryRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [AllowAny]
-
-    queryset = ProductCategory.objects.all()
-    serializer_class = ProductCategorySerializer
-
-#Productos
-class ProductListCreate(generics.ListCreateAPIView):
-    permission_classes = [AllowAny]
-
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-
-class ProductRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [AllowAny]
-
-    queryset = Product.objects.all()
-    serializer_class = ProductSerializer
-
-#Inventarios
-class InventoryListCreate(generics.ListCreateAPIView):
-    permission_classes = [AllowAny]
-
-    queryset = Inventory.objects.all()
-    serializer_class = InventorySerializer
-
-class InventoryRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [AllowAny]
-
-    queryset = Inventory.objects.all()
-    serializer_class = InventorySerializer
-
-# Detalles entre Productos y Inventarios
-class ProductInventoryDetailsListCreate(generics.ListCreateAPIView):
-    permission_classes = [AllowAny]
-
-    queryset = ProductInventoryDetails.objects.all()
-    serializer_class = ProductInventoryDetailsSerializer
-
-class ProductInventoryDetailsRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [AllowAny]
-
-    queryset = ProductInventoryDetails.objects.all()
-    serializer_class = ProductInventoryDetailsSerializer
-
-# Donaciones
-class DonationListCreate(generics.ListCreateAPIView):
-    permission_classes = [AllowAny]
-
-    queryset = Donation.objects.all()
-    serializer_class = DonationSerializer
-
-class DonationRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [AllowAny]
-
-    queryset = Donation.objects.all()
-    serializer_class = DonationSerializer
-
-# Detalles entre Donaciones y Productos
-class DonationProductDetailsListCreate(generics.ListCreateAPIView):
-    permission_classes = [AllowAny]
-
-    queryset = DonationProductDetails.objects.all()
-    serializer_class = DonationProductDetailsSerializer
-
-class DonationProductDetailsRetrieveUpdateDestroy(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [AllowAny]
-
-    queryset = DonationProductDetails.objects.all()
-    serializer_class = DonationProductDetailsSerializer
+        return Response(status=status.HTTP_204_NO_CONTENT)

@@ -48,6 +48,10 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = '__all__'
+        extra_kwargs = {
+            'Category': {'required': False},
+            'Status': {'required': False}
+        }
 
 class InventorySerializer(serializers.ModelSerializer):
     class Meta:
