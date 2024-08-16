@@ -1100,7 +1100,7 @@ class OperationTypeListView(generics.ListAPIView):
     serializer_class = OperationTypeSerializer
 
 
-class InventoryView(APIView):
+class InventoryAPIView(APIView):
     permission_classes = [AllowAny]
     # Obtener productos de una organización específica con la cantidad total
     def get(self, request, organization_id):
@@ -1116,3 +1116,45 @@ class InventoryView(APIView):
         serializer = ProductSerializer(products, many=True)
         return Response(serializer.data)
     
+
+# Product, Headquarter_1, Headquarter_2, quantity
+class ProductTransferAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        product_id = request.query_params.get('product_id')
+        headquarter1_id = request.query_params.get('headquarter1_id')
+        headquarter2_id = request.query_params.get('headquarter2_id')
+        quantity = request.query_params.get('quantity')
+
+        if not product_id or not headquarter1_id or not headquarter2_id or not quantity:
+            return Response({'error': 'product_id, headquarter1_id, headquarter2_id and quantity are required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            product = Product.objects.get(id=product_id)
+            headquarter1 = Headquarter.objects.get(id=headquarter1_id)
+            headquarter2 = Headquarter.objects.get(id=headquarter2_id)
+                
+                # Verificar si el producto está disponible en el inventario de la sede 1
+            product_inventory_details = ProductInventoryDetails.objects.get(Product=product, Inventory=headquarter1.inventory)
+            if product_inventory_details.cuantity < int(quantity):
+                return Response({'error': 'Not enough quantity in headquarter 1'}, status=status.HTTP_400_BAD_REQUEST)
+    
+    
+                # Actualizar las cantidades en los inventarios
+            product_inventory_details.cuantity -= int(quantity)
+            product_inventory_details.save()
+    
+            product_inventory_details2, created = ProductInventoryDetails.objects.get_or_create(Product=product, Inventory=headquarter2.inventory)
+            product_inventory_details2.cuantity += int(quantity)
+            product_inventory_details2.save()
+
+            return Response({'message': 'Product transferred successfully'}, status=status.HTTP_201_CREATED)
+        except Product.DoesNotExist:
+            return Response({'error': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Headquarter.DoesNotExist:
+            return Response({'error': 'Headquarter not found'}, status=status.HTTP_404_NOT_FOUND)
+        except ProductInventoryDetails.DoesNotExist:
+            return Response({'error': 'Product not found in headquarter 1'}, status=status.HTTP_404_NOT_FOUND)
+        
+
