@@ -12,10 +12,43 @@
 .height-checkbox {
     height: auto;
     padding: 10px 0;
-    margin-top: auto; /* Ajusta el tamaño como desees */
+    margin-top: auto;
+    height: 70px !important;
+    line-height: 1.5;
+    padding: 10px;
+}
+.d-flex {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
 
-.height-checkbox textarea {
-    height: 120px;
+@media (max-width: 576px) { /* Ajuste para pantallas pequeñas */
+    .d-flex {
+        flex-direction: column; /* Cambia la dirección a columna en pantallas pequeñas */
+    }
+    
+    .previous, .next {
+        width: 100%; /* Hace que los botones tomen todo el ancho disponible */
+        text-align: center;
+        margin-bottom: 10px; /* Añade un pequeño margen inferior para separarlos */
+    }
+    
+    .previous .btn, .next .btn {
+        width: 100%; /* Asegura que el botón tome todo el ancho del contenedor */
+    }
 }
+
+.form-label {
+    align-items: center;
+    padding-top: 10px;
+}
+
+.form-control {
+    padding-bottom: 10px;
+    line-height: 1.5;
+}
+
+
 

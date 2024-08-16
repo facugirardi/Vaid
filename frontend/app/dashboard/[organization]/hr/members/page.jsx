@@ -200,14 +200,52 @@ const Page = () => {
             </Modal>
 
             {/* Render the TagModal here */}
-            <TagModal show={showTagModal} handleClose={handleCloseTagModal} handleSearch={handleSearch} />
+            <TagModal show={showTagModal} handleClose={handleCloseTagModal} organizationId={organizationId} handleSearch={handleSearch}/>
         </Layout>
     );
 };
 
-const TagModal = ({ show, handleClose, handleSearch }) => {
+const TagModal = ({ show, handleClose, handleSearch, organizationId }) => {
+    const [tags, setTags] = useState([]);
+    const [filteredTags, setFilteredTags] = useState([]);
+    const [loading, setLoading] = useState(true); // Nuevo estado para manejar la carga
+
+    useEffect(() => {
+        const fetchTags = async () => {
+            setLoading(true); // Comienza la carga
+            if (organizationId) {
+                try {
+                    const response = await axios.get(`http://localhost:8000/api/organizations/${organizationId}/tags/`);
+                    setTags(response.data);
+                    setFilteredTags(response.data);  // Inicialmente, mostrar todas las tags
+                } catch (error) {
+                    console.error('Error fetching tags:', error);
+                }
+            }
+            setLoading(false); // Finaliza la carga
+        };
+
+        fetchTags();
+    }, [organizationId]);
+
+    const handleTagSearch = (keyword) => {
+        const filtered = tags.filter(tag => tag.name.toLowerCase().includes(keyword.toLowerCase()));
+        setFilteredTags(filtered);
+    };
+
+    const handleDeleteTag = async (tagId) => {
+        try {
+           await axios.delete(`http://localhost:8000/api/organizations/${organizationId}/tags/${tagId}/`);
+            const updatedTags = tags.filter(tag => tag.id !== tagId);
+            setTags(updatedTags);
+            setFilteredTags(updatedTags); // Actualiza las tags filtradas
+        } catch (error) {
+            console.error('Error deleting tag:', error);
+        }
+    };
+
     return (
-        <Modal show={show} onHide={handleClose} size="lg">
+        <Modal show={show} onHide={handleClose} size="lg" centered>
             <Modal.Header closeButton>
                 <Modal.Title>Select Tag</Modal.Title>
             </Modal.Header>
@@ -220,41 +258,45 @@ const TagModal = ({ show, handleClose, handleSearch }) => {
                                 type="text"
                                 className="form-control"
                                 placeholder="Search a Keyword"
-                                onChange={(event) => handleSearch(event.target.value)}
+                                onChange={(event) => handleTagSearch(event.target.value)}
+                                disabled={loading} // Deshabilitar el input mientras carga
                             />
                         </div>
                         <div className="d-grid col-md-3 mt-btn">
-                            <button className="btn btn-primary w-100" type="button">New Tag</button>
+                            <button className="btn btn-primary w-100" type="button" disabled={loading}>
+                                New Tag
+                            </button>
                         </div>
                         <div className="d-grid col-md-1"></div>
                     </div>
                 </div>
                 <div className="table-responsive">
-                    <table className="table">
-                        <thead>
-                            <tr>
-                                <th className="text-center">Tags</th>
-                                <th className="text-center">Members</th>
-                                <th className="text-center">Options</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {Array.from({ length: 6 }).map((_, idx) => (
-                                <tr key={idx}>
-                                    <td className="text-center">Tags {idx + 1}</td>
-                                    <td className="text-center"><i className="ti ti-user"></i> {idx + 1}</td>
-                                    <td className="text-center">
-                                        <button className="icon-button btn btn-light btn-sm mx-1">
-                                            <i className="ti ti-pencil"></i>
-                                        </button>
-                                        <button className="icon-button btn btn-light btn-sm mx-1">
-                                            <i className="ti ti-trash"></i>
-                                        </button>
-                                    </td>
+                    {loading ? (
+                        <p className="text-center">Loading tags...</p> // Mensaje de carga
+                    ) : filteredTags.length === 0 ? (
+                        <p className="text-center">No tags available.</p> // Mensaje si no hay tags
+                    ) : (
+                        <table className="table">
+                            <thead>
+                                <tr>
+                                    <th className="text-center">Tags</th>
+                                    <th className="text-center">Options</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                {filteredTags.map((tag) => (
+                                    <tr key={tag.id} className='tr-tags'>
+                                        <td className="text-center">{tag.name}</td>
+                                        <td className="text-center">
+                                            <button className="icon-button btn btn-light btn-sm mx-1" onClick={() => handleDeleteTag(tag.id)}>
+                                                <i className="ti ti-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    )}
                 </div>
             </Modal.Body>
             <Modal.Footer>
@@ -265,5 +307,4 @@ const TagModal = ({ show, handleClose, handleSearch }) => {
         </Modal>
     );
 };
-
 export default Page;
