@@ -59,6 +59,11 @@ const Page = () => {
         setSelectedTask(null);
     };
 
+    const handleArrowClick = () => {
+        // Lógica para lo que deseas que haga el botón de flecha
+        console.log('Arrow button clicked');
+    };
+
     return (
         <Layout>
             <BreadcrumbItem mainTitle="Events" subTitle="View Events" />
@@ -157,9 +162,15 @@ const Page = () => {
                                             <p className='title-dates'>End Time</p>
                                             <Form.Control type="time" defaultValue={selectedTask.endTime} readOnly/>
                                         </div>
+                                        <div className="d-flex justify-content-end align-items-center w-100">
+                                            <button className="arrow-button ms-2">
+                                            →
+                                            </button>
+                                        </div>
                                     </div>
+                                    
                                 </Form.Group>
-                                    <p className='title-modal-12'>Attendance</p><p className='title3-modal'>No attendance found!</p>
+                                    <p className='<title-modal-12'>Attendance</p><p className='title3-modal'>No attendance found!</p>
                                     </div>
                                     </div>
                             </div>
