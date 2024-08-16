@@ -203,10 +203,17 @@ const Page = () => {
                                                                     />
                                                                 </div>
                                                             </div>
-                                                            <div className="col-sm-12">
+                                                            <div className="col-sm-6">
+                                                                <div className="form-group">                                                            <label className="form-label">Did you have a volunteer expierience?</label>
+                                                                    <select className="form-select height-checkbox">
+                                                                        <option>Yes</option>
+                                                                        <option>No</option>
+                                                                    </select>                                                                    
+                                                                </div>
+                                                            </div>
+                                                            <div className="col-sm-6">
                                                                 <div className="form-group">
-                                                                    <div className="height-checkbox">
-                                                                        <label className="form-label">Relevant Experience or Skills</label>
+                                                                        <label className="form-label">Tell us about your experience</label>
                                                                         <textarea
                                                                             className="form-control"
                                                                             name="experience"
@@ -214,7 +221,6 @@ const Page = () => {
                                                                             value={formData.experience}
                                                                             onChange={handleChange}
                                                                         />
-                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -464,11 +470,11 @@ const Page = () => {
                                                         <h3 className="mb-2">Your Goals</h3>
                                                         <small className="text-muted">Tell us about your goals and motivations for volunteering.</small>
                                                     </div>
-                                                    <div className="col-md-12">
-                                                        <div className="mb-3">
-                                                            <div className="height-checkbox">
-                                                                <label className="form-label" htmlFor="goals">Volunteering Goals</label>
-                                                                <textarea
+                                                    <div className="row mt-4">
+                                                    <div className="col-sm-6">
+                                                        <div className="form-group">
+                                                        <label className="form-label" htmlFor="goals">Volunteering Goals</label>
+                                                            <textarea
                                                                     className="form-control"
                                                                     id="goals"
                                                                     name="goals"
@@ -476,13 +482,11 @@ const Page = () => {
                                                                     value={formData.goals}
                                                                     onChange={handleChange}
                                                                 />
-                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div className="col-md-12">
-                                                        <div className="mb-3">
-                                                            <div className="height-checkbox">
-                                                                <label className="form-label" htmlFor="motivations">Motivations</label>
+                                                    <div className="col-sm-6">
+                                                        <div className="form-group">
+                                                            <label className="form-label" htmlFor="motivations">Motivations</label>
                                                                 <textarea
                                                                     className="form-control"
                                                                     id="motivations"
@@ -491,18 +495,8 @@ const Page = () => {
                                                                     value={formData.motivations}
                                                                     onChange={handleChange}
                                                                 />
-                                                            </div>
                                                         </div>
                                                     </div>
-                                                    <div className="d-flex wizard justify-content-center mt-3">
-                                                        <div className="last">
-                                                            <button
-                                                                className={`btn btn-secondary mt-3 mt-md-0`}
-                                                                onClick={() => setKey(`tab-${totalTabs}`)}
-                                                            >
-                                                                Finish
-                                                            </button>
-                                                        </div>
                                                     </div>
                                                 </form>
                                             </Tab.Pane>
@@ -517,7 +511,7 @@ const Page = () => {
                                                                     Back To Previous
                                                                 </button>
                                                             </div>
-                                                            <div className="next">
+                                                            <div className="d-flex next">
                                                                 <button
                                                                     className="btn btn-secondary mt-3 mt-md-0"
                                                                     onClick={handleNext}
