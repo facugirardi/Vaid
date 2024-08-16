@@ -62,14 +62,24 @@
   }
   
   th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
+    padding: 0.3rem; /* Ajusta el padding para hacer las celdas más compactas */
+    font-size: 0.75rem; /* Tamaño de fuente más pequeño */
     text-align: left;
-    border-top: none; /* Elimina el borde superior */
-    border-left: none; /* Elimina el borde izquierdo */
-    border-right: none; /* Elimina el borde derecho */
   }
   
+  .th-compact {
+    max-width: 100px; /* Ajusta el ancho máximo según sea necesario */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .td-compact {
+    max-width: 100px; /* Ajusta el ancho máximo según sea necesario */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 
   .options-button {
     background: none;
@@ -77,4 +87,13 @@
     font-size: 18px;
     cursor: pointer;
   }
+
+  .custom-modal .modal-dialog {
+    max-width: 55%; /* Ajusta el porcentaje según el ancho deseado */
+  }
+
+  .custom-modal .modal-content {
+    border-radius: 0.5rem; /* Opcional: para redondear las esquinas del modal */
+  }
+
   
