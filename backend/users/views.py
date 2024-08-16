@@ -19,6 +19,8 @@ from rest_framework.permissions import IsAuthenticated
 from .models import Organization, Person, Image
 from .serializers import *
 from django.shortcuts import get_object_or_404
+from django.db.models import Sum
+
 
 class PersonOrganizationDetailsDeleteView(generics.GenericAPIView):
     permission_classes = [AllowAny]
@@ -910,27 +912,40 @@ class ProductForHeadquarterView(APIView):
 
     def post(self, request, headquarter_id):
         data = request.data
+        # Intentar obtener el inventario asociado al headquarter
         try:
             inventory = Inventory.objects.get(Headquarter_id=headquarter_id)
         except Inventory.DoesNotExist:
             return Response({'error': 'Inventory for specified headquarter not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        data['Inventory'] = inventory.id
-        serializer = ProductInventoryDetailsSerializer(data=data)
-
-        if serializer.is_valid():
-            product_inventory_details = serializer.save()
-            return Response(ProductInventoryDetailsSerializer(product_inventory_details).data, status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # Obtener el producto del request
+        product_id = data.get('Product')
+        
+        # Verificar si ya existe un registro en ProductInventoryDetails con el mismo producto e inventario
+        try:
+            product_inventory_details = ProductInventoryDetails.objects.get(Product_id=product_id, Inventory=inventory)
+            # Si existe, actualizar la cantidad
+            product_inventory_details.cuantity += int(data.get('cuantity', 0))
+            product_inventory_details.save()
+            return Response(ProductInventoryDetailsSerializer(product_inventory_details).data, status=status.HTTP_200_OK)
+        except ProductInventoryDetails.DoesNotExist:
+            # Si no existe, crear un nuevo registro
+            data['Inventory'] = inventory.id
+            serializer = ProductInventoryDetailsSerializer(data=data)
+            
+            if serializer.is_valid():
+                product_inventory_details = serializer.save()
+                return Response(ProductInventoryDetailsSerializer(product_inventory_details).data, status=status.HTTP_201_CREATED)
+            
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request, headquarter_id):
+        
         try:
             inventory = Inventory.objects.get(Headquarter_id=headquarter_id)
         except Inventory.DoesNotExist:
             return Response({'error': 'Inventory for specified headquarter not found'}, status=status.HTTP_404_NOT_FOUND)
             
-
         product_inventory_details = ProductInventoryDetails.objects.filter(Inventory=inventory)
         serializer = ProductInventoryDetailsSerializer(product_inventory_details, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -1258,4 +1273,100 @@ class ProductTransferAPIView(APIView):
         except ProductInventoryDetails.DoesNotExist:
             return Response({'error': 'Product not found in headquarter 1'}, status=status.HTTP_404_NOT_FOUND)
 
+
+#Se debera poder agregar/eliminar miembros de un evento.
+class MemberEventsAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        event_id = request.query_params.get('event_id')
+
+        try:
+            event = Event.objects.get(id=event_id)
+            members = EventPersonDetails.objects.filter(Event=event)
+            serializer = EventPersonDetailsSerializer(members, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        except Event.DoesNotExist:
+            return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+    def post(self, request):
+        person_id = request.query_params.get('person_id')
+        event_id = request.query_params.get('event_id')
+
+        if not person_id or not event_id:
+            return Response({'error': 'person_id and event_id are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            person = Person.objects.get(id=person_id)
+            event = Event.objects.get(id=event_id)
+
+            if EventPersonDetails.objects.filter(Person=person, Event=event).exists():
+                return Response({'error': 'Person is already attending this event'}, status=status.HTTP_400_BAD_REQUEST)
+
+            event_person_details = EventPersonDetails.objects.create(Person=person, Event=event)
+            return Response({'message': 'Person added successfully', 'event_person_details': EventPersonDetailsSerializer(event_person_details).data}, status=status.HTTP_201_CREATED)
+
+        except Person.DoesNotExist:
+            return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Event.DoesNotExist:
+            return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+    def delete(self, request):
+        person_id = request.query_params.get('person_id')
+        event_id = request.query_params.get('event_id')
+
+        try:
+            person = Person.objects.get(id=person_id)
+            event = Event.objects.get(id=event_id)
+
+            try:
+                event_person_details = EventPersonDetails.objects.get(Person=person, Event=event)
+                event_person_details.delete()
+                return Response({'message': 'Person removed successfully'}, status=status.HTTP_204_NO_CONTENT)
+
+            except EventPersonDetails.DoesNotExist:
+                return Response({'error': 'Person is not attending this event'}, status=status.HTTP_404_NOT_FOUND)
+
+        except Person.DoesNotExist:
+            return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Event.DoesNotExist:
+            return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    
+#Se debera poder agregar/eliminar invitados a un evento con la class Guest.
+class GuestEventsAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        event_id = request.query_params.get('event_id')
+
+        if not event_id:
+            return Response({'error': 'event_id is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            event = Event.objects.get(id=event_id)
+
+            GuestSerializer = GuestSerializer(data=request.data)
+            if GuestSerializer.is_valid():
+                guest = GuestSerializer.save(Event=event)
+                return Response({'message': 'Guest added successfully', 'guest': GuestSerializer(guest).data}, status=status.HTTP_201_CREATED)
+       
+        except Event.DoesNotExist:
+            return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+    def delete(self, request):
+        guest_id = request.query_params.get('guest_id')
+
+        if not guest_id:
+            return Response({'error': 'guest_id is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            guest = Guest.objects.get(id=guest_id)
+            guest.delete()
+            return Response({'message': 'Guest removed successfully'}, status=status.HTTP_204_NO_CONTENT)
+
+        except Guest.DoesNotExist:
+            return Response({'error': 'Guest not found'}, status=status.HTTP_404_NOT_FOUND)
+        
 

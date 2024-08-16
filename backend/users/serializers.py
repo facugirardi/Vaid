@@ -108,13 +108,18 @@ class ProductSerializer(serializers.ModelSerializer):
     Status = serializers.PrimaryKeyRelatedField(queryset=ProductStatus.objects.all())
     category_name = serializers.CharField(source='Category.name', read_only=True)
     status_name = serializers.CharField(source='Status.name', read_only=True)
+    total_quantity = serializers.SerializerMethodField(required=False)
 
     class Meta:
         model = Product
-        fields = '__all__'
+        fields = ['id', 'name', 'expDate', 'Category', 'Status', 'total_quantity']
         extra_kwargs = {
             'expDate': {'required': False, 'allow_null': True}  # Permitir null
         }
+    
+    def get_total_quantity(self, obj):
+        # Calcula la cantidad total si el objeto tiene la anotación total_quantity
+        return getattr(obj, 'total_quantity', None)    
 
 
 class ProductInventoryDetailsSerializer(serializers.ModelSerializer):
@@ -170,3 +175,13 @@ class OperationSerializer(serializers.ModelSerializer):
         for product_id in products_data:
             OperationProductDetails.objects.create(Operation=operation, Product_id=product_id)
         return operation
+
+class EventPersonDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EventPersonDetails
+        fields = '__all__'
+
+class GuestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Guest
+        fields = '__all__'
