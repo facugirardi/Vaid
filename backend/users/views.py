@@ -20,7 +20,7 @@ from .models import Organization, Person, Image
 from .serializers import *
 from django.shortcuts import get_object_or_404
 from django.db.models import Sum
-
+from .serializers import GuestSerializer
 
 class PersonOrganizationDetailsDeleteView(generics.GenericAPIView):
     permission_classes = [AllowAny]
@@ -1291,8 +1291,8 @@ class MemberEventsAPIView(APIView):
             return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
         
     def post(self, request):
-        person_id = request.query_params.get('person_id')
-        event_id = request.query_params.get('event_id')
+        person_id = request.data['person_id']
+        event_id = request.data['event_id']
 
         if not person_id or not event_id:
             return Response({'error': 'person_id and event_id are required'}, status=status.HTTP_400_BAD_REQUEST)
@@ -1344,14 +1344,16 @@ class GuestEventsAPIView(APIView):
         if not event_id:
             return Response({'error': 'event_id is required'}, status=status.HTTP_400_BAD_REQUEST)
 
+        request.data['Event'] = event_id
         try:
             event = Event.objects.get(id=event_id)
 
-            GuestSerializer = GuestSerializer(data=request.data)
-            if GuestSerializer.is_valid():
-                guest = GuestSerializer.save(Event=event)
+            serializers = GuestSerializer(data=request.data)
+            if serializers.is_valid():
+                guest = serializers.save(Event=event)
                 return Response({'message': 'Guest added successfully', 'guest': GuestSerializer(guest).data}, status=status.HTTP_201_CREATED)
-       
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+        
         except Event.DoesNotExist:
             return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
         

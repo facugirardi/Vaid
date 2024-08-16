@@ -53,6 +53,8 @@ urlpatterns = [
     path('organization/<int:organization_id>/operation/', OperationAPIView.as_view(), name='operation-list-create'),
     path('organization/<int:organization_id>/operation/<int:operation_id>/', OperationAPIView.as_view(), name='operation-detail-delete'),
     path('organization/operation-type/', OperationTypeListView.as_view(), name='operation-type-list-create'),
-    path('organization/<int:organization_id>/inventory/', InventoryView.as_view(), name='inventory-list'),
+    path('organization/<int:organization_id>/inventory', InventoryView.as_view(), name='inventory-list'),
     path('organization/transferProduct', ProductTransferAPIView.as_view(), name='transfer-list-create'),
+    path('organization/event/members', MemberEventsAPIView.as_view(), name='event-members'),
+    path('organization/event/guest', GuestEventsAPIView.as_view(), name='event-Guests'),
 ]
