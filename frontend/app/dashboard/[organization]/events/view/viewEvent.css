@@ -1,3 +1,19 @@
+.button-invite {
+  background-color: #f8f9fa00;
+  border: none;
+  color: #000000;
+  padding: 10px 20px;
+  border-radius: 5px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.button-invite:hover {
+  background-color: #e2e6ea;
+}
 .header {
   display: flex;
   justify-content: space-between;
@@ -119,7 +135,7 @@
   padding: 10px;
 }
 
-.button-take {
+.button-join {
   background-color: #2A50CF;
   color: #fff;
   border-radius: 5px;
@@ -130,8 +146,7 @@
   border: none;
   width: 100px;
 }
-
-.button-take:hover{
+.button-Join:hover{
 background-color: blue;
 }
 
@@ -148,9 +163,8 @@ background-color: blue;
   margin-left: 20px;
   border: 1px solid #fff;
 }
-
 .button-close:hover{
-border:.5px solid #bfbfbf !important;
+border:.5px solid #000000 !important;
 }
 
 .img-popup-event{

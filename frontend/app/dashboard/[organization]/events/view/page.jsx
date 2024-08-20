@@ -9,6 +9,7 @@ import { Button, Card, Col, Form, Row, Modal } from "react-bootstrap";
 import { FaPlusCircle } from 'react-icons/fa'; // Importa el ícono
 import cover1 from "@/public/assets/images/wallpaper_event.jpg";
 
+
 const Page = () => {
     const [tasks, setTasks] = useState([]);
     const [organizationId, setOrganizationId] = useState("");
@@ -142,65 +143,66 @@ const Page = () => {
                 }
             </Row>
 
-            {/* Modal de Visualización */}
-            <Modal show={showModal} onHide={handleCloseModal} centered size='xl' backdropClassName="modal-backdrop">
-                <Modal.Header>
+           {/* Modal de Visualización */}
+{/* Modal Component */}
+<Modal show={showModal} onHide={handleCloseModal} centered size='xl' backdropClassName="modal-backdrop">
+                <Modal.Header >
                 </Modal.Header>
                 <Modal.Body>
                     {selectedTask && (
                         <div className="d-flex">
-                            <div className='container'>
-                                <div className="row">
-                                    <div className="image-container col-12 col-md-5">
-                                        <Image 
-                                            src={cover1} 
-                                            alt="image" 
-                                            className="img-fluid img-popup-event" 
-                                            width={300} 
-                                            height={300}
-                                        />
-                                    <div>
-                                    <div className='d-flex justify-content-center'>
-                                        <button className="button-take">
-                                            Join
-                                        </button>
-                                        <button className="button-close" onClick={handleCloseModal}>
-                                            Close
-                                        </button>
+                          <div className='container'>
+                          <div className="row">
+                            <div className="image-container col-12 col-md-5">
+                                <Image 
+                                    src={cover1} 
+                                    alt="image" 
+                                    className="img-fluid img-popup-event" 
+                                    width={300} 
+                                    height={300}
+                                />
+                            </div>
+                            <div className="details-container col-md-7">
+                                <p className='title-modal-12'>Title</p><p className='title2-modal'>{selectedTask.name}</p>
+                                <p className='title-modal-12'>Description</p><p className='title3-modal'>{selectedTask.description}</p>
+                                <Form.Group className='form-group-all'>
+                                    <div className="row">
+                                        <div className='col-md-3'>
+                                          <p className='title-dates'>Start Date</p>
+                                            <Form.Control type="date" defaultValue={selectedTask.date} />
+                                        </div>
+                                        <div className="col-md-3">
+                                          <p className='title-dates'>End Date</p>
+                                          <Form.Control type="date" defaultValue={selectedTask.endDate} />
+                                        </div>
+                                        <div className="col-md-3">
+                                            <p className='title-dates'>Start Time</p>
+                                            <Form.Control type="time" defaultValue={selectedTask.time} />
+                                        </div>
+                                        <div className="col-md-3">
+                                            <p className='title-dates'>End Time</p>
+                                            <Form.Control type="time" defaultValue={selectedTask.endTime} />
+                                        </div>
+                                    </div>
+                                </Form.Group>
                                     </div>
                                     </div>
-                                    </div>
-                                    <div className="details-container col-md-7">
-                                        <p className='title-modal-12'>Title</p><p class='title2-modal'>{selectedTask.name}</p>
-                                        <p className='title-modal-12'>Description</p><p className='title3-modal'>{selectedTask.description}</p>
-                                        <Form.Group className='form-group-all'>
-                                            <div className="row">
-                                                <div className='col-md-3'>
-                                                    <p className='title-dates'>Start Date</p>
-                                                    <Form.Control type="date" defaultValue={selectedTask.date} readOnly/>
-                                                </div>
-                                                <div className="col-md-3">
-                                                    <p className='title-dates'>End Date</p>
-                                                    <Form.Control type="date" defaultValue={selectedTask.endDate} readOnly/>
-                                                </div>
-                                                <div className="col-md-3">
-                                                    <p className='title-dates'>Start Time</p>
-                                                    <Form.Control type="time" defaultValue={selectedTask.time} readOnly/>
-                                                </div>
-                                                <div className="col-md-3">
-                                                    <p className='title-dates'>End Time</p>
-                                                    <Form.Control type="time" defaultValue={selectedTask.endTime} readOnly/>
-                                                </div>
-                                            </div>
-                                        </Form.Group>
-                                        <p className='title-modal-12'>Attendance</p><p className='title3-modal'>No attendance found!</p>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     )}
                 </Modal.Body>
-            </Modal>
+                <Modal.Footer className='d-flex justify-content-center'>
+                    <button className="button-join">
+                        Join
+                    </button>
+                      <button className="button-close" onClick={handleCloseModal}>
+                        Close
+                    </button>
+                    <button className="button-invite">
+                        Invite
+                    </button>
+                </Modal.Footer>
+            </Modal>;
 
             {/* Modal de Agregar Tarea */}
             <Modal show={showAddModal} onHide={handleCloseAddModal} centered>
