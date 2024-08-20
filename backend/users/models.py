@@ -68,11 +68,6 @@ class TagType(models.Model):
     name = models.CharField(max_length=255)
 
 
-class Tag(models.Model):
-    name = models.CharField(max_length=255)
-    TagType = models.ForeignKey(TagType, on_delete=models.CASCADE) 
-
-
 class Organization(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True, null=True)
@@ -115,11 +110,6 @@ class Candidate(models.Model):
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
 
-class PersonTagDetails(models.Model):
-    Person = models.ForeignKey(Person, on_delete=models.CASCADE)
-    Tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
-
-
 class Headquarter(models.Model):
     name = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
@@ -140,7 +130,7 @@ class ProductStatus(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
-    description = models.TextField(blank=True, null=True)
+    expDate = models.DateField(null=True) 
     Category = models.ForeignKey(ProductCategory, null=True, blank=True, on_delete=models.CASCADE)
     Status = models.ForeignKey(ProductStatus, null=True, blank=True, on_delete=models.CASCADE)
 
@@ -153,9 +143,13 @@ class ProductInventoryDetails(models.Model):
 
 class Task(models.Model):
     name = models.CharField(max_length=255)
-    description = models.CharField(max_length=255, default='No description provided')
-    date = models.DateField(default=timezone.now)
-    time = models.TimeField(default=timezone.now)
+    description = models.TextField()
+    date = models.DateField()
+    endDate = models.DateField()
+    time = models.TimeField()
+    endTime = models.TimeField()
+    file = models.FileField(upload_to='tasks/', null=True, blank=True)
+    state = models.CharField(max_length=255)
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE) 
 
 
@@ -163,17 +157,17 @@ class TaskPersonDetails(models.Model):
     Person = models.ForeignKey(Person, on_delete=models.CASCADE)
     Task = models.ForeignKey(Task, on_delete=models.CASCADE)
 
-class TaskTagDetails(models.Model):
-    Tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
-    Task = models.ForeignKey(Task, on_delete=models.CASCADE)
 
 class Event(models.Model):
     name = models.CharField(max_length=255)
-    description = models.CharField(max_length=255, default='Details to be announced')
-    date = models.DateField(default=timezone.now)
-    time = models.TimeField(default=timezone.now)
+    description = models.TextField()
+    date = models.DateField()
+    endDate = models.DateField()
+    time = models.TimeField()
+    endTime = models.TimeField()
+    file = models.FileField(upload_to='events/', null=True, blank=True)
+    state = models.CharField(max_length=255)
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE) 
-
 
 class EventReport(models.Model):
     title = models.CharField(max_length=255)
@@ -237,3 +231,30 @@ class Image(models.Model):
 
     def __str__(self):
         return self.alt
+
+
+class History(models.Model):
+    action = models.CharField(max_length=255)
+    description = models.CharField(max_length=255)
+    Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)  # Aquí asegúrate de que es headquarter, no headquarter_id
+    date = models.DateField(default=timezone.now)
+
+class Tag(models.Model):
+    name = models.CharField(max_length=255)
+    TagType = models.ForeignKey(TagType, on_delete=models.CASCADE) 
+    Organization = models.ForeignKey(Organization, on_delete=models.CASCADE, default=1)
+
+
+class PersonTagDetails(models.Model):
+    Person = models.ForeignKey(Person, on_delete=models.CASCADE)
+    Tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
+
+
+class TaskTagDetails(models.Model):
+    Tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
+    Task = models.ForeignKey(Task, on_delete=models.CASCADE)
+
+
+class Invitation(models.Model):
+    Event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    status = models.BooleanField(default=False)
