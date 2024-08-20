@@ -944,8 +944,8 @@ class OrganizationHistoryView(APIView):
             # Verificar que la organización existe
             organization = Organization.objects.get(id=organization_id)
 
-            # Filtrar el historial de acciones de la ONG
-            history_records = History.objects.filter(headquarter_id__Organization=organization)
+            # Filtrar el historial de acciones de la ONG usando el campo headquarter_id
+            history_records = History.objects.filter(Organization=organization)
             serializer = HistorySerializer(history_records, many=True)
 
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -955,22 +955,19 @@ class OrganizationHistoryView(APIView):
 
     def post(self, request, organization_id):
         serializer = HistorySerializer(data=request.data)
-
+        print(request.data)
+        print(serializer)
         if serializer.is_valid():
-            user_id = serializer.validated_data.get('user_id')
-            headquarter_id = serializer.validated_data.get('headquarter_id')
 
             # Verificar que el usuario y la sede existen
             try:
-                user = UserAccount.objects.get(id=user_id)
-                headquarter = Headquarter.objects.get(id=headquarter_id)
+                organization = Organization.objects.get(id=organization_id)
 
                 # Crear el historial
                 history = History.objects.create(
-                    user_id=user,
                     action=serializer.validated_data['action'],
                     description=serializer.validated_data['description'],
-                    headquarter_id=headquarter
+                    Organization=organization
                 )
 
                 return Response({'message': 'Action recorded successfully', 'id': history.id}, status=status.HTTP_201_CREATED)
@@ -980,8 +977,7 @@ class OrganizationHistoryView(APIView):
             except Headquarter.DoesNotExist:
                 return Response({'error': 'Headquarter not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
-
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ProductCreateView(APIView):
     permission_classes = [AllowAny]
@@ -1199,3 +1195,63 @@ class OperationTypeListView(generics.ListAPIView):
     permission_classes = [AllowAny]
     queryset = OperationType.objects.all()
     serializer_class = OperationTypeSerializer
+
+
+class InventoryView(APIView):
+    permission_classes = [AllowAny]
+    # Obtener productos de una organización específica con la cantidad total
+    def get(self, request, organization_id):
+        # Filtramos los inventarios pertenecientes a la organización
+        inventory_ids = Inventory.objects.filter(Headquarter__Organization_id=organization_id).values_list('id', flat=True)
+
+        # Anotamos los productos con la suma total de las cantidades
+        products = Product.objects.filter(
+            productinventorydetails__Inventory_id__in=inventory_ids
+        ).annotate(total_quantity=Sum('productinventorydetails__cuantity')).distinct()
+
+        # Serializamos los productos con la cantidad total
+        serializer = ProductSerializer(products, many=True)
+        return Response(serializer.data)
+
+
+# Product, Headquarter_1, Headquarter_2, quantity
+class ProductTransferAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        product_id = request.query_params.get('product_id')
+        headquarter1_id = request.query_params.get('headquarter1_id')
+        headquarter2_id = request.query_params.get('headquarter2_id')
+        quantity = request.query_params.get('quantity')
+
+        if not product_id or not headquarter1_id or not headquarter2_id or not quantity:
+            return Response({'error': 'product_id, headquarter1_id, headquarter2_id and quantity are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            product = Product.objects.get(id=product_id)
+            headquarter1 = Headquarter.objects.get(id=headquarter1_id)
+            headquarter2 = Headquarter.objects.get(id=headquarter2_id)
+
+                # Verificar si el producto está disponible en el inventario de la sede 1
+            product_inventory_details = ProductInventoryDetails.objects.get(Product=product, Inventory=headquarter1.inventory)
+            if product_inventory_details.cuantity < int(quantity):
+                return Response({'error': 'Not enough quantity in headquarter 1'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+                # Actualizar las cantidades en los inventarios
+            product_inventory_details.cuantity -= int(quantity)
+            product_inventory_details.save()
+
+            product_inventory_details2, created = ProductInventoryDetails.objects.get_or_create(Product=product, Inventory=headquarter2.inventory)
+            product_inventory_details2.cuantity += int(quantity)
+            product_inventory_details2.save()
+
+            return Response({'message': 'Product transferred successfully'}, status=status.HTTP_201_CREATED)
+        except Product.DoesNotExist:
+            return Response({'error': 'Product not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Headquarter.DoesNotExist:
+            return Response({'error': 'Headquarter not found'}, status=status.HTTP_404_NOT_FOUND)
+        except ProductInventoryDetails.DoesNotExist:
+            return Response({'error': 'Product not found in headquarter 1'}, status=status.HTTP_404_NOT_FOUND)
+
+
