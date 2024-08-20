@@ -1182,7 +1182,7 @@ class  TaskParticipationView(APIView):
         except Task.DoesNotExist:
             return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
 
-
+# Se epera en body un atributo denominado products, con la lista de ids de los productos comprados o vendidos
 class OperationAPIView(APIView):
     permission_classes = [AllowAny]
 
@@ -1291,8 +1291,8 @@ class MemberEventsAPIView(APIView):
             return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
         
     def post(self, request):
-        person_id = request.data['person_id']
-        event_id = request.data['event_id']
+        person_id = request.query_params.get('person_id')
+        event_id = request.query_params.get('event_id')
 
         if not person_id or not event_id:
             return Response({'error': 'person_id and event_id are required'}, status=status.HTTP_400_BAD_REQUEST)
@@ -1371,4 +1371,79 @@ class GuestEventsAPIView(APIView):
         except Guest.DoesNotExist:
             return Response({'error': 'Guest not found'}, status=status.HTTP_404_NOT_FOUND)
         
+"""
+se espera un body similar a este:{
+    "description": "Donation of electronics",
+    "date": "2024-08-14",
+    "products": [1, 2, 3]
+}
+"""
+class DonationAPIView(APIView):
+    permission_classes = [AllowAny]
 
+    def get(self, request):
+        org_id = request.query_params.get('org_id')
+        
+        if not org_id:
+            return Response({'error': 'org_id is required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        donations = Donation.objects.filter(Organization_id=org_id)
+        serializer = DonationSerializer(donations, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        org_id = request.query_params.get('org_id')
+
+        if not org_id:
+            return Response({'error': 'org_id is required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        organization = get_object_or_404(Organization, id=org_id)
+        data = request.data.copy()
+        data['Organization'] = organization.id
+        serializer = DonationSerializer(data=data)
+        
+        if serializer.is_valid():
+            donation = serializer.save()
+            return Response(DonationSerializer(donation).data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+class DonationDetailAPIView(APIView):
+    # Obtener, actualizar o eliminar una donación específica
+    def get(self, request):
+        org_id = request.query_params.get('org_id')
+        donation_id = request.query_params.get('donation_id')
+
+        if not org_id or not donation_id:
+            return Response({'error': 'org_id and donation_id are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        donation = get_object_or_404(Donation, id=donation_id, Organization_id=org_id)
+        serializer = DonationSerializer(donation)
+        return Response(serializer.data)
+
+    def put(self, request):
+        org_id = request.query_params.get('org_id')
+        donation_id = request.query_params.get('donation_id')
+
+        if not org_id or not donation_id:
+            return Response({'error': 'org_id and donation_id are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        donation = get_object_or_404(Donation, id=donation_id, Organization_id=org_id)
+        serializer = DonationSerializer(donation, data=request.data, partial=True)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request):
+        org_id = request.query_params.get('org_id')
+        donation_id = request.query_params.get('donation_id')
+
+        if not org_id or not donation_id:
+            return Response({'error': 'org_id and donation_id are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        donation = get_object_or_404(Donation, id=donation_id, Organization_id=org_id)
+        donation.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)

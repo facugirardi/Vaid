@@ -185,3 +185,31 @@ class GuestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Guest
         fields = '__all__'
+
+
+class DonationProductDetailsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DonationProductDetails
+        fields = '__all__'
+
+
+class DonationSerializer(serializers.ModelSerializer):
+    products = serializers.ListField(
+        child=serializers.IntegerField(), write_only=True
+    )
+
+    class Meta:
+        model = Donation
+        fields = ['id', 'description', 'date', 'Organization', 'products']
+
+    def create(self, validated_data):
+        product_ids = validated_data.pop('products')
+        donation = Donation.objects.create(**validated_data)
+        for product_id in product_ids:
+            product = Product.objects.get(id=product_id)
+            DonationProductDetails.objects.create(Donation=donation, Product=product)
+        return donation
+
+    
+
+

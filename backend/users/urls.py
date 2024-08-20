@@ -57,4 +57,7 @@ urlpatterns = [
     path('organization/transferProduct', ProductTransferAPIView.as_view(), name='transfer-list-create'),
     path('organization/event/members', MemberEventsAPIView.as_view(), name='event-members'),
     path('organization/event/guest', GuestEventsAPIView.as_view(), name='event-Guests'),
+    path('donations/', DonationAPIView.as_view(), name='donation-create'),
+    path('donation/detail/', DonationDetailAPIView.as_view(), name='donation-detail'),
+
 ]
