@@ -96,4 +96,13 @@
     border-radius: 0.5rem; /* Opcional: para redondear las esquinas del modal */
   }
 
+
+  .custom-modal-donation .modal-dialog {
+    max-width: 40%; /* Ajusta el porcentaje según el ancho deseado */
+  }
+
+  .custom-modal-donation .modal-content {
+    border-radius: 0.5rem; /* Opcional: para redondear las esquinas del modal */
+  }
+
   
