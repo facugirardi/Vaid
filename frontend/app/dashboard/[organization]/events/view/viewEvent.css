@@ -1,168 +1,196 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
+.button-add-task {
+  display: inline-flex;
+  align-items: center;
+  background-color: #ffffff00;
+  color: rgb(0, 0, 0);
+  padding: 8px 12px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.button-add-task .plus-icon {
+  margin-left: 8px;
+  font-size: 20px;
+}
+
+
+/* Otros estilos existentes para mantener la consistencia */
 .text-white {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 .separator {
-    text-align: center;
-    margin-top: 30px !important;
-    margin-bottom: 20px !important;
+  text-align: center;
+  margin-top: 30px !important;
+  margin-bottom: 20px !important;
 }
 
 .saprator {
-    position: relative;
-    text-align: center;
-    margin-top: 30px !important; /* Ajusta el margen según sea necesario */
-    margin-bottom: 10px; /* Ajusta el margen según sea necesario */
+  position: relative;
+  text-align: center;
+  margin-top: 30px !important; /* Ajusta el margen según sea necesario */
+  margin-bottom: 10px; /* Ajusta el margen según sea necesario */
 }
 
 .ver-mas {
-    background-color: #ffffff; /* Color de fondo para el texto "ver más" */
-    padding: 5px 10px; /* Ajusta el relleno según sea necesario */
-    position: relative;
-    z-index: 1;
-    cursor: pointer;
+  background-color: #ffffff; /* Color de fondo para el texto "ver más" */
+  padding: 5px 10px; /* Ajusta el relleno según sea necesario */
+  position: relative;
+  z-index: 1;
+  cursor: pointer;
 }
 
 .saprator::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    border-top: 1px solid #ccc; /* Color de la línea */
-    z-index: 0;
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  border-top: 1px solid #ccc; /* Color de la línea */
+  z-index: 0;
 }
 
 .ver-mas:hover{
-    font-weight: bold;
-    scale: 1.15;
-    transition: .3s;
+  font-weight: bold;
+  scale: 1.15;
+  transition: .3s;
 }
 
 .bg-success{
-   background-color: #4ddb20 !important;
+ background-color: #4ddb20 !important;
 }
 
 .bg-danger{
-   background-color: #f03e05 !important;
+ background-color: #f03e05 !important;
 }
 
 .modal-content {
-    border-radius: 15px;
-    padding: 20px;
-    background-color: #fff;
-    border: 1px solid #BFBFBF;
+  border-radius: 15px;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #BFBFBF;
 }
 
 .modal-header {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 .modal-header .close {
-    padding: 0;
-    margin: 0;
+  padding: 0;
+  margin: 0;
 }
 
 .modal-title {
-    font-size: 1.5rem;
-    font-weight: bold;
+  font-size: 1.5rem;
+  font-weight: bold;
 }
 
 .modal-body {
-    font-size: 1rem;
-    color: #333;
-    display: flex;
-    flex-direction: row;
-    align-items: flex-start;
+  font-size: 1rem;
+  color: #333;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
 }
 
 .modal-body .image-container {
-    margin-right: 20px;
+  margin-right: 20px;
 }
 
 .modal-body .details-container {
-    flex: 1;
+  flex: 1;
 }
 
 .form-group {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
 .form-control {
-    border-radius: 5px;
-    border: 1px solid #ddd;
-    padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  padding: 10px;
 }
 
 .button-take {
-    background-color: #2A50CF;
-    color: #fff;
-    border-radius: 5px;
-    padding: 10px 20px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: .3s;
-    border: none;
-    width: 100px;
+  background-color: #2A50CF;
+  color: #fff;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: .3s;
+  border: none;
+  width: 100px;
 }
+
 .button-take:hover{
-  background-color: blue;
+background-color: blue;
 }
 
 .button-close {
-    background-color: #fff;
-    color: #000000;
-    border-radius: 5px;
-    padding: 10px 20px;
-    font-size: 1rem;
-    cursor: pointer;
-    border: none;
-    width: 100px;
-    transition: .3s;
-    margin-left: 20px;
-    border: 1px solid #fff;
+  background-color: #fff;
+  color: #000000;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  width: 100px;
+  transition: .3s;
+  margin-left: 20px;
+  border: 1px solid #fff;
 }
+
 .button-close:hover{
-  border:.5px solid #bfbfbf !important;
+border:.5px solid #bfbfbf !important;
 }
+
 .img-popup-event{
-  width: 415px !important;
-  border-radius: 10px;
-  margin-bottom: 20px;
+width: 415px !important;
+border-radius: 10px;
+margin-bottom: 20px;
 }
 
 .img-task-list{
-  width: 455px !important;
-  height: 185px !important;
+width: 455px !important;
+height: 185px !important;
 }
 
 .title-modal-12{
-  font-size: 1rem !important;
-  color: #363636;
-  font-weight: 300 !important;
+font-size: 1rem !important;
+color: #363636;
+font-weight: 300 !important;
 }
 
 .title2-modal{
-  margin-top: -20px !important;
-  font-size: 1.4rem !important;
-  color: #5F5F5F;
+margin-top: -20px !important;
+font-size: 1.4rem !important;
+color: #5F5F5F;
 }
 
 .title3-modal{
-  margin-top: -10px !important;
-  font-size: 1rem !important;
-  color: #5F5F5F;
+margin-top: -10px !important;
+font-size: 1rem !important;
+color: #5F5F5F;
 }
+
 .title-dates{
-  color: #363636 !important;
-  font-weight: 300 !important;
-  font-size: 1rem !important;
-  margin-bottom: 0px !important;
+color: #363636 !important;
+font-weight: 300 !important;
+font-size: 1rem !important;
+margin-bottom: 0px !important;
 }
 
 .modal-backdrop {
-  background-color: transparent;
+background-color: transparent;
 }
 
 .modal-open .modal {

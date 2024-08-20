@@ -285,3 +285,8 @@
 .custom-switch-v1 .form-check-input:checked + .form-check-label::after {
   transform: translate(25px, -50%);
 }
+
+.tr-tags:hover{
+  cursor: pointer;
+  background-color: #f5f5f5;
+}

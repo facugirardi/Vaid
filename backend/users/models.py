@@ -231,10 +231,9 @@ class Image(models.Model):
 
 
 class History(models.Model):
-    user_id = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
     action = models.CharField(max_length=255)
     description = models.CharField(max_length=255)
-    headquarter_id = models.ForeignKey(Headquarter, on_delete=models.CASCADE)
+    Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)  # Aquí asegúrate de que es headquarter, no headquarter_id
     date = models.DateField(default=timezone.now)
 
 class Tag(models.Model):
@@ -251,14 +250,6 @@ class PersonTagDetails(models.Model):
 class TaskTagDetails(models.Model):
     Tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
     Task = models.ForeignKey(Task, on_delete=models.CASCADE)
-
-
-class History(models.Model):
-    user_id = models.ForeignKey(UserAccount, on_delete=models.CASCADE)
-    action = models.CharField(max_length=255)
-    description = models.CharField(max_length=255)
-    headquarter_id = models.ForeignKey(Headquarter, on_delete=models.CASCADE)
-    date = models.DateField(default=timezone.now)
 
 
 class Invitation(models.Model):
