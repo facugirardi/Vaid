@@ -6,7 +6,7 @@ import BreadcrumbItem from '@/common/BreadcrumbItem';
 import Image from "next/image";
 import './viewEvent.css';
 import { Button, Card, Col, Form, Row, Modal } from "react-bootstrap";
-import { FaPlusCircle } from 'react-icons/fa';
+import { FaPlusCircle, FaArrowRight} from 'react-icons/fa';
 import cover1 from "@/public/assets/images/wallpaper_event.jpg";
 
 const Page = () => {
@@ -158,7 +158,7 @@ const Page = () => {
                                     height={300}
                                 />
                             </div>
-                            <div className="details-container col-md-7">
+                            <div className="details-container col-md-6">
                                 <p className='title-modal-12'>Title</p>
                                 <p className='title2-modal'>{selectedTask.name}</p>
                                 <p className='title-modal-12'>Description</p>
@@ -179,8 +179,9 @@ const Page = () => {
                                         </div>
                                         <div className="col-md-3">
                                             <p className='title-dates'>End Time</p>
-                                            <Form.Control type="time" defaultValue={selectedTask.endTime} readOnly/>
+                                            <Form.Control type="time" defaultValue={selectedTask.time} readOnly/>
                                         </div>
+                                        
                                     </div>
                                 </Form.Group>
                                 <p className='title-modal-12'>Attendance</p>
@@ -194,6 +195,13 @@ const Page = () => {
                                     </button>
                                 </div>
                             </div>
+                            <div className=" div-arrow-event col-md-1">
+                                    <button className="button-arrow-right">
+                                        <FaArrowRight className="arrow-right"/>
+                                    </button>
+
+                                </div>
+
                         </div>
                     )}
                 </Modal.Body>
