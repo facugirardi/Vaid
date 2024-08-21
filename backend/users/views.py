@@ -1373,14 +1373,23 @@ class GuestEventsAPIView(APIView):
         
 """
 se espera un body similar a este:{
-    "description": "Donation of electronics",
-    "date": "2024-08-14",
-    "products": [1, 2, 3]
+    "description": "Donation description",
+    "date": "2024-08-20",
+    "products": [
+        {
+            "product": 1,
+            "quantity": 10
+        }
+        {
+            "product": 6, (id del producto)
+            "quantity": 10
+        }
+    ]
 }
 """
 class DonationAPIView(APIView):
     permission_classes = [AllowAny]
-
+#Hace falta que se vean los detalles de la donacions
     def get(self, request):
         org_id = request.query_params.get('org_id')
         
@@ -1396,19 +1405,20 @@ class DonationAPIView(APIView):
 
         if not org_id:
             return Response({'error': 'org_id is required'}, status=status.HTTP_400_BAD_REQUEST)
-        
+
         organization = get_object_or_404(Organization, id=org_id)
         data = request.data.copy()
         data['Organization'] = organization.id
         serializer = DonationSerializer(data=data)
-        
+
         if serializer.is_valid():
             donation = serializer.save()
             return Response(DonationSerializer(donation).data, status=status.HTTP_201_CREATED)
-        
+
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+   
 class DonationDetailAPIView(APIView):
+    permission_classes = [AllowAny]
     # Obtener, actualizar o eliminar una donación específica
     def get(self, request):
         org_id = request.query_params.get('org_id')

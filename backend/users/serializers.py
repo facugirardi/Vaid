@@ -192,24 +192,47 @@ class DonationProductDetailsSerializer(serializers.ModelSerializer):
         model = DonationProductDetails
         fields = '__all__'
 
+class DonationProductSerializer(serializers.Serializer):
+    product = serializers.IntegerField()
+    quantity = serializers.IntegerField()
 
 class DonationSerializer(serializers.ModelSerializer):
     products = serializers.ListField(
-        child=serializers.IntegerField(), write_only=True
+        child=DonationProductSerializer(), write_only=True
     )
+    donation_products = DonationProductDetailsSerializer(source='donationproductdetails_set', many=True, read_only=True)
+
 
     class Meta:
         model = Donation
-        fields = ['id', 'description', 'date', 'Organization', 'products']
+        fields = ['id', 'description', 'date', 'Organization', 'products', 'donation_products']
 
     def create(self, validated_data):
-        product_ids = validated_data.pop('products')
+        products_data = validated_data.pop('products')
         donation = Donation.objects.create(**validated_data)
-        for product_id in product_ids:
+        
+        for product_data in products_data:
+            product_id = product_data['product']
+            quantity = product_data['quantity']
             product = Product.objects.get(id=product_id)
-            DonationProductDetails.objects.create(Donation=donation, Product=product)
-        return donation
+            
+            # Create DonationProductDetails entry
+            DonationProductDetails.objects.create(
+                Donation=donation, 
+                Product=product, 
+                quantity=quantity
+            )
+            
+            # Update ProductInventoryDetails
+            try:
+                product_inventory = ProductInventoryDetails.objects.get(Product=product)
+                product_inventory.cuantity += quantity
+                product_inventory.save()
+            except ProductInventoryDetails.DoesNotExist:
+                # Handle case where the ProductInventoryDetails does not exist
+                pass
 
+        return donation
     
 
 
