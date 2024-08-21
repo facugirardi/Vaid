@@ -213,6 +213,7 @@ class Operation(models.Model):
 class OperationProductDetails(models.Model):
     Product = models.ForeignKey(Product, on_delete=models.CASCADE)
     Operation = models.ForeignKey(Operation, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=0)
 
 
 class Video(models.Model):
