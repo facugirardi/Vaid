@@ -235,6 +235,7 @@
 /* Estilos para el switch personalizado */
 .custom-switch-v1 {
   display: flex;
+  margin-left: -280%;
   align-items: center;
 }
 
@@ -246,7 +247,6 @@
 
 .custom-switch-v1 .form-check-label {
   position: relative;
-  padding-left: 60px; /* Espacio para el switch */
   cursor: pointer;
   line-height: 30px;
 }
@@ -255,7 +255,6 @@
   content: "";
   position: absolute;
   top: 50%;
-  left: 0;
   transform: translateY(-50%);
   width: 50px;
   height: 25px;
@@ -268,10 +267,10 @@
   content: "";
   position: absolute;
   top: 50%;
-  left: 4px;
+  left: 5px;
   transform: translateY(-50%);
-  width: 22px;
-  height: 22px;
+  width: 15px;
+  height: 15px;
   background-color: #fff;
   border-radius: 50%;
   transition: transform 0.3s;
@@ -289,4 +288,14 @@
 .tr-tags:hover{
   cursor: pointer;
   background-color: #f5f5f5;
+}
+
+.div-switch{
+  display: flex !important;
+  align-items: center !important;
+}
+
+.box-create-btn{
+  padding: 0;
+  margin-bottom: -20px !important;
 }

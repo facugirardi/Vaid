@@ -158,7 +158,8 @@ class RetrieveOrganizationView(APIView):
             organization = Organization.objects.get(User=user)
             
             return Response(
-                {'name': organization.name,
+                {'id': organization.id,
+                'name': organization.name,
                  'description':organization.description,
                  'country':organization.country},
                 status=status.HTTP_200_OK
