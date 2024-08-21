@@ -148,12 +148,14 @@ background-color: blue;
   border: 1px solid #fff;
 }
 
+
 .button-close:hover{
-border:.5px solid #bfbfbf !important;
+border:.5px solid #817e7e !important;
 }
 
 .img-popup-event{
-width: 415px !important;
+width: 460px !important;
+height: 385px !important;
 border-radius: 10px;
 margin-bottom: 20px;
 }
@@ -201,7 +203,7 @@ background-color: transparent;
   justify-content: center; /* Centra los botones Join y Close */
   align-items: center; /* Asegura la alineación vertical */
   width: 100%; 
-  margin-left: -80px;
+  
 }
 
 .button-take,
@@ -244,4 +246,15 @@ background-color: transparent;
 
 .button-arrow-right:hover .arrow-icon {
   color: #333; /* Cambiar color del ícono en hover */
+}
+
+.title3-modal-desc {
+  height: 70px; /* Limita la altura para que aparezca la scrollbar vertical */
+  overflow-y: auto; /* Habilita la barra de desplazamiento vertical */
+  overflow-x: hidden; /* Deshabilita la barra de desplazamiento horizontal */
+  padding: 10px; /* Añade espacio interno */
+  border: 1px solid #ccc; /* Bordes */
+  border-radius: 10px; /* Bordes redondeados */
+  box-sizing: border-box; /* Asegura que el padding y border se incluyan en el ancho/alto */
+  word-wrap: break-word; /* Rompe palabras largas */
 }

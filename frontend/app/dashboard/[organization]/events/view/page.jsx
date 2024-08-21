@@ -162,7 +162,7 @@ const Page = () => {
                                 <p className='title-modal-12'>Title</p>
                                 <p className='title2-modal'>{selectedTask.name}</p>
                                 <p className='title-modal-12'>Description</p>
-                                <p className='title3-modal'>{selectedTask.description}</p>
+                                <p className='title3-modal-desc'>{selectedTask.description}</p>
                                 <Form.Group className='form-group-all'>
                                     <div className="row">
                                         <div className='col-md-3'>
@@ -193,16 +193,17 @@ const Page = () => {
                                     <button className="button-close" onClick={handleCloseModal}>
                                         Close
                                     </button>
-                                </div>
+                            </div>
                             </div>
                             <div className=" div-arrow-event col-md-1">
                                     <button className="button-arrow-right">
                                         <FaArrowRight className="arrow-right"/>
                                     </button>
 
-                                </div>
+                            </div>
 
                         </div>
+                        
                     )}
                 </Modal.Body>
             </Modal>
