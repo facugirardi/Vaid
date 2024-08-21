@@ -14,6 +14,7 @@ from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.db.models import Sum
 from django.http import Http404
 from rest_framework.permissions import IsAuthenticated
 from .models import Organization, Person, Image
