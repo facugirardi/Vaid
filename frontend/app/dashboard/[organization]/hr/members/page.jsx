@@ -123,18 +123,23 @@ const Page = () => {
             },
             {
                 header: "Category",
+                accessorKey: "status",
+                enableColumnFilter: false,
+            },
+            {
+                header: "Actions",
                 enableColumnFilter: false,
                 accessorKey: "status",
                 cell: (cellProps) => {
                     return (
                         <>
-                            <div className="overlay-edit">
+                            <div className="overlay-edit-2">
                                 <ul className="list-inline mb-0">
                                     <li className="list-inline-item m-0">
-                                        <Button className="avtar avtar-s btn btn-primary" onClick={() => handleShowModal(cellProps.row.original)}>
+                                        <Button className="btn-action avtar avtar-s btn btn-primary" onClick={() => handleShowModal(cellProps.row.original)}>
                                             <i className="ti ti-plus f-18"></i>
                                         </Button>
-                                        <Button className="avtar avtar-s btn btn-secondary" onClick={() => handleShowTagModal(cellProps.row.original)}>
+                                        <Button className="btn-action avtar avtar-s btn btn-secondary" onClick={() => handleShowTagModal(cellProps.row.original)}>
                                             <i className="ti ti-tag f-18"></i>
                                         </Button>
 
@@ -270,7 +275,7 @@ const TagModal = ({ show, handleClose, handleSearch, organizationId }) => {
         }
     };
 
-    return (
+return (
         <>
             <Modal show={show} onHide={handleClose} size="lg" centered>
                 <Modal.Header closeButton>
@@ -340,15 +345,15 @@ const TagModal = ({ show, handleClose, handleSearch, organizationId }) => {
 
             <Modal show={showNewTagModal} onHide={handleCloseNewTagModal} centered>
                 <Modal.Header closeButton>
-                    <Modal.Title>Create New Tag</Modal.Title>
+                    <Modal.Title className='title-tag-cnt'>Create Tag</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
 
                 <Form onSubmit={handleTagSubmit} className="tag-form">
                         <Form.Group controlId="formTagName" className="me-3 flex-grow-1 d-flex align-items-center">
-                            <div className="container">
+                            <div className="container cont-ctall">
                                 <div className="row">
-                                    <div className="col-md-9">
+                                    <div className="col-7 col-md-9">
                                         <Form.Control 
                                             type="text" 
                                             placeholder="Tag Name" 
@@ -358,8 +363,10 @@ const TagModal = ({ show, handleClose, handleSearch, organizationId }) => {
                                             className="me-3" // Ajuste para el margen entre el campo de texto y el switch
                                         />
                                     </div>
-                                    <div className="col-md-1">off</div>
-                                    <div className="col-md-1">
+                                    <div className="col-1 col-md-1 icon-switch">
+                                      <i class="ph-duotone ph-user-gear icon-admin"></i>
+                                    </div>
+                                    <div className="col-1 col-md-1 icon-switch">
                                     <div className="">
                                         <Form.Check 
                                             className="form-switch custom-switch-v1 form-check-inline" 
@@ -376,20 +383,29 @@ const TagModal = ({ show, handleClose, handleSearch, organizationId }) => {
                                         </Form.Check>
                                     </div>
                                     </div>
-                                    <div className="col-md-1">on</div>
+                                    <div className="col-1 col-md-1 icon-switch">
+                                      <i class="ph-duotone ph-user icon-admin"></i>
+                                    </div>
                                 </div>                                
                             </div>
                         </Form.Group>
                     <div className="box-create-btn container">
-                        <div className="row">
-                        <div className="col-md-4">
+                        <div className="row row-text-admin">
+                          <span className='col-1 col-md-1 icon-span-adm'><i class="ph-duotone ph-user-gear icon-admin"></i></span>
+                          <p className='col-3 col-md-5 p-adm1'>This is an administrator</p>
+                          <span className='col-1 col-md-1 icon-span-adm p-adm2'><i class="ph-duotone ph-user icon-admin"></i></span>  
+                          <p className='col-3 col-md-5'>This is a member</p>
                         </div>
-                        <div className="d-flex justify-content-center col-md-4">
+                        <div className="row">
+                        <div className="col-2 col-md-4">
+                        </div>
+                        <div className="col-6 d-flex justify-content-center col-md-4">
                         <Button variant="primary" type="submit" className="create-tag-btn">
                             Create Tag
                         </Button>
                         </div>
-                        <div className="col-md-4">
+
+                        <div className="col-2 col-md-4">
                         </div>
 
                         </div>

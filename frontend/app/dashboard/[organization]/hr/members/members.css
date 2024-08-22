@@ -232,70 +232,49 @@
   padding: 10px !important;
 }
 
-/* Estilos para el switch personalizado */
-.custom-switch-v1 {
-  display: flex;
-  margin-left: -280%;
-  align-items: center;
-}
-
-.custom-switch-v1 .form-check-input {
-  width: 0;
-  height: 0;
-  opacity: 0;
-}
-
-.custom-switch-v1 .form-check-label {
-  position: relative;
-  cursor: pointer;
-  line-height: 30px;
-}
-
-.custom-switch-v1 .form-check-label::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 50px;
-  height: 25px;
-  background-color: #ccc;
-  border-radius: 15px;
-  transition: background-color 0.3s;
-}
-
-.custom-switch-v1 .form-check-label::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 5px;
-  transform: translateY(-50%);
-  width: 15px;
-  height: 15px;
-  background-color: #fff;
-  border-radius: 50%;
-  transition: transform 0.3s;
-  z-index: 1;
-}
-
-.custom-switch-v1 .form-check-input:checked + .form-check-label::before {
-  background-color: #007bff;
-}
-
-.custom-switch-v1 .form-check-input:checked + .form-check-label::after {
-  transform: translate(25px, -50%);
-}
-
-.tr-tags:hover{
-  cursor: pointer;
-  background-color: #f5f5f5;
-}
-
-.div-switch{
-  display: flex !important;
-  align-items: center !important;
-}
-
 .box-create-btn{
   padding: 0;
   margin-bottom: -20px !important;
+}
+
+.custom-switch-v1.form-switch .form-check-input{
+
+  margin-left: -3.4em !important;
+  cursor: pointer;
+}
+
+.icon-switch{
+  margin-top: 12.5px;
+}
+
+.icon-admin{
+  font-size: 1.5em;
+}
+
+.cont-ctall{
+  margin-top: -10px !important;
+}
+
+.overlay-edit-2{
+  margin-left: -30px !important;
+  margin-right: -30px !important;
+  
+}
+
+.btn-action{
+  margin-left: 15px !important;
+}
+
+.row-text-admin{
+  margin-top: -40px !important;
+  margin-bottom: 20px !important;
+}
+.icon-span-adm{
+}
+
+.row-text-admin{
+  margin-left : 30px !important;
+}
+.title-tag-cnt{
+  font-size: 17.5px !important;
 }
