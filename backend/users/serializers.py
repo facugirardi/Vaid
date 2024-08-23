@@ -158,9 +158,10 @@ class OperationTypeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class OperationProductDetailsSerializer(serializers.ModelSerializer):
+    product_name = serializers.CharField(source='Product.name', read_only=True)
     class Meta:
         model = OperationProductDetails
-        fields = ['Product', 'Operation']
+        fields = ['Product', 'Operation', 'product_name']
 
 #Esta serializer es util par acundo queremos validar atraves del serializador sin tener el id de la Operation o Donation, ya que se guarda despues de la creacion de la Operation o Donation
 class ProductSerializerChild(serializers.Serializer):
@@ -172,10 +173,11 @@ class OperationSerializer(serializers.ModelSerializer):
         child=ProductSerializerChild(), write_only=True
     )
     operation_products = OperationProductDetailsSerializer(source='operationproductdetails_set', many=True, read_only=True)
+    type = serializers.CharField(source='Type.description', read_only=True)
 
     class Meta:
         model = Operation
-        fields = ['id', 'description', 'date', 'time', 'Organization', 'Type', 'products', 'operation_products']
+        fields = ['id', 'description', 'date', 'time', 'Organization', 'type', 'products', 'operation_products']
 
     def create(self, validated_data):
         products_data = validated_data.pop('products')
@@ -209,6 +211,8 @@ class GuestSerializer(serializers.ModelSerializer):
 
 
 class DonationProductDetailsSerializer(serializers.ModelSerializer):
+    product_name = serializers.CharField(source='Product.name')
+
     class Meta:
         model = DonationProductDetails
         fields = '__all__'
