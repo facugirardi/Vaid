@@ -232,56 +232,49 @@
   padding: 10px !important;
 }
 
-/* Estilos para el switch personalizado */
-.custom-switch-v1 {
-  display: flex;
-  align-items: center;
+.box-create-btn{
+  padding: 0;
+  margin-bottom: -20px !important;
 }
 
-.custom-switch-v1 .form-check-input {
-  width: 0;
-  height: 0;
-  opacity: 0;
-}
+.custom-switch-v1.form-switch .form-check-input{
 
-.custom-switch-v1 .form-check-label {
-  position: relative;
-  padding-left: 60px; /* Espacio para el switch */
+  margin-left: -3.4em !important;
   cursor: pointer;
-  line-height: 30px;
 }
 
-.custom-switch-v1 .form-check-label::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 0;
-  transform: translateY(-50%);
-  width: 50px;
-  height: 25px;
-  background-color: #ccc;
-  border-radius: 15px;
-  transition: background-color 0.3s;
+.icon-switch{
+  margin-top: 12.5px;
 }
 
-.custom-switch-v1 .form-check-label::after {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 4px;
-  transform: translateY(-50%);
-  width: 22px;
-  height: 22px;
-  background-color: #fff;
-  border-radius: 50%;
-  transition: transform 0.3s;
-  z-index: 1;
+.icon-admin{
+  font-size: 1.5em;
 }
 
-.custom-switch-v1 .form-check-input:checked + .form-check-label::before {
-  background-color: #007bff;
+.cont-ctall{
+  margin-top: -10px !important;
 }
 
-.custom-switch-v1 .form-check-input:checked + .form-check-label::after {
-  transform: translate(25px, -50%);
+.overlay-edit-2{
+  margin-left: -30px !important;
+  margin-right: -30px !important;
+  
+}
+
+.btn-action{
+  margin-left: 15px !important;
+}
+
+.row-text-admin{
+  margin-top: -40px !important;
+  margin-bottom: 20px !important;
+}
+.icon-span-adm{
+}
+
+.row-text-admin{
+  margin-left : 30px !important;
+}
+.title-tag-cnt{
+  font-size: 17.5px !important;
 }
