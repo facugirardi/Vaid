@@ -33,16 +33,20 @@ const Donations = () => {
   }, [organizationId]);
 
   const fetchDonations = async () => {
-    if(organizationId){
-    try {
-      const response = await axios.get(`http://localhost:8000/organizations/${organizationId}/tags/`); // URL del endpoint para obtener donaciones
-      setDonations(response.data);
-    } catch (error) {
-      console.error('Error fetching donations:', error);
+    if (organizationId) {
+      try {
+        const response = await axios.get(`http://localhost:8000/api/donations/`, {
+          params: {
+            org_id: organizationId
+          }
+        });
+        setDonations(response.data);
+      } catch (error) {
+        console.error('Error fetching donations:', error);
+      }
     }
-  }
   };
-
+  
   const deleteDonation = async (donationId) => {
     try {
       await axios.delete(`/api/donations/${donationId}`); // URL del endpoint para eliminar una donación
@@ -58,6 +62,7 @@ const Donations = () => {
 
   const handleProductModalShow = (product) => {
     setSelectedProduct(product);
+    console.log(selectedProduct)
     setShowProductModal(true);
   };
 
@@ -86,25 +91,21 @@ const Donations = () => {
           <table className="table">
             <thead>
               <tr>
-                <th className='text-center'>Name</th>
-                <th className='text-center'>Units</th>
-                <th className='text-center'>Category</th>
-                <th className='text-center'>Status</th>
+                <th className='text-center'>Description</th>
+                <th className='text-center'>Date</th>
                 <th className='text-center'>Actions</th>
               </tr>
             </thead>
             <tbody>
               {donations.map(item => (
                 <tr key={item.id}>
-                  <td className='text-center'>{item.Product.name}</td>
-                  <td className='text-center'>{item.cuantity}</td>
-                  <td className='text-center'>{item.Product.category_name}</td>
-                  <td className='text-center'>{item.Product.status_name}</td>
+                  <td className='text-center'>{item.description}</td>
+                  <td className='text-center'>{item.date}</td>
                   <td className='text-center'>
-                    <button className="icon-button" onClick={() => handleProductModalShow(item.Product)}>
+                    <button className="icon-button" onClick={() => handleProductModalShow(item.id)}>
                       <FontAwesomeIcon icon={faEye} className='hover-button' />
                     </button>
-                    <button className="icon-button" onClick={() => handleDeleteProductModalShow(item.Product)}>
+                    <button className="icon-button" onClick={() => handleDeleteProductModalShow(item.id)}>
                       <FontAwesomeIcon icon={faTrash} className='hover-button-trash' />
                     </button>
                   </td>
@@ -157,12 +158,12 @@ const Donations = () => {
       {/* Product Details Modal */}
       <Modal show={showProductModal} onHide={handleProductModalClose} backdropClassName="modal-backdrop" centered size='lg'>
         <Modal.Header closeButton>
-          <Modal.Title>Product Details</Modal.Title>
+          <Modal.Title>Donation Details</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           {selectedProduct && (
             <div>
-              <p><strong>Name:</strong> {selectedProduct.name}</p>
+              <p><strong>Name:</strong> {selectedProduct.Donation}</p>
               <p><strong>Category:</strong> {selectedProduct.category_name}</p>
               <p><strong>Status:</strong> {selectedProduct.status_name}</p>
               <p><strong>Expiration Date:</strong> {selectedProduct.expDate ? selectedProduct.expDate : '-'}</p>
