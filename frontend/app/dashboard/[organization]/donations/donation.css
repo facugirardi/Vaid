@@ -1,80 +1,191 @@
-.container {
-    padding: 10px;
-  }
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
 
-  h3 {
-    margin-bottom: 20px;
-    font-size: 20px;
-    margin-right: 50px;
-  }
-  
-  .cards-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-  }
-  
-  .card {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    flex: 1;
-    border-radius: 8px;
-    width: 100%;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-  }
-  
-  .icon-button {
-    background: none;
-    border: none;
-    cursor: pointer;
-    margin-right: 10px;
+.hover-button-trash:hover{
+  color: #c81d1d;
+  transition: .2s;
+}
+
+.hover-button:hover{
+  color: #2950CE;
+  transition: .2s;
+}
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header {
+  width: 100%;
+  background: #ffffff;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+nav {
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+  padding: 20px;
+}
+
+.left-column {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-right: 20px;
+}
+
+.right-column {
+  flex: 2;
+}
+
+.card {
+  background: #ffffff;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th, table td {
+  padding: 10px;
+  border-bottom: 1px solid #dddddd;
+}
+
+table th {
+  text-align: left;
+  color: #888;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 10px;
 }
 
 .icon-button:last-child {
-    margin-right: 0;
+  margin-right: 0;
 }
 
+.add-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  color: rgb(0, 0, 0);
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  margin-left: 50px;
 
-  .add-button {
-    color: #000000;
-    border: none;
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    font-size:30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-  }
-  
-  table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-    border-top: none; /* Elimina el borde superior */
-    border-left: none; /* Elimina el borde izquierdo */
-    border-right: none; /* Elimina el borde derecho */
-  }
-  
+}
 
-  .options-button {
-    background: none;
-    border: none;
-    font-size: 18px;
-    cursor: pointer;
-  }
-  
+.history-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.history-list li {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.history-list .time {
+  width: 80px;
+  font-weight: bold;
+  color: #888;
+}
+
+.history-list .event {
+  display: flex;
+  align-items: center;
+}
+
+.history-list .label {
+  margin-right: 10px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  color: #ffffff;
+  font-size: 12px;
+}
+
+.card h2 {
+  margin-top: 0;
+  color: #333;
+  font-size: 20px;
+  margin-right: 50px;
+}
+
+.card table {
+  margin-top: 20px;
+}
+
+.edit-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #000000;
+}
+
+.fa-ellipsis-v {
+  margin-left: 10px;
+}
+
+.trash-btn{
+margin-left: 15px !important;
+}
+
+.tr-class{
+cursor: pointer;
+}
+.tr-class:hover{
+  background-color: #f2f1f6;
+  transition: .2s;
+
+}
+
+.modal-backdrop {
+background-color: transparent;
+}
+
+.modal-open .modal {
+backdrop-filter: blur(5px); /* Adjust the blur amount as needed */
+}
+
+.linea-punteada {
+  border-left: 2px dashed #888;
+  height: 100px; /* Ajusta la altura según tus necesidades */
+  margin: 0 20px; /* Espaciado alrededor de la línea */
+  margin-bottom: -15px;
+}
+
+.fecha-historial{
+  margin-top: 30px;
+}
+
+.both-cont{
+  margin-top: 25px;
+}

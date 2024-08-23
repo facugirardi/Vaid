@@ -14,6 +14,7 @@ from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.db.models import Sum
 from django.http import Http404
 from rest_framework.permissions import IsAuthenticated
 from .models import Organization, Person, Image
@@ -160,7 +161,8 @@ class RetrieveOrganizationView(APIView):
             organization = Organization.objects.get(User=user)
             
             return Response(
-                {'name': organization.name,
+                {'id': organization.id,
+                'name': organization.name,
                  'description':organization.description,
                  'country':organization.country},
                 status=status.HTTP_200_OK
@@ -772,6 +774,7 @@ class TagListCreateAPIView(APIView):
         return Response(serializer.data)
 
     def post(self, request, organization_id):
+        print(request.data)
         organization = get_object_or_404(Organization, id=organization_id)
         data = request.data.copy()
         data['Organization'] = organization.id
@@ -960,8 +963,8 @@ class OrganizationHistoryView(APIView):
             # Verificar que la organización existe
             organization = Organization.objects.get(id=organization_id)
 
-            # Filtrar el historial de acciones de la ONG
-            history_records = History.objects.filter(headquarter_id__Organization=organization)
+            # Filtrar el historial de acciones de la ONG usando el campo headquarter_id
+            history_records = History.objects.filter(Organization=organization)
             serializer = HistorySerializer(history_records, many=True)
 
             return Response(serializer.data, status=status.HTTP_200_OK)
@@ -971,22 +974,19 @@ class OrganizationHistoryView(APIView):
 
     def post(self, request, organization_id):
         serializer = HistorySerializer(data=request.data)
-
+        print(request.data)
+        print(serializer)
         if serializer.is_valid():
-            user_id = serializer.validated_data.get('user_id')
-            headquarter_id = serializer.validated_data.get('headquarter_id')
 
             # Verificar que el usuario y la sede existen
             try:
-                user = UserAccount.objects.get(id=user_id)
-                headquarter = Headquarter.objects.get(id=headquarter_id)
+                organization = Organization.objects.get(id=organization_id)
 
                 # Crear el historial
                 history = History.objects.create(
-                    user_id=user,
                     action=serializer.validated_data['action'],
                     description=serializer.validated_data['description'],
-                    headquarter_id=headquarter
+                    Organization=organization
                 )
 
                 return Response({'message': 'Action recorded successfully', 'id': history.id}, status=status.HTTP_201_CREATED)
@@ -996,8 +996,7 @@ class OrganizationHistoryView(APIView):
             except Headquarter.DoesNotExist:
                 return Response({'error': 'Headquarter not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)    
-
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ProductCreateView(APIView):
     permission_classes = [AllowAny]

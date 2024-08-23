@@ -61,7 +61,12 @@ const Page = () => {
 
     return (
         <Layout>
+            <div className="header">
             <BreadcrumbItem mainTitle="Tasks" subTitle="View Tasks" />
+            <button className="button-add-task" onClick={() => window.location.href = `/dashboard/${organizationId}/tasks/create`}>
+                    add <i className='ph-duotone ph-plus-circle plus-icon'></i>
+            </button>
+            </div>
             <Row>
                 {
                     (tasks || []).map((item, index) => (

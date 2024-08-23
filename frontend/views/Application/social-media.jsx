@@ -61,7 +61,6 @@ const SocialProfile = () => {
             const imageUrl = `${backendUrl}${data.images[0].image}`;
 
             if (imageUrl) {
-              console.log("Image URL:", imageUrl); // Verificar la URL de la imagen en la consola
               setImage(imageUrl); // Asegúrate de usar la propiedad correcta
             } else {
               setImage(avatar); // Usar imagen por defecto si no se encuentra imagen
@@ -151,7 +150,7 @@ const SocialProfile = () => {
                                         <Col xs={6}>
                                     { userType === 2 ? (
 
-                                            <a  className="btn btn-primary" href={`dashboard/12314/home`}>Dashboard</a>
+                                            <a  className="btn btn-primary" href={`dashboard/${organization ? organization.id : ''}/home`}>Dashboard</a>
                                     ) :
                                     (
 
