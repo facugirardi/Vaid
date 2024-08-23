@@ -1394,8 +1394,9 @@ class DonationAPIView(APIView):
         
         if not org_id:
             return Response({'error': 'org_id is required'}, status=status.HTTP_400_BAD_REQUEST)
-        
-        donations = Donation.objects.filter(Organization_id=org_id)
+            
+        organization = Organization.objects.get(id=org_id)
+        donations = Donation.objects.filter(Organization=organization)
         serializer = DonationSerializer(donations, many=True)
         return Response(serializer.data)
 

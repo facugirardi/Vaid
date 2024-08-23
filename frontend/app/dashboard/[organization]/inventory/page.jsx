@@ -199,6 +199,7 @@ const Inventory = ({ headquarterId, organizationId, addHistoryEntry }) => {
 
   const handleProductModalShow = (product) => {
     setSelectedProduct(product);
+    console.log(selectedProduct)
     setShowProductModal(true);
   };
 
