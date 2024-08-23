@@ -265,7 +265,7 @@ const TagModal = ({ show, handleClose, handleSearch, organizationId }) => {
     const handleTagSubmit = async (e) => {
         e.preventDefault();
         try {
-            const newTag = { name: tagName, inline: isInline };
+            const newTag = { name: tagName, isAdmin: isInline };
             const response = await axios.post(`http://localhost:8000/api/organizations/${organizationId}/tags/`, newTag);
             setTags([...tags, response.data]);
             setFilteredTags([...filteredTags, response.data]);
@@ -317,6 +317,7 @@ return (
                                 <thead>
                                     <tr>
                                         <th className="text-center">Tags</th>
+                                        <th className="text-center">Type</th>
                                         <th className="text-center">Options</th>
                                     </tr>
                                 </thead>
@@ -324,6 +325,7 @@ return (
                                     {filteredTags.map((tag) => (
                                         <tr key={tag.id} className='tr-tags'>
                                             <td className="text-center">{tag.name}</td>
+                                            <td className="text-center">{tag.isAdmin ? 'Administrator' : 'Member'}</td>
                                             <td className="text-center">
                                                 <button className="icon-button btn btn-light btn-sm mx-1" onClick={() => handleDeleteTag(tag.id)}>
                                                     <i className="ti ti-trash"></i>

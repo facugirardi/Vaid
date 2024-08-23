@@ -238,7 +238,7 @@ class History(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(max_length=255)
-    TagType = models.ForeignKey(TagType, on_delete=models.CASCADE) 
+    isAdmin = models.BooleanField() 
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE, default=1)
 
 

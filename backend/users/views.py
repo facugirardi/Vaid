@@ -771,6 +771,7 @@ class TagListCreateAPIView(APIView):
         return Response(serializer.data)
 
     def post(self, request, organization_id):
+        print(request.data)
         organization = get_object_or_404(Organization, id=organization_id)
         data = request.data.copy()
         data['Organization'] = organization.id

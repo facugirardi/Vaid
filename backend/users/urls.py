@@ -51,7 +51,7 @@ urlpatterns = [
     path('organizations/membership/', CheckMembershipView.as_view(), name='check-membership'),
     path('organizations/tasks/participation/', TaskParticipationView.as_view(), name='task-participation'),
     path('organization/<int:organization_id>/operation/', OperationAPIView.as_view(), name='operation-list-create'),
-    path('organization/<int:organization_id>/operation/<int:operation_id>/', OperationAPIView.as_view(), name='operation-detail-delete'),
+    path('organization/<int:organization_i  >/operation/<int:operation_id>/', OperationAPIView.as_view(), name='operation-detail-delete'),
     path('organization/operation-type/', OperationTypeListView.as_view(), name='operation-type-list-create'),
     path('organization/<int:organization_id>/inventory/', InventoryView.as_view(), name='inventory-list'),
     path('<int:organization_id>/history/', OrganizationHistoryView.as_view()),
