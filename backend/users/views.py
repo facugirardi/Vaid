@@ -20,6 +20,7 @@ from .models import Organization, Person, Image
 from .serializers import *
 from django.shortcuts import get_object_or_404
 from django.db.models import Sum
+from django.core.mail import send_mail
 from .serializers import GuestSerializer
 
 class PersonOrganizationDetailsDeleteView(generics.GenericAPIView):
@@ -1457,3 +1458,46 @@ class DonationDetailAPIView(APIView):
         donation = get_object_or_404(Donation, id=donation_id, Organization_id=org_id)
         donation.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+#Se debe crear una view que permita enviar las invitaciones por mail 
+"""
+Se espera un body similar a este:
+{
+  "emails": ["galleguillolucas2006@gmail.com"],
+  "event_id": 1,
+  "subject": "Estás Invitado a Nuestro Evento",
+  "link": "https://www.google.com"
+}
+Les desea mucha suerte galle :) <3
+"""
+class SendInvitationView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        emails = request.data.get('emails') 
+        event_id = request.data.get('event_id')  
+        subject = request.data.get('subject', 'Invitación a Evento')
+        link = request.data.get('link')  
+        event = Event.objects.get(id=event_id)
+        organization = event.Organization.name
+
+        # Validar que los campos obligatorios están presentes
+        if not emails or not event or not organization or not link:
+            return Response({'error': 'emails, event and link are required fields.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            message_template = f"Hola,\n\nEstás invitado(a) a nuestro evento '{event.name}' que se llevará a cabo próximamente.\nEsperamos contar con tu presencia.\n{link}\n\nSaludos cordiales,\nEl equipo de {organization}"
+
+            send_mail(
+                subject=subject,  # Asunto del correo
+                message=message_template,  # Contenido del mensaje personalizado
+                from_email=settings.DEFAULT_FROM_EMAIL,  # Dirección de correo del remitente
+                recipient_list=emails,  # Lista de destinatarios
+                fail_silently=False,  # Generar excepción si falla el envío
+            )
+            print(f"Invitaciones enviadas exitosamente a: {', '.join(emails)}")
+            return Response({'message': 'Invitations sent successfully'}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

@@ -59,5 +59,7 @@ urlpatterns = [
     path('organization/event/guest', GuestEventsAPIView.as_view(), name='event-Guests'),
     path('donations/', DonationAPIView.as_view(), name='donation-create'),
     path('donation/detail/', DonationDetailAPIView.as_view(), name='donation-detail'),
+    path('send-email/', SendInvitationView.as_view(), name='send-email'),
+
 
 ]
