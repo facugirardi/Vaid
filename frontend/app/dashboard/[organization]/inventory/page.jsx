@@ -2,19 +2,22 @@
 
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEllipsisV, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import './styles.css';
 import Layout from '@/layouts/dashboard/index';
 import BreadcrumbItem from '@/common/BreadcrumbItem';
 import { Modal, Button } from 'react-bootstrap';
+import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 
-const Headquarters = ({ onHeadquarterClick }) => {
+const Headquarters = ({ onHeadquarterClick, addHistoryEntry }) => {
   const [headquarters, setHeadquarters] = useState([]);
   const [organizationId, setOrganizationId] = useState("");
   const [showHeadquarterModal, setShowHeadquarterModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedHeadquarter, setSelectedHeadquarter] = useState(null);
 
+  const { data: user, isError, isLoading } = useRetrieveUserQuery();
+  
   useEffect(() => {
     const currentUrl = window.location.href;
     const url = new URL(currentUrl);
@@ -54,7 +57,8 @@ const Headquarters = ({ onHeadquarterClick }) => {
       if (response.ok) {
         console.log('Headquarter borrado con éxito');
         setHeadquarters(headquarters.filter(hq => hq.id !== selectedHeadquarter.id));
-        setShowDeleteModal(false);
+        addHistoryEntry(`Headquarter "${selectedHeadquarter.name}" deleted by ${user.first_name} ${user.last_name}`);
+        handleDeleteModalClose(); // Cerrar el modal aquí
       } else {
         console.error('Error al borrar la sede:', response.status);
       }
@@ -83,9 +87,11 @@ const Headquarters = ({ onHeadquarterClick }) => {
         });
 
         if (response.ok) {
+            const newHeadquarter = await response.json();
             console.log('Headquarter creado con éxito');
-            setHeadquarters([...headquarters, await response.json()]);
-            setShowHeadquarterModal(false);
+            setHeadquarters([...headquarters, newHeadquarter]);
+            addHistoryEntry(`Headquarter "${newHeadquarter.name}" added by ${user.first_name} ${user.last_name}`);
+            handleHeadquarterModalClose(); // Cerrar el modal aquí
         } else {
             console.error('Error en la respuesta:', response.status);
         }
@@ -109,7 +115,7 @@ const Headquarters = ({ onHeadquarterClick }) => {
                 <td className="flex-grow-1 d-flex align-items-center justify-content-start">{hq.name}</td>
                 <td className="flex-grow-1 d-flex align-items-center justify-content-start">{hq.address}</td>
                 <td className="d-flex align-items-center justify-content-end">
-                  <button className="edit-button trash-btn" onClick={() => handleDeleteModalShow(hq)}>
+                  <button className="edit-button trash-btn" onClick={(e) => { e.stopPropagation(); handleDeleteModalShow(hq); }}>
                     <FontAwesomeIcon icon={faTrash} className='hover-button-trash'/>
                   </button>
                 </td>
@@ -132,11 +138,11 @@ const Headquarters = ({ onHeadquarterClick }) => {
               <div className='row'>
                 <div className="mb-3 col-md-6">
                   <label htmlFor="headquarterName" className="form-label">Headquarter Name</label>
-                  <input type="text" className="form-control" id="headquarterName" name="name" placeholder="Headquarter name" />
+                  <input type="text" className="form-control" id="headquarterName" name="name" placeholder="Headquarter name" required />
                 </div>
                 <div className="mb-3 col-md-6">
                   <label htmlFor="addressName" className="form-label">Address Name</label>
-                  <input type="text" className="form-control" id="headquarterAddress" name="address" placeholder="Address name" />
+                  <input type="text" className="form-control" id="headquarterAddress" name="address" placeholder="Address name" required />
                 </div>
               </div>
               <div className='d-flex justify-content-center'>
@@ -169,7 +175,7 @@ const Headquarters = ({ onHeadquarterClick }) => {
   );
 };
 
-const Inventory = ({ headquarterId, organizationId }) => {
+const Inventory = ({ headquarterId, organizationId, addHistoryEntry }) => {
   const [inventory, setInventory] = useState([]);
   const [showInventoryModal, setShowInventoryModal] = useState(false);
   const [showProductModal, setShowProductModal] = useState(false);
@@ -185,7 +191,6 @@ const Inventory = ({ headquarterId, organizationId }) => {
           console.error('Error fetching inventory:', error);
           setInventory([]);
         });
-      console.log(inventory)
     }
   }, [headquarterId]);
 
@@ -217,6 +222,7 @@ const Inventory = ({ headquarterId, organizationId }) => {
         if (response.ok) {
             console.log('Producto borrado con éxito');
             setInventory(inventory.filter(item => item.id !== selectedProduct.id));
+            addHistoryEntry(`Product "${selectedProduct.name}" deleted by ${user.first_name} ${user.last_name}`);
             setShowDeleteProductModal(false);
             
         } else {
@@ -257,6 +263,7 @@ const Inventory = ({ headquarterId, organizationId }) => {
         if (response.ok) {
             const newProduct = await response.json();
             setInventory([...inventory, newProduct]);
+            addHistoryEntry(`Product "${newProduct.name}" added by ${user.first_name} ${user.last_name}`);
             setShowInventoryModal(false);
         } else {
             const errorData = await response.json();
@@ -391,16 +398,52 @@ const Inventory = ({ headquarterId, organizationId }) => {
   );
 };
 
-const History = () => {
+const History = ({ organizationId }) => {
+  const [localHistory, setLocalHistory] = useState([]);
+
+  useEffect(() => {
+    const fetchHistory = async () => {
+      try {
+        const response = await fetch(`http://localhost:8000/api/organizations/${organizationId}/history/`);
+        const data = await response.json();
+        setLocalHistory(data);
+      } catch (error) {
+        console.error('Error fetching history:', error);
+      }
+    };
+
+    fetchHistory();
+  }, [organizationId]);
+
   return (
     <div className="card">
       <h2>History</h2>
       <ul className="history-list mt-20">
-        <li>
-          <div className='d-flex justify-content-start'>
-            <span>No History Yet</span>
-          </div>
-        </li>
+        {localHistory.length === 0 ? (
+          <li>No History Yet</li>
+        ) : (
+          localHistory.map((entry, index) => (
+            <>
+            <div className='container'>
+              <div className='row'>
+                  <div className='col-1 col-md-1'></div>
+                <div className='col-2 col-md-2 fecha-historial'>
+                   <li key={index}>{entry.date}</li>
+                 </div>
+                <div className='col-1 col-md-1'>
+                  <div class="linea-punteada"></div>
+                </div>
+                <div className='col-5 col-md-5'>
+                  <strong><li key={index}>{entry.action}</li></strong>
+                  <li key={index}>{entry.description}</li>
+                </div>
+                <div className='col-3 col-md-3'></div>
+              </div> 
+            </div>
+            <br/>
+            </>
+          ))
+        )}
       </ul>
     </div>
   );
@@ -421,8 +464,28 @@ const Page = () => {
   }, []);
 
   const handleHeadquarterClick = (id) => {
-    console.log("Headquarter clicked, ID:", id);
     setSelectedHeadquarterId(id);
+  };
+
+  const addHistoryEntry = async (entry) => {
+    try {
+        console.log('a')
+        const response = await fetch(`http://localhost:8000/api/${organizationId}/history/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        body: JSON.stringify({ description: entry, action: 'Inventory Change', Organization: organizationId}),
+        });
+
+        if (response.ok) {
+            console.log('Historial registrado con éxito');
+        } else {
+            console.error('Error al registrar el historial:', response.status);
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
   };
 
   return (
@@ -431,11 +494,11 @@ const Page = () => {
         <BreadcrumbItem mainTitle="Resource Management" subTitle="Headquarter Inventory" />
         <div className='row'>
           <div className="col-md-6">
-            <Headquarters onHeadquarterClick={handleHeadquarterClick} />
-            <History />
+            <Headquarters onHeadquarterClick={handleHeadquarterClick} addHistoryEntry={addHistoryEntry} />
+            <History organizationId={organizationId} />
           </div>
           <div className="col-md-6">
-            <Inventory headquarterId={selectedHeadquarterId} organizationId={organizationId} />
+            <Inventory headquarterId={selectedHeadquarterId} organizationId={organizationId} addHistoryEntry={addHistoryEntry} />
           </div>
         </div>
       </div>
@@ -444,4 +507,3 @@ const Page = () => {
 };
 
 export default Page;
-

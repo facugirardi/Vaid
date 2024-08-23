@@ -8,6 +8,7 @@ import './viewEvent.css';
 import { Button, Card, Col, Form, Row, Modal } from "react-bootstrap";
 import { FaPlusCircle } from 'react-icons/fa'; // Importa el ícono
 import cover1 from "@/public/assets/images/wallpaper_event.jpg";
+import FeatherIcon from "feather-icons-react";
 
 const Page = () => {
     const [tasks, setTasks] = useState([]);
@@ -92,8 +93,8 @@ const Page = () => {
         <Layout>
             <div className="header">
                 <BreadcrumbItem mainTitle="Events" subTitle="View Events" />
-                <button className="button-add-task" onClick={handleShowAddModal}>
-                    add <FaPlusCircle className="plus-icon" />
+                <button className="button-add-task" onClick={() => window.location.href = `/dashboard/${organizationId}/events/create`}>
+                    add <i className='ph-duotone ph-plus-circle plus-icon'></i>
                 </button>
             </div>
             <Row>
