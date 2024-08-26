@@ -122,9 +122,26 @@ const Page = () => {
                 enableColumnFilter: false,
             },
             {
-                header: "Category",
+                header: "Active Tags",
                 accessorKey: "status",
                 enableColumnFilter: false,
+                  cell: (cellProps) => {
+                    return (
+                        <>
+                            <div className="overlay-edit-3">
+                                <ul className="list-inline mb-0">
+                                    <li className="list-inline-item m-0">
+                                        <Button className="btn-action avtar avtar-s btn btn-secondary" onClick={() => handleShowTagModal(cellProps.row.original)}>
+                                            <i className="ti ti-plus f-18 icon-action"></i>
+                                        </Button>
+
+                                    </li>
+                                </ul>
+                            </div>
+                        </>
+                    );
+                },
+
             },
             {
                 header: "Actions",
@@ -137,10 +154,10 @@ const Page = () => {
                                 <ul className="list-inline mb-0">
                                     <li className="list-inline-item m-0">
                                         <Button className="btn-action avtar avtar-s btn btn-primary" onClick={() => handleShowModal(cellProps.row.original)}>
-                                            <i className="ti ti-plus f-18"></i>
+                                            <i className="ph-duotone ph-info f-18 icon-action"></i>
                                         </Button>
                                         <Button className="btn-action avtar avtar-s btn btn-secondary" onClick={() => handleShowTagModal(cellProps.row.original)}>
-                                            <i className="ti ti-tag f-18"></i>
+                                            <i className="ph-duotone ph-tag f-18 icon-action"></i>
                                         </Button>
 
                                     </li>
