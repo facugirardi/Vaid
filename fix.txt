@@ -1,0 +1,1 @@
+router.push('/nueva-ruta').then(() => window.location.reload());
