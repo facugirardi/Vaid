@@ -148,17 +148,6 @@ const handleSubmit = async (event) => {
                                 <Col sm={6}>
                                     <h4>Create Event</h4>
                                 </Col>
-                                <Col sm={6} className="text-end">
-                                <div className="close-button-container">
-                                    <button 
-                                        className="close-button" 
-                                        aria-label="Close" 
-                                        onClick={() => { /* Acá agregamos la lógica para cerrar la ventana */ }}
-                                    >
-                                        &times;
-                                    </button>
-                                </div>
-                                </Col>
                             </Row>
                         </Card.Header>
                     </div>
