@@ -128,7 +128,7 @@ class ProductStatus(models.Model):
 
 class Product(models.Model):
     name = models.CharField(max_length=255)
-    expDate = models.DateField(null=True) 
+    expDate = models.DateField(null=True, default=None) 
     Category = models.ForeignKey(ProductCategory, on_delete=models.CASCADE)
     Status = models.ForeignKey(ProductStatus, on_delete=models.CASCADE)
 
@@ -195,6 +195,7 @@ class Donation(models.Model):
 class DonationProductDetails(models.Model):
     Product = models.ForeignKey(Product, on_delete=models.CASCADE)
     Donation = models.ForeignKey(Donation, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=0)
 
 
 class OperationType(models.Model):
@@ -212,6 +213,7 @@ class Operation(models.Model):
 class OperationProductDetails(models.Model):
     Product = models.ForeignKey(Product, on_delete=models.CASCADE)
     Operation = models.ForeignKey(Operation, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=0)
 
 
 class Video(models.Model):
@@ -238,7 +240,7 @@ class History(models.Model):
 
 class Tag(models.Model):
     name = models.CharField(max_length=255)
-    TagType = models.ForeignKey(TagType, on_delete=models.CASCADE) 
+    isAdmin = models.BooleanField() 
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE, default=1)
 
 

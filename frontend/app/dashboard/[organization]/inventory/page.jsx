@@ -199,6 +199,7 @@ const Inventory = ({ headquarterId, organizationId, addHistoryEntry }) => {
 
   const handleProductModalShow = (product) => {
     setSelectedProduct(product);
+    console.log(selectedProduct)
     setShowProductModal(true);
   };
 
@@ -423,7 +424,25 @@ const History = ({ organizationId }) => {
           <li>No History Yet</li>
         ) : (
           localHistory.map((entry, index) => (
-            <li key={index}>{entry.action}</li>
+            <>
+            <div className='container'>
+              <div className='row'>
+                  <div className='col-1 col-md-1'></div>
+                <div className='col-2 col-md-2 fecha-historial'>
+                   <li key={index}>{entry.date}</li>
+                 </div>
+                <div className='col-1 col-md-1'>
+                  <div class="linea-punteada"></div>
+                </div>
+                <div className='col-5 col-md-5'>
+                  <strong><li key={index}>{entry.action}</li></strong>
+                  <li key={index}>{entry.description}</li>
+                </div>
+                <div className='col-3 col-md-3'></div>
+              </div> 
+            </div>
+            <br/>
+            </>
           ))
         )}
       </ul>
