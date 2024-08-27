@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Modal, Button } from 'react-bootstrap';
 import axios from 'axios';
+import {Form, Col, Row } from 'react-bootstrap';
 
 const Donations = () => {
   const [donations, setDonations] = useState([]);
@@ -127,7 +128,7 @@ const Donations = () => {
       {/* Add Inventory Modal */}
       <Modal show={showInventoryModal} onHide={handleInventoryModalClose} backdropClassName="modal-backdrop" centered size='lg'>
         <Modal.Header closeButton>
-          <Modal.Title>Add Inventory Item</Modal.Title>
+          <Modal.Title>Add Donation</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form>
@@ -137,22 +138,22 @@ const Donations = () => {
                   <label htmlFor="productName" className="form-label">Name</label>
                   <input type="text" className="form-control" id="productName" name="name" placeholder='Product Name' required />
                 </div>
+                <div className="mb-3 col-md-3">
+                  <label htmlFor="productType" className="form-label">Type</label>
+                  <input type="text" className="form-control" id="Category" name="Category" placeholder='Product Type' required />
+                </div>
                 <div className="mb-3 col-md-2">
                   <label htmlFor="quantity" className="form-label">Quantity</label>
                   <input type="number" className="form-control" id="quantity" name="quantity" placeholder='1' required />
                 </div>
                 <div className="mb-3 col-md-3">
-                  <label htmlFor="expDate" className="form-label">Expiration Date (Optional)</label>
+                  <label htmlFor="expDate" className="form-label">Date</label>
                   <input type="date" className="form-control" id="expDate" name="expDate" />
-                </div>
-                <div className="mb-3 col-md-3">
-                  <label htmlFor="productType" className="form-label">Type</label>
-                  <input type="text" className="form-control" id="Category" name="Category" placeholder='Product Type' required />
                 </div>
               </div>
               <div className='d-flex justify-content-center'>
                 <Button variant="primary" type="submit" className='mt-10'>
-                  Add Product
+                  Add Donation
                 </Button>
               </div>
             </div>
@@ -320,7 +321,7 @@ const BuySell = () => {
       {/* Add Inventory Modal */}
       <Modal show={showInventoryModal} onHide={handleInventoryModalClose} backdropClassName="modal-backdrop" centered size='lg'>
         <Modal.Header closeButton>
-          <Modal.Title>Add Inventory Item</Modal.Title>
+          <Modal.Title>Add Operation</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <form>
@@ -334,18 +335,21 @@ const BuySell = () => {
                   <label htmlFor="quantity" className="form-label">Quantity</label>
                   <input type="number" className="form-control" id="quantity" name="quantity" placeholder='1' required />
                 </div>
-                <div className="mb-3 col-md-3">
-                  <label htmlFor="expDate" className="form-label">Expiration Date (Optional)</label>
-                  <input type="date" className="form-control" id="expDate" name="expDate" />
+                <div className="mb-3 col-md-2">
+                  <label htmlFor="quantity" className="form-label">Amount</label>
+                  <input type="number" className="form-control" id="amount" name="amount" placeholder='$ 1' required />
                 </div>
-                <div className="mb-3 col-md-3">
-                  <label htmlFor="productType" className="form-label">Type</label>
-                  <input type="text" className="form-control" id="Category" name="Category" placeholder='Product Type' required />
+                <div className="mb-3 col-md-4">
+                  <label htmlFor="productType" className="form-label">Operation Type</label>
+                  <Form.Control as="select" className="form-select" name="category">
+                                    <option>Purchase</option>
+                                    <option>Sale</option>
+                  </Form.Control>
                 </div>
               </div>
               <div className='d-flex justify-content-center'>
                 <Button variant="primary" type="submit" className='mt-10'>
-                  Add Product
+                  Add Operation
                 </Button>
               </div>
             </div>
