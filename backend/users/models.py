@@ -219,9 +219,11 @@ class OperationProductDetails(models.Model):
 class Video(models.Model):
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255, default='Video content')
-    url = models.CharField(max_length=255, default='http://example.com')
+    video_file = models.FileField(upload_to='videos/', null=True, blank=True)  # Nuevo campo para el archivo de video
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.title
 
 class Image(models.Model):
     image = models.ImageField(upload_to='images/')

@@ -23,6 +23,8 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Sum
 from django.core.mail import send_mail
 from .serializers import GuestSerializer
+from rest_framework.parsers import MultiPartParser, FormParser
+
 
 class PersonOrganizationDetailsDeleteView(generics.GenericAPIView):
     permission_classes = [AllowAny]
@@ -1501,3 +1503,41 @@ class SendInvitationView(APIView):
 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+
+#View para subir un video al perfil de una organizacion
+
+class VideoUploadView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        try:
+            data = self.request.data
+            org_id = data.get('organization_id')
+            organization = Organization.objects.get(id=org_id)
+
+            video_file = data.get('video_file')
+            title = data.get('title')
+            description = data.get('description', 'Video content')
+
+            Video.objects.create(
+                title=title,
+                description=description,
+                video_file=video_file,
+                Organization=organization
+            )
+
+            return Response(
+                {'success': 'Video Uploaded Successfully'},
+                status=status.HTTP_201_CREATED
+            )
+        except Organization.DoesNotExist:
+            return Response(
+                {'error': 'Organization not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            return Response(
+                {'error': f'Error Uploading Video: {str(e)}'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
