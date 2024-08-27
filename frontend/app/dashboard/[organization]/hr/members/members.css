@@ -272,8 +272,6 @@
   margin-top: -40px !important;
   margin-bottom: 20px !important;
 }
-.icon-span-adm{
-}
 
 .row-text-admin{
   margin-left : 30px !important;
@@ -290,3 +288,7 @@
   margin-left: 10px !important;
   }
 
+.tr-tag:hover{
+  cursor: pointer;
+  background-color: #eeeeee;
+}

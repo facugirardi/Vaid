@@ -8,6 +8,7 @@ import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 import TableContainer from '@/common/TableContainer';
 import { Button, Card, Col, Form, Row, Modal } from "react-bootstrap";
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const Page = () => {
     const [showModal, setShowModal] = useState(false);
@@ -222,12 +223,12 @@ const Page = () => {
             </Modal>
 
             {/* Render the TagModal here */}
-            <TagModal show={showTagModal} handleClose={handleCloseTagModal} organizationId={organizationId} handleSearch={handleSearch}/>
+            <TagModal show={showTagModal} handleClose={handleCloseTagModal} organizationId={organizationId} handleSearch={handleSearch} selectedCandidate={selectedCandidate}   />
         </Layout>
     );
 };
 
-const TagModal = ({ show, handleClose, handleSearch, organizationId }) => {
+const TagModal = ({ show, handleClose, handleSearch, organizationId, selectedCandidate}) => {
     const [tags, setTags] = useState([]);
     const [filteredTags, setFilteredTags] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -292,6 +293,20 @@ const TagModal = ({ show, handleClose, handleSearch, organizationId }) => {
         }
     };
 
+    const handleAssignTag = async (tagId) => {
+        if (!selectedCandidate) return;
+
+        try {
+            await axios.post(`http://localhost:8000/api/user/${selectedCandidate.id}/tags/`, {
+                tags: [tagId]
+            });
+            toast.success('Tag Added Succesfully!')
+            handleClose();  // Cierra el modal después de asignar la tag
+        } catch (error) {
+            console.error('Error assigning tag to member:', error);
+        }
+    };
+
 return (
         <>
             <Modal show={show} onHide={handleClose} size="lg" centered>
@@ -335,14 +350,16 @@ return (
                                     <tr>
                                         <th className="text-center">Tags</th>
                                         <th className="text-center">Type</th>
+                                        <th className="text-center">Members</th>
                                         <th className="text-center">Options</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {filteredTags.map((tag) => (
-                                        <tr key={tag.id} className='tr-tags'>
+                                        <tr key={tag.id} className='tr-tags tr-tag' onClick={() => handleAssignTag(tag.id)}>
                                             <td className="text-center">{tag.name}</td>
                                             <td className="text-center">{tag.isAdmin ? 'Administrator' : 'Member'}</td>
+                                            <td className="text-center"><i className="ti ti-user"></i> 10</td>
                                             <td className="text-center">
                                                 <button className="icon-button btn btn-light btn-sm mx-1" onClick={() => handleDeleteTag(tag.id)}>
                                                     <i className="ti ti-trash"></i>
