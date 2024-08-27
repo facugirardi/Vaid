@@ -119,7 +119,7 @@ const TopBar = ({ handleOffcanvasToggle, changeThemeMode, toogleSidebarHide, too
 
                     <div className="ms-auto">
                         <ul className="list-unstyled">
-                            <Dropdown as="li" className="pc-h-item">
+                            {/* <Dropdown as="li" className="pc-h-item">
                                 <Dropdown.Toggle as="a" className="pc-head-link arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button"
                                     aria-haspopup="false" aria-expanded="false">
                                     <i className="ph-duotone ph-sun-dim"></i>
@@ -134,7 +134,7 @@ const TopBar = ({ handleOffcanvasToggle, changeThemeMode, toogleSidebarHide, too
                                         <span>Light</span>
                                     </Dropdown.Item>
                                 </Dropdown.Menu>
-                                </Dropdown>
+                                </Dropdown> */}
                             <Dropdown as="li" className="pc-h-item header-user-profile">
                                 <Dropdown.Toggle className="pc-head-link arrow-none me-0" data-bs-toggle="dropdown" href="#"
                                     aria-haspopup="false" data-bs-auto-close="outside" aria-expanded="false" style={{ border: "none" }}>
