@@ -263,6 +263,9 @@
 
 .btn-action{
   margin-left: 15px !important;
+  background-color: #f3f3f3 !important;
+  border-color: #9c9c9c !important;
+  border-radius: 10px !important;
 }
 
 .row-text-admin{
@@ -278,3 +281,12 @@
 .title-tag-cnt{
   font-size: 17.5px !important;
 }
+
+.icon-action{
+  color: #000 !important;
+}
+
+.overlay-edit-3{
+  margin-left: 10px !important;
+  }
+
