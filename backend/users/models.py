@@ -189,6 +189,7 @@ class EventPersonDetails(models.Model):
 class Donation(models.Model):
     description = models.CharField(max_length=255, default='General donation')
     date = models.DateField(default=timezone.now)
+    quantity = models.IntegerField(default=0)
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
 
@@ -206,8 +207,10 @@ class Operation(models.Model):
     description = models.CharField(max_length=255, default='Regular operation')
     date = models.DateField(default=timezone.now)
     time = models.TimeField(default=timezone.now)
+    quantity = models.IntegerField(default=0)
+    amount = models.IntegerField(default=0)
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    Type = models.ForeignKey(OperationType, on_delete=models.CASCADE)
+    type = models.CharField(max_length=255, default='')
 
 
 class OperationProductDetails(models.Model):

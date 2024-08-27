@@ -1196,6 +1196,7 @@ class OperationAPIView(APIView):
             return Response(serializer.data)
 
     def post(self, request, organization_id):
+        print(request.data)
         request.data['Organization'] = organization_id
         serializer = OperationSerializer(data=request.data)
         if serializer.is_valid():
@@ -1401,6 +1402,7 @@ class DonationAPIView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
+        print(request.data)
         org_id = request.query_params.get('org_id')
 
         if not org_id:
