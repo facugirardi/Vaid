@@ -96,7 +96,6 @@
 .modal-body {
   font-size: 1rem;
   color: #333;
-  display: flex;
   flex-direction: row;
   align-items: flex-start;
 }
@@ -149,12 +148,14 @@ background-color: blue;
   border: 1px solid #fff;
 }
 
+
 .button-close:hover{
-border:.5px solid #bfbfbf !important;
+border:.5px solid #817e7e !important;
 }
 
 .img-popup-event{
-width: 415px !important;
+width: 460px !important;
+height: 385px !important;
 border-radius: 10px;
 margin-bottom: 20px;
 }
@@ -194,5 +195,66 @@ background-color: transparent;
 }
 
 .modal-open .modal {
-backdrop-filter: blur(5px); /* Ajusta la cantidad de desenfoque según sea necesario */
+  backdrop-filter: blur(5px); /* Adjust the blur amount as needed */
+}
+
+.d-flex.justify-content-center {
+  position: relative;
+  justify-content: center; /* Centra los botones Join y Close */
+  align-items: center; /* Asegura la alineación vertical */
+  width: 100%; 
+  
+}
+
+.button-take,
+.button-close {
+  margin-right: 10px; /* Espacio entre el botón "Join" y el botón "Close" */
+}
+
+.button-arrow-right {
+  background-color: #f5f5f5; /* Color de fondo */
+  border: none; /* Sin borde */
+  border-radius: 50%; /* Hacer el botón redondo */
+  width: 40px; /* Ajusta el tamaño */
+  height: 40px; /* Ajusta el tamaño */
+  display: flex; /* Flexbox para centrar el icono */
+  align-items: center; /* Centrar verticalmente */
+  justify-content: center; /* Centrar horizontalmente */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra suave */
+  cursor: pointer; /* Cambia el cursor al pasar */
+  transition: background-color 0.3s ease, box-shadow 0.3s ease; /* Transición suave para efectos hover */
+  position:fixed; /* Posición absoluta */
+  top: 50%; /* Alineación vertical en el medio del contenedor */
+  transform: translateY(-50%); /* Compensación para centrar verticalmente */
+ }
+
+ .div-arrow-event{
+  width: 4% !important;
+  margin-left: 40px !important;
+ }
+
+.button-arrow-right:hover {
+  background-color: #b1b1b1; /* Color de fondo en hover */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15); /* Sombra más pronunciada en hover */
+}
+
+.arrow-icon {
+  color: #6c757d; /* Color del ícono */
+  font-size: 18px; /* Tamaño del ícono */
+  transition: color 0.3s ease; /* Transición suave para el color */
+}
+
+.button-arrow-right:hover .arrow-icon {
+  color: #333; /* Cambiar color del ícono en hover */
+}
+
+.title3-modal-desc {
+  height: 70px; /* Limita la altura para que aparezca la scrollbar vertical */
+  overflow-y: auto; /* Habilita la barra de desplazamiento vertical */
+  overflow-x: hidden; /* Deshabilita la barra de desplazamiento horizontal */
+  padding: 10px; /* Añade espacio interno */
+  border: 1px solid #ccc; /* Bordes */
+  border-radius: 10px; /* Bordes redondeados */
+  box-sizing: border-box; /* Asegura que el padding y border se incluyan en el ancho/alto */
+  word-wrap: break-word; /* Rompe palabras largas */
 }

@@ -6,7 +6,7 @@ import BreadcrumbItem from '@/common/BreadcrumbItem';
 import Image from "next/image";
 import './viewEvent.css';
 import { Button, Card, Col, Form, Row, Modal } from "react-bootstrap";
-import { FaPlusCircle } from 'react-icons/fa'; // Importa el ícono
+import { FaPlusCircle, FaArrowRight} from 'react-icons/fa';
 import cover1 from "@/public/assets/images/wallpaper_event.jpg";
 import FeatherIcon from "feather-icons-react";
 
@@ -87,7 +87,7 @@ const Page = () => {
         } catch (error) {
             console.error("Error adding task:", error);
         }
-    };
+    }
 
     return (
         <Layout>
@@ -150,55 +150,61 @@ const Page = () => {
                 <Modal.Body>
                     {selectedTask && (
                         <div className="d-flex">
-                            <div className='container'>
-                                <div className="row">
-                                    <div className="image-container col-12 col-md-5">
-                                        <Image 
-                                            src={cover1} 
-                                            alt="image" 
-                                            className="img-fluid img-popup-event" 
-                                            width={300} 
-                                            height={300}
-                                        />
-                                    <div>
-                                    <div className='d-flex justify-content-center'>
-                                        <button className="button-take">
-                                            Join
-                                        </button>
-                                        <button className="button-close" onClick={handleCloseModal}>
-                                            Close
-                                        </button>
-                                    </div>
-                                    </div>
-                                    </div>
-                                    <div className="details-container col-md-7">
-                                        <p className='title-modal-12'>Title</p><p class='title2-modal'>{selectedTask.name}</p>
-                                        <p className='title-modal-12'>Description</p><p className='title3-modal'>{selectedTask.description}</p>
-                                        <Form.Group className='form-group-all'>
-                                            <div className="row">
-                                                <div className='col-md-3'>
-                                                    <p className='title-dates'>Start Date</p>
-                                                    <Form.Control type="date" defaultValue={selectedTask.date} readOnly/>
-                                                </div>
-                                                <div className="col-md-3">
-                                                    <p className='title-dates'>End Date</p>
-                                                    <Form.Control type="date" defaultValue={selectedTask.endDate} readOnly/>
-                                                </div>
-                                                <div className="col-md-3">
-                                                    <p className='title-dates'>Start Time</p>
-                                                    <Form.Control type="time" defaultValue={selectedTask.time} readOnly/>
-                                                </div>
-                                                <div className="col-md-3">
-                                                    <p className='title-dates'>End Time</p>
-                                                    <Form.Control type="time" defaultValue={selectedTask.endTime} readOnly/>
-                                                </div>
-                                            </div>
-                                        </Form.Group>
-                                        <p className='title-modal-12'>Attendance</p><p className='title3-modal'>No attendance found!</p>
-                                    </div>
-                                </div>
+                            <div className="image-container col-12 col-md-5">
+                                <Image 
+                                    src={cover1} 
+                                    alt="image" 
+                                    className="img-fluid img-popup-event" 
+                                    width={300} 
+                                    height={300}
+                                />
                             </div>
+                            <div className="details-container col-md-6">
+                                <p className='title-modal-12'>Title</p>
+                                <p className='title2-modal'>{selectedTask.name}</p>
+                                <p className='title-modal-12'>Description</p>
+                                <p className='title3-modal-desc'>{selectedTask.description}</p>
+                                <Form.Group className='form-group-all'>
+                                    <div className="row">
+                                        <div className='col-md-3'>
+                                            <p className='title-dates'>Start Date</p>
+                                            <Form.Control type="date" defaultValue={selectedTask.date} readOnly/>
+                                        </div>
+                                        <div className="col-md-3">
+                                            <p className='title-dates'>End Date</p>
+                                            <Form.Control type="date" defaultValue={selectedTask.endDate} readOnly/>
+                                        </div>
+                                        <div className="col-md-3">
+                                            <p className='title-dates'>Start Time</p>
+                                            <Form.Control type="time" defaultValue={selectedTask.time} readOnly/>
+                                        </div>
+                                        <div className="col-md-3">
+                                            <p className='title-dates'>End Time</p>
+                                            <Form.Control type="time" defaultValue={selectedTask.time} readOnly/>
+                                        </div>
+                                        
+                                    </div>
+                                </Form.Group>
+                                <p className='title-modal-12'>Attendance</p>
+                                <p className='title3-modal'>No attendance found!</p>
+                                <div className='d-flex justify-content-center'>
+                                    <button className="button-take">
+                                        Join
+                                    </button>
+                                    <button className="button-close" onClick={handleCloseModal}>
+                                        Close
+                                    </button>
+                            </div>
+                            </div>
+                            <div className=" div-arrow-event col-md-1">
+                                    <button className="button-arrow-right">
+                                        <FaArrowRight className="arrow-right"/>
+                                    </button>
+
+                            </div>
+
                         </div>
+                        
                     )}
                 </Modal.Body>
             </Modal>
@@ -240,23 +246,19 @@ const Page = () => {
                             <Form.Control 
                                 as="textarea" 
                                 rows={3} 
+                                placeholder="Enter task description" 
                                 value={newTask.description} 
                                 onChange={(e) => setNewTask({ ...newTask, description: e.target.value })} 
                             />
                         </Form.Group>
+                        <Button variant="primary" className="mt-4" onClick={handleAddTask}>
+                            Add Task
+                        </Button>
                     </Form>
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseAddModal}>
-                        Close
-                    </Button>
-                    <Button variant="primary" onClick={handleAddTask}>
-                        Add Task
-                    </Button>
-                </Modal.Footer>
             </Modal>
         </Layout>
     );
-}
+};
 
 export default Page;

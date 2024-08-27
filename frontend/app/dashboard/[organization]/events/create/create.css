@@ -84,3 +84,28 @@
     background-color: #2A50FF !important;
     border-color: #2A50FF !important;
   }
+
+  .close-button-container {
+    display: flex;
+    justify-content: flex-end; /* Alinea el contenido del contenedor a la derecha */
+  }
+
+  .close-button {
+    background-color: #fff; /* Color de fondo del botón */
+    border: 2px solid #000; /* Borde del círculo */
+    border-radius: 50%; /* Hace que el borde sea un círculo */
+    width: 35px; /* Ancho del botón */
+    height: 35px; /* Altura del botón */
+    font-size: 1.5rem; /* Tamaño de la "X" */
+    color: #000; /* Color de la "X" */
+    display: flex; /* Centra el contenido */
+    align-items: center; /* Centra el contenido verticalmente */
+    justify-content: center; /* Centra el contenido horizontalmente */
+    cursor: pointer; /* Cambia el cursor a una mano */
+    padding: 0;
+    outline: none;
+}
+
+.close-button:hover {
+    background-color: #f8f8f8; /* Color de fondo al pasar el mouse */
+}
