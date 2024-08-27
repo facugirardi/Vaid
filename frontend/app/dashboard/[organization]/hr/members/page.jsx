@@ -122,9 +122,26 @@ const Page = () => {
                 enableColumnFilter: false,
             },
             {
-                header: "Category",
+                header: "Active Tags",
                 accessorKey: "status",
                 enableColumnFilter: false,
+                  cell: (cellProps) => {
+                    return (
+                        <>
+                            <div className="overlay-edit-3">
+                                <ul className="list-inline mb-0">
+                                    <li className="list-inline-item m-0">
+                                        <Button className="btn-action avtar avtar-s btn btn-secondary" onClick={() => handleShowTagModal(cellProps.row.original)}>
+                                            <i className="ti ti-plus f-18 icon-action"></i>
+                                        </Button>
+
+                                    </li>
+                                </ul>
+                            </div>
+                        </>
+                    );
+                },
+
             },
             {
                 header: "Actions",
@@ -137,10 +154,10 @@ const Page = () => {
                                 <ul className="list-inline mb-0">
                                     <li className="list-inline-item m-0">
                                         <Button className="btn-action avtar avtar-s btn btn-primary" onClick={() => handleShowModal(cellProps.row.original)}>
-                                            <i className="ti ti-plus f-18"></i>
+                                            <i className="ph-duotone ph-info f-18 icon-action"></i>
                                         </Button>
                                         <Button className="btn-action avtar avtar-s btn btn-secondary" onClick={() => handleShowTagModal(cellProps.row.original)}>
-                                            <i className="ti ti-tag f-18"></i>
+                                            <i className="ph-duotone ph-tag f-18 icon-action"></i>
                                         </Button>
 
                                     </li>
@@ -265,7 +282,7 @@ const TagModal = ({ show, handleClose, handleSearch, organizationId }) => {
     const handleTagSubmit = async (e) => {
         e.preventDefault();
         try {
-            const newTag = { name: tagName, inline: isInline };
+            const newTag = { name: tagName, isAdmin: isInline };
             const response = await axios.post(`http://localhost:8000/api/organizations/${organizationId}/tags/`, newTag);
             setTags([...tags, response.data]);
             setFilteredTags([...filteredTags, response.data]);
@@ -317,6 +334,7 @@ return (
                                 <thead>
                                     <tr>
                                         <th className="text-center">Tags</th>
+                                        <th className="text-center">Type</th>
                                         <th className="text-center">Options</th>
                                     </tr>
                                 </thead>
@@ -324,6 +342,7 @@ return (
                                     {filteredTags.map((tag) => (
                                         <tr key={tag.id} className='tr-tags'>
                                             <td className="text-center">{tag.name}</td>
+                                            <td className="text-center">{tag.isAdmin ? 'Administrator' : 'Member'}</td>
                                             <td className="text-center">
                                                 <button className="icon-button btn btn-light btn-sm mx-1" onClick={() => handleDeleteTag(tag.id)}>
                                                     <i className="ti ti-trash"></i>
