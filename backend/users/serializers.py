@@ -158,9 +158,10 @@ class OperationTypeSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class OperationProductDetailsSerializer(serializers.ModelSerializer):
+    product_name = serializers.CharField(source='Product.name', read_only=True)
     class Meta:
         model = OperationProductDetails
-        fields = ['Product', 'Operation']
+        fields = ['Product', 'Operation', 'product_name']
 
 #Esta serializer es util par acundo queremos validar atraves del serializador sin tener el id de la Operation o Donation, ya que se guarda despues de la creacion de la Operation o Donation
 class ProductSerializerChild(serializers.Serializer):
@@ -168,34 +169,34 @@ class ProductSerializerChild(serializers.Serializer):
     quantity = serializers.IntegerField()
 
 class OperationSerializer(serializers.ModelSerializer):
-    products = serializers.ListField(
-        child=ProductSerializerChild(), write_only=True
-    )
-    operation_products = OperationProductDetailsSerializer(source='operationproductdetails_set', many=True, read_only=True)
+    # products = serializers.ListField(
+    #     child=ProductSerializerChild(), write_only=True
+    # )
+    # operation_products = OperationProductDetailsSerializer(source='operationproductdetails_set', many=True, read_only=True)
 
     class Meta:
         model = Operation
-        fields = ['id', 'description', 'date', 'time', 'Organization', 'Type', 'products', 'operation_products']
+        fields = ['id', 'description', 'date', 'quantity', 'amount', 'type', 'Organization']
 
-    def create(self, validated_data):
-        products_data = validated_data.pop('products')
-        operation = Operation.objects.create(**validated_data)
+    # def create(self, validated_data):
+    #     products_data = validated_data.pop('products')
+    #     operation = Operation.objects.create(**validated_data)
 
-        for product_data in products_data:
-            quantity = product_data['quantity']
-            product_id = product_data['product']
-            product = Product.objects.get(id=product_id)
+    #     for product_data in products_data:
+    #         quantity = product_data['quantity']
+    #         product_id = product_data['product']
+    #         product = Product.objects.get(id=product_id)
             
-            OperationProductDetails.objects.create(Operation=operation, Product_id=product_id, quantity=quantity)
+    #         OperationProductDetails.objects.create(Operation=operation, Product_id=product_id, quantity=quantity)
             
-            try:
-                product_inventory = ProductInventoryDetails.objects.get(Product=product)
-                product_inventory.cuantity += quantity
-                product_inventory.save()
-            except ProductInventoryDetails.DoesNotExist:
-                # Handle case where the ProductInventoryDetails does not exist
-                pass
-        return operation
+    #         try:
+    #             product_inventory = ProductInventoryDetails.objects.get(Product=product)
+    #             product_inventory.cuantity += quantity
+    #             product_inventory.save()
+    #         except ProductInventoryDetails.DoesNotExist:
+    #             # Handle case where the ProductInventoryDetails does not exist
+    #             pass
+    #     return operation
 
 class EventPersonDetailsSerializer(serializers.ModelSerializer):
     class Meta:
@@ -209,48 +210,45 @@ class GuestSerializer(serializers.ModelSerializer):
 
 
 class DonationProductDetailsSerializer(serializers.ModelSerializer):
+    product_name = serializers.CharField(source='Product.name')
+
     class Meta:
         model = DonationProductDetails
         fields = '__all__'
 
 
 class DonationSerializer(serializers.ModelSerializer):
-    products = serializers.ListField(
-        child=ProductSerializerChild(), write_only=True
-    )
-    donation_products = DonationProductDetailsSerializer(source='donationproductdetails_set', many=True, read_only=True)
-
 
     class Meta:
         model = Donation
-        fields = ['id', 'description', 'date', 'Organization', 'products', 'donation_products']
+        fields = ['id', 'description', 'quantity', 'date', 'Organization']
 
-    def create(self, validated_data):
-        products_data = validated_data.pop('products')
-        donation = Donation.objects.create(**validated_data)
+    # def create(self, validated_data):
+    #     products_data = validated_data.pop('products')
+    #     donation = Donation.objects.create(**validated_data)
         
-        for product_data in products_data:
-            product_id = product_data['product']
-            quantity = product_data['quantity']
-            product = Product.objects.get(id=product_id)
+    #     for product_data in products_data:
+    #         product_id = product_data['product']
+    #         quantity = product_data['quantity']
+    #         product = Product.objects.get(id=product_id)
             
-            # Create DonationProductDetails entry
-            DonationProductDetails.objects.create(
-                Donation=donation, 
-                Product=product, 
-                quantity=quantity
-            )
+    #         # Create DonationProductDetails entry
+    #         DonationProductDetails.objects.create(
+    #             Donation=donation, 
+    #             Product=product,  
+    #             quantity=quantity
+    #         )
             
-            # Update ProductInventoryDetails
-            try:
-                product_inventory = ProductInventoryDetails.objects.get(Product=product)
-                product_inventory.cuantity += quantity
-                product_inventory.save()
-            except ProductInventoryDetails.DoesNotExist:
-                # Handle case where the ProductInventoryDetails does not exist
-                pass
+    #         # Update ProductInventoryDetails
+    #         try:
+    #             product_inventory = ProductInventoryDetails.objects.get(Product=product)
+    #             product_inventory.cuantity += quantity
+    #             product_inventory.save()
+    #         except ProductInventoryDetails.DoesNotExist:
+    #             # Handle case where the ProductInventoryDetails does not exist
+    #             pass
 
-        return donation
+    #     return donation
     
 
 
