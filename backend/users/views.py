@@ -858,6 +858,10 @@ class HeadquarterListCreateView(APIView):
         data = request.data.copy()  # Hacer una copia de los datos enviados
         data['Organization'] = organization.id  # Asignar la organización al diccionario de datos
 
+        #No se repita el nombre de la sede
+        if Headquarter.objects.filter(name=request.data['name']).exists():
+            return Response({'error': 'Headquarter with the same name already exists'}, status=status.HTTP_400_BAD_REQUEST)    
+
         serializer = HeadquarterSerializer(data=data)
         if serializer.is_valid():
             headquarter = serializer.save(Organization=organization) 
@@ -896,6 +900,11 @@ class ProductView(APIView):
 
     def post(self, request):
         serializer = ProductSerializer(data=request.data)
+        
+        #No se repita el nombre del producto
+        if Product.objects.filter(name=request.data['name']).exists():
+            return Response({'error': 'Product with the same name already exists'}, status=status.HTTP_400_BAD_REQUEST)
+
 
         if serializer.is_valid():
             product = serializer.save()
