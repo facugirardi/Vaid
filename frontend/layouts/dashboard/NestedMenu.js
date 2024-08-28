@@ -51,13 +51,13 @@ const NestedMenu = () => {
   useEffect(() => {
     if (userType === 1) {
       setMenuItems([
-        { id: "home", label: "Home", icon: "ph-duotone ph-house", link: `/dashboard/${organizationId}/home`, dataPage: "home" },
+        { id: "home", label: "Home (SIN TERMINAR)", icon: "ph-duotone ph-house", link: `/dashboard/${organizationId}/home`, dataPage: "home" },
         { id: "events", label: "Events", icon: "ph-duotone ph-calendar-blank", link: `/dashboard/${organizationId}/events/view`, dataPage: "events" },
         { id: "tasks", label: "Tasks", icon: "ph-duotone ph-clipboard-text", link: `/dashboard/${organizationId}/tasks/view`, dataPage: "tasks" },
        ]);
     } else {
       setMenuItems([
-        { id: "home", label: "Home", icon: "ph-duotone ph-house", link: `/dashboard/${organizationId}/home`, dataPage: "home" },
+        { id: "home", label: "Home (SIN TERMINAR)", icon: "ph-duotone ph-house", link: `/dashboard/${organizationId}/home`, dataPage: "home" },
         {
           type: "HASHMENU", id: 1, label: "Tasks", icon: "ph-duotone ph-clipboard-text", dataPage: null, link: "#",
           submenu: [
@@ -76,17 +76,16 @@ const NestedMenu = () => {
           type: "HASHMENU", id: 1, label: "Human Resources", icon: "ph-duotone ph-users-three", dataPage: null, link: "#",
           submenu: [
             { id: "members-list", label: "Members List", icon: "ph-duotone ph-user-list", link: `/dashboard/${organizationId}/hr/members`, dataPage: "members-list" },
-            { id: "add-members", label: "Add Members", icon: "ph-duotone ph-user-circle-plus", link: "/dashboard/hr/add-members", dataPage: "add-members" },
             { id: "candidates", label: "Candidates", icon: "ph-duotone ph-users", link: `/dashboard/${organizationId}/hr/candidates`, dataPage: "candidates" },
           ],
         },
-        { id: "analytics", label: "Analytics", icon: "ph-duotone ph-chart-bar", link: `/dashboard/${organizationId}/home`, dataPage: "analytics" },
+        { id: "analytics", label: "Analytics (SIN TERMINAR)", icon: "ph-duotone ph-chart-bar", link: `/dashboard/${organizationId}/home`, dataPage: "analytics" },
         {
           type: "HASHMENU", id: 1, label: "Resources", icon: "ph-duotone ph-archive", dataPage: null, link: "#",
           submenu: [
             { id: "inventory", label: "Inventory", icon: "ph-duotone ph-package", link: `/dashboard/${organizationId}/inventory/general`, dataPage: "inventory" },
             { id: "headquarter-inv", label: "Headquarter Inventory", icon: "ph-duotone ph-warehouse", link: `/dashboard/${organizationId}/inventory`, dataPage: "headquarter-inv" },
-            { id: "transfer-prod", label: "Transfer Productos", icon: "ph-duotone ph-swap", link: `/dashboard/${organizationId}/inventory`, dataPage: "transfer-prod" },
+            { id: "transfer-prod", label: "Transfer Products (SIN TERMINAR)", icon: "ph-duotone ph-swap", link: `/dashboard/${organizationId}/inventory`, dataPage: "transfer-prod" },
           ],
         },
           {

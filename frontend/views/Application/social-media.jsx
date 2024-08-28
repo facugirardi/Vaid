@@ -147,7 +147,7 @@ const SocialProfile = () => {
                                 </Col>
                                 <Col md={3} xl={2} xxl={2}>
                                     <Row className="g-1 text-center">
-                                        <Col xs={6}>
+                                        <Col xs={12}>
                                     { userType === 2 ? (
 
                                             <a  className="btn btn-primary" href={`dashboard/${organization ? organization.id : ''}/home`}>Dashboard</a>

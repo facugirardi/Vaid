@@ -159,8 +159,8 @@ const Donations = () => {
             <div className='container'>
               <div className='row'>
                 <div className="mb-3 col-md-4">
-                  <label htmlFor="productName" className="form-label">Description</label>
-                  <input type="text" className="form-control" id="description" name="description" placeholder='description' required />
+                  <label htmlFor="productName" className="form-label">Donation Description</label>
+                  <input type="text" className="form-control" id="description" name="description" placeholder='Add Description' required />
                 </div>
                 <div className="mb-3 col-md-3">
                   <label htmlFor="productType" className="form-label">Type</label>
@@ -415,20 +415,9 @@ const BuySell = () => {
           {selectedProduct && (
             <div>
               <p><strong>Description:</strong> {selectedProduct.description}</p>
+              <p><strong>Quantity:</strong> {selectedProduct.quantity}</p>
               <p><strong>Date:</strong> {selectedProduct.date}</p>
               <p><strong>Type:</strong> {selectedProduct.type}</p>
-              <p><strong>Products:</strong></p>
-                <ul>
-                  {selectedProduct.operation_products && selectedProduct.operation_products.length > 0 ? (
-                    selectedProduct.operation_products.map((product, index) => (
-                      <li key={index}>
-                        <strong>Name:</strong> {product.product_name}
-                      </li>
-                    ))
-                  ) : (
-                    <li>No products found</li>
-                  )}
-                </ul>
             </div>
           )}
         </Modal.Body>

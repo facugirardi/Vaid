@@ -128,13 +128,13 @@ const page = () => {
                     )}
                     <input id="upload-button" type="file" onChange={onFileChange} style={{ display: 'none' }} />
                 </label>
-                 <label className='label_input upl-label'>Click to upload a picture *</label>
+                 <label className='label_input upl-label'>Click to upload a picture <span className='asterisco-rojo'>*</span></label>
                 </div>
 
 
 
                 <div className="input-box flex-item">
-                    <label className='label_input'>Country *</label>
+                    <label className='label_input'>Country <span className='asterisco-rojo'>*</span></label>
                     <select name='country' className='country_label' required>
                         {countries.map((country, index) => (
                             <option key={index} value={country.name}>{country.name}</option>
@@ -143,12 +143,12 @@ const page = () => {
                 </div>
 
                 <div className="input-box flex-item">
-                    <label className='label_input'>Phone Number *</label>
+                    <label className='label_input'>Phone Number <span className='asterisco-rojo'>*</span></label>
                     <input name='phone_number' type="text" placeholder='Enter your phone number' required />
                 </div>
 
                 <div className="input-box flex-item">
-                    <label className='label_input'>Tell us about yourself! *</label>
+                    <label className='label_input'>Tell us about yourself! <span className='asterisco-rojo'>*</span></label>
                     <input name='description' className='description-org' type="text" placeholder='Enter a description' required />
                 </div>
                 <div className='flex-item'>
@@ -156,6 +156,9 @@ const page = () => {
                 </div>
                 
             </form>
+            <div className="d-flex justify-content-center">
+                                    <label className='label_input'>Obligatory fields have: <span className='asterisco-rojo'>*</span></label>
+                                </div>
         </div>
         </div>
         </div>
