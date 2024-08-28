@@ -1566,3 +1566,19 @@ class VideoUploadView(APIView):
                 {'error': f'Error Uploading Video: {str(e)}'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+        
+
+class IsAdminView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        user_id = request.query_params.get('user_id')
+
+        try:
+            user = User.objects.get(id=user_id)
+            tags_user = Tag.objects.filter(PersonTagDetails__Person=user, PersonTagDetails__tag__TagType=1)
+            if tags_user.exists():
+                return Response(True, status=status.HTTP_200_OK)
+            return Response(False, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)

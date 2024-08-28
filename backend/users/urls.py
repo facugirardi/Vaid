@@ -62,4 +62,5 @@ urlpatterns = [
     path('send-email/', SendInvitationView.as_view(), name='send-email'),
     path('<int:organization_id>/history/', OrganizationHistoryView.as_view()),
     path('organization/upload-video/', VideoUploadView.as_view(), name='upload-organization-video'),
-]
+    path('isAdmin/', IsAdminView.as_view(), name='is-admin'),
+    ]
