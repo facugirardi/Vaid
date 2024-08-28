@@ -1194,6 +1194,16 @@ class  TaskParticipationView(APIView):
             return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
 
 # Se epera en body un atributo denominado products, con la lista de ids de los productos comprados o vendidos
+# "products": [
+#         {
+#             "product": 1,
+#             "quantity": 10
+#         }
+#         {
+#             "product": 6, (id del producto)
+#             "quantity": 10
+#         }
+#     ]
 class OperationAPIView(APIView):
     permission_classes = [AllowAny]
 
@@ -1210,13 +1220,19 @@ class OperationAPIView(APIView):
     def post(self, request, organization_id):
         request.data['Organization'] = organization_id
         serializer = OperationSerializer(data=request.data)
+        
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, organization_id, operation_id):
         operation = get_object_or_404(Operation, id=operation_id, Organization_id=organization_id)
+        
+        if operation.invoice:
+            operation.invoice.delete()
+
         operation.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 

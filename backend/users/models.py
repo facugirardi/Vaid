@@ -208,6 +208,7 @@ class Operation(models.Model):
     time = models.TimeField(default=timezone.now)
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     Type = models.ForeignKey(OperationType, on_delete=models.CASCADE)
+    invoice = models.FileField(upload_to='invoices/', null=True, blank=True)
 
 
 class OperationProductDetails(models.Model):
@@ -259,3 +260,4 @@ class TaskTagDetails(models.Model):
 class Invitation(models.Model):
     Event = models.ForeignKey(Event, on_delete=models.CASCADE)
     status = models.BooleanField(default=False)
+

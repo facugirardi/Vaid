@@ -177,7 +177,7 @@ class OperationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Operation
-        fields = ['id', 'description', 'date', 'time', 'Organization', 'type', 'products', 'operation_products']
+        fields = ['id', 'description', 'date', 'time', 'Organization', 'type', 'products', 'operation_products', 'invoice']
 
     def create(self, validated_data):
         products_data = validated_data.pop('products')
@@ -256,5 +256,3 @@ class DonationSerializer(serializers.ModelSerializer):
 
         return donation
     
-
-
