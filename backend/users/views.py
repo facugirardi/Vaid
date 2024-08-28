@@ -815,9 +815,12 @@ class PersonTagsAPIView(APIView):
 
     def get(self, request, user_id):
         try:
-            # Obtener todas las etiquetas asociadas a la persona
-            person_tags = PersonTagDetails.objects.filter(Person__id=user_id)
-            tags = [detail.Tag for detail in person_tags]  # Obtener solo las etiquetas
+            # Obtener todas las etiquetas asociadas a la persona y eliminar duplicados
+            person_tags = PersonTagDetails.objects.filter(Person__id=user_id).values('Tag').distinct()
+            tag_ids = [detail['Tag'] for detail in person_tags]
+
+            # Obtener las instancias de las etiquetas basadas en los IDs
+            tags = Tag.objects.filter(id__in=tag_ids)
 
             # Serializar las etiquetas
             serializer = TagSerializer(tags, many=True)
@@ -839,6 +842,18 @@ class PersonTagsAPIView(APIView):
 
             return Response({'message': 'Tags assigned successfully'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, user_id):
+        tag_id = request.query_params.get('tag_id')
+        if not tag_id:
+            return Response({'error': 'Tag ID is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            person_tag = PersonTagDetails.objects.filter(Person__id=user_id, Tag__id=tag_id)
+            person_tag.delete()
+            return Response({'message': 'Tag deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+        except PersonTagDetails.DoesNotExist:
+            return Response({'error': 'Tag not found for this user'}, status=status.HTTP_404_NOT_FOUND)
 
 
 class HeadquarterListCreateView(APIView):
@@ -1459,3 +1474,21 @@ class DonationDetailAPIView(APIView):
         donation = get_object_or_404(Donation, id=donation_id, Organization_id=org_id)
         donation.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+class UnassignedTagsAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, user_id):
+        # Obtener la persona
+        person = get_object_or_404(Person, id=user_id)
+        
+        # Obtener IDs de las tags asignadas al usuario
+        assigned_tag_ids = PersonTagDetails.objects.filter(Person=person).values_list('Tag', flat=True)
+        
+        # Obtener las tags que no están asignadas al usuario
+        unassigned_tags = Tag.objects.exclude(id__in=assigned_tag_ids).distinct()
+
+        # Serializar y devolver las tags
+        serializer = TagSerializer(unassigned_tags, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

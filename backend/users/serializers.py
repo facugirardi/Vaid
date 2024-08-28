@@ -58,9 +58,14 @@ class EventSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class TagSerializer(serializers.ModelSerializer):
+    member_count = serializers.SerializerMethodField()
+
     class Meta:
         model = Tag
         fields = '__all__'
+
+    def get_member_count(self, obj):
+        return PersonTagDetails.objects.filter(Tag=obj).values('Person').distinct().count()
 
 class PersonTagDetailsSerializer(serializers.ModelSerializer):
     class Meta:

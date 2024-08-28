@@ -60,4 +60,5 @@ urlpatterns = [
     path('donations/', DonationAPIView.as_view(), name='donation-create'),
     path('donation/detail/', DonationDetailAPIView.as_view(), name='donation-detail'),
     path('<int:organization_id>/history/', OrganizationHistoryView.as_view()),
+    path('user/<int:user_id>/unassigned-tags/', UnassignedTagsAPIView.as_view(), name='unassigned-tags'),
 ]

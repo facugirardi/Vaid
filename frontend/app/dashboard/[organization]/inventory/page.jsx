@@ -8,6 +8,7 @@ import Layout from '@/layouts/dashboard/index';
 import BreadcrumbItem from '@/common/BreadcrumbItem';
 import { Modal, Button } from 'react-bootstrap';
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
+import { toast } from "react-toastify";
 
 const Headquarters = ({ onHeadquarterClick, addHistoryEntry }) => {
   const [headquarters, setHeadquarters] = useState([]);
@@ -33,7 +34,7 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry }) => {
       fetch(`http://localhost:8000/api/headquarters/${organizationId}`)
         .then(response => response.json())
         .then(data => setHeadquarters(data))
-        .catch(error => console.error('Error fetching headquarters:', error));
+        .catch(error => toast.error('Error:', error));
     }
   }, [organizationId]);
 
@@ -60,10 +61,10 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry }) => {
         addHistoryEntry(`Headquarter "${selectedHeadquarter.name}" deleted by ${user.first_name} ${user.last_name}`);
         handleDeleteModalClose(); // Cerrar el modal aquí
       } else {
-        console.error('Error al borrar la sede:', response.status);
+        toast.error('Error al borrar la sede:', response.status);
       }
     } catch (error) {
-      console.error('Error:', error);
+      toast.error('Error:', error);
     }
   };
 
@@ -93,10 +94,10 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry }) => {
             addHistoryEntry(`Headquarter "${newHeadquarter.name}" added by ${user.first_name} ${user.last_name}`);
             handleHeadquarterModalClose(); // Cerrar el modal aquí
         } else {
-            console.error('Error en la respuesta:', response.status);
+            toast.error('Error en la respuesta:', response.status);
         }
     } catch (error) {
-        console.error('Error:', error);
+        toast.error('Error:', error);
     }
   };
 
@@ -188,7 +189,7 @@ const Inventory = ({ headquarterId, organizationId, addHistoryEntry }) => {
         .then(response => response.json())
         .then(data => setInventory(Array.isArray(data) ? data : []))
         .catch(error => {
-          console.error('Error fetching inventory:', error);
+          toast.error('Error fetching inventory:', error);
           setInventory([]);
         });
     }
@@ -227,7 +228,7 @@ const Inventory = ({ headquarterId, organizationId, addHistoryEntry }) => {
             setShowDeleteProductModal(false);
             
         } else {
-            console.error('Error al borrar el producto:', response.status);
+            toast.error('Error al borrar el producto:', response.status);
         }
     } catch (error) {
         console.error('Error:', error);
@@ -268,15 +269,15 @@ const Inventory = ({ headquarterId, organizationId, addHistoryEntry }) => {
             setShowInventoryModal(false);
         } else {
             const errorData = await response.json();
-            console.error('Error en la respuesta:', response.status, errorData);
+            toast.error('Error en la respuesta:', response.status, errorData);
         }
     } catch (error) {
-        console.error('Error:', error);
+        toast.error('Error:', error);
     }
   };
 
   return (
-    <div className="card">
+    <div className="card product-container">
       <h2>Products</h2>
       {!headquarterId ? (
         <>
@@ -293,7 +294,7 @@ const Inventory = ({ headquarterId, organizationId, addHistoryEntry }) => {
         </>
       ) : (
         <>
-          <table className="table">
+          <table className="table ">
             <thead>
               <tr>
                 <th className='text-center'>Name</th>
@@ -408,7 +409,7 @@ const History = ({ organizationId, localHistory, setLocalHistory }) => {
         const data = await response.json();
         setLocalHistory(data);
       } catch (error) {
-        console.error('Error fetching history:', error);
+        toast.error('Error fetching history:', error);
       }
     };
 
@@ -476,7 +477,7 @@ const Page = () => {
             console.log('Historial registrado con éxito');
             fetchHistory();
         } else {
-            console.error('Error al registrar el historial:', response.status);
+            toast.error('Error al registrar el historial');
         }
     } catch (error) {
         console.error('Error:', error);
@@ -489,7 +490,7 @@ const Page = () => {
       const data = await response.json();
       setLocalHistory(data);
     } catch (error) {
-      console.error('Error fetching history:', error);
+      toast.error('Error fetching history:', error);
     }
   };
 

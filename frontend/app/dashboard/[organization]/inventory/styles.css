@@ -192,10 +192,17 @@ table th {
 }
 
 .history-container {
-    max-height: 500px; /* Ajusta esta altura según tu diseño */
+    max-height: 450px; /* Ajusta esta altura según tu diseño */
     overflow-y: auto;
     overflow-x: hidden; /* Evita el desplazamiento horizontal si no es necesario */
   }
+
+  .product-container {
+    max-height: 600px; /* Ajusta esta altura según tu diseño */
+    overflow-y: auto;
+    overflow-x: hidden; /* Evita el desplazamiento horizontal si no es necesario */
+  }
+
   
   .history-list {
     padding: 0;
