@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Modal, Button } from 'react-bootstrap';
 import axios from 'axios';
+import {Form, Col, Row } from 'react-bootstrap';
 
 const Donations = () => {
   const [donations, setDonations] = useState([]);
@@ -80,6 +81,30 @@ const Donations = () => {
 
   const handleDeleteProductModalClose = () => setShowDeleteProductModal(false);
 
+  const handleAddDonation = async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+  
+    const donationData = {
+      description: formData.get('description'),
+      date: formData.get('expDate'),
+      quantity: formData.get('quantity')
+    };
+  
+    try {
+      await axios.post(`http://localhost:8000/api/donations/`, donationData, {
+        params: {
+          org_id: organizationId,
+        },
+      });
+      fetchDonations(); 
+      handleInventoryModalClose();
+    } catch (error) {
+      console.error('Error adding donation:', error);
+    }
+  };
+  
   return (
     <div className="card">
       <h2>Donations</h2>
@@ -127,32 +152,32 @@ const Donations = () => {
       {/* Add Inventory Modal */}
       <Modal show={showInventoryModal} onHide={handleInventoryModalClose} backdropClassName="modal-backdrop" centered size='lg'>
         <Modal.Header closeButton>
-          <Modal.Title>Add Inventory Item</Modal.Title>
+          <Modal.Title>Add Donation</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form>
+          <form onSubmit={handleAddDonation}>
             <div className='container'>
               <div className='row'>
                 <div className="mb-3 col-md-4">
-                  <label htmlFor="productName" className="form-label">Name</label>
-                  <input type="text" className="form-control" id="productName" name="name" placeholder='Product Name' required />
+                  <label htmlFor="productName" className="form-label">Description</label>
+                  <input type="text" className="form-control" id="description" name="description" placeholder='description' required />
+                </div>
+                <div className="mb-3 col-md-3">
+                  <label htmlFor="productType" className="form-label">Type</label>
+                  <input type="text" className="form-control" id="Category" name="Category" placeholder='Product Type' required />
                 </div>
                 <div className="mb-3 col-md-2">
                   <label htmlFor="quantity" className="form-label">Quantity</label>
                   <input type="number" className="form-control" id="quantity" name="quantity" placeholder='1' required />
                 </div>
                 <div className="mb-3 col-md-3">
-                  <label htmlFor="expDate" className="form-label">Expiration Date (Optional)</label>
+                  <label htmlFor="expDate" className="form-label">Date</label>
                   <input type="date" className="form-control" id="expDate" name="expDate" />
-                </div>
-                <div className="mb-3 col-md-3">
-                  <label htmlFor="productType" className="form-label">Type</label>
-                  <input type="text" className="form-control" id="Category" name="Category" placeholder='Product Type' required />
                 </div>
               </div>
               <div className='d-flex justify-content-center'>
                 <Button variant="primary" type="submit" className='mt-10'>
-                  Add Product
+                  Add Donation
                 </Button>
               </div>
             </div>
@@ -170,18 +195,7 @@ const Donations = () => {
           <div>
             <p><strong>Description:</strong> {selectedProduct.description}</p>
             <p><strong>Date:</strong> {selectedProduct.date}</p>
-            <p><strong>Products:</strong></p>
-            <ul>
-              {selectedProduct.donation_products && selectedProduct.donation_products.length > 0 ? (
-                selectedProduct.donation_products.map((product, index) => (
-                  <li key={index}>
-                    <strong>Name:</strong> {product.product_name} - <strong>Quantity:</strong> {product.quantity}
-                  </li>
-                ))
-              ) : (
-                <li>No products found</li>
-              )}
-            </ul>
+            <p><strong>Quantity:</strong> {selectedProduct.quantity}</p>
           </div>
         )}
       </Modal.Body>
@@ -271,6 +285,38 @@ const BuySell = () => {
 
   const handleDeleteProductModalClose = () => setShowDeleteProductModal(false);
 
+  const handleAddOperation = async (e) => {
+    e.preventDefault();
+    
+    const formData = new FormData(e.target);
+  
+    const operationData = {
+      description: formData.get('description'),
+      date: formData.get('date'),
+      type: formData.get('type'),
+      quantity: formData.get('quantity'),
+      amount: formData.get('amount'),
+    };
+  
+    try {
+      await axios.post(`http://localhost:8000/api/organization/${organizationId}/operation/`, operationData);
+      fetchBuySell(); // Refrescar la lista de operaciones
+      handleInventoryModalClose(); // Cerrar el modal
+    } catch (error) {
+      console.error('Error adding operation:', error);
+    }
+  };
+  
+  const handleDeleteOperation = async (operationId) => {
+    try {
+      await axios.delete(`http://localhost:8000/api/organization/${organizationId}/operation/${operationId}/`);
+      setBuysell(buysell.filter(item => item.id !== operationId)); // Actualizar la lista de operaciones en el estado
+      handleDeleteProductModalClose(); // Cerrar el modal de confirmación
+    } catch (error) {
+      console.error('Error deleting operation:', error);
+    }
+  };
+  
   return (
     <div className="card">
       <h2>Buy/Sell</h2>
@@ -320,32 +366,39 @@ const BuySell = () => {
       {/* Add Inventory Modal */}
       <Modal show={showInventoryModal} onHide={handleInventoryModalClose} backdropClassName="modal-backdrop" centered size='lg'>
         <Modal.Header closeButton>
-          <Modal.Title>Add Inventory Item</Modal.Title>
+          <Modal.Title>Add Operation</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form>
+          <form onSubmit={handleAddOperation}>
             <div className='container'>
               <div className='row'>
-                <div className="mb-3 col-md-4">
-                  <label htmlFor="productName" className="form-label">Name</label>
-                  <input type="text" className="form-control" id="productName" name="name" placeholder='Product Name' required />
+                <div className="mb-3 col-md-8">
+                  <label htmlFor="description" className="form-label">Product Name</label>
+                  <input type="text" className="form-control" id="description" name="description" placeholder='Product Name' required />
                 </div>
                 <div className="mb-3 col-md-2">
                   <label htmlFor="quantity" className="form-label">Quantity</label>
                   <input type="number" className="form-control" id="quantity" name="quantity" placeholder='1' required />
                 </div>
-                <div className="mb-3 col-md-3">
-                  <label htmlFor="expDate" className="form-label">Expiration Date (Optional)</label>
-                  <input type="date" className="form-control" id="expDate" name="expDate" />
+                <div className="mb-3 col-md-2">
+                  <label htmlFor="quantity" className="form-label">Amount</label>
+                  <input type="number" className="form-control" id="amount" name="amount" placeholder='$ 1' required />
                 </div>
-                <div className="mb-3 col-md-3">
-                  <label htmlFor="productType" className="form-label">Type</label>
-                  <input type="text" className="form-control" id="Category" name="Category" placeholder='Product Type' required />
+                <div className="mb-3 col-md-6">
+                  <label htmlFor="date" className="form-label">Date</label>
+                  <input type="date" className="form-control" id="date" name="date" required/>
+                </div>
+                <div className="mb-3 col-md-6">
+                  <label htmlFor="type" className="form-label">Operation Type</label>
+                  <Form.Control as="select" className="form-select" name="type">
+                                    <option>Purchase</option>
+                                    <option>Sale</option>
+                  </Form.Control>
                 </div>
               </div>
               <div className='d-flex justify-content-center'>
                 <Button variant="primary" type="submit" className='mt-10'>
-                  Add Product
+                  Add Operation
                 </Button>
               </div>
             </div>
@@ -384,15 +437,15 @@ const BuySell = () => {
       {/* Delete Product Modal */}
       <Modal show={showDeleteProductModal} onHide={handleDeleteProductModalClose} backdropClassName="modal-backdrop" centered size='lg'>
         <Modal.Header closeButton>
-          <Modal.Title>Delete Product</Modal.Title>
+          <Modal.Title>Delete Operation</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <p>Are you sure you want to delete the product <strong>{selectedProduct?.name}</strong>?</p>
+          <p>Are you sure you want to delete this operation?</p>
           <div className="d-flex justify-content-end">
             <Button variant="secondary" onClick={handleDeleteProductModalClose} className="me-2">
               Cancel
             </Button>
-            <Button variant="danger" onClick={() => deleteBuySell(selectedProduct.id)}>
+            <Button variant="danger" onClick={() => handleDeleteOperation(selectedProduct.id)}>
               Delete
             </Button>
           </div>

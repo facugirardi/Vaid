@@ -8,6 +8,7 @@ import Layout from '@/layouts/dashboard/index';
 import BreadcrumbItem from '@/common/BreadcrumbItem';
 import { Modal, Button } from 'react-bootstrap';
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
+import { toast } from "react-toastify";
 
 const Headquarters = ({ onHeadquarterClick, addHistoryEntry }) => {
   const [headquarters, setHeadquarters] = useState([]);
@@ -33,7 +34,7 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry }) => {
       fetch(`http://localhost:8000/api/headquarters/${organizationId}`)
         .then(response => response.json())
         .then(data => setHeadquarters(data))
-        .catch(error => console.error('Error fetching headquarters:', error));
+        .catch(error => toast.error('Error:', error));
     }
   }, [organizationId]);
 
@@ -60,10 +61,10 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry }) => {
         addHistoryEntry(`Headquarter "${selectedHeadquarter.name}" deleted by ${user.first_name} ${user.last_name}`);
         handleDeleteModalClose(); // Cerrar el modal aquí
       } else {
-        console.error('Error al borrar la sede:', response.status);
+        toast.error('Error al borrar la sede:', response.status);
       }
     } catch (error) {
-      console.error('Error:', error);
+      toast.error('Error:', error);
     }
   };
 
@@ -93,10 +94,10 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry }) => {
             addHistoryEntry(`Headquarter "${newHeadquarter.name}" added by ${user.first_name} ${user.last_name}`);
             handleHeadquarterModalClose(); // Cerrar el modal aquí
         } else {
-            console.error('Error en la respuesta:', response.status);
+            toast.error('Error en la respuesta:', response.status);
         }
     } catch (error) {
-        console.error('Error:', error);
+        toast.error('Error:', error);
     }
   };
 
@@ -107,7 +108,7 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry }) => {
         <tbody>
           {headquarters.length === 0 ? (
             <>
-            <p>No headquarters available.</p>
+            <p className='p-inventory'>No headquarters available.<br></br><br></br>Start by adding your first headquarters using the '+' button.</p>
             </>
           ) : (
             headquarters.map(hq => (
@@ -188,7 +189,7 @@ const Inventory = ({ headquarterId, organizationId, addHistoryEntry }) => {
         .then(response => response.json())
         .then(data => setInventory(Array.isArray(data) ? data : []))
         .catch(error => {
-          console.error('Error fetching inventory:', error);
+          toast.error('Error fetching inventory:', error);
           setInventory([]);
         });
     }
@@ -227,7 +228,7 @@ const Inventory = ({ headquarterId, organizationId, addHistoryEntry }) => {
             setShowDeleteProductModal(false);
             
         } else {
-            console.error('Error al borrar el producto:', response.status);
+            toast.error('Error al borrar el producto:', response.status);
         }
     } catch (error) {
         console.error('Error:', error);
@@ -268,32 +269,32 @@ const Inventory = ({ headquarterId, organizationId, addHistoryEntry }) => {
             setShowInventoryModal(false);
         } else {
             const errorData = await response.json();
-            console.error('Error en la respuesta:', response.status, errorData);
+            toast.error('Error en la respuesta:', response.status, errorData);
         }
     } catch (error) {
-        console.error('Error:', error);
+        toast.error('Error:', error);
     }
   };
 
   return (
-    <div className="card">
+    <div className="card product-container">
       <h2>Products</h2>
       {!headquarterId ? (
         <>
         <br/>
-        <p>Please select a headquarter to view the inventory.</p>
+        <p className='p-inventory'>Please select a headquarter to view the inventory.</p>
         </>
       ) : inventory.length === 0 ? (
         <>
         <br/>
-        <p>No products found in the inventory.</p>
+        <p className='p-inventory'>No products found in the inventory.<br></br><br></br>Start by adding your first products using the '+' button.</p>
           <button className="add-button" onClick={handleInventoryModalShow}>
             <FontAwesomeIcon icon={faPlus} className='hover-button'/>
           </button>
         </>
       ) : (
         <>
-          <table className="table">
+          <table className="table ">
             <thead>
               <tr>
                 <th className='text-center'>Name</th>
@@ -399,8 +400,7 @@ const Inventory = ({ headquarterId, organizationId, addHistoryEntry }) => {
   );
 };
 
-const History = ({ organizationId }) => {
-  const [localHistory, setLocalHistory] = useState([]);
+const History = ({ organizationId, localHistory, setLocalHistory }) => {
 
   useEffect(() => {
     const fetchHistory = async () => {
@@ -409,40 +409,34 @@ const History = ({ organizationId }) => {
         const data = await response.json();
         setLocalHistory(data);
       } catch (error) {
-        console.error('Error fetching history:', error);
+        toast.error('Error fetching history:', error);
       }
     };
 
     fetchHistory();
-  }, [organizationId]);
+  }, [organizationId, setLocalHistory]);
 
   return (
-    <div className="card">
+    <div className="card history-container">
       <h2>History</h2>
+      <br></br>
       <ul className="history-list mt-20">
         {localHistory.length === 0 ? (
-          <li>No History Yet</li>
+          <p>No History Yet</p>
         ) : (
           localHistory.map((entry, index) => (
-            <>
-            <div className='container'>
+            <div key={index} className='container'>
               <div className='row'>
-                  <div className='col-1 col-md-1'></div>
-                <div className='col-2 col-md-2 fecha-historial'>
-                   <li key={index}>{entry.date}</li>
-                 </div>
-                <div className='col-1 col-md-1'>
-                  <div class="linea-punteada"></div>
-                </div>
                 <div className='col-5 col-md-5'>
-                  <strong><li key={index}>{entry.action}</li></strong>
-                  <li key={index}>{entry.description}</li>
+                  <strong>{entry.action}</strong>
+                  <p>{entry.description}</p>
+                  <p>{entry.date}</p>
+                  -
                 </div>
                 <div className='col-3 col-md-3'></div>
               </div> 
+              <br/>
             </div>
-            <br/>
-            </>
           ))
         )}
       </ul>
@@ -453,6 +447,7 @@ const History = ({ organizationId }) => {
 const Page = () => {
   const [selectedHeadquarterId, setSelectedHeadquarterId] = useState(null);
   const [organizationId, setOrganizationId] = useState("");
+  const [localHistory, setLocalHistory] = useState([]);
 
   useEffect(() => {
     const currentUrl = window.location.href;
@@ -470,7 +465,6 @@ const Page = () => {
 
   const addHistoryEntry = async (entry) => {
     try {
-        console.log('a')
         const response = await fetch(`http://localhost:8000/api/${organizationId}/history/`, {
             method: 'POST',
             headers: {
@@ -481,11 +475,22 @@ const Page = () => {
 
         if (response.ok) {
             console.log('Historial registrado con éxito');
+            fetchHistory();
         } else {
-            console.error('Error al registrar el historial:', response.status);
+            toast.error('Error al registrar el historial');
         }
     } catch (error) {
         console.error('Error:', error);
+    }
+  };
+
+  const fetchHistory = async () => {
+    try {
+      const response = await fetch(`http://localhost:8000/api/organizations/${organizationId}/history/`);
+      const data = await response.json();
+      setLocalHistory(data);
+    } catch (error) {
+      toast.error('Error fetching history:', error);
     }
   };
 
@@ -496,7 +501,7 @@ const Page = () => {
         <div className='row'>
           <div className="col-md-6">
             <Headquarters onHeadquarterClick={handleHeadquarterClick} addHistoryEntry={addHistoryEntry} />
-            <History organizationId={organizationId} />
+            <History organizationId={organizationId} localHistory={localHistory} setLocalHistory={setLocalHistory} />
           </div>
           <div className="col-md-6">
             <Inventory headquarterId={selectedHeadquarterId} organizationId={organizationId} addHistoryEntry={addHistoryEntry} />

@@ -63,4 +63,5 @@ urlpatterns = [
     path('<int:organization_id>/history/', OrganizationHistoryView.as_view()),
     path('organization/upload-video/', VideoUploadView.as_view(), name='upload-organization-video'),
     path('isAdmin/', IsAdminView.as_view(), name='is-admin'),
-    ]
+    path('user/<int:user_id>/unassigned-tags/', UnassignedTagsAPIView.as_view(), name='unassigned-tags'),
+]

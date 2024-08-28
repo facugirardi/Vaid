@@ -8,12 +8,14 @@ import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 import TableContainer from '@/common/TableContainer';
 import { Button, Card, Col, Form, Row, Modal } from "react-bootstrap";
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const Page = () => {
     const [showModal, setShowModal] = useState(false);
     const [selectedCandidate, setSelectedCandidate] = useState(null);
     const [candidates, setCandidates] = useState([]);
     const [showTagModal, setShowTagModal] = useState(false);
+    const [showTagModalAssign, setShowTagModalAssign] = useState(false); // Nuevo estado para TagModalAssign
     const [organizationId, setOrganizationId] = useState("");
 
     useEffect(() => {
@@ -28,18 +30,18 @@ const Page = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            if(organizationId){
+            if (organizationId) {
                 try {
                     const response = await axios.get(`http://localhost:8000/api/organizations/${organizationId}/members`);
                     console.log('Fetched candidates:', response.data);
                     setCandidates(response.data);
                 } catch (error) {
-                    console.error('Error fetching candidate details:', error);
+                    toast.error('Error fetching candidate details:', error);
                 }
             }
         };
 
-        if(organizationId){
+        if (organizationId) {
             fetchData();
         }
     }, [organizationId]);
@@ -48,21 +50,27 @@ const Page = () => {
         setShowTagModal(false);
     };
 
+    const handleCloseTagModalAssign = () => { // Función para cerrar TagModalAssign
+        setShowTagModalAssign(false);
+    };
+
     const handleSearch = (keyword) => {
         console.log('Search keyword:', keyword);
-        // Lógica para filtrar las tags basadas en el keyword
     };
 
     const handleShowModal = (candidate) => {
         setSelectedCandidate(candidate);
-        console.log(candidate)
-        console.log(selectedCandidate)
         setShowModal(true);
     };
 
     const handleShowTagModal = (candidate) => {
         setSelectedCandidate(candidate);
         setShowTagModal(true);
+    };
+
+    const handleShowTagModalAssign = (candidate) => { // Función para mostrar TagModalAssign
+        setSelectedCandidate(candidate);
+        setShowTagModalAssign(true);
     };
 
     const handleCloseModal = () => {
@@ -79,7 +87,7 @@ const Page = () => {
             setCandidates(candidates.filter(candidate => candidate.id !== selectedCandidate.id));
             handleCloseModal();
         } catch (error) {
-            console.error('Error deleting PersonOrganizationDetails:', error);
+            toast.error('Error deleting:', error);
         }
     };
 
@@ -112,37 +120,48 @@ const Page = () => {
                 enableColumnFilter: false,
             },
             {
-                header: "Country",
-                accessorKey: "country",
-                enableColumnFilter: false,
-            },
-            {
                 header: "Born Date",
                 accessorKey: "born_date",
                 enableColumnFilter: false,
             },
             {
-                header: "Category",
-                accessorKey: "status",
+                header: "Country",
+                accessorKey: "country",
                 enableColumnFilter: false,
             },
             {
-                header: "Actions",
+                header: "User Tags",
+                accessorKey: "status",
+                enableColumnFilter: false,
+                cell: (cellProps) => {
+                    return (
+                        <>
+                            <div className="overlay-edit-3">
+                                <ul className="list-inline mb-0">
+                                    <li className="list-inline-item m-0">
+                                        <Button className="btn-action avtar avtar-s btn btn-secondary" onClick={() => handleShowTagModalAssign(cellProps.row.original)}>
+                                            <i className="ph-duotone ph-tag f-18 icon-action"></i>
+                                        </Button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </>
+                    );
+                },
+            },
+            {
+                header: "Information",
                 enableColumnFilter: false,
                 accessorKey: "status",
                 cell: (cellProps) => {
                     return (
                         <>
-                            <div className="overlay-edit-2">
+                            <div className="overlay-edit-3">
                                 <ul className="list-inline mb-0">
                                     <li className="list-inline-item m-0">
                                         <Button className="btn-action avtar avtar-s btn btn-primary" onClick={() => handleShowModal(cellProps.row.original)}>
-                                            <i className="ti ti-plus f-18"></i>
+                                            <i className="ph-duotone ph-info f-18 icon-action"></i>
                                         </Button>
-                                        <Button className="btn-action avtar avtar-s btn btn-secondary" onClick={() => handleShowTagModal(cellProps.row.original)}>
-                                            <i className="ti ti-tag f-18"></i>
-                                        </Button>
-
                                     </li>
                                 </ul>
                             </div>
@@ -161,12 +180,23 @@ const Page = () => {
                 <Col sm={12}>
                     <Card className="border-0 table-card user-profile-list">
                         <Card.Body>
+                            <div className="container">
+                                <div className="row">
+                                    <button className="col-md-2 btn-tags-create theme-btn style-two">Invite Users <span>
+                                    <i className="ph-duotone ph-user"></i> 
+                                        </span></button>
+                                    <div className="col-md-8"></div>
+                                    <button className="col-md-2 btn-tags-create theme-btn style-one" onClick={() => handleShowTagModal()}>View Tags <span>
+                                    <i className="ph-duotone ph-tag"></i> 
+                                        </span></button>
+                                </div>
+                            </div>
                             <TableContainer
                                 columns={columns}
                                 data={candidates}
                                 isGlobalFilter={true}
                                 isBordered={false}
-                                customPageSize={5}
+                                customPageSize={10}
                                 tableClass="table-hover"
                                 theadClass="table-light"
                                 isPagination={true}
@@ -204,37 +234,41 @@ const Page = () => {
                 </Modal.Footer>
             </Modal>
 
-            {/* Render the TagModal here */}
-            <TagModal show={showTagModal} handleClose={handleCloseTagModal} organizationId={organizationId} handleSearch={handleSearch}/>
+            {/* Render TagModal */}
+            <TagModal show={showTagModal} handleClose={handleCloseTagModal} organizationId={organizationId} handleSearch={handleSearch} selectedCandidate={selectedCandidate} />
+
+            {/* Render TagModalAssign */}
+            <TagModalAssign show={showTagModalAssign} handleClose={handleCloseTagModalAssign} organizationId={organizationId} handleSearch={handleSearch} selectedCandidate={selectedCandidate} />
         </Layout>
     );
 };
 
-const TagModal = ({ show, handleClose, handleSearch, organizationId }) => {
+const TagModal = ({ show, handleClose, handleSearch, organizationId, selectedCandidate }) => {
     const [tags, setTags] = useState([]);
     const [filteredTags, setFilteredTags] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showNewTagModal, setShowNewTagModal] = useState(false);
     const [tagName, setTagName] = useState("");
-    const [isInline, setIsInline] = useState(false); // Estado para el checkbox
+    const [isInline, setIsInline] = useState(false);
 
     useEffect(() => {
         const fetchTags = async () => {
-            setLoading(true);
-            if (organizationId) {
+            if (show && organizationId) { // Hace fetch solo cuando el modal se muestra y hay una organización seleccionada
+                setLoading(true);
                 try {
                     const response = await axios.get(`http://localhost:8000/api/organizations/${organizationId}/tags/`);
                     setTags(response.data);
                     setFilteredTags(response.data);
                 } catch (error) {
-                    console.error('Error fetching tags:', error);
+                    toast.error('Error fetching tags:', error);
+                } finally {
+                    setLoading(false);
                 }
             }
-            setLoading(false);
         };
 
         fetchTags();
-    }, [organizationId]);
+    }, [show, organizationId]); // Ejecutar cuando `show` o `organizationId` cambian
 
     const handleTagSearch = (keyword) => {
         const filtered = tags.filter(tag => tag.name.toLowerCase().includes(keyword.toLowerCase()));
@@ -247,8 +281,9 @@ const TagModal = ({ show, handleClose, handleSearch, organizationId }) => {
             const updatedTags = tags.filter(tag => tag.id !== tagId);
             setTags(updatedTags);
             setFilteredTags(updatedTags);
+            toast.success('Tag deleted successfully!')
         } catch (error) {
-            console.error('Error deleting tag:', error);
+            toast.error('Error deleting tag:', error);
         }
     };
 
@@ -271,15 +306,29 @@ const TagModal = ({ show, handleClose, handleSearch, organizationId }) => {
             setFilteredTags([...filteredTags, response.data]);
             handleCloseNewTagModal();
         } catch (error) {
-            console.error('Error creating tag:', error);
+            toast.error('Error creating tag:', error);
         }
     };
 
-return (
+    const handleAssignTag = async (tagId) => {
+        if (!selectedCandidate) return;
+
+        try {
+            await axios.post(`http://localhost:8000/api/user/${selectedCandidate.id}/tags/`, {
+                tags: [tagId]
+            });
+            toast.success('Tag Added Successfully!')
+            handleClose();  // Cierra el modal después de asignar la tag
+        } catch (error) {
+            toast.error('Error assigning tag to member:', error);
+        }
+    };
+
+    return (
         <>
             <Modal show={show} onHide={handleClose} size="lg" centered>
                 <Modal.Header closeButton>
-                    <Modal.Title>Select Tag</Modal.Title>
+                    <Modal.Title>View Tags</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div className="container">
@@ -318,14 +367,16 @@ return (
                                     <tr>
                                         <th className="text-center">Tags</th>
                                         <th className="text-center">Type</th>
-                                        <th className="text-center">Options</th>
+                                        <th className="text-center">Members</th>
+                                        <th className="text-center">Delete</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {filteredTags.map((tag) => (
                                         <tr key={tag.id} className='tr-tags'>
                                             <td className="text-center">{tag.name}</td>
-                                            <td className="text-center">{tag.isAdmin ? 'Administrator' : 'Member'}</td>
+                                            <td className="text-center">{tag.isAdmin ? 'Member' : 'Administrator'}</td>
+                                            <td className="text-center"><i className="ti ti-user"></i> {tag.member_count}</td>
                                             <td className="text-center">
                                                 <button className="icon-button btn btn-light btn-sm mx-1" onClick={() => handleDeleteTag(tag.id)}>
                                                     <i className="ti ti-trash"></i>
@@ -351,71 +402,231 @@ return (
                 </Modal.Header>
                 <Modal.Body>
 
-                <Form onSubmit={handleTagSubmit} className="tag-form">
+                    <Form onSubmit={handleTagSubmit} className="tag-form">
                         <Form.Group controlId="formTagName" className="me-3 flex-grow-1 d-flex align-items-center">
                             <div className="container cont-ctall">
                                 <div className="row">
                                     <div className="col-7 col-md-9">
-                                        <Form.Control 
-                                            type="text" 
-                                            placeholder="Tag Name" 
+                                        <Form.Control
+                                            type="text"
+                                            placeholder="Tag Name"
                                             value={tagName}
                                             onChange={(e) => setTagName(e.target.value)}
-                                            required 
+                                            required
                                             className="me-3" // Ajuste para el margen entre el campo de texto y el switch
                                         />
                                     </div>
                                     <div className="col-1 col-md-1 icon-switch">
-                                      <i class="ph-duotone ph-user-gear icon-admin"></i>
+                                        <i className="ph-duotone ph-user-gear icon-admin"></i>
                                     </div>
                                     <div className="col-1 col-md-1 icon-switch">
-                                    <div className="">
-                                        <Form.Check 
-                                            className="form-switch custom-switch-v1 form-check-inline" 
-                                            type="checkbox"
-                                        >
-                                            <Form.Check.Input
+                                        <div className="">
+                                            <Form.Check
+                                                className="form-switch custom-switch-v1 form-check-inline"
                                                 type="checkbox"
-                                                className="input-primary"
-                                                id="customCheckinl2"
-                                                checked={isInline}
-                                                onChange={(e) => setIsInline(e.target.checked)}
-                                            />
-                                            <Form.Check.Label htmlFor="customCheckinl2"></Form.Check.Label>
-                                        </Form.Check>
-                                    </div>
+                                            >
+                                                <Form.Check.Input
+                                                    type="checkbox"
+                                                    className="input-primary"
+                                                    id="customCheckinl2"
+                                                    checked={isInline}
+                                                    onChange={(e) => setIsInline(e.target.checked)}
+                                                />
+                                                <Form.Check.Label htmlFor="customCheckinl2"></Form.Check.Label>
+                                            </Form.Check>
+                                        </div>
                                     </div>
                                     <div className="col-1 col-md-1 icon-switch">
-                                      <i class="ph-duotone ph-user icon-admin"></i>
+                                        <i className="ph-duotone ph-user icon-admin"></i>
                                     </div>
-                                </div>                                
+                                </div>
                             </div>
                         </Form.Group>
-                    <div className="box-create-btn container">
-                        <div className="row row-text-admin">
-                          <span className='col-1 col-md-1 icon-span-adm'><i class="ph-duotone ph-user-gear icon-admin"></i></span>
-                          <p className='col-3 col-md-5 p-adm1'>This is an administrator</p>
-                          <span className='col-1 col-md-1 icon-span-adm p-adm2'><i class="ph-duotone ph-user icon-admin"></i></span>  
-                          <p className='col-3 col-md-5'>This is a member</p>
-                        </div>
-                        <div className="row">
-                        <div className="col-2 col-md-4">
-                        </div>
-                        <div className="col-6 d-flex justify-content-center col-md-4">
-                        <Button variant="primary" type="submit" className="create-tag-btn">
-                            Create Tag
-                        </Button>
-                        </div>
+                        <div className="box-create-btn container">
+                            <div className="row row-text-admin">
+                                <span className='col-1 col-md-1 icon-span-adm'><i className="ph-duotone ph-user-gear icon-admin"></i></span>
+                                <p className='col-3 col-md-5 p-adm1'>This is an administrator</p>
+                                <span className='col-1 col-md-1 icon-span-adm p-adm2'><i className="ph-duotone ph-user icon-admin"></i></span>
+                                <p className='col-3 col-md-5'>This is a member</p>
+                            </div>
+                            <div className="row">
+                                <div className="col-2 col-md-4">
+                                </div>
+                                <div className="col-6 d-flex justify-content-center col-md-4">
+                                    <Button variant="primary" type="submit" className="create-tag-btn">
+                                        Create Tag
+                                    </Button>
+                                </div>
 
-                        <div className="col-2 col-md-4">
-                        </div>
+                                <div className="col-2 col-md-4">
+                                </div>
 
+                            </div>
                         </div>
-                    </div>
-                </Form>
+                    </Form>
                 </Modal.Body>
             </Modal>
         </>
     );
 };
+
+// Aquí está el nuevo TagModalAssign, que hace fetch de las tags cada vez que se muestra.
+
+const TagModalAssign = ({ show, handleClose, handleSearch, organizationId, selectedCandidate }) => {
+    const [tags, setTags] = useState([]);
+    const [filteredTags, setFilteredTags] = useState([]);
+    const [tagsNot, setTagsNot] = useState([]);
+    const [filteredTagsNot, setFilteredTagsNot] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchTags = async () => {
+            if (show && selectedCandidate) { // Hace fetch solo cuando el modal se muestra y hay un candidato seleccionado
+                setLoading(true);
+                try {
+                    const response = await axios.get(`http://localhost:8000/api/user/${selectedCandidate.id}/tags/`);
+                    setTags(response.data);
+                    setFilteredTags(response.data);
+                } catch (error) {
+                    toast.error('Error fetching tags:', error);
+                } finally {
+                    setLoading(false);
+                }
+            }
+        };
+
+        const fetchUnassignedTags = async () => {
+            if (show && selectedCandidate) { // Hace fetch solo cuando el modal se muestra y hay un candidato seleccionado
+                setLoading(true);
+                try {
+                    const response = await axios.get(`http://localhost:8000/api/user/${selectedCandidate.id}/unassigned-tags/`);
+                    setTagsNot(response.data);  // Actualiza el estado con las tags no asignadas
+                    setFilteredTagsNot(response.data);  // También actualiza los tags filtrados
+                } catch (error) {
+                    toast.error('Error fetching unassigned tags:', error);
+                } finally {
+                    setLoading(false);
+                }
+            }
+        };
+        
+        fetchUnassignedTags();
+        fetchTags();
+    }, [show, selectedCandidate]); // Ejecutar cuando `show` o `selectedCandidate` cambian
+
+    const handleTagSearch = (keyword) => {
+        const filtered = tags.filter(tag => tag.name.toLowerCase().includes(keyword.toLowerCase()));
+        setFilteredTags(filtered);
+    };
+
+    const handleDeleteTag = async (tagId) => {
+        if (!selectedCandidate) return;
+    
+        try {
+            await axios.delete(`http://localhost:8000/api/user/${selectedCandidate.id}/tags/?tag_id=${tagId}`);
+            const updatedTags = tags.filter(tag => tag.id !== tagId);
+            setTags(updatedTags);
+            setFilteredTags(updatedTags);
+            toast.success('Tag unassigned successfully!');
+        } catch (error) {
+            toast.error('Error deleting tag:', error);
+        }
+    };
+    
+    const handleAssignTag = async (tagId) => {
+        if (!selectedCandidate) return;
+
+        try {
+            await axios.post(`http://localhost:8000/api/user/${selectedCandidate.id}/tags/`, {
+                tags: [tagId]
+            });
+            toast.success('Tag Added Successfully!')
+    
+        } catch (error) {
+            toast.error('Error assigning tag to member:', error);
+        }
+    };
+
+    return (
+        <>
+            <Modal show={show} onHide={handleClose} size="lg" centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>User Tags</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <div className="container">
+                        <div className="row mb-4 justify-content-between">
+                            <div className="d-grid col-md-1"></div>
+                            <div className="d-grid col-md-10 mt-btn">
+                                <input
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Search a Keyword"
+                                    onChange={(event) => handleTagSearch(event.target.value)}
+                                    disabled={loading}
+                                />
+                            </div>
+                            <div className="d-grid col-md-1"></div>
+                        </div>
+                    </div>
+                    <div className="table-responsive">
+                        {loading ? (
+                            <p className="text-center">Loading tags...</p>
+                        ) : filteredTags.length === 0 ? (
+                            <p className="text-center">No tags available.</p>
+                        ) : (
+                            <>
+                            <table className="table">
+                                <thead>
+                                    <tr>
+                                        <th className="text-center">Tags</th>
+                                        <th className="text-center">Type</th>
+                                        <th className="text-center">Members</th>
+                                        <th className="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {filteredTags.map((tag) => (
+                                        <tr key={tag.id} className='tr-tags tr-assigned'>
+                                            <td className="text-center">{tag.name}</td>
+                                            <td className="text-center">{tag.isAdmin ? 'Administrator' : 'Member'}</td>
+                                            <td className="text-center"><i className="ti ti-user"></i> {tag.member_count}</td>
+                                            <td className="text-center">
+                                                <button className="icon-button btn btn-light btn-sm mx-1" onClick={() => handleDeleteTag(tag.id)}>
+                                                    <i className="ti ti-x"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                                <tbody>
+                                    {filteredTagsNot.map((tag) => (
+                                        <tr key={tag.id} className='tr-tags'>
+                                            <td className="text-center">{tag.name}</td>
+                                            <td className="text-center">{tag.isAdmin ? 'Administrator' : 'Member'}</td>
+                                            <td className="text-center"><i className="ti ti-user"></i> {tag.member_count}</td>
+                                            <td className="text-center">
+                                                <button className="icon-button btn btn-light btn-sm mx-1" onClick={() => handleAssignTag(tag.id)}>
+                                                    <i className="ti ti-plus"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+
+                            </table>
+                            </>
+                        )}
+                    </div>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleClose}>
+                        Close
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+        </>
+    );
+};
+
 export default Page;

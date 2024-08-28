@@ -1,5 +1,4 @@
 body {
-    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
 }
@@ -186,3 +185,28 @@ table th {
     margin-top: 30px;
 }
 
+.p-inventory{
+    font-size:15px;
+    font-weight: 500;
+    color: #525252;
+}
+
+.history-container {
+    max-height: 450px; /* Ajusta esta altura según tu diseño */
+    overflow-y: auto;
+    overflow-x: hidden; /* Evita el desplazamiento horizontal si no es necesario */
+  }
+
+  .product-container {
+    max-height: 600px; /* Ajusta esta altura según tu diseño */
+    overflow-y: auto;
+    overflow-x: hidden; /* Evita el desplazamiento horizontal si no es necesario */
+  }
+
+  
+  .history-list {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+  }
+  
