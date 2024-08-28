@@ -21,7 +21,10 @@ from .models import Organization, Person, Image
 from .serializers import *
 from django.shortcuts import get_object_or_404
 from django.db.models import Sum
+from django.core.mail import send_mail
 from .serializers import GuestSerializer
+from rest_framework.parsers import MultiPartParser, FormParser
+
 
 class PersonOrganizationDetailsDeleteView(generics.GenericAPIView):
     permission_classes = [AllowAny]
@@ -870,6 +873,10 @@ class HeadquarterListCreateView(APIView):
         data = request.data.copy()  # Hacer una copia de los datos enviados
         data['Organization'] = organization.id  # Asignar la organización al diccionario de datos
 
+        #No se repita el nombre de la sede
+        if Headquarter.objects.filter(name=request.data['name']).exists():
+            return Response({'error': 'Headquarter with the same name already exists'}, status=status.HTTP_400_BAD_REQUEST)    
+
         serializer = HeadquarterSerializer(data=data)
         if serializer.is_valid():
             headquarter = serializer.save(Organization=organization) 
@@ -908,6 +915,11 @@ class ProductView(APIView):
 
     def post(self, request):
         serializer = ProductSerializer(data=request.data)
+        
+        #No se repita el nombre del producto
+        if Product.objects.filter(name=request.data['name']).exists():
+            return Response({'error': 'Product with the same name already exists'}, status=status.HTTP_400_BAD_REQUEST)
+
 
         if serializer.is_valid():
             product = serializer.save()
@@ -1197,6 +1209,16 @@ class  TaskParticipationView(APIView):
             return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
 
 # Se epera en body un atributo denominado products, con la lista de ids de los productos comprados o vendidos
+# "products": [
+#         {
+#             "product": 1,
+#             "quantity": 10
+#         }
+#         {
+#             "product": 6, (id del producto)
+#             "quantity": 10
+#         }
+#     ]
 class OperationAPIView(APIView):
     permission_classes = [AllowAny]
 
@@ -1214,13 +1236,19 @@ class OperationAPIView(APIView):
         print(request.data)
         request.data['Organization'] = organization_id
         serializer = OperationSerializer(data=request.data)
+        
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, organization_id, operation_id):
         operation = get_object_or_404(Operation, id=operation_id, Organization_id=organization_id)
+        
+        if operation.invoice:
+            operation.invoice.delete()
+
         operation.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -1474,6 +1502,103 @@ class DonationDetailAPIView(APIView):
         donation = get_object_or_404(Donation, id=donation_id, Organization_id=org_id)
         donation.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+#Se debe crear una view que permita enviar las invitaciones por mail 
+"""
+Se espera un body similar a este:
+{
+  "emails": ["galleguillolucas2006@gmail.com"],
+  "event_id": 1,
+  "subject": "Estás Invitado a Nuestro Evento",
+  "link": "https://www.google.com"
+}
+Les desea mucha suerte galle :) <3
+"""
+class SendInvitationView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        emails = request.data.get('emails') 
+        event_id = request.data.get('event_id')  
+        subject = request.data.get('subject', 'Invitación a Evento')
+        link = request.data.get('link')  
+        event = Event.objects.get(id=event_id)
+        organization = event.Organization.name
+
+        # Validar que los campos obligatorios están presentes
+        if not emails or not event or not organization or not link:
+            return Response({'error': 'emails, event and link are required fields.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            message_template = f"Hola,\n\nEstás invitado(a) a nuestro evento '{event.name}' que se llevará a cabo próximamente.\nEsperamos contar con tu presencia.\n{link}\n\nSaludos cordiales,\nEl equipo de {organization}"
+
+            send_mail(
+                subject=subject,  # Asunto del correo
+                message=message_template,  # Contenido del mensaje personalizado
+                from_email=settings.DEFAULT_FROM_EMAIL,  # Dirección de correo del remitente
+                recipient_list=emails,  # Lista de destinatarios
+                fail_silently=False,  # Generar excepción si falla el envío
+            )
+            print(f"Invitaciones enviadas exitosamente a: {', '.join(emails)}")
+            return Response({'message': 'Invitations sent successfully'}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+
+#View para subir un video al perfil de una organizacion
+
+class VideoUploadView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        try:
+            data = self.request.data
+            org_id = data.get('organization_id')
+            organization = Organization.objects.get(id=org_id)
+
+            video_file = data.get('video_file')
+            title = data.get('title')
+            description = data.get('description', 'Video content')
+
+            Video.objects.create(
+                title=title,
+                description=description,
+                video_file=video_file,
+                Organization=organization
+            )
+
+            return Response(
+                {'success': 'Video Uploaded Successfully'},
+                status=status.HTTP_201_CREATED
+            )
+        except Organization.DoesNotExist:
+            return Response(
+                {'error': 'Organization not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            return Response(
+                {'error': f'Error Uploading Video: {str(e)}'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+        
+
+class IsAdminView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        user_id = request.query_params.get('user_id')
+
+        try:
+            user = User.objects.get(id=user_id)
+            tags_user = Tag.objects.filter(PersonTagDetails__Person=user, PersonTagDetails__tag__TagType=1)
+            if tags_user.exists():
+                return Response(True, status=status.HTTP_200_OK)
+            return Response(False, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
     
 
 class UnassignedTagsAPIView(APIView):

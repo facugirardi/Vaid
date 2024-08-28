@@ -181,7 +181,7 @@ class OperationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Operation
-        fields = ['id', 'description', 'date', 'quantity', 'amount', 'type', 'Organization']
+        fields = ['id', 'description', 'date', 'quantity', 'amount', 'type', 'Organization', 'invoice']
 
     # def create(self, validated_data):
     #     products_data = validated_data.pop('products')
