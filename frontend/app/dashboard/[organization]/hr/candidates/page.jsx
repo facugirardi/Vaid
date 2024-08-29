@@ -153,7 +153,7 @@ const Page = () => {
                     <Card className="border-0 table-card user-profile-list">
                         <Card.Body>
                             {candidates.length === 0 ? (
-                                <p className="text-center">No candidates available.</p>
+                                <p className="text-center p-donation">No candidates available.</p>
                             ) : (
                                 <TableContainer
                                     columns={columns}

@@ -129,8 +129,8 @@ const Donations = () => {
             <tbody>
               {donations.map(item => (
                 <tr key={item.id}>
-                  <td className='text-center'>{item.description}</td>
-                  <td className='text-center'>{item.date}</td>
+                  <td className='text-center p-donation'>{item.description}</td>
+                  <td className='text-center p-donation'>{item.date}</td>
                   <td className='text-center'>
                     <button className="icon-button" onClick={() => handleProductModalShow(item)}>
                       <FontAwesomeIcon icon={faEye} className='hover-button' />
@@ -342,9 +342,9 @@ const BuySell = () => {
             <tbody>
               {buysell.map(item => (
                 <tr key={item.id}>
-                  <td className='text-center'>{item.description}</td>
-                  <td className='text-center'>{item.date}</td>
-                  <td className='text-center'>{item.type}</td>
+                  <td className='text-center p-donation'>{item.description}</td>
+                  <td className='text-center p-donation'>{item.date}</td>
+                  <td className='text-center p-donation'>{item.type}</td>
                   <td className='text-center'>
                     <button className="icon-button" onClick={() => handleProductModalShow(item)}>
                       <FontAwesomeIcon icon={faEye} className='hover-button' />

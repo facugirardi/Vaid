@@ -190,3 +190,14 @@
 }
 
 
+.p-history{
+  margin-top: 10px;
+  font-family: 'Inter', sans-serif;;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.6;
+      padding: 1px ;
+      margin-bottom: 5px;
+      color: #272835; /* Color más oscuro para mejor contraste */
+  }
+  

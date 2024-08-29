@@ -119,8 +119,8 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry }) => {
           ) : (
             headquarters.map(hq => (
               <tr key={hq.id} className="d-flex tr-class" onClick={() => onHeadquarterClick(hq.id)}>
-                <td className="flex-grow-1 d-flex align-items-center justify-content-start">{hq.name}</td>
-                <td className="flex-grow-1 d-flex align-items-center justify-content-start">{hq.address}</td>
+                <td className="flex-grow-1 d-flex align-items-center justify-content-start p-inventory">{hq.name}</td>
+                <td className="flex-grow-1 d-flex align-items-center justify-content-start p-inventory">{hq.address}</td>
                 <td className="d-flex align-items-center justify-content-end">
                   <button className="edit-button trash-btn" onClick={(e) => { e.stopPropagation(); handleDeleteModalShow(hq); }}>
                     <FontAwesomeIcon icon={faTrash} className='hover-button-trash'/>
@@ -337,10 +337,10 @@ const Inventory = ({ headquarterId, organizationId }) => {
             <tbody>
               {inventory.map(item => (
                 <tr key={item.id}>
-                  <td className='text-center'>{item.Product.name}</td>
-                  <td className='text-center'>{item.cuantity}</td>
-                  <td className='text-center'>{item.Product.category_name}</td>
-                  <td className='text-center'>{item.Product.status_name}</td>
+                  <td className='text-center p-inventory'>{item.Product.name}</td>
+                  <td className='text-center '>{item.cuantity}</td>
+                  <td className='text-center p-inventory'>{item.Product.category_name}</td>
+                  <td className='text-center p-inventory'>{item.Product.status_name}</td>
                   <td className='text-center'>
                     <button className="icon-button" onClick={() => handleProductModalShow(item.Product)}>
                       <FontAwesomeIcon icon={faEye} className='hover-button'/>
@@ -450,6 +450,7 @@ const History = ({ organizationId, localHistory, setLocalHistory }) => {
   return (
     <div className="card history-container">
       <h2>History</h2>
+      <div className="title-divider"></div> {/* Línea gris debajo del título */}
       <br></br>
       <ul className="history-list mt-20">
         {localHistory.length === 0 ? (
@@ -457,13 +458,23 @@ const History = ({ organizationId, localHistory, setLocalHistory }) => {
         ) : (
           localHistory.map((entry, index) => (
             <div key={index} className='container'>
-              <div className='row'>
-                <div className='col-5 col-md-5'>
-                  <p className='p-inventory'><b>{entry.action}</b></p>
-                  <p  className='p-inventory'>{entry.date}</p>
-                  <p  className='p-inventory'>{entry.description}</p>
+              <div className='row align-items-center'>
+              <div className='col-5 col-md-3 text-center'>
+                  <p className='p-history'>{entry.date}</p>
                 </div>
-                <div className='col-3 col-md-3'></div>
+                <div className='col-5 col-md-8'>
+                  <p className='p-history'><b>{entry.action}</b>
+                  {entry.description.includes('added') && (
+                    <span className="badge bg-success ms-2">Added</span>
+                  )}
+                  {entry.description.includes('deleted') && (
+                    <span className="badge bg-danger ms-2">Deleted</span>
+                  )}
+                  </p>
+                  <p className='p-history'>
+                  {entry.description}
+                </p>
+                </div>
               </div> 
               <br/>
             </div>

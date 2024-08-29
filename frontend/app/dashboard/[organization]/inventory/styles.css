@@ -216,3 +216,21 @@ table th {
     list-style-type: none;
   }
   
+.p-history{
+    font-family: 'Inter', sans-serif;;
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.6;
+    padding: 1px ;
+    margin-bottom: 5px;
+    color: #333; /* Color más oscuro para mejor contraste */
+
+}
+
+.history-container .title-divider {
+    border-bottom: 1px solid #BFBFBF; /* Línea gris */
+    width: 100%; /* Ocupa todo el ancho del contenedor */
+    margin-top: 10px; /* Separación superior opcional */
+    margin-bottom: 20px; /* Separación inferior opcional */
+  }
+  
