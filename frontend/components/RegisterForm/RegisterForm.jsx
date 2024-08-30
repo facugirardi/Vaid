@@ -37,8 +37,10 @@ const RegisterForm = () => {
             .then(() => {
 
                 toast.success('Please check email to verify your account.')
-                window.location.href = '/auth/login';
-
+                setTimeout(() => {
+                    window.location.href = '/auth/login';
+                }, 5000);
+        
             })
             .catch((error) => {
                 console.log(error); 

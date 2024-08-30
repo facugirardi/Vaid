@@ -91,7 +91,7 @@ const page = () => {
                 data-aos-duration={1000}
                 data-aos-offset={50}
               >
-                <img src="assets/images/placeholderimage.png" alt="Hero" style={{borderRadius:'10px'}}/>
+                <img src="assets/images/backgrounds/bg-landing.jpg" alt="Hero" style={{borderRadius:'10px'}}/>
               </div>
             </div>
           </div>
