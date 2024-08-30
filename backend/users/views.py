@@ -24,6 +24,7 @@ from django.db.models import Sum
 from django.core.mail import send_mail
 from .serializers import GuestSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.exceptions import ValidationError
 
 
 class PersonOrganizationDetailsDeleteView(generics.GenericAPIView):
@@ -389,6 +390,12 @@ class UploadImageView(APIView):
 
             image = data['image']
             
+
+            extension = image.name.split('.')[-1].lower()
+            if extension not in ['jpg', 'jpeg', 'png']:
+                raise ValidationError('Unsupported file extensionsplit. Please upload a JPEG or PNG image.')
+
+
             Image.objects.create(
                     image = image,
                     User = user
