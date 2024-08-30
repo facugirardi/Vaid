@@ -97,36 +97,28 @@
   }
   
   /* Estilos del botón "Take" */
-  .take-button {
-    background-color: #007bff; /* Fondo azul */
-    color: white; /* Texto blanco */
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
-  }
-  
-  /* Efecto hover para el botón "Take" */
-  .take-button:hover {
-    background-color: #0056b3; /* Oscurece el botón al pasar el cursor */
-  }
-  
-  /* Estilos del botón "Close" */
-  .close-button {
-    background-color: #f5f5f5; /* Fondo claro */
-    color: #555; /* Texto gris oscuro */
-    padding: 10px 20px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
-  }
-  
-  /* Efecto hover para el botón "Close" */
-  .close-button:hover {
-    background-color: #e0e0e0; /* Cambia ligeramente el fondo al pasar el cursor */
-  }
-  
+  /* view-more.css */
+
+.task-buttons {
+  display: flex;
+  justify-content: flex-start; 
+  margin-top: 20px; 
+}
+
+.create-button, .close-button {
+  padding: 30px 30px;
+  margin-left: 10px;
+  border: none;
+  border-radius: 15px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.create-button { 
+  color: rgb(0, 0, 0);
+}
+
+.close-button { 
+  color: rgb(0, 0, 0);
+}
+
