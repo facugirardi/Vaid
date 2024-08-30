@@ -1,0 +1,132 @@
+/* Estilos principales del contenedor */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f5f5f5; /* Fondo claro para todo el contenedor */
+  }
+  
+  /* Estilos de la tarjeta principal */
+  .card {
+    background-color: #ffffff; /* Fondo blanco para resaltar el contenido */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Sombra para un efecto de profundidad */
+    overflow: hidden;
+    width: 600px; /* Ancho fijo de la tarjeta */
+  }
+  
+  /* Estilos de la imagen en la tarjeta */
+  .image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover; /* Asegura que la imagen cubra todo el espacio sin distorsionarse */
+  }
+  
+  /* Contenedor del contenido textual y de los inputs */
+  .content {
+    padding: 20px; /* Espaciado interno para el contenido */
+}
+  
+  /* Estilos del título */
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333; /* Color oscuro para el título */
+  }
+  
+  /* Estilos de la descripción del evento */
+  .description {
+    font-size: 16px;
+    margin-bottom: 20px;
+    line-height: 1.5; /* Mejora la legibilidad */
+    color: #555; /* Color gris para el texto */
+  }
+  
+  /* Estilos del texto de ubicación */
+  .location {
+    font-size: 14px;
+    margin-bottom: 20px;
+    color: #777; /* Color gris claro para diferenciarlo del texto principal */
+  }
+  
+  /* Contenedor de los campos de fecha y hora */
+  .date-time {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Espacio entre los inputs */
+  }
+  
+  /* Estilos individuales para cada campo */
+  .date-time div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Estilos de las etiquetas de los inputs */
+  .date-time label {
+    font-size: 12px;
+    color: #555; /* Color de las etiquetas */
+    margin-bottom: 5px;
+  }
+  
+  /* Estilos de los inputs de fecha y hora */
+  .date-time input {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 8px;
+    font-size: 14px;
+    color: #555;
+    background-color: #fff; /* Fondo blanco */
+    transition: border-color 0.3s;
+  }
+  
+  /* Cambia el color del borde cuando el input está enfocado */
+  .date-time input:focus {
+    border-color: #007bff; /* Color azul cuando el input está activo */
+    outline: none;
+  }
+  
+  /* Contenedor de los botones */
+  .actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  /* Estilos del botón "Take" */
+  .take-button {
+    background-color: #007bff; /* Fondo azul */
+    color: white; /* Texto blanco */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+  }
+  
+  /* Efecto hover para el botón "Take" */
+  .take-button:hover {
+    background-color: #0056b3; /* Oscurece el botón al pasar el cursor */
+  }
+  
+  /* Estilos del botón "Close" */
+  .close-button {
+    background-color: #f5f5f5; /* Fondo claro */
+    color: #555; /* Texto gris oscuro */
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+  }
+  
+  /* Efecto hover para el botón "Close" */
+  .close-button:hover {
+    background-color: #e0e0e0; /* Cambia ligeramente el fondo al pasar el cursor */
+  }
+  
