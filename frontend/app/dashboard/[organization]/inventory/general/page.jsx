@@ -343,11 +343,9 @@ const Page = () => {
       <div className="container">
         <BreadcrumbItem mainTitle="Resource Management" subTitle="Inventory" />
         <div className='row'>
-          <div className='col-md-1'></div>
-          <div className="col-md-10">
+          <div className="col-md-12">
             <Inventory headquarterId={selectedHeadquarterId} organizationId={organizationId} addHistoryEntry={addHistoryEntry} />
           </div>
-          <div className='col-md-1'></div>
         </div>
       </div>
     </Layout>

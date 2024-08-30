@@ -32,7 +32,7 @@ const Footer3 = () => {
                 </div>
                 <div className="footer-btns">
                   <a
-                    href="/"
+                    href="/auth/signup"
                     className="theme-btn"
                     style={{border:'.1px solid white !important'}}
                   >

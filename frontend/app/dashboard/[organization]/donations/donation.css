@@ -189,3 +189,13 @@ backdrop-filter: blur(5px); /* Adjust the blur amount as needed */
 .both-cont{
   margin-top: 25px;
 }
+
+.p-donation{
+font-family: 'Inter', sans-serif;;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.6;
+    padding: 1px ;
+    margin-bottom: 5px;
+    color: #333; /* Color más oscuro para mejor contraste */
+}

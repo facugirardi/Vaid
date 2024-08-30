@@ -34,7 +34,7 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry }) => {
       fetch(`http://localhost:8000/api/headquarters/${organizationId}`)
         .then(response => response.json())
         .then(data => setHeadquarters(data))
-        .catch(error => toast.error('Error:', error));
+        .catch(error => console.error('Error:', error));
     }
   }, [organizationId]);
 
@@ -51,22 +51,28 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry }) => {
     if (!selectedHeadquarter) return;
 
     try {
-      const response = await fetch(`http://localhost:8000/api/headquarters/${organizationId}/edit/${selectedHeadquarter.id}/`, {
-        method: 'DELETE',
-      });
+        const response = await fetch(`http://localhost:8000/api/headquarters/${organizationId}/edit/${selectedHeadquarter.id}/`, {
+            method: 'DELETE',
+        });
 
-      if (response.ok) {
-        console.log('Headquarter borrado con éxito');
-        setHeadquarters(headquarters.filter(hq => hq.id !== selectedHeadquarter.id));
-        addHistoryEntry(`Headquarter "${selectedHeadquarter.name}" deleted by ${user.first_name} ${user.last_name}`);
-        handleDeleteModalClose(); // Cerrar el modal aquí
-      } else {
-        toast.error('Error al borrar la sede:', response.status);
-      }
+        if (response.ok) {
+            console.log('Headquarter borrado con éxito');
+            setHeadquarters(headquarters.filter(hq => hq.id !== selectedHeadquarter.id));
+
+            // Si no quedan más headquarters, actualizar el selectedHeadquarterId
+            if (headquarters.length === 1) {
+                onHeadquarterClick(null);  // Pasar null para limpiar el selectedHeadquarterId
+            }
+
+            addHistoryEntry(`Headquarter "${selectedHeadquarter.name}" deleted by ${user.first_name} ${user.last_name}`);
+            handleDeleteModalClose();
+        } else {
+            toast.error('Error al borrar la sede:', response.status);
+        }
     } catch (error) {
-      toast.error('Error:', error);
+        toast.error('Error:', error);
     }
-  };
+};
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -113,8 +119,8 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry }) => {
           ) : (
             headquarters.map(hq => (
               <tr key={hq.id} className="d-flex tr-class" onClick={() => onHeadquarterClick(hq.id)}>
-                <td className="flex-grow-1 d-flex align-items-center justify-content-start">{hq.name}</td>
-                <td className="flex-grow-1 d-flex align-items-center justify-content-start">{hq.address}</td>
+                <td className="flex-grow-1 d-flex align-items-center justify-content-start p-inventory">{hq.name}</td>
+                <td className="flex-grow-1 d-flex align-items-center justify-content-start p-inventory">{hq.address}</td>
                 <td className="d-flex align-items-center justify-content-end">
                   <button className="edit-button trash-btn" onClick={(e) => { e.stopPropagation(); handleDeleteModalShow(hq); }}>
                     <FontAwesomeIcon icon={faTrash} className='hover-button-trash'/>
@@ -176,7 +182,7 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry }) => {
   );
 };
 
-const Inventory = ({ headquarterId, organizationId, addHistoryEntry }) => {
+const Inventory = ({ headquarterId, organizationId }) => {
   const [inventory, setInventory] = useState([]);
   const [showInventoryModal, setShowInventoryModal] = useState(false);
   const [showProductModal, setShowProductModal] = useState(false);
@@ -185,15 +191,18 @@ const Inventory = ({ headquarterId, organizationId, addHistoryEntry }) => {
 
   useEffect(() => {
     if (headquarterId) {
-      fetch(`http://localhost:8000/api/headquarters/${headquarterId}/products`)
-        .then(response => response.json())
-        .then(data => setInventory(Array.isArray(data) ? data : []))
-        .catch(error => {
-          toast.error('Error fetching inventory:', error);
-          setInventory([]);
-        });
+        fetch(`http://localhost:8000/api/headquarters/${headquarterId}/products`)
+            .then(response => response.json())
+            .then(data => setInventory(Array.isArray(data) ? data : []))
+            .catch(error => {
+                toast.error('Error fetching inventory:', error);
+                setInventory([]);
+            });
+    } else {
+        // Limpiar el inventario si no hay headquarter seleccionada
+        setInventory([]);
     }
-  }, [headquarterId]);
+}, [headquarterId]);
 
   const handleInventoryModalClose = () => setShowInventoryModal(false);
   const handleInventoryModalShow = () => setShowInventoryModal(true);
@@ -212,6 +221,27 @@ const Inventory = ({ headquarterId, organizationId, addHistoryEntry }) => {
   };
 
   const handleDeleteProductModalClose = () => setShowDeleteProductModal(false);
+  
+  const addHistoryEntry = async (entry) => {
+    try {
+        const response = await fetch(`http://localhost:8000/api/${organizationId}/history/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        body: JSON.stringify({ description: entry, action: 'Inventory Change', Organization: organizationId}),
+        });
+
+        if (response.ok) {
+            console.log('Historial registrado con éxito');
+            fetchHistory();
+        } else {
+            toast.error('Error al registrar el historial');
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    }
+  };
 
   const handleDeleteProduct = async () => {
     if (!selectedProduct) return;
@@ -224,8 +254,8 @@ const Inventory = ({ headquarterId, organizationId, addHistoryEntry }) => {
         if (response.ok) {
             console.log('Producto borrado con éxito');
             setInventory(inventory.filter(item => item.id !== selectedProduct.id));
-            addHistoryEntry(`Product "${selectedProduct.name}" deleted by ${user.first_name} ${user.last_name}`);
             setShowDeleteProductModal(false);
+            addHistoryEntry(`Product "${selectedProduct.name}" deleted by ${user.first_name} ${user.last_name}`);
             
         } else {
             toast.error('Error al borrar el producto:', response.status);
@@ -265,14 +295,14 @@ const Inventory = ({ headquarterId, organizationId, addHistoryEntry }) => {
         if (response.ok) {
             const newProduct = await response.json();
             setInventory([...inventory, newProduct]);
-            addHistoryEntry(`Product "${newProduct.name}" added by ${user.first_name} ${user.last_name}`);
             setShowInventoryModal(false);
+            addHistoryEntry(`Product "${newProduct.name}" added by ${user.first_name} ${user.last_name}`);
         } else {
             const errorData = await response.json();
             toast.error('Error en la respuesta:', response.status, errorData);
         }
     } catch (error) {
-        toast.error('Error:', error);
+        console.error('Error:', error);
     }
   };
 
@@ -307,10 +337,10 @@ const Inventory = ({ headquarterId, organizationId, addHistoryEntry }) => {
             <tbody>
               {inventory.map(item => (
                 <tr key={item.id}>
-                  <td className='text-center'>{item.Product.name}</td>
-                  <td className='text-center'>{item.cuantity}</td>
-                  <td className='text-center'>{item.Product.category_name}</td>
-                  <td className='text-center'>{item.Product.status_name}</td>
+                  <td className='text-center p-inventory'>{item.Product.name}</td>
+                  <td className='text-center '>{item.cuantity}</td>
+                  <td className='text-center p-inventory'>{item.Product.category_name}</td>
+                  <td className='text-center p-inventory'>{item.Product.status_name}</td>
                   <td className='text-center'>
                     <button className="icon-button" onClick={() => handleProductModalShow(item.Product)}>
                       <FontAwesomeIcon icon={faEye} className='hover-button'/>
@@ -404,13 +434,14 @@ const History = ({ organizationId, localHistory, setLocalHistory }) => {
 
   useEffect(() => {
     const fetchHistory = async () => {
+      if(organizationId){
       try {
         const response = await fetch(`http://localhost:8000/api/organizations/${organizationId}/history/`);
         const data = await response.json();
         setLocalHistory(data);
       } catch (error) {
         toast.error('Error fetching history:', error);
-      }
+      }}
     };
 
     fetchHistory();
@@ -419,6 +450,7 @@ const History = ({ organizationId, localHistory, setLocalHistory }) => {
   return (
     <div className="card history-container">
       <h2>History</h2>
+      <div className="title-divider"></div> {/* Línea gris debajo del título */}
       <br></br>
       <ul className="history-list mt-20">
         {localHistory.length === 0 ? (
@@ -426,14 +458,23 @@ const History = ({ organizationId, localHistory, setLocalHistory }) => {
         ) : (
           localHistory.map((entry, index) => (
             <div key={index} className='container'>
-              <div className='row'>
-                <div className='col-5 col-md-5'>
-                  <strong>{entry.action}</strong>
-                  <p>{entry.description}</p>
-                  <p>{entry.date}</p>
-                  -
+              <div className='row align-items-center'>
+              <div className='col-5 col-md-3 text-center'>
+                  <p className='p-history'>{entry.date}</p>
                 </div>
-                <div className='col-3 col-md-3'></div>
+                <div className='col-5 col-md-8'>
+                  <p className='p-history'><b>{entry.action}</b>
+                  {entry.description.includes('added') && (
+                    <span className="badge bg-success ms-2">Added</span>
+                  )}
+                  {entry.description.includes('deleted') && (
+                    <span className="badge bg-danger ms-2">Deleted</span>
+                  )}
+                  </p>
+                  <p className='p-history'>
+                  {entry.description}
+                </p>
+                </div>
               </div> 
               <br/>
             </div>
@@ -450,65 +491,65 @@ const Page = () => {
   const [localHistory, setLocalHistory] = useState([]);
 
   useEffect(() => {
-    const currentUrl = window.location.href;
-    const url = new URL(currentUrl);
-    const pathSegments = url.pathname.split('/');
-    const dashboardIndex = pathSegments.indexOf('dashboard');
-    if (dashboardIndex !== -1 && pathSegments.length > dashboardIndex + 1) {
-      setOrganizationId(pathSegments[dashboardIndex + 1]);
-    }
+      const currentUrl = window.location.href;
+      const url = new URL(currentUrl);
+      const pathSegments = url.pathname.split('/');
+      const dashboardIndex = pathSegments.indexOf('dashboard');
+      if (dashboardIndex !== -1 && pathSegments.length > dashboardIndex + 1) {
+          setOrganizationId(pathSegments[dashboardIndex + 1]);
+      }
   }, []);
 
   const handleHeadquarterClick = (id) => {
-    setSelectedHeadquarterId(id);
+      setSelectedHeadquarterId(id);
   };
 
   const addHistoryEntry = async (entry) => {
-    try {
-        const response = await fetch(`http://localhost:8000/api/${organizationId}/history/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        body: JSON.stringify({ description: entry, action: 'Inventory Change', Organization: organizationId}),
-        });
+      try {
+          const response = await fetch(`http://localhost:8000/api/${organizationId}/history/`, {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+          body: JSON.stringify({ description: entry, action: 'Inventory Change', Organization: organizationId}),
+          });
 
-        if (response.ok) {
-            console.log('Historial registrado con éxito');
-            fetchHistory();
-        } else {
-            toast.error('Error al registrar el historial');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-    }
+          if (response.ok) {
+              console.log('Historial registrado con éxito');
+              fetchHistory();
+          } else {
+              toast.error('Error al registrar el historial');
+          }
+      } catch (error) {
+          console.error('Error:', error);
+      }
   };
 
   const fetchHistory = async () => {
-    try {
-      const response = await fetch(`http://localhost:8000/api/organizations/${organizationId}/history/`);
-      const data = await response.json();
-      setLocalHistory(data);
-    } catch (error) {
-      toast.error('Error fetching history:', error);
-    }
+      try {
+          const response = await fetch(`http://localhost:8000/api/organizations/${organizationId}/history/`);
+          const data = await response.json();
+          setLocalHistory(data);
+      } catch (error) {
+          console.error('Error fetching history:', error);
+      }
   };
 
   return (
-    <Layout>
-      <div className="container">
-        <BreadcrumbItem mainTitle="Resource Management" subTitle="Headquarter Inventory" />
-        <div className='row'>
-          <div className="col-md-6">
-            <Headquarters onHeadquarterClick={handleHeadquarterClick} addHistoryEntry={addHistoryEntry} />
-            <History organizationId={organizationId} localHistory={localHistory} setLocalHistory={setLocalHistory} />
+      <Layout>
+          <div className="container">
+              <BreadcrumbItem mainTitle="Resource Management" subTitle="Headquarter Inventory" />
+              <div className='row'>
+                  <div className="col-md-6">
+                      <Headquarters onHeadquarterClick={handleHeadquarterClick} addHistoryEntry={addHistoryEntry} />
+                      <History organizationId={organizationId} localHistory={localHistory} setLocalHistory={setLocalHistory} />
+                  </div>
+                  <div className="col-md-6">
+                      <Inventory headquarterId={selectedHeadquarterId} organizationId={organizationId} />
+                  </div>
+              </div>
           </div>
-          <div className="col-md-6">
-            <Inventory headquarterId={selectedHeadquarterId} organizationId={organizationId} addHistoryEntry={addHistoryEntry} />
-          </div>
-        </div>
-      </div>
-    </Layout>
+      </Layout>
   );
 };
 
