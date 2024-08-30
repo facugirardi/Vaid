@@ -582,7 +582,7 @@ const page = () => {
               data-aos-offset={50}
             >
               <img
-                src="assets/images/placeholderimage950.png"
+                src="assets/images/backgrounds/vaid_design_bg.png"
                 alt="Management"
               />
             </div>
