@@ -561,12 +561,12 @@ const page = () => {
                 data-aos-offset={50}
               >
                 <img
-                  src="assets/images/placeholderimage440.png"
+                  src="assets/images/440.png"
                   alt="Management"
                 />
                 <div className="management-over">
                   <img
-                    src="assets/images/placeholderimage216.png"
+                    src="assets/images/2136.png"
                     alt="Management"
                   />
                 </div>
