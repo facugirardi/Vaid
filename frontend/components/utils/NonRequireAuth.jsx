@@ -8,7 +8,8 @@ export default function NonRequireAuth({ children }){
     const { isAuthenticated } = useAppSelector(state => state.auth)
 
     if (isAuthenticated){
-        return push('/dashboard')
+        return window.location.href = '/dashboard';
+
     }
 
     return <>{children}</>

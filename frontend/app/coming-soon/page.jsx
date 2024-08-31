@@ -53,13 +53,13 @@ const page = () => {
             <div className="header-inner py-20 rel d-flex align-items-center">
               <div className="logo-outer-two">
                 <div className="logo">
-                  <Link href="/">
+                  <a href="/">
                     <img
                       src="assets/images/vaidpng2.png"
                       alt="Logo"
                       title="Logo"
                     />
-                  </Link>
+                  </a>
                 </div>
               </div>
             </div>

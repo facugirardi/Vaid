@@ -122,6 +122,7 @@ const Donations = () => {
             <thead>
               <tr>
                 <th className='text-center'>Description</th>
+                <th className='text-center'>Units</th>
                 <th className='text-center'>Date</th>
                 <th className='text-center'>Actions</th>
               </tr>
@@ -130,6 +131,7 @@ const Donations = () => {
               {donations.map(item => (
                 <tr key={item.id}>
                   <td className='text-center p-donation'>{item.description}</td>
+                  <td className='text-center p-donation'>{item.quantity}</td>
                   <td className='text-center p-donation'>{item.date}</td>
                   <td className='text-center'>
                     <button className="icon-button" onClick={() => handleProductModalShow(item)}>
@@ -335,7 +337,9 @@ const BuySell = () => {
               <tr>
                 <th className='text-center'>Name</th>
                 <th className='text-center'>Units</th>
-                <th className='text-center'>Category</th>
+                <th className='text-center'>Amount</th>
+                <th className='text-center'>Date</th>
+                <th className='text-center'>Operation</th>
                 <th className='text-center'>Actions</th>
               </tr>
             </thead>
@@ -343,8 +347,20 @@ const BuySell = () => {
               {buysell.map(item => (
                 <tr key={item.id}>
                   <td className='text-center p-donation'>{item.description}</td>
+                  <td className='text-center p-donation'>{item.quantity}</td>
+                  <td className='text-center p-donation'>$ {item.amount}</td>
                   <td className='text-center p-donation'>{item.date}</td>
-                  <td className='text-center p-donation'>{item.type}</td>
+                  <td className={`text-center p-donation ${item.type === 'Sale' ? 'text-green' : 'text-red'}`}>
+                    {item.type === 'Sale' ? (
+                      <>
+                        <i className="fa fa-arrow-up text-green"></i> {item.type}
+                      </>
+                    ) : (
+                      <>
+                        <i className="fa fa-arrow-down text-red"></i> {item.type}
+                      </>
+                    )}
+                  </td>
                   <td className='text-center'>
                     <button className="icon-button" onClick={() => handleProductModalShow(item)}>
                       <FontAwesomeIcon icon={faEye} className='hover-button' />
@@ -416,6 +432,7 @@ const BuySell = () => {
             <div>
               <p><strong>Description:</strong> {selectedProduct.description}</p>
               <p><strong>Quantity:</strong> {selectedProduct.quantity}</p>
+              <p><strong>Amount:</strong> {selectedProduct.amount}</p>
               <p><strong>Date:</strong> {selectedProduct.date}</p>
               <p><strong>Type:</strong> {selectedProduct.type}</p>
             </div>

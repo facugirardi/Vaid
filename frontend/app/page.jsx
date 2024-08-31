@@ -71,9 +71,9 @@ const page = () => {
                 <p>
                 Designed to empower nonprofit organizations by providing streamlined, 
                 innovative management software solutions.                </p>
-                <Link href="/auth/register" className="theme-btn mt-15 mb-10">
+                <a href="/auth/register" className="theme-btn mt-15 mb-10">
                   Get Started <i className="far fa-arrow-right" />
-                </Link>
+                </a>
                 <ul className="icon-list style-two">
                   <li>
                     <i className="fal fa-check" /> Free

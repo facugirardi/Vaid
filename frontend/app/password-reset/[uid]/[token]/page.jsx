@@ -34,7 +34,7 @@ const page = ( { params } ) => {
         .unwrap()
         .then(() => {
             toast.success('Password succesfully changed')
-            push('/auth/login');
+            window.location.href = '/auth/login';
         })
         .catch((error) => {
             console.log(error); // Muestra el error en la consola

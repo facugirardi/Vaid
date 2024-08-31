@@ -111,7 +111,7 @@ const Page = () => {
 
             const data = await response.json();
             toast.success(data.message || 'Form data saved successfully!');
-            push('/dashboard')
+            window.location.href = '/dashboard';
 
         } catch (error) {
             console.error('Failed to save form data', error);
