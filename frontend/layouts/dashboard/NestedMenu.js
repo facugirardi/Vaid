@@ -8,7 +8,6 @@ const NestedMenu = () => {
   const { data: user } = useRetrieveUserQuery();
   const [menuItems, setMenuItems] = useState([]);
   const [userType, setUserType] = useState(null);
-  const { push } = useRouter();
   const [openMenu, setOpenMenu] = useState(null);
   const [organizationId, setOrganizationId] = useState("");
   
@@ -51,13 +50,13 @@ const NestedMenu = () => {
   useEffect(() => {
     if (userType === 1) {
       setMenuItems([
-        { id: "home", label: "Home (SIN TERMINAR)", icon: "ph-duotone ph-house", link: `/dashboard/${organizationId}/home`, dataPage: "home" },
+        { id: "home", label: "Home", icon: "ph-duotone ph-house", link: `/dashboard/${organizationId}/home`, dataPage: "home" },
         { id: "events", label: "Events", icon: "ph-duotone ph-calendar-blank", link: `/dashboard/${organizationId}/events/view`, dataPage: "events" },
         { id: "tasks", label: "Tasks", icon: "ph-duotone ph-clipboard-text", link: `/dashboard/${organizationId}/tasks/view`, dataPage: "tasks" },
        ]);
     } else {
       setMenuItems([
-        { id: "home", label: "Home (SIN TERMINAR)", icon: "ph-duotone ph-house", link: `/dashboard/${organizationId}/home`, dataPage: "home" },
+        { id: "home", label: "Home", icon: "ph-duotone ph-house", link: `/dashboard/${organizationId}/home`, dataPage: "home" },
         {
           type: "HASHMENU", id: 1, label: "Tasks", icon: "ph-duotone ph-clipboard-text", dataPage: null, link: "#",
           submenu: [
@@ -79,13 +78,13 @@ const NestedMenu = () => {
             { id: "candidates", label: "Candidates", icon: "ph-duotone ph-users", link: `/dashboard/${organizationId}/hr/candidates`, dataPage: "candidates" },
           ],
         },
-        { id: "analytics", label: "Analytics (SIN TERMINAR)", icon: "ph-duotone ph-chart-bar", link: `/dashboard/${organizationId}/home`, dataPage: "analytics" },
+        { id: "analytics", label: "Analytics", icon: "ph-duotone ph-chart-bar", link: `/dashboard/${organizationId}/analytics`, dataPage: "analytics" },
         {
           type: "HASHMENU", id: 1, label: "Resources", icon: "ph-duotone ph-archive", dataPage: null, link: "#",
           submenu: [
             { id: "inventory", label: "Inventory", icon: "ph-duotone ph-package", link: `/dashboard/${organizationId}/inventory/general`, dataPage: "inventory" },
             { id: "headquarter-inv", label: "Headquarter Inventory", icon: "ph-duotone ph-warehouse", link: `/dashboard/${organizationId}/inventory`, dataPage: "headquarter-inv" },
-            { id: "transfer-prod", label: "Transfer Products (SIN TERMINAR)", icon: "ph-duotone ph-swap", link: `/dashboard/${organizationId}/inventory`, dataPage: "transfer-prod" },
+            { id: "transfer-prod", label: "Transfer Products", icon: "ph-duotone ph-swap", link: `/dashboard/${organizationId}/inventory/transfer`, dataPage: "transfer-prod" },
           ],
         },
           {
@@ -123,7 +122,7 @@ const NestedMenu = () => {
     (list) => {
       if (!list) return false;
       for (const menuItem of list) {
-        if (menuItem.link === push.pathname) {
+        if (menuItem.link === window.location.pathname) {
           return true;
         } else if (menuItem.submenu && hasActiveLink(menuItem.submenu)) {
           return true;
@@ -131,7 +130,7 @@ const NestedMenu = () => {
       }
       return false;
     },
-    [push.pathname]
+    []
   );
 
   const hasOpenedSubMenu = useCallback(
@@ -151,6 +150,13 @@ const NestedMenu = () => {
 
   const renderMenu = (items) => {
     return items.map((item, index) => {
+      const handleClick = (e) => {
+        e.preventDefault();
+        if (item.link) {
+          window.location.href = item.link;
+        }
+      };
+
       return (
         <li
           key={item.label + index}
@@ -167,11 +173,11 @@ const NestedMenu = () => {
               ? "pc-trigger"
               : ""
             }
-                    ${item.link === push.pathname || hasActiveLink(item.submenu) ? "active" : ""}`}
+                    ${item.link === window.location.pathname || hasActiveLink(item.submenu) ? "active" : ""}`}
         >
           {item.type === "HEADER" && <label>{item.label}</label>}
           {item.type !== "HEADER" && (
-            <Link href={item.link || "#"} className="pc-link">
+            <a href="#" className="pc-link" onClick={handleClick}>
               {item.icon && (
                 <span className="pc-micon">
                   <i className={item.icon}></i>
@@ -184,7 +190,7 @@ const NestedMenu = () => {
                 </span>
               )}
               {item.badge && <span className="pc-badge">{item.badge}</span>}
-            </Link>
+            </a>
           )}
           {(openMenu === item.label || hasOpenedSubMenu(item.submenu, openMenu)) && (
             <ul
@@ -204,4 +210,3 @@ const NestedMenu = () => {
 };
 
 export default NestedMenu;
-

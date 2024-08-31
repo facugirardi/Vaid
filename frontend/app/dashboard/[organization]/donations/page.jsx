@@ -150,7 +150,7 @@ const Donations = () => {
       )}
 
       {/* Add Inventory Modal */}
-      <Modal show={showInventoryModal} onHide={handleInventoryModalClose} backdropClassName="modal-backdrop" centered size='lg'>
+      <Modal show={showInventoryModal} onHide={handleInventoryModalClose} backdropClassName="modal-backdrop" centered size='xl'>
         <Modal.Header closeButton>
           <Modal.Title>Add Donation</Modal.Title>
         </Modal.Header>
@@ -167,7 +167,7 @@ const Donations = () => {
                   <input type="text" className="form-control" id="Category" name="Category" placeholder='Product Type' required />
                 </div>
                 <div className="mb-3 col-md-2">
-                  <label htmlFor="quantity" className="form-label">Quantity</label>
+                  <label htmlFor="quantity" className="form-label">Quantity / Amount</label>
                   <input type="number" className="form-control" id="quantity" name="quantity" placeholder='1' required />
                 </div>
                 <div className="mb-3 col-md-3">
@@ -176,7 +176,7 @@ const Donations = () => {
                 </div>
               </div>
               <div className='d-flex justify-content-center'>
-                <Button variant="primary" type="submit" className='mt-10'>
+                <Button variant="primary" type="submit" className='col-md-3 mt-40'>
                   Add Donation
                 </Button>
               </div>
