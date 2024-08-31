@@ -57,13 +57,13 @@ const Header3 = ({ onePage }) => {
           <div className="header-inner py-20 rpy-10 rel d-flex align-items-center">
             <div className="logo-outer">
               <div className="logo">
-                <Link href="/">
+                <a href="/">
                   <img
                     src="/assets/images/vaidpng2.png"
                     alt="Logo"
                     title="Logo"
                   />
-                </Link>
+                </a>
               </div>
             </div>
             <div className="nav-outer ms-lg-auto clearfix">
@@ -118,13 +118,13 @@ const HeaderEmpty = ({ onePage }) => {
           <div className="header-inner py-20 rpy-10 rel d-flex align-items-center">
             <div className="logo-outer">
               <div className="logo">
-                <Link href="/">
+                <a href="/">
                   <img
                     src="/assets/images/vaidpng2.png"
                     alt="Logo"
                     title="Logo"
                   />
-                </Link>
+                </a>
               </div>
             </div>
             <div className="nav-outer ms-lg-auto clearfix">
@@ -156,9 +156,9 @@ const Nav = ({
       <div className="d-none d-lg-flex desktop-menu">
         <div className="navbar-header py-10">
           <div className="mobile-logo">
-            <Link href="/">
+            <a href="/">
               <img src={logo} alt="Logo" title="Logo" />
-            </Link>
+            </a>
           </div>
           {/* Toggle Button */}
           <Accordion.Toggle
@@ -370,9 +370,9 @@ const Nav = ({
       <Accordion defaultActiveKey="0" className="d-block d-lg-none mobile-menu">
         <div className="navbar-header py-10">
           <div className="mobile-logo">
-            <Link href="/">
+            <a href="/">
               <img src={logo} alt="Logo" title="Logo" />
-            </Link>
+            </a>
           </div>
           {/* Toggle Button */}
           <Accordion.Toggle
