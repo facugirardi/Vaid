@@ -6,17 +6,13 @@ import BreadcrumbItem from '@/common/BreadcrumbItem';
 import Image from "next/image";
 import './viewEvent.css';
 import { Button, Card, Col, Form, Row, Modal } from "react-bootstrap";
-import { FaPlusCircle } from 'react-icons/fa'; // Importa el ícono
 import cover1 from "@/public/assets/images/wallpaper_event.jpg";
-import FeatherIcon from "feather-icons-react";
 
 const Page = () => {
-    const [tasks, setTasks] = useState([]);
+    const [events, setEvents] = useState([]);
     const [organizationId, setOrganizationId] = useState("");
     const [showModal, setShowModal] = useState(false);
-    const [showAddModal, setShowAddModal] = useState(false);
-    const [selectedTask, setSelectedTask] = useState(null);
-    const [newTask, setNewTask] = useState({ name: "", date: "", time: "", description: "" });
+    const [selectedEvent, setSelectedEvent] = useState(null);
 
     useEffect(() => {
         const currentUrl = window.location.href;
@@ -39,7 +35,7 @@ const Page = () => {
                         }
                     });
                     const data = await response.json();
-                    setTasks(data);
+                    setEvents(data);
                 } catch (error) {
                     console.error("Error fetching data:", error);
                 }
@@ -49,44 +45,14 @@ const Page = () => {
         }
     }, [organizationId]);
 
-    const handleShowModal = (task) => {
-        setSelectedTask(task);
+    const handleShowModal = (event) => {
+        setSelectedEvent(event);
         setShowModal(true);
     };
 
     const handleCloseModal = () => {
         setShowModal(false);
-        setSelectedTask(null);
-    };
-
-    const handleShowAddModal = () => {
-        setShowAddModal(true);
-    };
-
-    const handleCloseAddModal = () => {
-        setShowAddModal(false);
-        setNewTask({ name: "", date: "", time: "", description: "" });
-    };
-
-    const handleAddTask = async () => {
-        try {
-            const response = await fetch(`http://localhost:8000/api/organizations/${organizationId}/events/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(newTask)
-            });
-            if (response.ok) {
-                const addedTask = await response.json();
-                setTasks([...tasks, addedTask]);
-                handleCloseAddModal();
-            } else {
-                console.error("Error adding task:", response.statusText);
-            }
-        } catch (error) {
-            console.error("Error adding task:", error);
-        }
+        setSelectedEvent(null);
     };
 
     return (
@@ -98,8 +64,12 @@ const Page = () => {
                 </button>
             </div>
             <Row>
-                {
-                    (tasks || []).map((item, index) => (
+                {events.length === 0 ? (
+                    <div className="no-events-message">
+                        <p className="p-history">No events available. Start by adding your first event using the 'add' button.</p>
+                    </div>
+                ) : (
+                    events.map((item, index) => (
                         <Col md={6} xl={4} key={index}>
                             <Card className="user-card card-task">
                                 <Card.Body>
@@ -140,7 +110,7 @@ const Page = () => {
                             </Card>
                         </Col>
                     ))
-                }
+                )}
             </Row>
 
             {/* Modal de Visualización */}
@@ -148,7 +118,7 @@ const Page = () => {
                 <Modal.Header>
                 </Modal.Header>
                 <Modal.Body>
-                    {selectedTask && (
+                    {selectedEvent && (
                         <div className="d-flex">
                             <div className='container'>
                                 <div className="row">
@@ -160,100 +130,36 @@ const Page = () => {
                                             width={300} 
                                             height={300}
                                         />
-                                    <div>
-                                    <div className='d-flex justify-content-center'>
-                                        <button className="button-take">
-                                            Join
-                                        </button>
-                                        <button className="button-close" onClick={handleCloseModal}>
-                                            Close
-                                        </button>
-                                    </div>
-                                    </div>
                                     </div>
                                     <div className="details-container col-md-7">
-                                        <p className='title-modal-12'>Title</p><p class='title2-modal'>{selectedTask.name}</p>
-                                        <p className='title-modal-12'>Description</p><p className='title3-modal'>{selectedTask.description}</p>
+                                        <p className='title-modal-12'>Title</p><p class='title2-modal'>{selectedEvent.name}</p>
+                                        <p className='title-modal-12'>Description</p><p className='title3-modal'>{selectedEvent.description}</p>
                                         <Form.Group className='form-group-all'>
                                             <div className="row">
                                                 <div className='col-md-3'>
                                                     <p className='title-dates'>Start Date</p>
-                                                    <Form.Control type="date" defaultValue={selectedTask.date} readOnly/>
+                                                    <Form.Control type="date" defaultValue={selectedEvent.date} readOnly/>
                                                 </div>
                                                 <div className="col-md-3">
                                                     <p className='title-dates'>End Date</p>
-                                                    <Form.Control type="date" defaultValue={selectedTask.endDate} readOnly/>
+                                                    <Form.Control type="date" defaultValue={selectedEvent.endDate} readOnly/>
                                                 </div>
                                                 <div className="col-md-3">
                                                     <p className='title-dates'>Start Time</p>
-                                                    <Form.Control type="time" defaultValue={selectedTask.time} readOnly/>
+                                                    <Form.Control type="time" defaultValue={selectedEvent.time} readOnly/>
                                                 </div>
                                                 <div className="col-md-3">
                                                     <p className='title-dates'>End Time</p>
-                                                    <Form.Control type="time" defaultValue={selectedTask.endTime} readOnly/>
+                                                    <Form.Control type="time" defaultValue={selectedEvent.endTime} readOnly/>
                                                 </div>
                                             </div>
                                         </Form.Group>
-                                        <p className='title-modal-12'>Attendance</p><p className='title3-modal'>No attendance found!</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     )}
                 </Modal.Body>
-            </Modal>
-
-            {/* Modal de Agregar Tarea */}
-            <Modal show={showAddModal} onHide={handleCloseAddModal} centered>
-                <Modal.Header closeButton>
-                    <Modal.Title>Add New Task</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    <Form>
-                        <Form.Group controlId="formTaskName">
-                            <Form.Label>Task Name</Form.Label>
-                            <Form.Control 
-                                type="text" 
-                                placeholder="Enter task name" 
-                                value={newTask.name} 
-                                onChange={(e) => setNewTask({ ...newTask, name: e.target.value })} 
-                            />
-                        </Form.Group>
-                        <Form.Group controlId="formTaskDate" className="mt-3">
-                            <Form.Label>Date</Form.Label>
-                            <Form.Control 
-                                type="date" 
-                                value={newTask.date} 
-                                onChange={(e) => setNewTask({ ...newTask, date: e.target.value })} 
-                            />
-                        </Form.Group>
-                        <Form.Group controlId="formTaskTime" className="mt-3">
-                            <Form.Label>Time</Form.Label>
-                            <Form.Control 
-                                type="time" 
-                                value={newTask.time} 
-                                onChange={(e) => setNewTask({ ...newTask, time: e.target.value })} 
-                            />
-                        </Form.Group>
-                        <Form.Group controlId="formTaskDescription" className="mt-3">
-                            <Form.Label>Description</Form.Label>
-                            <Form.Control 
-                                as="textarea" 
-                                rows={3} 
-                                value={newTask.description} 
-                                onChange={(e) => setNewTask({ ...newTask, description: e.target.value })} 
-                            />
-                        </Form.Group>
-                    </Form>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseAddModal}>
-                        Close
-                    </Button>
-                    <Button variant="primary" onClick={handleAddTask}>
-                        Add Task
-                    </Button>
-                </Modal.Footer>
             </Modal>
         </Layout>
     );

@@ -122,6 +122,7 @@ const Donations = () => {
             <thead>
               <tr>
                 <th className='text-center'>Description</th>
+                <th className='text-center'>Units</th>
                 <th className='text-center'>Date</th>
                 <th className='text-center'>Actions</th>
               </tr>
@@ -129,8 +130,9 @@ const Donations = () => {
             <tbody>
               {donations.map(item => (
                 <tr key={item.id}>
-                  <td className='text-center'>{item.description}</td>
-                  <td className='text-center'>{item.date}</td>
+                  <td className='text-center p-donation'>{item.description}</td>
+                  <td className='text-center p-donation'>{item.quantity}</td>
+                  <td className='text-center p-donation'>{item.date}</td>
                   <td className='text-center'>
                     <button className="icon-button" onClick={() => handleProductModalShow(item)}>
                       <FontAwesomeIcon icon={faEye} className='hover-button' />
@@ -150,7 +152,7 @@ const Donations = () => {
       )}
 
       {/* Add Inventory Modal */}
-      <Modal show={showInventoryModal} onHide={handleInventoryModalClose} backdropClassName="modal-backdrop" centered size='lg'>
+      <Modal show={showInventoryModal} onHide={handleInventoryModalClose} backdropClassName="modal-backdrop" centered size='xl'>
         <Modal.Header closeButton>
           <Modal.Title>Add Donation</Modal.Title>
         </Modal.Header>
@@ -159,15 +161,15 @@ const Donations = () => {
             <div className='container'>
               <div className='row'>
                 <div className="mb-3 col-md-4">
-                  <label htmlFor="productName" className="form-label">Description</label>
-                  <input type="text" className="form-control" id="description" name="description" placeholder='description' required />
+                  <label htmlFor="productName" className="form-label">Donation Description</label>
+                  <input type="text" className="form-control" id="description" name="description" placeholder='Add Description' required />
                 </div>
                 <div className="mb-3 col-md-3">
                   <label htmlFor="productType" className="form-label">Type</label>
                   <input type="text" className="form-control" id="Category" name="Category" placeholder='Product Type' required />
                 </div>
                 <div className="mb-3 col-md-2">
-                  <label htmlFor="quantity" className="form-label">Quantity</label>
+                  <label htmlFor="quantity" className="form-label">Quantity / Amount</label>
                   <input type="number" className="form-control" id="quantity" name="quantity" placeholder='1' required />
                 </div>
                 <div className="mb-3 col-md-3">
@@ -176,7 +178,7 @@ const Donations = () => {
                 </div>
               </div>
               <div className='d-flex justify-content-center'>
-                <Button variant="primary" type="submit" className='mt-10'>
+                <Button variant="primary" type="submit" className='col-md-3 mt-40'>
                   Add Donation
                 </Button>
               </div>
@@ -335,16 +337,30 @@ const BuySell = () => {
               <tr>
                 <th className='text-center'>Name</th>
                 <th className='text-center'>Units</th>
-                <th className='text-center'>Category</th>
+                <th className='text-center'>Amount</th>
+                <th className='text-center'>Date</th>
+                <th className='text-center'>Operation</th>
                 <th className='text-center'>Actions</th>
               </tr>
             </thead>
             <tbody>
               {buysell.map(item => (
                 <tr key={item.id}>
-                  <td className='text-center'>{item.description}</td>
-                  <td className='text-center'>{item.date}</td>
-                  <td className='text-center'>{item.type}</td>
+                  <td className='text-center p-donation'>{item.description}</td>
+                  <td className='text-center p-donation'>{item.quantity}</td>
+                  <td className='text-center p-donation'>$ {item.amount}</td>
+                  <td className='text-center p-donation'>{item.date}</td>
+                  <td className={`text-center p-donation ${item.type === 'Sale' ? 'text-green' : 'text-red'}`}>
+                    {item.type === 'Sale' ? (
+                      <>
+                        <i className="fa fa-arrow-up text-green"></i> {item.type}
+                      </>
+                    ) : (
+                      <>
+                        <i className="fa fa-arrow-down text-red"></i> {item.type}
+                      </>
+                    )}
+                  </td>
                   <td className='text-center'>
                     <button className="icon-button" onClick={() => handleProductModalShow(item)}>
                       <FontAwesomeIcon icon={faEye} className='hover-button' />
@@ -415,20 +431,10 @@ const BuySell = () => {
           {selectedProduct && (
             <div>
               <p><strong>Description:</strong> {selectedProduct.description}</p>
+              <p><strong>Quantity:</strong> {selectedProduct.quantity}</p>
+              <p><strong>Amount:</strong> {selectedProduct.amount}</p>
               <p><strong>Date:</strong> {selectedProduct.date}</p>
               <p><strong>Type:</strong> {selectedProduct.type}</p>
-              <p><strong>Products:</strong></p>
-                <ul>
-                  {selectedProduct.operation_products && selectedProduct.operation_products.length > 0 ? (
-                    selectedProduct.operation_products.map((product, index) => (
-                      <li key={index}>
-                        <strong>Name:</strong> {product.product_name}
-                      </li>
-                    ))
-                  ) : (
-                    <li>No products found</li>
-                  )}
-                </ul>
             </div>
           )}
         </Modal.Body>

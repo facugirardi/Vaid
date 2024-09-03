@@ -79,12 +79,12 @@ const TopBar = ({ handleOffcanvasToggle, changeThemeMode, toogleSidebarHide, too
       .then(() => {
         dispatch2(setLogout())
         toast.success('Logged out successfully.');
-        push('/auth/login');
+        window.location.href = '/auth/login';
       })
       .catch(() => {
         dispatch2(setLogout())
         toast.success('Logged out successfully.');
-        push('/auth/login');
+        window.location.href = '/auth/login';
       })
     }
 
@@ -105,21 +105,21 @@ const TopBar = ({ handleOffcanvasToggle, changeThemeMode, toogleSidebarHide, too
                     <div className="me-auto pc-mob-drp">
                         <ul className="list-unstyled">
                             <li className="pc-h-item pc-sidebar-collapse">
-                                <Link href="#" className="pc-head-link ms-0" id="sidebar-hide" onClick={toogleSidebarHide}>
+                                <a href="#" className="pc-head-link ms-0" id="sidebar-hide" onClick={toogleSidebarHide}>
                                     <i className="ti ti-menu-2"></i>
-                                </Link>
+                                </a>
                             </li>
                             <li className="pc-h-item pc-sidebar-popup">
-                                <Link href="#" className="pc-head-link ms-0" id="mobile-collapse" onClick={toogleMobileSidebarHide}>
+                                <a href="#" className="pc-head-link ms-0" id="mobile-collapse" onClick={toogleMobileSidebarHide}>
                                     <i className="ti ti-menu-2"></i>
-                                </Link>
+                                </a>
                             </li>
                         </ul>
                     </div>
 
                     <div className="ms-auto">
                         <ul className="list-unstyled">
-                            <Dropdown as="li" className="pc-h-item">
+                            {/* <Dropdown as="li" className="pc-h-item">
                                 <Dropdown.Toggle as="a" className="pc-head-link arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button"
                                     aria-haspopup="false" aria-expanded="false">
                                     <i className="ph-duotone ph-sun-dim"></i>
@@ -134,7 +134,7 @@ const TopBar = ({ handleOffcanvasToggle, changeThemeMode, toogleSidebarHide, too
                                         <span>Light</span>
                                     </Dropdown.Item>
                                 </Dropdown.Menu>
-                                </Dropdown>
+                                </Dropdown> */}
                             <Dropdown as="li" className="pc-h-item header-user-profile">
                                 <Dropdown.Toggle className="pc-head-link arrow-none me-0" data-bs-toggle="dropdown" href="#"
                                     aria-haspopup="false" data-bs-auto-close="outside" aria-expanded="false" style={{ border: "none" }}>

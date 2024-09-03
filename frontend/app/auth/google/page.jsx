@@ -34,8 +34,18 @@ const page = () => {
                       data-aos-offset={50}
                     >
                       You will be redirected soon to the dashboard page. 
+                      If not redirected please click the button below.
                     </p>
-    
+                    <a
+                      href="/dashboard"
+                      className="theme-btn style-two"
+                      data-aos="fade-up"
+                      data-aos-delay={100}
+                      data-aos-duration={1500}
+                      data-aos-offset={50}
+                    >
+                      <span>Profile</span>
+                    </a>
                   </div>
                 </div>
               </div>

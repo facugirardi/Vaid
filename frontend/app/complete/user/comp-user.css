@@ -273,6 +273,11 @@ body{
     border: 1px solid rgb(160, 160, 160);
 
 }
+
+.asterisco-rojo{
+    color: red
+}
+
 @media (max-width: 1200px) {
     .wrapper-complete-user {
         width: 45%;

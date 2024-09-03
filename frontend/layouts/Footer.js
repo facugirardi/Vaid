@@ -32,7 +32,7 @@ const Footer3 = () => {
                 </div>
                 <div className="footer-btns">
                   <a
-                    href="/"
+                    href="/auth/signup"
                     className="theme-btn"
                     style={{border:'.1px solid white !important'}}
                   >
@@ -52,16 +52,16 @@ const Footer3 = () => {
                 <h6 className="footer-title">Links</h6>
                 <ul>
                   <li>
-                    <Link href="#home">Home</Link>
+                    <a href="#home">Home</a>
                   </li>
                   <li>
-                    <Link href="#about">About</Link>
+                    <a href="#about">About</a>
                   </li>
                   <li>
-                    <Link href="#services">Services</Link>
+                    <a href="#services">Services</a>
                   </li>
                   <li>
-                    <Link href="#faqs">FAQs</Link>
+                    <a href="#faqs">FAQs</a>
                   </li>
                 </ul>
               </div>
@@ -77,16 +77,16 @@ const Footer3 = () => {
                 <h6 className="footer-title">External Links</h6>
                 <ul>
                   <li>
-                    <Link href="#">Linkedin</Link>
+                    <a href="#">Linkedin</a>
                   </li>
                   <li>
-                    <Link href="pricing">Instagram</Link>
+                    <a href="pricing">Instagram</a>
                   </li>
                   <li>
-                    <Link href="about">Medium</Link>
+                    <a href="about">Medium</a>
                   </li>
                   <li>
-                    <Link href="contact">Contact</Link>
+                    <a href="contact">Contact</a>
                   </li>
                 </ul>
               </div>
@@ -103,7 +103,7 @@ const Footer3 = () => {
                 data-aos-offset={50}
               >
                 <p>
-                  Copyright @2024, <Link href="/">Vaid </Link> All Rights
+                  Copyright @2024, <a href="/">Vaid </a> All Rights
                   Reserved
                 </p>
               </div>
@@ -115,9 +115,9 @@ const Footer3 = () => {
                 data-aos-duration={1000}
                 data-aos-offset={50}
               >
-                <Link href="/">
+                <a href="/">
                   <img src="/assets/images/vaidpng2.png" alt="Logo" style={{ filter: 'brightness(0) invert(1)' }}/>
-                </Link>
+                </a>
               </div>
             </div>
           </div>

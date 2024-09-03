@@ -49,13 +49,13 @@ const { push } = useRouter();
 
 
       if(selection === 'organization'){
-        push('/complete/organization');
+        window.location.href = '/complete/organization';
       }
       else if(selection === 'user'){
-        push('/complete/user')
+        window.location.href = '/complete/user';
       }
       else{
-        push('/')
+        window.location.href = '/';
       }
       
     

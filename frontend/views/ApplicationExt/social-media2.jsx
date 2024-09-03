@@ -188,7 +188,7 @@ const SocialProfile = () => {
               <Row className="justify-content-between align-items-end">
                 <Col md={5} xl={6} className="soc-profile-data">
                   <h5 className="mb-1">{organization ? organization.name : 'Loading...'}</h5>
-                  <p className="mb-0">‎<Link href="#" className="link-primary"></Link></p>
+                  <p className="mb-0">‎<a href="#" className="link-primary"></a></p>
                 </Col>
                 <Col md={3} xl={2} xxl={2}>
                   <Row className="g-1 text-center">
