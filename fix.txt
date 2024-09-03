@@ -1,1 +1,3 @@
 onClick={() => window.location.href = `/dashboard/${organizationId}/events/create`}
+
+window.location.href = '/auth/login';

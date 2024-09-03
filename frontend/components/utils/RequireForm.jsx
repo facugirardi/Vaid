@@ -21,7 +21,8 @@ export default function RequireForm({ children }) {
                 });
 
                 if (response.status === 404) {
-                    push('/not-found');
+                    window.location.href = '/not-found';
+
                     return;
                 }
                 if (!response.ok) {
@@ -38,13 +39,13 @@ export default function RequireForm({ children }) {
         if (user) {
             fetchUserDetails();
         }
-    }, [user, push]);
+    }, [user]);
 
     useEffect(() => {
         if (!isLoading && userDetails && userDetails.user.is_form === false) {
-            push('/complete/form');
+            window.location.href = '/complete/form';
         }
-    }, [isLoading, userDetails, push]);
+    }, [isLoading, userDetails]);
 
     if (isLoading || !user) {
         return <div>Loading...</div>; // Show loading spinner or message

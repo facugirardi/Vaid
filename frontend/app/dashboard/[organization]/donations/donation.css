@@ -199,3 +199,11 @@ font-family: 'Inter', sans-serif;;
     margin-bottom: 5px;
     color: #333; /* Color más oscuro para mejor contraste */
 }
+
+.text-green {
+  color: green !important;
+}
+
+.text-red {
+  color: red !important;
+}

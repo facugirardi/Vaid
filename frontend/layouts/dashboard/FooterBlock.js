@@ -18,8 +18,8 @@ const FooterBlock = () => {
                     </Col>
                     <div className="col-auto my-1">
                         <ul className="list-inline footer-link mb-0">
-                            <li className="list-inline-item"><Link href="/dashboard">Home</Link></li>
-                            <li className="list-inline-item"><Link href="#" target="_blank">Support</Link></li>
+                            <li className="list-inline-item"><a href="/dashboard">Home</a></li>
+                            <li className="list-inline-item"><a href="#" target="_blank">Support</a></li>
                         </ul>
                     </div>
                 </Row>

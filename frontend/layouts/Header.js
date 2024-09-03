@@ -34,12 +34,12 @@ const Header3 = ({ onePage }) => {
       .then(() => {
         dispatch(setLogout())
         toast.success('Logged out successfully.');
-        push('/auth/login');
+        window.location.href = '/auth/login';
       })
       .catch(() => {
         dispatch(setLogout())
         toast.success('Logged out successfully.');
-        push('/auth/login');
+        window.location.href = '/auth/login';
       })
   }
 
@@ -440,14 +440,14 @@ const MobileMenu = ({ sidebar, onePage, menus }) => {
         localStorage.removeItem('id');
         dispatch(setLogout())
         toast.success('Logged out successfully.');
-        push('/auth/login');
+        window.location.href = '/auth/login';
       })
       .catch(() => {
         localStorage.removeItem('token');
         localStorage.removeItem('id');
         dispatch(setLogout())
         toast.success('Logged out successfully.');
-        push('/auth/login');
+        window.location.href = '/auth/login';
       })
   }
 
@@ -478,12 +478,12 @@ const MobileMenu = ({ sidebar, onePage, menus }) => {
               ? 
               <>
                 <li><a onClick={handleLogout}>Logout</a></li>
-                <li><Link href="/dashboard">Profile</Link></li>      
+                <li><a href="/dashboard">Profile</a></li>      
               </>
               :
               <>
-                <li><Link href="/auth/login">Login</Link></li>      
-                <li><Link href="/auth/register">Sign Up</Link></li>      
+                <li><a href="/auth/login">Login</a></li>      
+                <li><a href="/auth/register">Sign Up</a></li>      
               </>
               }
         </ul>

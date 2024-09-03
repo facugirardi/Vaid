@@ -22,7 +22,7 @@ export default function RequireForm({ children }) {
                 });
 
                 if (response.status === 404) {
-                    push('/not-found');
+                    window.location.href = '/not-found';
                     return;
                 }
                 if (!response.ok) {
@@ -39,13 +39,13 @@ export default function RequireForm({ children }) {
         if (user) {
             fetchUserDetails();
         }
-    }, [user, push]);
+    }, [user]);
 
     useEffect(() => {
         if (!isLoading && userDetails && userDetails.user.user_type === 2) {
-            push('/dashboard');
+            window.location.href = '/dashboard';
         }
-    }, [isLoading, userDetails, push]);
+    }, [isLoading, userDetails]);
 
     if (isLoading || !user) {
         return <div>Loading...</div>; // Show loading spinner or message

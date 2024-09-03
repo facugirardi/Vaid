@@ -304,3 +304,22 @@
   font-size: 16px;
   margin-bottom: -20px !important;
 }
+
+.mt-user-email{
+  margin-bottom: -20px !important;
+  font-weight: 300 !important;
+}
+
+.p-history{
+
+    font-family: 'Inter', sans-serif;;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.6;
+    padding: 1px ;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    color: #333; /* Color más oscuro para mejor contraste */
+}
+
+

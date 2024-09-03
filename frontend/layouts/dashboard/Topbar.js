@@ -79,12 +79,12 @@ const TopBar = ({ handleOffcanvasToggle, changeThemeMode, toogleSidebarHide, too
       .then(() => {
         dispatch2(setLogout())
         toast.success('Logged out successfully.');
-        push('/auth/login');
+        window.location.href = '/auth/login';
       })
       .catch(() => {
         dispatch2(setLogout())
         toast.success('Logged out successfully.');
-        push('/auth/login');
+        window.location.href = '/auth/login';
       })
     }
 
@@ -105,14 +105,14 @@ const TopBar = ({ handleOffcanvasToggle, changeThemeMode, toogleSidebarHide, too
                     <div className="me-auto pc-mob-drp">
                         <ul className="list-unstyled">
                             <li className="pc-h-item pc-sidebar-collapse">
-                                <Link href="#" className="pc-head-link ms-0" id="sidebar-hide" onClick={toogleSidebarHide}>
+                                <a href="#" className="pc-head-link ms-0" id="sidebar-hide" onClick={toogleSidebarHide}>
                                     <i className="ti ti-menu-2"></i>
-                                </Link>
+                                </a>
                             </li>
                             <li className="pc-h-item pc-sidebar-popup">
-                                <Link href="#" className="pc-head-link ms-0" id="mobile-collapse" onClick={toogleMobileSidebarHide}>
+                                <a href="#" className="pc-head-link ms-0" id="mobile-collapse" onClick={toogleMobileSidebarHide}>
                                     <i className="ti ti-menu-2"></i>
-                                </Link>
+                                </a>
                             </li>
                         </ul>
                     </div>

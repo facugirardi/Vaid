@@ -17,6 +17,10 @@ const Page = () => {
     const [showTagModal, setShowTagModal] = useState(false);
     const [showTagModalAssign, setShowTagModalAssign] = useState(false); // Nuevo estado para TagModalAssign
     const [organizationId, setOrganizationId] = useState("");
+    const [showInviteModal, setShowInviteModal] = useState(false);
+
+    const handleShowInviteModal = () => setShowInviteModal(true);
+    const handleCloseInviteModal = () => setShowInviteModal(false);
 
     useEffect(() => {
         const currentUrl = window.location.href;
@@ -182,7 +186,7 @@ const Page = () => {
                         <Card.Body>
                             <div className="container">
                                 <div className="row">
-                                    <button className="col-md-2 btn-tags-create theme-btn style-two">Invite Users <span>
+                                    <button className="col-md-2 btn-tags-create theme-btn style-two" onClick={() => handleShowInviteModal()}>Invite Users <span>
                                     <i className="ph-duotone ph-user"></i> 
                                         </span></button>
                                     <div className="col-md-8"></div>
@@ -191,6 +195,11 @@ const Page = () => {
                                         </span></button>
                                 </div>
                             </div>
+                        {candidates.length === 0 ? (
+                            <div className="text-center mt-4">
+                                <p className='p-history'>No members available.</p>
+                            </div>
+                        ) : (
                             <TableContainer
                                 columns={columns}
                                 data={candidates}
@@ -201,6 +210,7 @@ const Page = () => {
                                 theadClass="table-light"
                                 isPagination={true}
                             />
+                        )}
                         </Card.Body>
                     </Card>
                 </Col>
@@ -239,7 +249,85 @@ const Page = () => {
 
             {/* Render TagModalAssign */}
             <TagModalAssign show={showTagModalAssign} handleClose={handleCloseTagModalAssign} organizationId={organizationId} handleSearch={handleSearch} selectedCandidate={selectedCandidate} />
+
+  <InviteUserModal
+    show={showInviteModal}
+    handleClose={handleCloseInviteModal}
+    organizationId={organizationId}
+/>
+     
         </Layout>
+    );
+};
+
+const InviteUserModal = ({ show, handleClose, organizationId }) => {
+    const [inviteEmail, setInviteEmail] = useState("");
+
+    const handleInviteUser = async (e) => {
+        e.preventDefault();  // Previene el comportamiento por defecto del formulario
+
+        if (!inviteEmail) return;
+
+        try {
+            await axios.post(`http://localhost:8000/api/send-email-plat/`, {
+                email: inviteEmail,
+                org_id: organizationId
+            });
+            toast.success('Invitation sent successfully!');
+            setInviteEmail("");
+            handleClose();
+        } catch (error) {
+            toast.error('Error sending invitation');
+      
+        }
+    };
+
+    return (
+         <Modal show={show} onHide={handleClose} centered size='lg'>
+            <Modal.Header closeButton>
+                <Modal.Title>Invite User</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <Form onSubmit={handleInviteUser}>
+                    <div className="container">
+                        <div className='row justify-content-between'>
+
+                            <div className="d-grid col-md-1"></div>
+                            <div className="d-grid col-md-7 mt-user-email">
+                                <h6>Email Address</h6>
+                            </div>
+                            <div className='d-grid col-md-4'></div>
+                        </div>
+ 
+                        <div className="row mb-4 justify-content-between">
+                            <div className="d-grid col-md-1"></div>
+                            <div className="d-grid col-md-7 mt-btn">
+                                <input
+                                  
+                                    type="text"
+                                    className="form-control"
+                                    placeholder="Enter user's email address"
+                                    value={inviteEmail}
+                                    required
+                                    onChange={(e) => setInviteEmail(e.target.value)}
+ 
+                                />
+                            </div>
+                            <div className="d-grid col-md-3 mt-btn">
+                                <button
+                                    className="btn btn-primary w-100"
+                                    type="button"
+                                    onClick={handleInviteUser} 
+                                >
+                                    Invite
+                                </button>
+                            </div>
+                            <div className="d-grid col-md-1"></div>
+                        </div>
+                    </div>
+                </Form>
+            </Modal.Body>
+        </Modal>
     );
 };
 

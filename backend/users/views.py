@@ -1545,7 +1545,37 @@ class SendInvitationView(APIView):
 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+       
+
+class SendInvitationPlatView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        emails = [request.data.get('email')] 
+        subject = 'You are invited to our platform!'
+        organization_id = request.data.get('org_id')
+        organization = Organization.objects.get(id=organization_id) 
+        link = f'http://localhost:3000/dashboard/organization/{organization_id}'
+        # Validar que los campos obligatorios están presentes
+        if not emails or not organization or not link:
+            return Response({'error': 'emails, and link are required fields.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            message_template = f"Hello,\n\nYou have been invited to join our platform and become a part of the organization: '{organization.name}'.\nWe look forward to your participation.\n{link}\n\nBest regards,\nThe Vaid Team"
+            send_mail(
+                subject=subject,  # Asunto del correo
+                message=message_template,  # Contenido del mensaje personalizado
+                from_email=settings.DEFAULT_FROM_EMAIL,  # Dirección de correo del remitente
+                recipient_list=emails,  # Lista de destinatarios
+                fail_silently=False,  # Generar excepción si falla el envío
+            )
+            print(emails)
+            return Response({'message': 'Invitations sent successfully'}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
+
 
 #View para subir un video al perfil de una organizacion
 

@@ -25,7 +25,8 @@ const page = ({ params }) => {
         toast.error('Failed to activate your account');
       })
       .finally(() => {
-        push('/auth/login');
+
+        window.location.href = '/auth/login';
       })
   }, []);
 

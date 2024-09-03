@@ -28,6 +28,17 @@ const e404 = () => {
                   never existed in the first place. But don't worry, you're not
                   lost for long.
                 </p>
+                
+                    <a
+                      href="/"
+                      className="theme-btn style-two mt-30"
+                      data-aos="fade-up"
+                      data-aos-delay={100}
+                      data-aos-duration={1500}
+                      data-aos-offset={50}
+                    >
+                      <span>Home</span>
+                    </a>
 
               </div>
             </div>

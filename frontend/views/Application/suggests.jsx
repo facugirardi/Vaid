@@ -27,7 +27,7 @@ const Suggestions = ({ userId }) => {
           });
 
           if (response.status === 404) {
-            push('/not-found');
+            window.location.href = '/not-found';
             return;
           }
           if (!response.ok) {
@@ -72,7 +72,7 @@ const handleApply = async (orgId) => {
             console.error('Error: ', error);
         }
     } else {
-        push('/complete/form');
+        window.location.href = '/complete/form';
     }
 };
     useEffect(() => {

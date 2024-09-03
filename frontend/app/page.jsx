@@ -71,9 +71,9 @@ const page = () => {
                 <p>
                 Designed to empower nonprofit organizations by providing streamlined, 
                 innovative management software solutions.                </p>
-                <Link href="/auth/register" className="theme-btn mt-15 mb-10">
+                <a href="/auth/register" className="theme-btn mt-15 mb-10">
                   Get Started <i className="far fa-arrow-right" />
-                </Link>
+                </a>
                 <ul className="icon-list style-two">
                   <li>
                     <i className="fal fa-check" /> Free
@@ -561,12 +561,12 @@ const page = () => {
                 data-aos-offset={50}
               >
                 <img
-                  src="assets/images/placeholderimage440.png"
+                  src="assets/images/440.png"
                   alt="Management"
                 />
                 <div className="management-over">
                   <img
-                    src="assets/images/placeholderimage216.png"
+                    src="assets/images/2136.png"
                     alt="Management"
                   />
                 </div>

@@ -79,12 +79,12 @@ const TopBar = ({ handleOffcanvasToggle, changeThemeMode, toogleSidebarHide, too
       .then(() => {
         dispatch2(setLogout())
         toast.success('Logged out successfully.');
-        push('/auth/login');
+        window.location.href = '/auth/login';
       })
       .catch(() => {
         dispatch2(setLogout())
         toast.success('Logged out successfully.');
-        push('/auth/login');
+        window.location.href = '/auth/login';
       })
     }
 

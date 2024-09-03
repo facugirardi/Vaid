@@ -8,7 +8,7 @@ export default function RequireAuth({ children }){
     const { isAuthenticated } = useAppSelector(state => state.auth)
 
     if (!isAuthenticated){
-        return push('/auth/login')
+        window.location.href = '/auth/login';
     }
 
     return <>{children}</>
