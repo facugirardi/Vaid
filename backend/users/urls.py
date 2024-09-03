@@ -65,5 +65,5 @@ urlpatterns = [
     path('isAdmin/', IsAdminView.as_view(), name='is-admin'),
     path('user/<int:user_id>/unassigned-tags/', UnassignedTagsAPIView.as_view(), name='unassigned-tags'),
     path('send-email-plat/', SendInvitationPlatView.as_view()),
-
+    path('organization/<int:organization_id>/all-products/', AllProductsView.as_view(), name='all-products'),
 ]

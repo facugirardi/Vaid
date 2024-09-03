@@ -1647,3 +1647,24 @@ class UnassignedTagsAPIView(APIView):
         # Serializar y devolver las tags
         serializer = TagSerializer(unassigned_tags, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class AllProductsView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, organization_id):
+        # Verificamos que la organización existe
+        organization = get_object_or_404(Organization, id=organization_id)
+
+        # Obtenemos todos los IDs de inventarios asociados a la organización
+        inventory_ids = Inventory.objects.filter(Headquarter__Organization=organization).values_list('id', flat=True)
+
+        # Obtenemos los productos asociados a esos inventarios, agrupados por sede y sumando la cantidad total
+        products = Product.objects.filter(
+            productinventorydetails__Inventory_id__in=inventory_ids
+        ).annotate(total_quantity=Sum('productinventorydetails__cuantity')).distinct()
+
+        # Serializamos los productos
+        serializer = ProductSerializer(products, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
