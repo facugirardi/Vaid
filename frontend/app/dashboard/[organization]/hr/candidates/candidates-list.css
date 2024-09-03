@@ -40,7 +40,6 @@
   backdrop-filter: blur(5px); /* Adjust the blur amount as needed */
 }
 
-
 .p-donation{
     font-family: 'Inter', sans-serif;;
     font-size: 15px;
@@ -50,8 +49,4 @@
     margin-top: 10px;
     margin-bottom: 5px;
     color: #333; /* Color más oscuro para mejor contraste */
-
 }
-
-
->>>>>>> 9d2bd2392ffef43f33ba4e80a57674c69c39554c
