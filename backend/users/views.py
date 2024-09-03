@@ -1230,14 +1230,27 @@ class OperationAPIView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request, organization_id, operation_id=None):
+        operation_type = request.query_params.get('type')
+        month = request.query_params.get('month')
+
+        if month:
+            operations = Operation.objects.filter(Organization_id=organization_id, date__month=month)
+            serializer = OperationSerializer(operations, many=True)
+            return Response(serializer.data)
+        
+        if operation_type:
+            operation = get_object_or_404(Operation, Organization_id=organization_id, type=operation_type)
+            serializer = OperationSerializer(operation)
+            return Response(serializer.data)
+
         if operation_id:
             operation = get_object_or_404(Operation, id=operation_id, Organization_id=organization_id)
             serializer = OperationSerializer(operation)
             return Response(serializer.data)
-        else:
-            operations = Operation.objects.filter(Organization_id=organization_id)
-            serializer = OperationSerializer(operations, many=True)
-            return Response(serializer.data)
+        
+        operations = Operation.objects.filter(Organization_id=organization_id)
+        serializer = OperationSerializer(operations, many=True)
+        return Response(serializer.data)
 
     def post(self, request, organization_id):
         print(request.data)
@@ -1624,3 +1637,31 @@ class UnassignedTagsAPIView(APIView):
         # Serializar y devolver las tags
         serializer = TagSerializer(unassigned_tags, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+# En caso de querer ver el historial de compra y vent usar OperationAPIView
+# saber cunat aplata enmtro con compra/venta la diferencia, el total de palta por donaciones, filtros de fecha/cantidad/tipo de opreacion 
+class StatisticsAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        ong = request.query_params.get('ong')
+
+        if not ong:
+            return Response({'error': 'ong is required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        try:
+            #Obtener total de la donaciones de dinero
+            #Obtener la diferencia entre el total de la compras/ventas
+            #Obtener la donaciones del mes anterior y del actual
+            #Obtener las compras/ventas del mes anterior y del actual
+            #Filtrar por tipo de operacion/fecha/cantidad (Esto hacerlo en la operation view)
+            organization = Organization.objects.get(id=ong)
+            donations = Donation.objects.filter(Organization=organization)
+            serializer = DonationSerializer(donations, many=True)
+
+
+            return Response({}, status=status.HTTP_200_OK)
+        
+        except Organization.DoesNotExist:
+            return Response({'error': 'Organization not found'}, status=status.HTTP_404_NOT_FOUND)
