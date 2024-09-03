@@ -389,11 +389,6 @@ const TagModal = ({ show, handleClose, handleSearch, organizationId, selectedCan
                         )}
                     </div>
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Close
-                    </Button>
-                </Modal.Footer>
             </Modal>
 
             <Modal show={showNewTagModal} onHide={handleCloseNewTagModal} centered>
@@ -619,11 +614,6 @@ const TagModalAssign = ({ show, handleClose, handleSearch, organizationId, selec
                         )}
                     </div>
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Close
-                    </Button>
-                </Modal.Footer>
             </Modal>
         </>
     );

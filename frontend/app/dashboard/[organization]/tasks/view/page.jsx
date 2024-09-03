@@ -162,9 +162,6 @@ const Page = () => {
                     <button className="button-take">
                         Take
                     </button>
-                    <button className="button-close" onClick={handleCloseModal}>
-                        Close
-                    </button>
                 </Modal.Footer>
             </Modal>
         </Layout>

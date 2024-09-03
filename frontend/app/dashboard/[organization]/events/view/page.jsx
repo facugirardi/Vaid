@@ -160,11 +160,6 @@ const Page = () => {
                         </div>
                     )}
                 </Modal.Body>
-                <Modal.Footer className='d-flex justify-content-center'>
-                    <button className="button-close" onClick={handleCloseModal}>
-                        Close
-                    </button>
-                </Modal.Footer>
             </Modal>
         </Layout>
     );
