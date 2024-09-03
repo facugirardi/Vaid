@@ -142,14 +142,15 @@ class ProductInventoryDetails(models.Model):
 
 
 class Task(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.TextField()
-    date = models.DateField()
-    endDate = models.DateField()
-    time = models.TimeField()
-    endTime = models.TimeField()
-    file = models.FileField(upload_to='tasks/', null=True, blank=True)
-    state = models.CharField(max_length=255)
+    title = models.CharField(max_length=255, null=False, blank=False)
+    description = models.TextField(default='without_description')
+    startDate = models.DateField(default=timezone.now)
+    endDate = models.DateField(default=timezone.now)
+    startTtime = models.TimeField(default=timezone.now)
+    endTime = models.TimeField(default=timezone.now)
+    image = models.ImageField(upload_to='images/tasks/', null=True, blank=True)
+    state = models.CharField(max_length=255, default='without_state')
+    category = models.CharField(max_length=255, default='without_category')
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE) 
 
 
@@ -159,15 +160,17 @@ class TaskPersonDetails(models.Model):
 
 
 class Event(models.Model):
-    name = models.CharField(max_length=255)
-    description = models.TextField()
-    date = models.DateField()
-    endDate = models.DateField()
-    time = models.TimeField()
-    endTime = models.TimeField()
-    file = models.FileField(upload_to='events/', null=True, blank=True)
-    state = models.CharField(max_length=255)
-    Organization = models.ForeignKey(Organization, on_delete=models.CASCADE) 
+    title = models.CharField(max_length=255, null=False, blank=False)
+    description = models.TextField(default='without_description')
+    startDate = models.DateField(default=timezone.now)
+    endDate = models.DateField(default=timezone.now)
+    startTtime = models.TimeField(default=timezone.now)
+    endTime = models.TimeField(default=timezone.now)
+    image = models.ImageField(upload_to='images/events/', null=True, blank=True)
+    state = models.CharField(max_length=255, default='without_state')
+    category = models.CharField(max_length=255, default='without_category')
+    Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)  
+
 
 class EventReport(models.Model):
     title = models.CharField(max_length=255)
@@ -238,6 +241,7 @@ class History(models.Model):
     description = models.CharField(max_length=255)
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)  # Aquí asegúrate de que es headquarter, no headquarter_id
     date = models.DateField(default=timezone.now)
+
 
 class Tag(models.Model):
     name = models.CharField(max_length=255)
