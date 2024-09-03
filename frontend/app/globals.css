@@ -14,7 +14,7 @@
 }
 
 *::-webkit-scrollbar-thumb {
-  background-color: rgb(40, 80, 206);
+  background-color: #d3d3d3;
   border-radius: 20px;
   border: 3.5px solid rgb(255, 255, 255);
 }
@@ -175,4 +175,9 @@ p.amount span {
 .price-filter-wrap .price span {
   font-size: 16px;
   font-weight: 500;
+}
+
+.close{
+  background-color: #fff; 
+  font-size: 30px;
 }

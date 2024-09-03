@@ -22,11 +22,11 @@ export default function useSocialAuth(authenticate, provider) {
 				.then(() => {
 					dispatch(setAuth());
 					toast.success('Logged in');
-					router.push('/');
+					window.location.href = '/dashboard';
 				})
 				.catch(() => {
 					toast.error('Failed to log in');
-					router.push('/auth/login');
+					window.location.href = '/auth/login';
 				});
 		}
 

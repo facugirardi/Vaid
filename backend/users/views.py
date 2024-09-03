@@ -9,17 +9,22 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView,
 )
 from .models import UserAccount as User
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny  
 from django.http import JsonResponse
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 import json
+from django.db.models import Sum
 from django.http import Http404
 from rest_framework.permissions import IsAuthenticated
 from .models import Organization, Person, Image
 from .serializers import *
 from django.shortcuts import get_object_or_404
 from django.db.models import Sum
+from django.core.mail import send_mail
+from .serializers import GuestSerializer
+from rest_framework.parsers import MultiPartParser, FormParser
+
 
 class PersonOrganizationDetailsDeleteView(generics.GenericAPIView):
     permission_classes = [AllowAny]
@@ -34,7 +39,7 @@ class PersonOrganizationDetailsDeleteView(generics.GenericAPIView):
             return Response(status=status.HTTP_204_NO_CONTENT)
         except PersonOrganizationDetails.DoesNotExist:
             return Response({'error': 'Details not found'}, status=status.HTTP_404_NOT_FOUND)
-
+                           
 
 class ApplyOrgView(APIView):
     permission_classes = [AllowAny]
@@ -95,7 +100,7 @@ class UserFormView(APIView):
             data = request.data
             user = User.objects.get(id=user_id)
             person = Person.objects.get(User=user)
-
+            
             person.date_of_birth = data.get('dateOfBirth')
             person.profession = data.get('profession')
             person.experience = data.get('experience')
@@ -119,14 +124,13 @@ class UserFormView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-
 class RetrieveOrganizationExtView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request, user_id):
         try:
             organization = Organization.objects.get(id=user_id)
-
+            
             return Response(
                 {'name': organization.name,
                  'description':organization.description,
@@ -157,9 +161,10 @@ class RetrieveOrganizationView(APIView):
         try:
             user = User.objects.get(id=user_id)
             organization = Organization.objects.get(User=user)
-
+            
             return Response(
-                {'name': organization.name,
+                {'id': organization.id,
+                'name': organization.name,
                  'description':organization.description,
                  'country':organization.country},
                 status=status.HTTP_200_OK
@@ -218,7 +223,7 @@ class RetrievePersonView(APIView):
             user = User.objects.get(id=user_id)
             person = Person.objects.get(User=user)
             person_serializer = PersonSerializer(person)
-            user_serializer = UserSerializer(user)
+            user_serializer = UserSerializer(user) 
             return Response(
                 {'person': person_serializer.data,
                  'user': user_serializer.data},
@@ -240,6 +245,7 @@ class RetrievePersonView(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
+        
 
 class ApproveCandidate(APIView):
     permission_classes = [AllowAny]
@@ -279,10 +285,10 @@ class RejectCandidate(APIView):
 
 
 class OrgView(generics.ListAPIView):
+    
     permission_classes = [AllowAny]
     queryset = Organization.objects.all()
     serializer_class = OrganizationSerializer
-
 
 class CandidateDetailView(APIView):
     permission_classes = [AllowAny]
@@ -309,7 +315,7 @@ class RetrieveImageOrgView(APIView):
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
-            organization = Organization.objects.get(id=user_id)
+            organization = Organization.objects.get(id=user_id) 
             images = Image.objects.filter(User=organization.User)
 
             if images.exists():
@@ -339,7 +345,7 @@ class RetrieveImageView(APIView):
     permission_classes = [AllowAny]
     def get(self, request):
         try:
-
+    
             user_id = request.query_params.get('user_id')
             if not user_id:
                 return Response(
@@ -372,22 +378,22 @@ class RetrieveImageView(APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
-
 class UploadImageView(APIView):
+
     permission_classes = [AllowAny]
     def post(self, request):
         try:
             data = self.request.data
-            user_id = data.get('user_id')
-            user = User.objects.get(id=user_id)
+            user_id = data.get('user_id')                
+            user = User.objects.get(id=user_id) 
 
             image = data['image']
-
+            
             Image.objects.create(
                     image = image,
                     User = user
                 )
-
+            
             return Response(
                     {'success': 'Image Uploaded Successfully'},
                     status=status.HTTP_201_CREATED
@@ -397,6 +403,7 @@ class UploadImageView(APIView):
             return Response(
                 {'error': 'Error Uploading Image'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                
             )
 
 
@@ -408,7 +415,7 @@ class CreatePerson(APIView):
             data = request.data
             user_id = data.get('user_id')
             user = User.objects.get(id=user_id)
-
+            
             person = Person(
                 phone_number=data.get('phone_number'),
                 country=data.get('country'),
@@ -426,22 +433,23 @@ class CreatePerson(APIView):
 
 
 class CreateOrganization(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [AllowAny]  
 
     def post(self, request):
         try:
             data = request.data
-
+            
 
             user_id = data.get('user_id')
             if not user_id:
                 return Response({'error': 'User ID is required'}, status=status.HTTP_400_BAD_REQUEST)
-
+            
+        
             try:
                 user = User.objects.get(id=user_id)
             except User.DoesNotExist:
                 return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-
+            
             # Crear la organización
             organization = Organization(
                 name=data.get('name'),
@@ -457,10 +465,9 @@ class CreateOrganization(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-
 # @method_decorator(csrf_exempt, name='dispatch')
 class UserTypeUpdate(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [AllowAny]  
     def patch(self, request, pk):
         try:
             data = json.loads(request.body)
@@ -469,7 +476,7 @@ class UserTypeUpdate(APIView):
             is_completed = data.get('is_completed')
 
             if user_type is not None:
-                user.user_type = user_type
+                user.user_type = user_type 
             if is_completed is not None:
                 user.is_completed = is_completed
 
@@ -482,7 +489,7 @@ class UserTypeUpdate(APIView):
 
 
 class CheckUserType(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [AllowAny]  
 
     def get(self, request, *args, **kwargs):
         user_id = kwargs.get('user_id')
@@ -494,7 +501,7 @@ class CheckUserType(APIView):
 
 
 class CheckCompleteView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [AllowAny]  
 
     def get(self, request, *args, **kwargs):
         user_id = kwargs.get('user_id')
@@ -503,7 +510,6 @@ class CheckCompleteView(APIView):
             return Response({'is_completed': user.is_completed})
         except User.DoesNotExist:
             return Response({'error': 'User not found'}, status=404)
-
 
 class CustomProviderAuthView(ProviderAuthView):
     def post(self, request, *args, **kwargs):
@@ -531,6 +537,7 @@ class CustomProviderAuthView(ProviderAuthView):
                 httponly=settings.AUTH_COOKIE_HTTP_ONLY,
                 samesite=settings.AUTH_COOKIE_SAMESITE
             )
+
         return response
 
 
@@ -560,6 +567,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                 httponly=settings.AUTH_COOKIE_HTTP_ONLY,
                 samesite=settings.AUTH_COOKIE_SAMESITE
             )
+
         return response
 
 
@@ -584,6 +592,7 @@ class CustomTokenRefreshView(TokenRefreshView):
                 httponly=settings.AUTH_COOKIE_HTTP_ONLY,
                 samesite=settings.AUTH_COOKIE_SAMESITE
             )
+
         return response
 
 
@@ -597,7 +606,7 @@ class CustomTokenVerifyView(TokenVerifyView):
         return super().post(request, *args, **kwargs)
 
 
-class LogoutView(APIView):
+class LogoutView(APIView): 
     def post(self, request, *args, **kwargs):
         response = Response(status=status.HTTP_204_NO_CONTENT)
         response.delete_cookie('access')
@@ -619,9 +628,10 @@ class TaskListView(APIView):
         tasks = Task.objects.filter(Organization=organization)
         serializer = TaskSerializer(tasks, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
-
+    
+    
     def post(self, request, pk):
+        
         try:
             organization = Organization.objects.get(id=pk)
         except Organization.DoesNotExist:
@@ -645,9 +655,10 @@ class TaskUpdateDestroyView(APIView):
             task = Task.objects.get(id=pk)
         except Task.DoesNotExist:
             return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
-
+        
         serializer = TaskSerializer(task)
         return Response(serializer.data)
+        
 
     def put(self, request, pk):
         try:
@@ -656,9 +667,9 @@ class TaskUpdateDestroyView(APIView):
             return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
 
         data = request.data.copy()
-
+        
         serializer = TaskSerializer(task, data=data, partial=True)
-
+        
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -669,9 +680,10 @@ class TaskUpdateDestroyView(APIView):
             task = Task.objects.get(id=pk)
         except Task.DoesNotExist:
             return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
-
+        
         task.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 
 class OrganizationMembersView(APIView):
@@ -686,7 +698,6 @@ class OrganizationMembersView(APIView):
         serializer = PersonSerializer(members, many=True)
         return Response(serializer.data)
 
-
 class EventListView(APIView):
     permission_classes = [AllowAny]
 
@@ -699,7 +710,7 @@ class EventListView(APIView):
         events = Event.objects.filter(Organization=organization)
         serializer = EventSerializer(events, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
+    
     #Se puede postear un evento a la vez ya que, sino gernera erro en la linea 550
     def post(self, request, pk):
         try:
@@ -715,7 +726,7 @@ class EventListView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
+    
 
 class EventUpdateDestroyView(APIView):
     permission_classes = [AllowAny]
@@ -725,9 +736,10 @@ class EventUpdateDestroyView(APIView):
             event = Event.objects.get(id=pk)
         except Event.DoesNotExist:
             return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
-
+        
         serializer = EventSerializer(event)
         return Response(serializer.data)
+        
 
     def put(self, request, pk):
         try:
@@ -736,9 +748,9 @@ class EventUpdateDestroyView(APIView):
             return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
 
         data = request.data.copy()
-
+        
         serializer = EventSerializer(event, data=data, partial=True)
-
+        
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -749,7 +761,7 @@ class EventUpdateDestroyView(APIView):
             event = Event.objects.get(id=pk)
         except Event.DoesNotExist:
             return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
-
+        
         event.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -764,6 +776,7 @@ class TagListCreateAPIView(APIView):
         return Response(serializer.data)
 
     def post(self, request, organization_id):
+        print(request.data)
         organization = get_object_or_404(Organization, id=organization_id)
         data = request.data.copy()
         data['Organization'] = organization.id
@@ -772,7 +785,6 @@ class TagListCreateAPIView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 class TagDetailAPIView(APIView):
     permission_classes = [AllowAny]
@@ -806,9 +818,12 @@ class PersonTagsAPIView(APIView):
 
     def get(self, request, user_id):
         try:
-            # Obtener todas las etiquetas asociadas a la persona
-            person_tags = PersonTagDetails.objects.filter(Person__id=user_id)
-            tags = [detail.Tag for detail in person_tags]  # Obtener solo las etiquetas
+            # Obtener todas las etiquetas asociadas a la persona y eliminar duplicados
+            person_tags = PersonTagDetails.objects.filter(Person__id=user_id).values('Tag').distinct()
+            tag_ids = [detail['Tag'] for detail in person_tags]
+
+            # Obtener las instancias de las etiquetas basadas en los IDs
+            tags = Tag.objects.filter(id__in=tag_ids)
 
             # Serializar las etiquetas
             serializer = TagSerializer(tags, many=True)
@@ -830,6 +845,18 @@ class PersonTagsAPIView(APIView):
 
             return Response({'message': 'Tags assigned successfully'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request, user_id):
+        tag_id = request.query_params.get('tag_id')
+        if not tag_id:
+            return Response({'error': 'Tag ID is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            person_tag = PersonTagDetails.objects.filter(Person__id=user_id, Tag__id=tag_id)
+            person_tag.delete()
+            return Response({'message': 'Tag deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+        except PersonTagDetails.DoesNotExist:
+            return Response({'error': 'Tag not found for this user'}, status=status.HTTP_404_NOT_FOUND)
 
 
 class HeadquarterListCreateView(APIView):
@@ -846,6 +873,10 @@ class HeadquarterListCreateView(APIView):
         data = request.data.copy()  # Hacer una copia de los datos enviados
         data['Organization'] = organization.id  # Asignar la organización al diccionario de datos
 
+        #No se repita el nombre de la sede
+        if Headquarter.objects.filter(name=request.data['name']).exists():
+            return Response({'error': 'Headquarter with the same name already exists'}, status=status.HTTP_400_BAD_REQUEST)    
+
         serializer = HeadquarterSerializer(data=data)
         if serializer.is_valid():
             headquarter = serializer.save(Organization=organization) 
@@ -853,7 +884,6 @@ class HeadquarterListCreateView(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
 
 class HeadquarterDetailUpdateDestroyView(APIView):
     permission_classes = [AllowAny]
@@ -884,22 +914,18 @@ class ProductView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        product_name = request.data.get('name')
+        serializer = ProductSerializer(data=request.data)
+        
+        #No se repita el nombre del producto
+        if Product.objects.filter(name=request.data['name']).exists():
+            return Response({'error': 'Product with the same name already exists'}, status=status.HTTP_400_BAD_REQUEST)
 
-        try:
-            product = Product.objects.get(name=product_name)
-            return Response(
-                {"message": "Product already exists.", "product": ProductSerializer(product).data},
-                status=status.HTTP_200_OK
-            )
-        except Product.DoesNotExist:
-            serializer = ProductSerializer(data=request.data)
 
-            if serializer.is_valid():
-                product = serializer.save()
-                return Response(ProductSerializer(product).data, status=status.HTTP_201_CREATED)
+        if serializer.is_valid():
+            product = serializer.save()
+            return Response(ProductSerializer(product).data, status=status.HTTP_201_CREATED)
 
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request):
         products = Product.objects.all()
@@ -907,39 +933,49 @@ class ProductView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request, pk):
-        try:
-            product = Product.objects.get(pk=pk)
-        except Product.DoesNotExist:
-            return Response({"error": "Product not found"}, status=status.HTTP_404_NOT_FOUND)
-
+        product = get_object_or_404(Product, pk=pk)
         product.delete()
         return Response({"message": "Product deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
-
 
 class ProductForHeadquarterView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request, headquarter_id):
         data = request.data
+        # Intentar obtener el inventario asociado al headquarter
         try:
             inventory = Inventory.objects.get(Headquarter_id=headquarter_id)
         except Inventory.DoesNotExist:
             return Response({'error': 'Inventory for specified headquarter not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        data['Inventory'] = inventory.id
-        serializer = ProductInventoryDetailsSerializer(data=data)
-
-        if serializer.is_valid():
-            product_inventory_details = serializer.save()
-            return Response(ProductInventoryDetailsSerializer(product_inventory_details).data, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        # Obtener el producto del request
+        product_id = data.get('Product')
+        
+        # Verificar si ya existe un registro en ProductInventoryDetails con el mismo producto e inventario
+        try:
+            product_inventory_details = ProductInventoryDetails.objects.get(Product_id=product_id, Inventory=inventory)
+            # Si existe, actualizar la cantidad
+            product_inventory_details.cuantity += int(data.get('cuantity', 0))
+            product_inventory_details.save()
+            return Response(ProductInventoryDetailsSerializer(product_inventory_details).data, status=status.HTTP_200_OK)
+        except ProductInventoryDetails.DoesNotExist:
+            # Si no existe, crear un nuevo registro
+            data['Inventory'] = inventory.id
+            serializer = ProductInventoryDetailsSerializer(data=data)
+            
+            if serializer.is_valid():
+                product_inventory_details = serializer.save()
+                return Response(ProductInventoryDetailsSerializer(product_inventory_details).data, status=status.HTTP_201_CREATED)
+            
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request, headquarter_id):
+        
         try:
             inventory = Inventory.objects.get(Headquarter_id=headquarter_id)
         except Inventory.DoesNotExist:
             return Response({'error': 'Inventory for specified headquarter not found'}, status=status.HTTP_404_NOT_FOUND)
-
+            
         product_inventory_details = ProductInventoryDetails.objects.filter(Inventory=inventory)
         serializer = ProductInventoryDetailsSerializer(product_inventory_details, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -985,8 +1021,8 @@ class OrganizationHistoryView(APIView):
                 return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
             except Headquarter.DoesNotExist:
                 return Response({'error': 'Headquarter not found'}, status=status.HTTP_404_NOT_FOUND)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ProductCreateView(APIView):
     permission_classes = [AllowAny]
@@ -1013,6 +1049,7 @@ class ProductCreateView(APIView):
             )
 
             return Response(ProductInventoryDetailsSerializer(product_inventory_details).data, status=status.HTTP_201_CREATED)
+        
         else:
             print('Errores del serializador:', product_serializer.errors)
         
@@ -1020,6 +1057,7 @@ class ProductCreateView(APIView):
 
 
 #PROBRAR LA FUNCONES DE ABAJO(Si funciona el query_params y en postman. Sino cambia pasando el user_id por parametro en la url)
+
 class EventAttendanceView(APIView):
     permission_classes = [AllowAny]
 
@@ -1034,6 +1072,7 @@ class EventAttendanceView(APIView):
 
         except Event.DoesNotExist:
             return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
+
 
     def post(self, request):
         person_id = request.query_params.get('person_id')
@@ -1105,6 +1144,7 @@ class CheckMembershipView(APIView):
         user_id = request.query_params.get('person_id')
         event_id = request.query_params.get('event_id')
 
+
         try:
             person = Person.objects.get(id=user_id)
             event = Event.objects.get(id=event_id)
@@ -1146,6 +1186,7 @@ class  TaskParticipationView(APIView):
         except Task.DoesNotExist:
             return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
 
+
     def delete(self, request):
         person_id = request.query_params.get('person_id')
         task_id = request.query_params.get('task_id')
@@ -1167,7 +1208,17 @@ class  TaskParticipationView(APIView):
         except Task.DoesNotExist:
             return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
 
-
+# Se epera en body un atributo denominado products, con la lista de ids de los productos comprados o vendidos
+# "products": [
+#         {
+#             "product": 1,
+#             "quantity": 10
+#         }
+#         {
+#             "product": 6, (id del producto)
+#             "quantity": 10
+#         }
+#     ]
 class OperationAPIView(APIView):
     permission_classes = [AllowAny]
 
@@ -1182,15 +1233,22 @@ class OperationAPIView(APIView):
             return Response(serializer.data)
 
     def post(self, request, organization_id):
+        print(request.data)
         request.data['Organization'] = organization_id
         serializer = OperationSerializer(data=request.data)
+        
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, organization_id, operation_id):
         operation = get_object_or_404(Operation, id=operation_id, Organization_id=organization_id)
+        
+        if operation.invoice:
+            operation.invoice.delete()
+
         operation.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -1241,6 +1299,7 @@ class ProductTransferAPIView(APIView):
             if product_inventory_details.cuantity < int(quantity):
                 return Response({'error': 'Not enough quantity in headquarter 1'}, status=status.HTTP_400_BAD_REQUEST)
 
+
                 # Actualizar las cantidades en los inventarios
             product_inventory_details.cuantity -= int(quantity)
             product_inventory_details.save()
@@ -1258,204 +1317,333 @@ class ProductTransferAPIView(APIView):
             return Response({'error': 'Product not found in headquarter 1'}, status=status.HTTP_404_NOT_FOUND)
 
 
-# Operation_Donation:
-# List and Create:
-class OperationListCreateDonationView(APIView):
+#Se debera poder agregar/eliminar miembros de un evento.
+class MemberEventsAPIView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        donations = Donation.objects.all()
-        list = []
+        event_id = request.query_params.get('event_id')
 
-        for donation in donations:
-            details = DonationProductDetails.objects.filter(Donation=donation)
-            for detail in details:
-                list.append({
-                    "Headquarter": donation.Headquarter.name,
-                    "date": donation.date,
-                    "name": detail.Product.name,
-                    "quantity": detail.quantity,
-                    "category": detail.Product.Category.name,
-                    "description": donation.description
-                })
-        return Response(list, status=status.HTTP_200_OK)
+        try:
+            event = Event.objects.get(id=event_id)
+            members = EventPersonDetails.objects.filter(Event=event)
+            serializer = EventPersonDetailsSerializer(members, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
+        except Event.DoesNotExist:
+            return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
+        
     def post(self, request):
-        data = request.data
+        person_id = request.query_params.get('person_id')
+        event_id = request.query_params.get('event_id')
 
-        Donation_Headquarter = data.get('Headquarter')
-        Donation_date = data.get('date', timezone.now().date())
-        Product_name = data.get('name')
-        Details_quantity = data.get('quantity')
-        Category_name = data.get('category')
-        Donation_description = data.get('description', "")
+        if not person_id or not event_id:
+            return Response({'error': 'person_id and event_id are required'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            headquarter = Headquarter.objects.get(id=Donation_Headquarter)
-        except Headquarter.DoesNotExist:
-            return Response({"error": "Headquarter not found."}, status=status.HTTP_404_NOT_FOUND)
+            person = Person.objects.get(id=person_id)
+            event = Event.objects.get(id=event_id)
+
+            if EventPersonDetails.objects.filter(Person=person, Event=event).exists():
+                return Response({'error': 'Person is already attending this event'}, status=status.HTTP_400_BAD_REQUEST)
+
+            event_person_details = EventPersonDetails.objects.create(Person=person, Event=event)
+            return Response({'message': 'Person added successfully', 'event_person_details': EventPersonDetailsSerializer(event_person_details).data}, status=status.HTTP_201_CREATED)
+
+        except Person.DoesNotExist:
+            return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Event.DoesNotExist:
+            return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+    def delete(self, request):
+        person_id = request.query_params.get('person_id')
+        event_id = request.query_params.get('event_id')
 
         try:
-            category = ProductCategory.objects.get(name=Category_name).first()
-        except ProductCategory.DoesNotExist:
-            category = ProductCategory.objects.create(name=Category_name)
+            person = Person.objects.get(id=person_id)
+            event = Event.objects.get(id=event_id)
 
-        try:
-            product = Product.objects.get(name=Product_name).first()
-        except Product.DoesNotExist:
-            product = Product.objects.create(name=Product_name, Category=category)
-
-        donation = Donation.objects.create(
-            Headquarter=headquarter,
-            date=Donation_date,
-            description=Donation_description
-        )
-
-        details = DonationProductDetails.objects.create(
-            Product=product,
-            Donation=donation,
-            quantity=Details_quantity
-        )
-        return Response(status=status.HTTP_201_CREATED)
-    
-    def post(self, request):
-        data = request.data
-
-        Donation_id = data.get('Donation')
-        Product_name = data.get('name')
-        Details_quantity = data.get('quantity')
-        Category_name = data.get('category')
-
-        try:
-            donation = Donation.objects.get(id=Donation_id)
-        except Donation.DoesNotExist:
-            return Response({"error": "Donation not found."}, status=status.HTTP_404_NOT_FOUND)
-
-        try:
-            category = ProductCategory.objects.get(name=Category_name).first()
-        except ProductCategory.DoesNotExist:
-            category = ProductCategory.objects.create(name=Category_name)
-
-        try:
-            product = Product.objects.get(name=Product_name).first()
-        except Product.DoesNotExist:
-            product = Product.objects.create(name=Product_name, Category=category)
-
-        details = DonationProductDetails.objects.create(
-            Product=product,
-            Donation=donation,
-            quantity=Details_quantity
-        )
-        return Response(status=status.HTTP_201_CREATED)
-
-# Update:
-class OperationUpdateDonationView(APIView):
-    permission_classes = [AllowAny]
-
-    def get(self, request, don_pk, pro_pk):
-        try:
-            details = DonationProductDetails.objects.get(Donation_id=don_pk, Product_id=pro_pk)
-        except DonationProductDetails.DoesNotExist:
-            return Response({"error": "Donation and Product not found."}, status=status.HTTP_404_NOT_FOUND)
-
-        donation = {
-            "Headquarter": details.Donation.Headquarter.name,
-            "date": details.Donation.date,
-            "name": details.Product.name,
-            "quantity": details.quantity,
-            "category": details.Product.Category.name,
-            "description": details.Donation.description
-        }
-
-        return Response(donation, status=status.HTTP_200_OK)
-
-    def put(self, request, don_pk, pro_pk):
-        data = request.data
-
-        Donation_Headquarter = data.get('Headquarter')
-        Donation_date = data.get('date', timezone.now().date())
-        Product_name = data.get('name')
-        Details_quantity = data.get('quantity')
-        Donation_description = data.get('description', '')
-
-        try:
-            detail = DonationProductDetails.objects.get(Donation_id=don_pk, Product_id=pro_pk)
-            donation = detail.Donation
-        except DonationProductDetails.DoesNotExist:
-            return Response({"error": "Donation and Product details not found."}, status=status.HTTP_404_NOT_FOUND)
-
-        if Donation_Headquarter:
             try:
-                headquarter = Headquarter.objects.get(id=Donation_Headquarter)
-                donation.Headquarter = headquarter
-            except Headquarter.DoesNotExist:
-                return Response({"error": "Headquarter not found."}, status=status.HTTP_404_NOT_FOUND)
+                event_person_details = EventPersonDetails.objects.get(Person=person, Event=event)
+                event_person_details.delete()
+                return Response({'message': 'Person removed successfully'}, status=status.HTTP_204_NO_CONTENT)
 
-        if Donation_date:
-            donation.date = Donation_date
-        if Donation_description:
-            donation.description = Donation_description
+            except EventPersonDetails.DoesNotExist:
+                return Response({'error': 'Person is not attending this event'}, status=status.HTTP_404_NOT_FOUND)
 
-        donation.save()
+        except Person.DoesNotExist:
+            return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Event.DoesNotExist:
+            return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        if Details_quantity:
-            detail.quantity = Details_quantity
-            detail.save()
-
-        try:
-            category = ProductCategory.objects.get(name='without category')
-        except ProductCategory.DoesNotExist:
-            category = ProductCategory.objects.create(name='without category')
-
-        try:
-            product = Product.objects.get(name=Product_name)
-        except Product.DoesNotExist:
-            product = Product.objects.create(name=Product_name, Category=category)
-
-        detail.Product = product
-        detail.save()
-
-        return Response({
-            "Headquarter": donation.Headquarter.name,
-            "date": donation.date,
-            "name": product.name,
-            "quantity": detail.quantity,
-            "category": product.Category.name,
-            "description": donation.description
-        }, status=status.HTTP_200_OK)
-
-# Delete:
-class OperationDeleteDonationView(APIView):
+    
+#Se debera poder agregar/eliminar invitados a un evento con la class Guest.
+class GuestEventsAPIView(APIView):
     permission_classes = [AllowAny]
 
-    def get(self, request, don_pk):
+    def post(self, request):
+        event_id = request.query_params.get('event_id')
+
+        if not event_id:
+            return Response({'error': 'event_id is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        request.data['Event'] = event_id
         try:
-            donation = Donation.objects.get(id=don_pk)
-        except Donation.DoesNotExist:
-            return Response({"error": "Donations not found."}, status=status.HTTP_404_NOT_FOUND)
+            event = Event.objects.get(id=event_id)
 
-        details = DonationProductDetails.objects.filter(Donation=donation)
+            serializers = GuestSerializer(data=request.data)
+            if serializers.is_valid():
+                guest = serializers.save(Event=event)
+                return Response({'message': 'Guest added successfully', 'guest': GuestSerializer(guest).data}, status=status.HTTP_201_CREATED)
+            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+        except Event.DoesNotExist:
+            return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+    def delete(self, request):
+        guest_id = request.query_params.get('guest_id')
 
-        lists = []
-        for detail in details:
-            lists.append({
-                "Headquarter": donation.Headquarter.name,
-                "date": donation.date,
-                "name": detail.Product.name,
-                "quantity": detail.quantity,
-                "category": detail.Product.Category.name,
-                "description": donation.description
-            })
-        return Response(lists, status=status.HTTP_200_OK)
+        if not guest_id:
+            return Response({'error': 'guest_id is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, don_pk):
         try:
-            donation = Donation.objects.get(id=don_pk)
-        except Donation.DoesNotExist:
-            return Response({"error": "Donation not found."}, status=status.HTTP_404_NOT_FOUND)
+            guest = Guest.objects.get(id=guest_id)
+            guest.delete()
+            return Response({'message': 'Guest removed successfully'}, status=status.HTTP_204_NO_CONTENT)
 
-        DonationProductDetails.objects.filter(Donation=donation).delete()
+        except Guest.DoesNotExist:
+            return Response({'error': 'Guest not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+"""
+se espera un body similar a este:{
+    "description": "Donation description",
+    "date": "2024-08-20",
+    "products": [
+        {
+            "product": 1,
+            "quantity": 10
+        }
+        {
+            "product": 6, (id del producto)
+            "quantity": 10
+        }
+    ]
+}
+"""
+class DonationAPIView(APIView):
+    permission_classes = [AllowAny]
+#Hace falta que se vean los detalles de la donacions
+    def get(self, request):
+        org_id = request.query_params.get('org_id')
+        
+        if not org_id:
+            return Response({'error': 'org_id is required'}, status=status.HTTP_400_BAD_REQUEST)
+            
+        organization = Organization.objects.get(id=org_id)
+        donations = Donation.objects.filter(Organization=organization)
+        serializer = DonationSerializer(donations, many=True)
+        return Response(serializer.data)
 
+    def post(self, request):
+        print(request.data)
+        org_id = request.query_params.get('org_id')
+
+        if not org_id:
+            return Response({'error': 'org_id is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        organization = get_object_or_404(Organization, id=org_id)
+        data = request.data.copy()
+        data['Organization'] = organization.id
+        serializer = DonationSerializer(data=data)
+
+        if serializer.is_valid():
+            donation = serializer.save()
+            return Response(DonationSerializer(donation).data, status=status.HTTP_201_CREATED)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+   
+class DonationDetailAPIView(APIView):
+    permission_classes = [AllowAny]
+    # Obtener, actualizar o eliminar una donación específica
+    def get(self, request):
+        org_id = request.query_params.get('org_id')
+        donation_id = request.query_params.get('donation_id')
+
+        if not org_id or not donation_id:
+            return Response({'error': 'org_id and donation_id are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        donation = get_object_or_404(Donation, id=donation_id, Organization_id=org_id)
+        serializer = DonationSerializer(donation)
+        return Response(serializer.data)
+
+    def put(self, request):
+        org_id = request.query_params.get('org_id')
+        donation_id = request.query_params.get('donation_id')
+
+        if not org_id or not donation_id:
+            return Response({'error': 'org_id and donation_id are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        donation = get_object_or_404(Donation, id=donation_id, Organization_id=org_id)
+        serializer = DonationSerializer(donation, data=request.data, partial=True)
+        
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request):
+        org_id = request.query_params.get('org_id')
+        donation_id = request.query_params.get('donation_id')
+
+        if not org_id or not donation_id:
+            return Response({'error': 'org_id and donation_id are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        donation = get_object_or_404(Donation, id=donation_id, Organization_id=org_id)
         donation.delete()
-
         return Response(status=status.HTTP_204_NO_CONTENT)
+    
+
+#Se debe crear una view que permita enviar las invitaciones por mail 
+"""
+Se espera un body similar a este:
+{
+  "emails": ["galleguillolucas2006@gmail.com"],
+  "event_id": 1,
+  "subject": "Estás Invitado a Nuestro Evento",
+  "link": "https://www.google.com"
+}
+Les desea mucha suerte galle :) <3
+"""
+class SendInvitationView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        emails = request.data.get('emails') 
+        event_id = request.data.get('event_id')  
+        subject = request.data.get('subject', 'Invitación a Evento')
+        link = request.data.get('link')  
+        event = Event.objects.get(id=event_id)
+        organization = event.Organization.name
+
+        # Validar que los campos obligatorios están presentes
+        if not emails or not event or not organization or not link:
+            return Response({'error': 'emails, event and link are required fields.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            message_template = f"Hola,\n\nEstás invitado(a) a nuestro evento '{event.name}' que se llevará a cabo próximamente.\nEsperamos contar con tu presencia.\n{link}\n\nSaludos cordiales,\nEl equipo de {organization}"
+
+            send_mail(
+                subject=subject,  # Asunto del correo
+                message=message_template,  # Contenido del mensaje personalizado
+                from_email=settings.DEFAULT_FROM_EMAIL,  # Dirección de correo del remitente
+                recipient_list=emails,  # Lista de destinatarios
+                fail_silently=False,  # Generar excepción si falla el envío
+            )
+            print(f"Invitaciones enviadas exitosamente a: {', '.join(emails)}")
+            return Response({'message': 'Invitations sent successfully'}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+       
+
+class SendInvitationPlatView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        emails = [request.data.get('email')] 
+        subject = 'You are invited to our platform!'
+        organization_id = request.data.get('org_id')
+        organization = Organization.objects.get(id=organization_id) 
+        link = f'http://localhost:3000/dashboard/organization/{organization_id}'
+        # Validar que los campos obligatorios están presentes
+        if not emails or not organization or not link:
+            return Response({'error': 'emails, and link are required fields.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            message_template = f"Hello,\n\nYou have been invited to join our platform and become a part of the organization: '{organization.name}'.\nWe look forward to your participation.\n{link}\n\nBest regards,\nThe Vaid Team"
+            send_mail(
+                subject=subject,  # Asunto del correo
+                message=message_template,  # Contenido del mensaje personalizado
+                from_email=settings.DEFAULT_FROM_EMAIL,  # Dirección de correo del remitente
+                recipient_list=emails,  # Lista de destinatarios
+                fail_silently=False,  # Generar excepción si falla el envío
+            )
+            print(emails)
+            return Response({'message': 'Invitations sent successfully'}, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+
+
+#View para subir un video al perfil de una organizacion
+
+class VideoUploadView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        try:
+            data = self.request.data
+            org_id = data.get('organization_id')
+            organization = Organization.objects.get(id=org_id)
+
+            video_file = data.get('video_file')
+            title = data.get('title')
+            description = data.get('description', 'Video content')
+
+            Video.objects.create(
+                title=title,
+                description=description,
+                video_file=video_file,
+                Organization=organization
+            )
+
+            return Response(
+                {'success': 'Video Uploaded Successfully'},
+                status=status.HTTP_201_CREATED
+            )
+        except Organization.DoesNotExist:
+            return Response(
+                {'error': 'Organization not found'},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        except Exception as e:
+            return Response(
+                {'error': f'Error Uploading Video: {str(e)}'},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+        
+
+class IsAdminView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        user_id = request.query_params.get('user_id')
+
+        try:
+            user = User.objects.get(id=user_id)
+            tags_user = Tag.objects.filter(PersonTagDetails__Person=user, PersonTagDetails__tag__TagType=1)
+            if tags_user.exists():
+                return Response(True, status=status.HTTP_200_OK)
+            return Response(False, status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+    
+
+class UnassignedTagsAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, user_id):
+        # Obtener la persona
+        person = get_object_or_404(Person, id=user_id)
+        
+        # Obtener IDs de las tags asignadas al usuario
+        assigned_tag_ids = PersonTagDetails.objects.filter(Person=person).values_list('Tag', flat=True)
+        
+        # Obtener las tags que no están asignadas al usuario
+        unassigned_tags = Tag.objects.exclude(id__in=assigned_tag_ids).distinct()
+
+        # Serializar y devolver las tags
+        serializer = TagSerializer(unassigned_tags, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

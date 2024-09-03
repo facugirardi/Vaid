@@ -21,3 +21,37 @@
   background-color: #2f20cf;
   border: #2F20CF 1px solid;
 }
+<<<<<<< HEAD
+=======
+
+.user-profile-list{
+  background-color: #fff !important;
+  box-shadow: 0px 8px 24px rgba(27,46,94,.12) !important;
+  padding: 25px !important;
+  border: 1px solid #dbe0e5 !important;
+  padding-bottom: 5px !important;
+}
+
+.modal-backdrop {
+  background-color: transparent;
+}
+
+.modal-open .modal {
+  backdrop-filter: blur(5px); /* Adjust the blur amount as needed */
+}
+
+
+.p-donation{
+    font-family: 'Inter', sans-serif;;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.6;
+    padding: 1px ;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    color: #333; /* Color más oscuro para mejor contraste */
+
+}
+
+
+>>>>>>> 9d2bd2392ffef43f33ba4e80a57674c69c39554c

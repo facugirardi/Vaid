@@ -41,7 +41,7 @@ export default function RequireComplete({ children }) {
     }, [user?.id]); 
 
     if (isCompleted === true) {
-        push('/dashboard');
+        window.location.href = '/dashboard';
         return null;
     }
     return isCompleted ? null :  <>{children}</> ;

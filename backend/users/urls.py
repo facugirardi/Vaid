@@ -55,9 +55,14 @@ urlpatterns = [
     path('organization/operation-type/', OperationTypeListView.as_view(), name='operation-type-list-create'),
     path('organization/<int:organization_id>/inventory/', InventoryView.as_view(), name='inventory-list'),
     path('<int:organization_id>/history/', OrganizationHistoryView.as_view()),
-
-    # Donaciones
-    path('operationlistcreatedonation/', OperationListCreateDonationView.as_view()),
-    path('operationupdatedonation/<int:don_pk>/<int:pro_pk>', OperationUpdateDonationView.as_view()),
-    path('operationdeletedonation/<int:don_pk>', OperationDeleteDonationView.as_view()),
+    path('organization/transferProduct', ProductTransferAPIView.as_view(), name='transfer-list-create'),
+    path('organization/event/members', MemberEventsAPIView.as_view(), name='event-members'),
+    path('organization/event/guest', GuestEventsAPIView.as_view(), name='event-Guests'),
+    path('donations/', DonationAPIView.as_view(), name='donation-create'),
+    path('donation/detail/', DonationDetailAPIView.as_view(), name='donation-detail'),
+    path('send-email/', SendInvitationView.as_view(), name='send-email'),
+    path('organization/upload-video/', VideoUploadView.as_view(), name='upload-organization-video'),
+    path('isAdmin/', IsAdminView.as_view(), name='is-admin'),
+    path('user/<int:user_id>/unassigned-tags/', UnassignedTagsAPIView.as_view(), name='unassigned-tags'),
+    path('send-email-plat/', SendInvitationPlatView.as_view()),
 ]
