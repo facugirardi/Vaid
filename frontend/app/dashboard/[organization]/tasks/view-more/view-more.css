@@ -1,4 +1,5 @@
-/* Estilos principales del contenedor */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
 .container {
     display: flex;
     justify-content: center;
@@ -21,6 +22,7 @@
     width: 100%;
     height: 200px;
     object-fit: cover; /* Asegura que la imagen cubra todo el espacio sin distorsionarse */
+    border-radius: 8px;
   }
   
   /* Contenedor del contenido textual y de los inputs */
@@ -105,20 +107,44 @@
   margin-top: 20px; 
 }
 
+body {
+  font-family: 'Roboto', sans-serif; /* Aplica la fuente a todo el cuerpo */
+}
+
 .create-button, .close-button {
-  padding: 30px 30px;
-  margin-left: 10px;
+  font-family: 'Roboto', sans-serif; /* Aplica la fuente a los botones */
+  margin-top: 20px; /* Baja los botones un poco */
+}
+
+.title-modal-12,
+.title-dates {
+  font-family: 'Roboto', sans-serif;
+    font-size: 16px; /* Ajustar según el tamaño del texto de la imagen */
+    font-weight: 1000; /* Negrita */
+}
+
+.create-button {
+  color: rgb(0, 0, 0);
   border: none;
-  border-radius: 15px;
+  padding: 10px 20px;
   cursor: pointer;
-  font-size: 16px;
+  border-radius: 4px;
+  margin-left: 380px;
+  margin-top: 20px; /* Baja el botón Create */
+  font-weight: 1000;
+  font-size: 15px;
 }
 
-.create-button { 
+.close-button {
   color: rgb(0, 0, 0);
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 4px;
+  margin-top: 10px; /* Baja el botón Close */
+  font-weight: 1000;
+  font-size: 15px;
 }
 
-.close-button { 
-  color: rgb(0, 0, 0);
-}
+
 

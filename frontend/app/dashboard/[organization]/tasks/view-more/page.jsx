@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Layout from '@/layouts/dashboard/index';
 import BreadcrumbItem from '@/common/BreadcrumbItem';
 import Image from "next/image";
-import { Card, Col, Form, Row, Button } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import cover1 from "@/public/assets/images/wallpaper_event.jpg";
 import './view-more.css'; // Asegúrate de importar los estilos
 
@@ -49,12 +49,10 @@ const Page = () => {
     };
 
     const handleCreateClick = () => {
-        // Lógica para el botón Create
         console.log('Create button clicked');
     };
 
     const handleCloseClick = () => {
-        // Lógica para el botón Close
         console.log('Close button clicked');
     };
 
@@ -74,6 +72,12 @@ const Page = () => {
                                 width={480} 
                                 height={305}
                             />
+                            {/* Botón Create en la columna de la imagen */}
+                            <div className="mt-3">
+                                <button className="create-button" onClick={handleCreateClick}>
+                                    Create
+                                </button>
+                            </div>
                         </div>
                         <div className="details-container col-md-7">
                             <p className='title-modal-12'>Title</p>
@@ -102,10 +106,8 @@ const Page = () => {
                                     </div>
                                 </div>
                             </Form.Group>
+                            {/* Botón Close en la columna del texto */}
                             <div className="task-buttons mt-3">
-                                <button className="create-button" onClick={handleCreateClick}>
-                                    Create
-                                </button>
                                 <button className="close-button" onClick={handleCloseClick}>
                                     Close
                                 </button>
