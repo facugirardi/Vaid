@@ -32,7 +32,7 @@ const Inventory = ({ headquarterId, addHistoryEntry }) => {
 
   const loadInventory = () => {
     if (organizationId) {
-      fetch(`http://localhost:8000/api/organization/${organizationId}/inventory/`)
+      fetch(`http://localhost:8000/api/organization/${organizationId}/all-products/`)
         .then(response => response.json())
         .then(data => {
           if (Array.isArray(data)) {
@@ -127,41 +127,43 @@ const Inventory = ({ headquarterId, addHistoryEntry }) => {
     const formData = new FormData(event.target);
     let expDate = formData.get('expDate');
     if (expDate === '') {
-      expDate = null; // Si la fecha está vacía, establecerla como null
+        expDate = null; // Si la fecha está vacía, establecerla como null
     }
 
     const data = {
-      name: formData.get('name'),
-      description: formData.get('description'),
-      Category: formData.get('Category'),
-      expDate: expDate,
-      Status: 1,
-      quantity: parseInt(formData.get('quantity')),
-      headquarter: selectedHeadquarter
+        name: formData.get('name'),
+        Category: formData.get('Category'),
+        expDate: expDate,
+        Status: 1,
+        quantity: parseInt(formData.get('quantity')),
+        headquarter: selectedHeadquarter
     };
 
     try {
-      const response = await fetch(`http://localhost:8000/api/headquarters/${organizationId}/${selectedHeadquarter}/products/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
+        console.log(data)
+        const response = await fetch(`http://localhost:8000/api/headquarters/${organizationId}/${selectedHeadquarter}/products/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
 
-      if (response.ok) {
-        const newProduct = await response.json();
-        setInventory([...inventory, newProduct]);
-        addHistoryEntry(`Product "${newProduct.name}" added by ${user.first_name} ${user.last_name}`);
-        setShowInventoryModal(false);
-      } else {
-        const errorData = await response.json();
-        console.error('Error en la respuesta:', response.status, errorData);
-      }
+        if (response.ok) {
+            const newProduct = await response.json();
+            console.log(newProduct)
+            setInventory([...inventory, newProduct]);
+            addHistoryEntry(`Product "${newProduct.name}" added by ${user.first_name} ${user.last_name}`);
+            setShowInventoryModal(false);
+        } else {
+            const errorData = await response.json();
+            console.error('Error en la respuesta:', response.status, errorData);
+        }
     } catch (error) {
-      console.error('Error:', error);
+        console.error('Error:', error);
     }
-  };
+};
+
 
   return (
     <div className="card">
@@ -343,11 +345,9 @@ const Page = () => {
       <div className="container">
         <BreadcrumbItem mainTitle="Resource Management" subTitle="Inventory" />
         <div className='row'>
-          <div className='col-md-1'></div>
-          <div className="col-md-10">
+          <div className="col-md-12">
             <Inventory headquarterId={selectedHeadquarterId} organizationId={organizationId} addHistoryEntry={addHistoryEntry} />
           </div>
-          <div className='col-md-1'></div>
         </div>
       </div>
     </Layout>

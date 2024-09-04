@@ -143,11 +143,11 @@ const SocialProfile = () => {
 
                                     <h5 className="mb-1">{user.first_name} {user.last_name}</h5>
                                     )}
-                                    <p className="mb-0">‎<Link href="#" className="link-primary"></Link></p>
+                                    <p className="mb-0">‎<a href="#" className="link-primary"></a></p>
                                 </Col>
                                 <Col md={3} xl={2} xxl={2}>
                                     <Row className="g-1 text-center">
-                                        <Col xs={6}>
+                                        <Col xs={12}>
                                     { userType === 2 ? (
 
                                             <a  className="btn btn-primary" href={`dashboard/${organization ? organization.id : ''}/home`}>Dashboard</a>

@@ -15,13 +15,9 @@ const Page = () => {
     const [selectedTask, setSelectedTask] = useState(null);
 
     useEffect(() => {
-        // Get the current URL
         const currentUrl = window.location.href;
-        // Use URL constructor to parse the URL
         const url = new URL(currentUrl);
-        // Split the pathname into segments
         const pathSegments = url.pathname.split('/');
-        // Find the segment after 'dashboard'
         const dashboardIndex = pathSegments.indexOf('dashboard');
         if (dashboardIndex !== -1 && pathSegments.length > dashboardIndex + 1) {
             setOrganizationId(pathSegments[dashboardIndex + 1]);
@@ -68,8 +64,12 @@ const Page = () => {
             </button>
             </div>
             <Row>
-                {
-                    (tasks || []).map((item, index) => (
+                {tasks.length === 0 ? (
+                    <div className="no-tasks-message">
+                        <p className="p-history">No tasks available. Start by adding your first task using the 'add' button.</p>
+                    </div>
+                ) : (
+                    tasks.map((item, index) => (
                         <Col md={6} xl={4} key={index}>
                             <Card className="user-card">
                                 <Card.Body>
@@ -110,14 +110,11 @@ const Page = () => {
                             </Card>
                         </Col>
                     ))
-                }
+                )}
             </Row>
 
-
-            {/* Modal Component */}
             <Modal show={showModal} onHide={handleCloseModal} centered size='xl' backdropClassName="modal-backdrop">
-                <Modal.Header >
-                </Modal.Header>
+                <Modal.Header />
                 <Modal.Body>
                     {selectedTask && (
                         <div className="d-flex">
@@ -164,9 +161,6 @@ const Page = () => {
                 <Modal.Footer className='d-flex justify-content-center'>
                     <button className="button-take">
                         Take
-                    </button>
-                      <button className="button-close" onClick={handleCloseModal}>
-                        Close
                     </button>
                 </Modal.Footer>
             </Modal>

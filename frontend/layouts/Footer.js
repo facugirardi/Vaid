@@ -22,9 +22,6 @@ const Footer3 = () => {
             <div className="col-xl-6 col-lg-7">
               <div
                 className="footer-widget widget-about"
-                data-aos="fade-up"
-                data-aos-duration={1000}
-                data-aos-offset={50}
               >
                 <div className="section-title text-white">
                   <h2>We’re Also Available On Mobile.</h2>
@@ -32,8 +29,8 @@ const Footer3 = () => {
                 </div>
                 <div className="footer-btns">
                   <a
-                    href="/"
-                    className="theme-btn"
+                    href="/auth/signup"
+                    className="theme-btn btn-footer-ln"
                     style={{border:'.1px solid white !important'}}
                   >
                     Get Started <i className="far fa-arrow-right" />
@@ -44,24 +41,20 @@ const Footer3 = () => {
             <div className="col-lg-2 col-6 ms-lg-auto">
               <div
                 className="footer-widget widget-links"
-                data-aos="fade-up"
-                data-aos-delay={100}
-                data-aos-duration={1000}
-                data-aos-offset={50}
               >
                 <h6 className="footer-title">Links</h6>
                 <ul>
                   <li>
-                    <Link href="#home">Home</Link>
+                    <a href="#home">Home</a>
                   </li>
                   <li>
-                    <Link href="#about">About</Link>
+                    <a href="#about">About</a>
                   </li>
                   <li>
-                    <Link href="#services">Services</Link>
+                    <a href="#services">Services</a>
                   </li>
                   <li>
-                    <Link href="#faqs">FAQs</Link>
+                    <a href="#faqs">FAQs</a>
                   </li>
                 </ul>
               </div>
@@ -69,24 +62,21 @@ const Footer3 = () => {
             <div className="col-lg-2 col-6">
               <div
                 className="footer-widget widget-links"
-                data-aos="fade-up"
-                data-aos-delay={150}
-                data-aos-duration={1000}
-                data-aos-offset={50}
+
               >
                 <h6 className="footer-title">External Links</h6>
                 <ul>
                   <li>
-                    <Link href="#">Linkedin</Link>
+                    <a href="#">Linkedin</a>
                   </li>
                   <li>
-                    <Link href="pricing">Instagram</Link>
+                    <a href="pricing">Instagram</a>
                   </li>
                   <li>
-                    <Link href="about">Medium</Link>
+                    <a href="about">Medium</a>
                   </li>
                   <li>
-                    <Link href="contact">Contact</Link>
+                    <a href="contact">Contact</a>
                   </li>
                 </ul>
               </div>
@@ -98,12 +88,9 @@ const Footer3 = () => {
             <div className="col-xl-4 col-lg-6">
               <div
                 className="copyright-text pt-10 text-lg-start text-center"
-                data-aos="fade-left"
-                data-aos-duration={1000}
-                data-aos-offset={50}
               >
                 <p>
-                  Copyright @2024, <Link href="/">Vaid </Link> All Rights
+                  Copyright @2024, <a href="/">Vaid </a> All Rights
                   Reserved
                 </p>
               </div>
@@ -111,20 +98,13 @@ const Footer3 = () => {
             <div className="col-xl-8 col-lg-6">
               <div
                 className="footer-bottom-logo text-lg-end text-center"
-                data-aos="fade-right"
-                data-aos-duration={1000}
-                data-aos-offset={50}
               >
-                <Link href="/">
+                <a href="/">
                   <img src="/assets/images/vaidpng2.png" alt="Logo" style={{ filter: 'brightness(0) invert(1)' }}/>
-                </Link>
+                </a>
               </div>
             </div>
           </div>
-          {/* Scroll Top Button */}
-          <button className="scroll-top scroll-to-target" data-target="html">
-            <span className="far fa-angle-double-up" />
-          </button>
         </div>
       </div>
     </footer>

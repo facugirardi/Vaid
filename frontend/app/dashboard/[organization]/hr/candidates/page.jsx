@@ -1,4 +1,3 @@
-
 "use client"
 
 import React, { useState, useMemo, useEffect } from "react";
@@ -14,17 +13,12 @@ const Page = () => {
     const [showModal, setShowModal] = useState(false);
     const [selectedCandidate, setSelectedCandidate] = useState(null);
     const [candidates, setCandidates] = useState([]);
-
     const [organizationId, setOrganizationId] = useState("");
 
     useEffect(() => {
-        // Get the current URL
         const currentUrl = window.location.href;
-        // Use URL constructor to parse the URL
         const url = new URL(currentUrl);
-        // Split the pathname into segments
         const pathSegments = url.pathname.split('/');
-        // Find the segment after 'dashboard'
         const dashboardIndex = pathSegments.indexOf('dashboard');
         if (dashboardIndex !== -1 && pathSegments.length > dashboardIndex + 1) {
             setOrganizationId(pathSegments[dashboardIndex + 1]);
@@ -47,8 +41,8 @@ const Page = () => {
 
     const handleShowModal = (candidate) => {
         setSelectedCandidate(candidate);
-        console.log(candidate)
-        console.log(selectedCandidate)
+        console.log(candidate);
+        console.log(selectedCandidate);
         setShowModal(true);
     };
 
@@ -153,21 +147,25 @@ const Page = () => {
     return (
         <Layout>
             <BreadcrumbItem mainTitle="Human Resources" subTitle="Candidate List" />
-            
+
             <Row>
                 <Col sm={12}>
                     <Card className="border-0 table-card user-profile-list">
                         <Card.Body>
-                            <TableContainer
-                                columns={columns}
-                                data={candidates}
-                                isGlobalFilter={true}
-                                isBordered={false}
-                                customPageSize={5}
-                                tableClass="table-hover"
-                                theadClass="table-light"
-                                isPagination={true}
-                            />
+                            {candidates.length === 0 ? (
+                                <p className="text-center p-donation">No candidates available.</p>
+                            ) : (
+                                <TableContainer
+                                    columns={columns}
+                                    data={candidates}
+                                    isGlobalFilter={true}
+                                    isBordered={false}
+                                    customPageSize={5}
+                                    tableClass="table-hover"
+                                    theadClass="table-light"
+                                    isPagination={true}
+                                />
+                            )}
                         </Card.Body>
                     </Card>
                 </Col>

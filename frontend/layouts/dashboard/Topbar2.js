@@ -79,12 +79,12 @@ const TopBar = ({ handleOffcanvasToggle, changeThemeMode, toogleSidebarHide, too
       .then(() => {
         dispatch2(setLogout())
         toast.success('Logged out successfully.');
-        push('/auth/login');
+        window.location.href = '/auth/login';
       })
       .catch(() => {
         dispatch2(setLogout())
         toast.success('Logged out successfully.');
-        push('/auth/login');
+        window.location.href = '/auth/login';
       })
     }
 
@@ -105,22 +105,6 @@ const TopBar = ({ handleOffcanvasToggle, changeThemeMode, toogleSidebarHide, too
 
                     <div className="ms-auto">
                         <ul className="list-unstyled">
-                            <Dropdown as="li" className="pc-h-item">
-                                <Dropdown.Toggle as="a" className="pc-head-link arrow-none me-0" data-bs-toggle="dropdown" href="#" role="button"
-                                    aria-haspopup="false" aria-expanded="false">
-                                    <i className="ph-duotone ph-sun-dim"></i>
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu className="dropdown-menu-end pc-h-dropdown">
-                                    <Dropdown.Item onClick={() => handleThemeChange(THEME_MODE.DARK)}>
-                                        <i className="ph-duotone ph-moon"></i>
-                                        <span>Dark</span>
-                                    </Dropdown.Item>
-                                    <Dropdown.Item onClick={() => handleThemeChange(THEME_MODE.LIGHT)}>
-                                        <i className="ph-duotone ph-sun-dim"></i>
-                                        <span>Light</span>
-                                    </Dropdown.Item>
-                                </Dropdown.Menu>
-                                </Dropdown>
                             <Dropdown as="li" className="pc-h-item header-user-profile">
                                 <Dropdown.Toggle className="pc-head-link arrow-none me-0" data-bs-toggle="dropdown" href="#"
                                     aria-haspopup="false" data-bs-auto-close="outside" aria-expanded="false" style={{ border: "none" }}>

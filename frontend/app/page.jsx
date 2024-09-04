@@ -10,7 +10,7 @@ const accordionItems = [
     id: 1,
     title: "What is Vaid?",
     value:
-    "Vaid is a comprehensive platform designed to streamline and manage the operations of Non-profit Organizations. It offers various modules and functionalities aimed at digitizing internal processes, enhancing volunteer management, and optimizing resource allocation."
+    "Vaid is a comprehensive platform designed to streamline and manage the operations of Non-profit Organizations. It offers various modules and functionalities aimed at digitizing internal processes, enhancing the entire organization management, and optimizing resource allocation."
   },
   {
     id: 2,
@@ -34,7 +34,7 @@ const accordionItems = [
     id: 5,
     title: "What are the key features of Vaid software?",
     value:
-    "Some key features of Vaid software include: volunteer management tools, event and activity management, resource allocation and project management, E-learning resources for volunteers, statistical reporting capabilities, Progressive Web Application (PWA) accessibility for mobile devices."
+    "Some key features of Vaid software include: HR management tools, event and activity management, resource allocation and project management, statistical reporting capabilities, Progressive Web Application (PWA) accessibility for mobile devices, and others!"
   },
   {
     id: 6,
@@ -71,9 +71,9 @@ const page = () => {
                 <p>
                 Designed to empower nonprofit organizations by providing streamlined, 
                 innovative management software solutions.                </p>
-                <Link href="/auth/register" className="theme-btn mt-15 mb-10">
+                <a href="/auth/register" className="theme-btn mt-15 mb-10">
                   Get Started <i className="far fa-arrow-right" />
-                </Link>
+                </a>
                 <ul className="icon-list style-two">
                   <li>
                     <i className="fal fa-check" /> Free
@@ -91,7 +91,7 @@ const page = () => {
                 data-aos-duration={1000}
                 data-aos-offset={50}
               >
-                <img src="assets/images/placeholderimage.png" alt="Hero" style={{borderRadius:'10px'}}/>
+                <img src="assets/images/backgrounds/bg-landing.jpg" alt="Hero" style={{borderRadius:'10px'}}/>
               </div>
             </div>
           </div>
@@ -444,7 +444,7 @@ const page = () => {
                   </h5>
                   <p>
                     From initiation to completion, manage your tasks, resources, 
-                    and timelines efficiently using our comprehensive project management tools.                   </p>
+                    and timelines efficiently using our project management tools.                   </p>
                 </div>
               </div>
             </div>
@@ -486,7 +486,7 @@ const page = () => {
                   </h5>
                   <p>
                   Utilize Vaid to effortlessly monitor your work progress. 
-                  This system captures real-time data on tasks and milestones, providing you insights and analytics.</p>
+                  This system captures real-time data on tasks, providing you insights and analytics.</p>
                 </div>
               </div>
             </div>
@@ -516,7 +516,7 @@ const page = () => {
                 <p>
                 Our platform offers you the tools and flexibility needed to
                  streamline your processes, enhance team coordination, and
-                  increase operational efficiency. From volunteer management 
+                  increase operational efficiency. From HR management 
                   to event planning and resource tracking, our solution provides 
                   you with the control you need to drive your organization's success to new heights.
                   </p>
@@ -561,12 +561,12 @@ const page = () => {
                 data-aos-offset={50}
               >
                 <img
-                  src="assets/images/placeholderimage440.png"
+                  src="assets/images/440.png"
                   alt="Management"
                 />
                 <div className="management-over">
                   <img
-                    src="assets/images/placeholderimage216.png"
+                    src="assets/images/2136.png"
                     alt="Management"
                   />
                 </div>
@@ -582,7 +582,7 @@ const page = () => {
               data-aos-offset={50}
             >
               <img
-                src="assets/images/placeholderimage950.png"
+                src="assets/images/backgrounds/vaid_design_bg.png"
                 alt="Management"
               />
             </div>
@@ -784,15 +784,15 @@ const page = () => {
               className="row justify-content-center text-center"
               data-aos="fade-up"
               data-aos-duration={1000}
-              data-aos-offset={50}
+              data-aos-offset={15}
             >
               <div className="col-lg-7">
                 <div className="section-title mb-30">
-                  <h3>Have Any Question On Mind?</h3>
-                  <p>Please enter your email and get your answer</p>
+                  <h3>Suscribe to Newsletter!</h3>
+                  <p>Please enter your email and get your answer.</p>
                 </div>
                 <form className="newsletter-form style-three" action="#">
-                  <input type="email" placeholder="Email Address" required="" style={{border:'.1px solid gray !important'}}/>
+                  <input type="email" placeholder="Email Address" required="" className="input-nl"/>
                   <button type="submit">
                     Send <i className="far fa-arrow-right" />
                   </button>

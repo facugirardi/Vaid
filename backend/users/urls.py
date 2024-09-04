@@ -59,5 +59,11 @@ urlpatterns = [
     path('organization/event/guest', GuestEventsAPIView.as_view(), name='event-Guests'),
     path('donations/', DonationAPIView.as_view(), name='donation-create'),
     path('donation/detail/', DonationDetailAPIView.as_view(), name='donation-detail'),
+    path('send-email/', SendInvitationView.as_view(), name='send-email'),
     path('<int:organization_id>/history/', OrganizationHistoryView.as_view()),
+    path('organization/upload-video/', VideoUploadView.as_view(), name='upload-organization-video'),
+    path('isAdmin/', IsAdminView.as_view(), name='is-admin'),
+    path('user/<int:user_id>/unassigned-tags/', UnassignedTagsAPIView.as_view(), name='unassigned-tags'),
+    path('send-email-plat/', SendInvitationPlatView.as_view()),
+    path('organization/<int:organization_id>/all-products/', AllProductsView.as_view(), name='all-products'),
 ]

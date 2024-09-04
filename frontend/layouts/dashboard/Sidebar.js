@@ -64,7 +64,7 @@ const Sidebar = () => {
                   <li
                     className={`pc-item ${isMenuActive(item) ? "active" : ""}`}
                   >
-                    <Link
+                    <a
                       href={item.link && item.link}
                       data-page="index"
                       className="pc-link"
@@ -78,7 +78,7 @@ const Sidebar = () => {
                       ) : (
                         ""
                       )}
-                    </Link>
+                    </a>
                   </li>
                 </>
               ) : (
@@ -120,13 +120,13 @@ const Sidebar = () => {
                               }`}
                             key={key}
                           >
-                            <Link
+                            <a
                               className="pc-link"
                               href={subItem.link || "#"}
                               data-page={subItem.dataPage}
                             >
                               {subItem.label}
-                            </Link>
+                            </a>
                           </li>
                         ) : (
                           <li
@@ -134,22 +134,22 @@ const Sidebar = () => {
                               }`}
                             key={key}
                           >
-                            <Link
+                            <a
                               className="pc-link"
                               href={subItem.link || "#"}
                               data-page={subItem.dataPage}
                             >
                               aa{subItem.label}
-                            </Link>
+                            </a>
                             <ul className="pc-submenu" 
                             style={{
                               display: openMenu[item.id] ? "block" : "none"
                             }}>
                               {(subItem.submenu || []).map((childItem, key) => (
                                 <li className="pc-item" key={key}>
-                                  <Link className="pc-link" target="_blank" href="/pages/login-v1">
+                                  <a className="pc-link" target="_blank" href="/pages/login-v1">
                                     {childItem.label}
-                                  </Link></li>
+                                  </a></li>
                               ))}
                             </ul>
                           </li>

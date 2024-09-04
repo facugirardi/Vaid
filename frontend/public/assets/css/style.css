@@ -8318,8 +8318,9 @@ a.theme-btn {
       font-size: 16px; } }
   .breadcrumb .breadcrumb-item {
     padding: 0;
-    color: white;
+    color: #0d0f15;
     font-weight: 400;
+    margin-bottom: 20px;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -8330,7 +8331,7 @@ a.theme-btn {
     -ms-flex-pack: center;
     justify-content: center; }
     .breadcrumb .breadcrumb-item a {
-      color: white; }
+      color: #1a202b; }
     .breadcrumb .breadcrumb-item.active {
       text-decoration: underline;
       text-underline-offset: 3px;
@@ -8341,10 +8342,13 @@ a.theme-btn {
       -webkit-box-flex: 0;
       -ms-flex: none;
       flex: none;
-      color: white;
+      color: #1a202b;
       content: "\f105";
       font-family: "Font Awesome 5 Pro"; }
 
+      .page-header .breadcrumb .breadcrumb-item:last-child{
+        margin-top:2px;
+      }
 /*******************************************************/
 /******************* ## About Area ********************/
 /*******************************************************/

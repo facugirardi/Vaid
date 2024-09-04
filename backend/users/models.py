@@ -189,6 +189,7 @@ class EventPersonDetails(models.Model):
 class Donation(models.Model):
     description = models.CharField(max_length=255, default='General donation')
     date = models.DateField(default=timezone.now)
+    quantity = models.IntegerField(default=0)
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
 
@@ -206,8 +207,11 @@ class Operation(models.Model):
     description = models.CharField(max_length=255, default='Regular operation')
     date = models.DateField(default=timezone.now)
     time = models.TimeField(default=timezone.now)
+    quantity = models.IntegerField(default=0)
+    amount = models.IntegerField(default=0)
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    Type = models.ForeignKey(OperationType, on_delete=models.CASCADE)
+    type = models.CharField(max_length=255, default='')
+    invoice = models.FileField(upload_to='invoices/', null=True, blank=True)
 
 
 class OperationProductDetails(models.Model):
@@ -219,9 +223,11 @@ class OperationProductDetails(models.Model):
 class Video(models.Model):
     title = models.CharField(max_length=255)
     description = models.CharField(max_length=255, default='Video content')
-    url = models.CharField(max_length=255, default='http://example.com')
+    video_file = models.FileField(upload_to='videos/', null=True, blank=True)  # Nuevo campo para el archivo de video
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.title
 
 class Image(models.Model):
     image = models.ImageField(upload_to='images/')
@@ -257,3 +263,4 @@ class TaskTagDetails(models.Model):
 class Invitation(models.Model):
     Event = models.ForeignKey(Event, on_delete=models.CASCADE)
     status = models.BooleanField(default=False)
+

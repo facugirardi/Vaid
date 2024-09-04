@@ -97,7 +97,7 @@ const SocialProfile = () => {
           });
 
           if (response.status === 404) {
-            push('/not-found');
+            window.location.href = '/not-found';
             return;
           }
           if (!response.ok) {
@@ -136,7 +136,7 @@ const SocialProfile = () => {
                     {userDetails ? `${userDetails.user.first_name} ${userDetails.user.last_name}` : 'Loading...'}
                   </h5>
                   <p className="mb-0">
-                    <Link href="#" className="link-primary"></Link>
+                    <a href="#" className="link-primary"></a>
                   </p>
                 </Col>
                 <Col md={3} xl={2} xxl={2}>

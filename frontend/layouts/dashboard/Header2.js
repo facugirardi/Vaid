@@ -23,7 +23,7 @@ const Header = ({ themeMode }) => {
       <nav className="pc-sidebar pc-sidebar-hide" id="pc-sidebar-hide">
         <div className="navbar-wrapper">
           <div className="m-header">
-            <Link href="/" className="b-brand text-primary">
+            <a href="/" className="b-brand text-primary">
               {themeMode === "dark" ?
                 <Image src={logoLight} alt="logo" width={90} className="logo-lg landing-logo" />
                 :
@@ -32,7 +32,7 @@ const Header = ({ themeMode }) => {
               <span className="badge bg-brand-color-2 rounded-pill ms-2 theme-version">
                 Demo v1.0
               </span>
-            </Link>
+            </a>
           </div>
           {/* <div className="navbar-content"> */}
           <SimpleBar className="navbar-content" style={{ maxHeight: "100vh" }}>

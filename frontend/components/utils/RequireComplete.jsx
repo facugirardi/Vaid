@@ -41,7 +41,7 @@ export default function RequireComplete({ children }) {
     }, [user?.id]); 
 
     if (isCompleted === false) {
-        push('/complete/choose');
+        window.location.href = '/complete/choose';
         return null;
     }
     return isCompleted ? <>{children}</> : null;
