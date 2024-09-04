@@ -66,4 +66,6 @@ urlpatterns = [
     path('user/<int:user_id>/unassigned-tags/', UnassignedTagsAPIView.as_view(), name='unassigned-tags'),
     path('send-email-plat/', SendInvitationPlatView.as_view()),
     path('organization/<int:organization_id>/all-products/', AllProductsView.as_view(), name='all-products'),
+    path('organizations/<int:organization_id>/events/<int:event_id>/', EventDetailView.as_view(), name='event-detail'),
+    path('organizations/<int:organization_id>/tasks/<int:task_id>/', TaskDetailView.as_view(), name='task-detail'),
 ]

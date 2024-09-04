@@ -672,7 +672,7 @@ const TagModalAssign = ({ show, handleClose, handleSearch, organizationId, selec
                                     {filteredTags.map((tag) => (
                                         <tr key={tag.id} className='tr-tags tr-assigned'>
                                             <td className="text-center">{tag.name}</td>
-                                            <td className="text-center">{tag.isAdmin ? 'Administrator' : 'Member'}</td>
+                                            <td className="text-center">{tag.isAdmin ? 'Member' : 'Administrator'}</td>
                                             <td className="text-center"><i className="ti ti-user"></i> {tag.member_count}</td>
                                             <td className="text-center">
                                                 <button className="icon-button btn btn-light btn-sm mx-1" onClick={() => handleDeleteTag(tag.id)}>
