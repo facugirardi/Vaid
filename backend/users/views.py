@@ -1675,13 +1675,16 @@ class UnassignedTagsAPIView(APIView):
         # Obtener IDs de las tags asignadas al usuario
         assigned_tag_ids = PersonTagDetails.objects.filter(Person=person).values_list('Tag', flat=True)
         
-        # Obtener las tags que no están asignadas al usuario
-        unassigned_tags = Tag.objects.exclude(id__in=assigned_tag_ids).distinct()
+        if assigned_tag_ids.exists():
+            # Obtener las tags que no están asignadas al usuario si existen etiquetas asignadas
+            unassigned_tags = Tag.objects.exclude(id__in=assigned_tag_ids).distinct()
+        else:
+            # Si no hay etiquetas asignadas, obtener todas las etiquetas
+            unassigned_tags = Tag.objects.all().distinct()
 
         # Serializar y devolver las tags
         serializer = TagSerializer(unassigned_tags, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-
 
 class AllProductsView(APIView):
     permission_classes = [AllowAny]

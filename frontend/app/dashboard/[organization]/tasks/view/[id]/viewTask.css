@@ -259,6 +259,12 @@ backdrop-filter: blur(5px); /* Ajusta la cantidad de desenfoque según sea neces
   margin-top: 50px !important;
 }
 
+.title-modal-12 {
+  word-wrap: break-word !important; /* Asegura que las palabras largas se ajusten al ancho del contenedor */
+  white-space: pre-wrap !important; /* Mantiene los saltos de línea y los espacios en blanco */
+}
+
+
 @media (max-width: 575px) {
   .details-container {
     padding: 50px !important; /* Añadir padding a .details-container */
@@ -272,3 +278,4 @@ backdrop-filter: blur(5px); /* Ajusta la cantidad de desenfoque según sea neces
     width: 350px !important;
   }
 }
+

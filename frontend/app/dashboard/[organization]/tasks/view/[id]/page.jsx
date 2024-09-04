@@ -199,8 +199,10 @@ const Page = () => {
                                 />
                             </div>
                             <div className="details-container col-md-7">
-                                <p className='title2-modal'>Title</p><p class='title-modal-13'>{task.name}</p>
-                                <p className='title3-modal'>Description</p><p className='title-modal-12'>{task.description}</p>
+                                <p className='title2-modal'>Title</p>
+                                <p class='title-modal-13'>{task.name}</p>
+                                <p className='title3-modal'>Description</p>
+                                <p className='title-modal-12'>{task.description}</p>
                                 <Form.Group className='form-group-all'>
                                     <div className="row">
                                         <div className='col-md-3'>
