@@ -164,6 +164,7 @@ class OperationTypeSerializer(serializers.ModelSerializer):
 
 class OperationProductDetailsSerializer(serializers.ModelSerializer):
     product_name = serializers.CharField(source='Product.name', read_only=True)
+    
     class Meta:
         model = OperationProductDetails
         fields = ['Product', 'Operation', 'product_name']
@@ -182,7 +183,7 @@ class OperationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Operation
         fields = ['id', 'description', 'date', 'quantity', 'amount', 'type', 'Organization', 'invoice']
-
+    # Este metdo se usa para cuando creamos una operacion, se crean los detalles de la operacion AUTOMATICAMENTE y se actualiza el inventario
     # def create(self, validated_data):
     #     products_data = validated_data.pop('products')
     #     operation = Operation.objects.create(**validated_data)
@@ -215,8 +216,8 @@ class GuestSerializer(serializers.ModelSerializer):
 
 
 class DonationProductDetailsSerializer(serializers.ModelSerializer):
-    product_name = serializers.CharField(source='Product.name')
-
+    product_name = serializers.CharField(source='Product.name', read_only=True)
+    
     class Meta:
         model = DonationProductDetails
         fields = '__all__'
@@ -227,7 +228,7 @@ class DonationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Donation
         fields = ['id', 'description', 'quantity', 'date', 'Organization']
-
+    # Este metdo se usa para cuando creamos una donacion, se crean los detalles de la donacion AUTOMATICAMENTE y se actualiza el inventario
     # def create(self, validated_data):
     #     products_data = validated_data.pop('products')
     #     donation = Donation.objects.create(**validated_data)

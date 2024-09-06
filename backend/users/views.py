@@ -16,15 +16,17 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 from django.db.models import Sum
 from django.http import Http404
-from rest_framework.permissions import IsAuthenticated
 from .models import Organization, Person, Image
 from .serializers import *
 from django.shortcuts import get_object_or_404
 from django.db.models import Sum
 from django.core.mail import send_mail
-from .serializers import GuestSerializer
-from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.exceptions import ValidationError
+from django.db.models import Sum, F, Case, When, Value
+from django.db.models.functions import TruncMonth
+from django.utils import timezone
+from datetime import timedelta
+from dateutil.relativedelta import relativedelta
 
 
 class PersonOrganizationDetailsDeleteView(generics.GenericAPIView):
@@ -1231,12 +1233,6 @@ class OperationAPIView(APIView):
 
     def get(self, request, organization_id, operation_id=None):
         operation_type = request.query_params.get('type')
-        month = request.query_params.get('month')
-
-        if month:
-            operations = Operation.objects.filter(Organization_id=organization_id, date__month=month)
-            serializer = OperationSerializer(operations, many=True)
-            return Response(serializer.data)
         
         if operation_type:
             operation = get_object_or_404(Operation, Organization_id=organization_id, type=operation_type)
@@ -1467,10 +1463,10 @@ class DonationAPIView(APIView):
     def post(self, request):
         print(request.data)
         org_id = request.query_params.get('org_id')
-
+        
         if not org_id:
             return Response({'error': 'org_id is required'}, status=status.HTTP_400_BAD_REQUEST)
-
+        
         organization = get_object_or_404(Organization, id=org_id)
         data = request.data.copy()
         data['Organization'] = organization.id
@@ -1639,29 +1635,208 @@ class UnassignedTagsAPIView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 
-# En caso de querer ver el historial de compra y vent usar OperationAPIView
-# saber cunat aplata enmtro con compra/venta la diferencia, el total de palta por donaciones, filtros de fecha/cantidad/tipo de opreacion 
-class StatisticsAPIView(APIView):
+#ESTADISTICAS (suerte, la van a necesitar:D)
+
+# Filtrar donations por category y mostrar el historial de donaciones pasando por query params la ong+_id y la category
+class DonationHistoryAPIView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
         ong = request.query_params.get('ong')
+        category = request.query_params.get('category')
 
         if not ong:
             return Response({'error': 'ong is required'}, status=status.HTTP_400_BAD_REQUEST)
         
-        try:
-            #Obtener total de la donaciones de dinero
-            #Obtener la diferencia entre el total de la compras/ventas
-            #Obtener la donaciones del mes anterior y del actual
-            #Obtener las compras/ventas del mes anterior y del actual
-            #Filtrar por tipo de operacion/fecha/cantidad (Esto hacerlo en la operation view)
-            organization = Organization.objects.get(id=ong)
-            donations = Donation.objects.filter(Organization=organization)
-            serializer = DonationSerializer(donations, many=True)
+        organization = Organization.objects.get(id=ong)
 
+        if category:
+            donations_detail = DonationProductDetails.objects.filter(Donation__Organization=organization)
+            serializer = DonationProductDetailsSerializer(donations_detail, many=True).filter(Donation__Organization=organization, Donation__Category=category)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
-            return Response({}, status=status.HTTP_200_OK)
+        try: 
+            donations_detail = DonationProductDetails.objects.filter(Donation__Organization=organization)
+            serializer = DonationProductDetailsSerializer(donations_detail, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         
         except Organization.DoesNotExist:
             return Response({'error': 'Organization not found'}, status=status.HTTP_404_NOT_FOUND)
+        
+# Ver el historial de compra y venta. Putiendo filtrar por type o ordenar 
+class OperationHistoryAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        organization_id = request.query_params.get('ong')
+        operation_type = request.query_params.get('type')
+        first_operation = request.query_params.get('first') #Aca se espera recibir un TRUE en caso de que quiera que se ordene del mas viejo al mas nuevo
+
+        if not organization_id:
+            return Response({'error': 'ong is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        organization = Organization.objects.get(id=organization_id)
+
+        if first_operation:
+            operations = OperationProductDetailsSerializer.objects.filter(Operation__Organization=organization_id).order_by('-Operation__date')
+            serializer = OperationProductDetailsSerializer(operations, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        if operation_type:
+            operations = OperationProductDetailsSerializer.objects.filter(Operation__Organization=organization_id, Operation__type=operation_type)
+            serializer = OperationProductDetailsSerializer(operations, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        operations = Operation.objects.filter(Organization_id=organization_id)
+        serializer = OperationSerializer(operations, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+# Obtener total de la donaciones de dinero
+class TotalAmountDonationAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        organization_id = request.query_params.get('ong')
+        
+        if not organization_id:
+            return Response({'error': 'ong is required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        organization = Organization.objects.get(id=organization_id)
+        donations = DonationProductDetails.objects.filter(Donation__Organization=organization, Donation__Category=1)
+        total_amount = donations.aggregate(Sum('quantity'))
+        return Response(total_amount, status=status.HTTP_200_OK)
+    
+
+# Obtener la diferencia entre el total de la compras/ventas
+class TotalAmountOperationAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        organization_id = request.query_params.get('ong')
+        type = request.query_params.get('type')
+
+        if not organization_id:
+            return Response({'error': 'ong is required'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        organization = Organization.objects.get(id=organization_id)
+        operations = OperationProductDetails.objects.filter(Operation__Organization=organization)
+        
+        # Modificar el valor de 'amount' según el tipo de operación
+        operations = operations.annotate(
+            adjusted_amount=Case(
+                When(Operation__type=1, then=F('amount')),
+                When(Operation__type=2, then=F('amount') * Value(-1)),
+                default=Value(0)
+            )
+        )
+        
+        # Calcular el total
+        total_amount = operations.aggregate(total=Sum('adjusted_amount'))['total']
+
+        return Response({'total_amount': total_amount}, status=status.HTTP_200_OK)
+
+
+# Obtener la donaciones del meses anteriores anterior y del actual
+class DonationMonthAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        organization_id = request.query_params.get('ong')
+        # Obtener la fecha actual
+        current_date = timezone.now()
+
+        # Calcular la fecha de inicio para los últimos 6 meses
+        start_date = current_date - timedelta(days=6 * 30)  # Aproximadamente los últimos 6 meses
+
+        # Filtrar y agrupar las donaciones por mes
+        donations_by_month = Donation.objects.filter(
+            Organization_id=organization_id,
+            date__gte=start_date  # Solo donaciones desde los últimos 6 meses
+        ).annotate(
+            month=TruncMonth('date')  # Agrupar por mes
+        ).values('month').annotate(
+            total_quantity=Sum('quantity')  # Sumar las cantidades de las donaciones por mes
+        ).order_by('month')  # Ordenar de más antiguo a más reciente
+
+        # Generar la respuesta con los últimos 6 meses
+        data = []
+        for donation in donations_by_month:
+            current_month = donation['month']
+            previous_month = current_month - relativedelta(months=1)
+            data.append({
+                'month': donation['month'].strftime('%B'),  # Convertir el mes a un nombre legible (ej: 'Julio')
+                'total_donations': donation['total_quantity'] or 0,  # Si no hay donaciones, devolver 0
+                'month_previous': previous_month.strftime('%B'),  # Convertir el mes a un nombre legible (ej: 'Julio')
+                'total_donations_previous': donation['total_quantity'] or 0
+            })
+        print(data)
+        return Response(data)  
+    
+
+# Obtener las compras/ventas del mes anterior y del actual
+class DonationMonthAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        organization_id = request.query_params.get('ong')
+        # Obtener la fecha actual
+        current_date = timezone.now()
+
+        # Calcular la fecha de inicio para los últimos 6 meses
+        start_date = current_date - timedelta(days=6 * 30)  # Aproximadamente los últimos 6 meses
+
+        # Filtrar y agrupar las donaciones por mes
+        operations_by_month = Operation.objects.filter(
+            Organization_id=organization_id,
+            date__gte=start_date  # Solo donaciones desde los últimos 6 meses
+        ).annotate(
+            month=TruncMonth('date')  # Agrupar por mes
+        ).values('month').annotate(
+            total_quantity=Sum('quantity')  # Sumar las cantidades de las donaciones por mes
+        ).order_by('month')  # Ordenar de más antiguo a más reciente
+
+        # Generar la respuesta con los últimos 6 meses
+        data = []
+        for operation in operations_by_month:
+            current_month = operation['month']
+            previous_month = current_month - relativedelta(months=1)
+            data.append({
+                'month': operation['month'].strftime('%B'),  # Convertir el mes a un nombre legible (ej: 'Julio')
+                'total_donations': operation['total_quantity'] or 0,  # Si no hay donaciones, devolver 0
+                'month_previous': previous_month.strftime('%B'),  # Convertir el mes a un nombre legible (ej: 'Julio')
+                'total_donations_previous': operation['total_quantity'] or 0
+            })
+        print(data)
+        return Response(data)  
+    
+
+# Obtener las donaciones por categoría del ultimo mes
+class DonationCategoryAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        organization_id = request.query_params.get('ong')
+        # Obtener la fecha actual
+        current_date = timezone.now()
+
+        # Calcular la fecha de inicio para el último mes
+        start_date = current_date - timedelta(days=30)  # Aproximadamente el último mes
+
+        # Filtrar y agrupar las donaciones por categoria
+        donations_by_category = Donation.objects.filter(
+            Organization_id=organization_id,
+            Donation__date__gte=start_date  # Solo donaciones desde el último mes
+        ).values('Category__name').annotate(
+            total_quantity=Sum('quantity')  # Sumar las cantidades de las donaciones por categoria
+        ).order_by('Category__name')
+
+        # Generar la respuesta con las categorias
+        data = []
+        for donation in donations_by_category:
+            data.append({
+                'category': donation['Category__name'],
+                'total_donations': donation['total_quantity'] or 0  # Si no hay donaciones, devolver 0
+            })
+        print(data)
+        return Response(data)

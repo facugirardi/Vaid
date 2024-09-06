@@ -64,4 +64,7 @@ urlpatterns = [
     path('organization/upload-video/', VideoUploadView.as_view(), name='upload-organization-video'),
     path('isAdmin/', IsAdminView.as_view(), name='is-admin'),
     path('user/<int:user_id>/unassigned-tags/', UnassignedTagsAPIView.as_view(), name='unassigned-tags'),
+    path('organization/DonationHistory/', DonationHistoryAPIView.as_view(), name='donation-history'),
+    path('organization/OperationHistory/', OperationHistoryAPIView.as_view(), name='opedonation-product-detailsration-history'),
+    path('organization/DonationMonth/' , DonationMonthAPIView.as_view(), name='donation-month'),
 ]
