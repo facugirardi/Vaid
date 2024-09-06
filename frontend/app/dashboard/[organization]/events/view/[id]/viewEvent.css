@@ -235,3 +235,8 @@ backdrop-filter: blur(5px); /* Ajusta la cantidad de desenfoque según sea neces
 .button-add-guest{
   width: 100%;
 }
+
+
+.text-dark{
+  margin-right: 10px;
+}

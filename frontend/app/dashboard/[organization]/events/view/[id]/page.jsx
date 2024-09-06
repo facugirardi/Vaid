@@ -79,6 +79,10 @@ const Page = () => {
                                 />
                             </div>
                             <div className="details-container col-md-7">
+                            <div className="d-inline-flex align-items-center mb-10">
+                                            <span className="text-dark"> {event.state}</span>
+                                            <i className={`chat-badge ${event.state === 'Done' ? 'bg-success' : 'bg-danger'}`}></i>
+                                        </div>
                                 <p className='title2-modal'>Title</p><p className='title-modal-13'>{event.name}</p>
                                 <p className='title3-modal'>Description</p><p className='title-modal-12'>{event.description}</p>
                                 <Form.Group className='form-group-all'>
