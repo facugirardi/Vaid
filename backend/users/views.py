@@ -1722,3 +1722,29 @@ class TaskDetailView(APIView):
         task = get_object_or_404(Task, id=task_id, Organization_id=organization_id)
         serializer = TaskSerializer(task)
         return Response(serializer.data, status=200)
+
+
+class MarkTaskAsDoneView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, task_id):
+        try:
+            task = Task.objects.get(id=task_id)
+            task.state = 'Done'  # Cambia el estado de la tarea
+            task.save()
+            return Response({"message": "Task marked as done successfully"}, status=status.HTTP_200_OK)
+        except Task.DoesNotExist:
+            return Response({"error": "Task not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class MarkTaskAsPendingView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, task_id):
+        try:
+            task = Task.objects.get(id=task_id)
+            task.state = 'Pending'  # Cambia el estado de la tarea a Pending
+            task.save()
+            return Response({"message": "Task marked as pending successfully"}, status=status.HTTP_200_OK)
+        except Task.DoesNotExist:
+            return Response({"error": "Task not found"}, status=status.HTTP_404_NOT_FOUND)

@@ -121,6 +121,48 @@ const Page = () => {
         window.location.href = `http://localhost:3000/dashboard/${organizationId}/tasks/view`; // Redireccionar
     };
 
+
+    const handleMarkAsDone = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/api/tasks/${taskId}/mark-as-done/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.ok) {
+                toast.success('Task marked as done!');
+                setTask({ ...task, state: 'Done' });
+            } else {
+                toast.error('Error marking task as done');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
+    // Función para marcar la tarea como pendiente
+    const handleMarkAsPending = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/api/tasks/${taskId}/mark-as-pending/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+
+            if (response.ok) {
+                toast.success('Task marked as pending!');
+                setTask({ ...task, state: 'Pending' });
+            } else {
+                toast.error('Error marking task as pending');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+
     // Función para eliminar la tarea
     const handleDelete = async () => {
         try {
@@ -199,7 +241,13 @@ const Page = () => {
                                 />
                             </div>
                             <div className="details-container col-md-7">
-                                <p className='title2-modal'>Title</p>
+                            <div className="cover-data">
+                                        <div className="d-inline-flex align-items-center mb-10">
+                                            <span className="text-dark"> {task.state}</span>
+                                            <i className={`chat-badge ${task.state === 'Done' ? 'bg-success' : 'bg-danger'}`}></i>
+                                        </div>
+                                    </div> 
+                                <p className='title2-modal'>Title </p>
                                 <p class='title-modal-13'>{task.name}</p>
                                 <p className='title3-modal'>Description</p>
                                 <p className='title-modal-12'>{task.description}</p>
@@ -223,6 +271,7 @@ const Page = () => {
                                         </div>
                                     </div>
                                 </Form.Group>
+
                             </div>
                             <div className="d-flex justify-content-center mt-4 btn-cont-all">
                                 {isAdmin || isOrgAccount ? (
@@ -242,12 +291,21 @@ const Page = () => {
                                         {isTaken ? "Leave" : "Take"}
                                     </Button>
                                 )}
-                                <Button 
-                                    className="button-close btn-close-task mx-2" 
-                                    onClick={handleRedirect}
-                                >
-                                    Mark as Done
-                                </Button>
+                                {task.state === 'Done' ? (
+                                    <Button 
+                                        className="button-close btn-close-task mx-2" 
+                                        onClick={handleMarkAsPending}
+                                    >
+                                        Mark as Pending
+                                    </Button>
+                                ) : (
+                                    <Button 
+                                        className="button-close btn-close-task mx-2" 
+                                        onClick={handleMarkAsDone}
+                                    >
+                                        Mark as Done
+                                    </Button>
+                                )}
                             </div>
                         </div>
                     </div>
