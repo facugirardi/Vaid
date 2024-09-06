@@ -225,3 +225,13 @@ backdrop-filter: blur(5px); /* Ajusta la cantidad de desenfoque según sea neces
   padding: 50px;
   border-radius: 25px;
 }
+
+.add-guest-container{
+  border: 1px solid #dcdcdc;
+  padding: 50px;
+  border-radius: 10px;
+}
+
+.button-add-guest{
+  width: 100%;
+}

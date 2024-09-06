@@ -102,6 +102,32 @@ const Page = () => {
                                     </div>
                                 </Form.Group>
                             </div>
+                            <form>
+                            <div className='container mt-50 add-guest-container'>
+                            <h5 className="add-guest-title mb-40">Add Guest</h5>
+                            <div className='row d-flex justify-content-center'>
+                                <div className="mb-3 col-md-3">
+                                <label htmlFor="description" className="form-label">Name</label>
+                                <input type="text" className="form-control" id="name" name="name" placeholder='Add Name' required />
+                                </div>
+                                <div className="mb-3 col-md-3">
+                                <label htmlFor="quantity" className="form-label">Email</label>
+                                <input type="email" className="form-control" id="email" name="email" placeholder='Add Email' required />
+                                </div>
+                                <div className="mb-3 col-md-3">
+                                <label htmlFor="quantity" className="form-label">Role</label>
+                                <input type="text" className="form-control" id="role" name="role" placeholder='Event Role' required />
+                                </div>
+                                <div className='col-md-2 d-flex justify-content-center align-items-center'>
+                                    <Button variant="primary" type="submit" className='button-add-guest mt-10'>
+                                    Add Guest
+                                    </Button>
+                                </div>
+                                </div>
+
+                            </div>
+                            </form>
+
                         </div>
                     </div>
                 </div>

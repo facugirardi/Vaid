@@ -501,26 +501,35 @@ const Page = () => {
                                                 </form>
                                             </Tab.Pane>
                                         </Tab.Content>
-                                                          <div className="d-flex justify-content-center mt-30">
-                                                            <div className="previous me-2">
-                                                                <button
-                                                                    className={`btn btn-secondary ${key === 'tab-1' ? 'disabled' : ''}`}
-                                                                    onClick={handlePrevious}
-                                                                    disabled={key === 'tab-1'}
-                                                                >
-                                                                    Back To Previous
-                                                                </button>
-                                                            </div>
-                                                            <div className="d-flex next">
-                                                                <button
-                                                                    className="btn btn-secondary mt-3 mt-md-0"
-                                                                    onClick={handleNext}
-                                                                    disabled={key === `tab-${totalTabs}`}
-                                                                >
-                                                                    Next Step
-                                                                </button>
-                                                            </div>
-                                                        </div>
+                                        <div className="d-flex justify-content-center mt-30">
+                                            <div className="previous me-2">
+                                                <button
+                                                    className={`btn btn-secondary ${key === 'tab-1' ? 'disabled' : ''}`}
+                                                    onClick={handlePrevious}
+                                                    disabled={key === 'tab-1'}
+                                                >
+                                                    Back To Previous
+                                                </button>
+                                            </div>
+                                            <div className="d-flex next">
+                                                {key === `tab-${totalTabs}` ? (
+                                                    <button
+                                                        className="btn btn-primary mt-3 mt-md-0"
+                                                        onClick={handleSubmit} // Llama al handleSubmit en la última pestaña
+                                                    >
+                                                        Finish
+                                                    </button>
+                                                ) : (
+                                                    <button
+                                                        className="btn btn-secondary mt-3 mt-md-0"
+                                                        onClick={handleNext}
+                                                    >
+                                                        Next Step
+                                                    </button>
+                                                )}
+                                            </div>
+                                        </div>
+
 
                                     </div>
                                 </Card>
