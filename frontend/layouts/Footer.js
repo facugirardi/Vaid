@@ -22,9 +22,6 @@ const Footer3 = () => {
             <div className="col-xl-6 col-lg-7">
               <div
                 className="footer-widget widget-about"
-                data-aos="fade-up"
-                data-aos-duration={1000}
-                data-aos-offset={50}
               >
                 <div className="section-title text-white">
                   <h2>We’re Also Available On Mobile.</h2>
@@ -33,7 +30,7 @@ const Footer3 = () => {
                 <div className="footer-btns">
                   <a
                     href="/auth/signup"
-                    className="theme-btn"
+                    className="theme-btn btn-footer-ln"
                     style={{border:'.1px solid white !important'}}
                   >
                     Get Started <i className="far fa-arrow-right" />
@@ -44,10 +41,6 @@ const Footer3 = () => {
             <div className="col-lg-2 col-6 ms-lg-auto">
               <div
                 className="footer-widget widget-links"
-                data-aos="fade-up"
-                data-aos-delay={100}
-                data-aos-duration={1000}
-                data-aos-offset={50}
               >
                 <h6 className="footer-title">Links</h6>
                 <ul>
@@ -69,10 +62,7 @@ const Footer3 = () => {
             <div className="col-lg-2 col-6">
               <div
                 className="footer-widget widget-links"
-                data-aos="fade-up"
-                data-aos-delay={150}
-                data-aos-duration={1000}
-                data-aos-offset={50}
+
               >
                 <h6 className="footer-title">External Links</h6>
                 <ul>
@@ -98,9 +88,6 @@ const Footer3 = () => {
             <div className="col-xl-4 col-lg-6">
               <div
                 className="copyright-text pt-10 text-lg-start text-center"
-                data-aos="fade-left"
-                data-aos-duration={1000}
-                data-aos-offset={50}
               >
                 <p>
                   Copyright @2024, <a href="/">Vaid </a> All Rights
@@ -111,9 +98,6 @@ const Footer3 = () => {
             <div className="col-xl-8 col-lg-6">
               <div
                 className="footer-bottom-logo text-lg-end text-center"
-                data-aos="fade-right"
-                data-aos-duration={1000}
-                data-aos-offset={50}
               >
                 <a href="/">
                   <img src="/assets/images/vaidpng2.png" alt="Logo" style={{ filter: 'brightness(0) invert(1)' }}/>
@@ -121,10 +105,6 @@ const Footer3 = () => {
               </div>
             </div>
           </div>
-          {/* Scroll Top Button */}
-          <button className="scroll-top scroll-to-target" data-target="html">
-            <span className="far fa-angle-double-up" />
-          </button>
         </div>
       </div>
     </footer>

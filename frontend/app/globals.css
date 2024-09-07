@@ -18,7 +18,14 @@
   border-radius: 20px;
   border: 3.5px solid rgb(255, 255, 255);
 }
+.input-nl{
+  border: 1px solid gray !important;
+}
 
+.btn-footer-ln{
+  border: 1px solid white !important;
+
+}
 .main-menu .navbar-collapse .mobile-menu li ul {
   opacity: 1 !important;
   visibility: unset !important;
