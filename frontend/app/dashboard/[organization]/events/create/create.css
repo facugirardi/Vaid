@@ -1,4 +1,6 @@
-
+body{
+  font-family: 'Inter', sans-serif;
+}
   .image-upload {
     border: 100px;
     border-radius: 100px;

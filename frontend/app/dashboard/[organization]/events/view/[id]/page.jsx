@@ -7,6 +7,8 @@ import Image from "next/image";
 import './viewEvent.css';
 import { Button, Card, Col, Form, Row, Modal } from "react-bootstrap";
 import cover1 from "@/public/assets/images/wallpaper_event.jpg";
+import { faEye, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Page = () => {
     const [event, setEvent] = useState(null); // Cambié 'events' por 'event' porque solo buscas uno
@@ -131,6 +133,71 @@ const Page = () => {
 
                             </div>
                             </form>
+                            <div className='container table-guest-container'>
+                            <h5 className='add-guest-title mb-40'>Attendance List</h5>
+                            <div className='row d-flex justify-content-center'>
+                            <table className="table">
+                                <thead>
+                                <tr>
+                                    <th className='text-center'>ID</th>
+                                    <th className='text-center'>Name</th>
+                                    <th className='text-center'>Category</th>
+                                    <th className='text-center'>Role</th>
+                                    <th className='text-center'>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                    <td className='text-center p-donation'>1</td>
+                                    <td className='text-center p-donation'>
+                                    <Image 
+                                        src={cover1} 
+                                        alt="Emma Brown" 
+                                        style={{
+                                        width: '30px', 
+                                        height: '30px', 
+                                        borderRadius: '50%', 
+                                        marginRight: '10px',
+                                        verticalAlign: 'middle'
+                                        }} 
+                                    />
+                                    Emma Brown
+                                    </td>
+                                    <td className='text-center p-donation'>Guest</td>
+                                    <td className='text-center p-donation'>Speaker</td>
+                                    <td className='text-center p-donation'>
+                                        <button className="trash-event">
+                                        <FontAwesomeIcon icon={faTrash} className='hover-button-trash'/>
+                                        </button>
+                                    </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            </div>
+
+                            </div>
+                            <div className='container last-container'>
+                            <div className='row d-flex justify-content-center'>
+
+                            <Button 
+                                className="btn-close-task mx-2" 
+                            >
+                            Finish event
+                            </Button>
+                            <Button 
+                                className="btn-close-task3 mx-2" 
+                            >
+                                Delete
+                            </Button>
+                            <Button 
+                                className="btn-close-task2 mx-2" 
+                            >
+                                <i className="fa fa-share-alt"/>
+                            </Button>
+
+                            </div>
+
+                            </div>
 
                         </div>
                     </div>

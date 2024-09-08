@@ -6,7 +6,7 @@ import { faEye, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import './styles.css';
 import Layout from '@/layouts/dashboard/index';
 import BreadcrumbItem from '@/common/BreadcrumbItem';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, Form} from 'react-bootstrap';
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 
 const Inventory = ({ headquarterId, addHistoryEntry }) => {
@@ -252,8 +252,16 @@ const Inventory = ({ headquarterId, addHistoryEntry }) => {
                   <input type="date" className="form-control" id="expDate" name="expDate" />
                 </div>
                 <div className="mb-3 col-md-4">
-                  <label htmlFor="productType" className="form-label">Category</label>
-                  <input type="text" className="form-control" id="Category" name="Category" placeholder='Product Category' required />
+                <label htmlFor="productType" className="form-label">Category</label>
+                  <Form.Control as="select" className="form-select" id="Category" name="Category">
+                                    <option>Clothes</option>
+                                    <option>Food</option>
+                                    <option>Drinks</option>
+                                    <option>Medications</option>
+                                    <option>Tools</option>
+                                    <option>Other</option>
+                                    <option>Money</option>
+                  </Form.Control>
                 </div>
               </div>
               <div className='d-flex justify-content-center'>
