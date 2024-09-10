@@ -27,6 +27,8 @@ from django.db.models.functions import TruncMonth
 from django.utils import timezone
 from datetime import timedelta
 from dateutil.relativedelta import relativedelta
+from collections import defaultdict
+
 
 
 class PersonOrganizationDetailsDeleteView(generics.GenericAPIView):
@@ -1651,13 +1653,13 @@ class DonationHistoryAPIView(APIView):
         organization = Organization.objects.get(id=ong)
 
         if category:
-            donations_detail = DonationProductDetails.objects.filter(Donation__Organization=organization)
-            serializer = DonationProductDetailsSerializer(donations_detail, many=True).filter(Donation__Organization=organization, Donation__Category=category)
+            donations_detail = Donation.objects.filter(Organization=organization)
+            serializer = DonationSerializer(donations_detail, many=True).filter(Organization=organization, Category=category)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         try: 
-            donations_detail = DonationProductDetails.objects.filter(Donation__Organization=organization)
-            serializer = DonationProductDetailsSerializer(donations_detail, many=True)
+            donations_detail = Donation.objects.filter(Organization=organization)
+            serializer = DonationSerializer(donations_detail, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         
         except Organization.DoesNotExist:
@@ -1693,6 +1695,7 @@ class OperationHistoryAPIView(APIView):
 
 
 # Obtener total de la donaciones de dinero
+#HACE FLATA HACER QUE SEA SOLO PARA DINERO CON UN CATEGORY
 class TotalAmountDonationAPIView(APIView):
     permission_classes = [AllowAny]
 
@@ -1703,8 +1706,8 @@ class TotalAmountDonationAPIView(APIView):
             return Response({'error': 'ong is required'}, status=status.HTTP_400_BAD_REQUEST)
         
         organization = Organization.objects.get(id=organization_id)
-        donations = DonationProductDetails.objects.filter(Donation__Organization=organization, Donation__Category=1)
-        total_amount = donations.aggregate(Sum('quantity'))
+        donations = Donation.objects.filter(Organization=organization) #HACE FLATA HACER QUE SEA SOLO PARA DINERO CON UN CATEGORY
+        total_amount = donations.aggregate(Sum('amount'))
         return Response(total_amount, status=status.HTTP_200_OK)
     
 
@@ -1720,16 +1723,18 @@ class TotalAmountOperationAPIView(APIView):
             return Response({'error': 'ong is required'}, status=status.HTTP_400_BAD_REQUEST)
         
         organization = Organization.objects.get(id=organization_id)
-        operations = OperationProductDetails.objects.filter(Operation__Organization=organization)
-        
-        # Modificar el valor de 'amount' según el tipo de operación
-        operations = operations.annotate(
+        operations = Operation.objects.filter(Organization=organization).annotate(
             adjusted_amount=Case(
-                When(Operation__type=1, then=F('amount')),
-                When(Operation__type=2, then=F('amount') * Value(-1)),
-                default=Value(0)
+                # Si el tipo de operación es 'type 1' (puedes cambiar el valor según corresponda), multiplicar el amount por -1
+                When(type='Sale', then=F('amount') * Value(-1)),
+                # En los demás casos, dejar el amount sin cambios
+                default=F('amount'),
+                output_field=models.IntegerField(),
             )
         )
+
+        for operation in operations:
+            print(f'Operation ID: {operation.id}, Adjusted Amount: {operation.adjusted_amount}')
         
         # Calcular el total
         total_amount = operations.aggregate(total=Sum('adjusted_amount'))['total']
@@ -1754,10 +1759,11 @@ class DonationMonthAPIView(APIView):
             Organization_id=organization_id,
             date__gte=start_date  # Solo donaciones desde los últimos 6 meses
         ).annotate(
-            month=TruncMonth('date')  # Agrupar por mes
+            month=TruncMonth('date')  # Agrupar por mes usando la fecha de la donación
         ).values('month').annotate(
             total_quantity=Sum('quantity')  # Sumar las cantidades de las donaciones por mes
         ).order_by('month')  # Ordenar de más antiguo a más reciente
+
 
         # Generar la respuesta con los últimos 6 meses
         data = []
@@ -1770,48 +1776,69 @@ class DonationMonthAPIView(APIView):
                 'month_previous': previous_month.strftime('%B'),  # Convertir el mes a un nombre legible (ej: 'Julio')
                 'total_donations_previous': donation['total_quantity'] or 0
             })
+            print(data)
         print(data)
         return Response(data)  
     
 
 # Obtener las compras/ventas del mes anterior y del actual
-class DonationMonthAPIView(APIView):
+class OperationMonthAPIView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
         organization_id = request.query_params.get('ong')
-        # Obtener la fecha actual
-        current_date = timezone.now()
+        
+        # Verificar si se pasa un id de organización
+        if not organization_id:
+            return Response({'error': 'Organization ID is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Calcular la fecha de inicio para los últimos 6 meses
+        # Fecha actual y fecha de los últimos 6 meses
+        current_date = timezone.now()
         start_date = current_date - timedelta(days=6 * 30)  # Aproximadamente los últimos 6 meses
 
-        # Filtrar y agrupar las donaciones por mes
+        # Obtener las operaciones agrupadas por mes
         operations_by_month = Operation.objects.filter(
             Organization_id=organization_id,
-            date__gte=start_date  # Solo donaciones desde los últimos 6 meses
+            date__gte=start_date  # Solo operaciones desde los últimos 6 meses
         ).annotate(
             month=TruncMonth('date')  # Agrupar por mes
         ).values('month').annotate(
-            total_quantity=Sum('quantity')  # Sumar las cantidades de las donaciones por mes
+            total_quantity=Sum('quantity')  # Sumar las cantidades de las operaciones por mes
         ).order_by('month')  # Ordenar de más antiguo a más reciente
 
-        # Generar la respuesta con los últimos 6 meses
-        data = []
+        # Crear un diccionario para almacenar los resultados por mes
+        monthly_data = defaultdict(lambda: 0)
+
+        # Llenar el diccionario con los resultados de las operaciones por mes
         for operation in operations_by_month:
-            current_month = operation['month']
-            previous_month = current_month - relativedelta(months=1)
+            monthly_data[operation['month']] = operation['total_quantity']
+
+        # Generar la respuesta comparando el mes actual con el mes anterior
+        data = []
+        sorted_months = sorted(monthly_data.keys())  # Ordenar los meses cronológicamente
+
+        for i, current_month in enumerate(sorted_months):
+            total_current_month = monthly_data[current_month]
+            if i > 0:  # Comparar solo si no es el primer mes (porque no hay mes anterior)
+                previous_month = sorted_months[i - 1]
+                total_previous_month = monthly_data[previous_month]
+            else:
+                previous_month = None
+                total_previous_month = 0  # Si no hay mes anterior, poner 0
+
+            # Agregar los datos de este mes y el mes anterior a la respuesta
             data.append({
-                'month': operation['month'].strftime('%B'),  # Convertir el mes a un nombre legible (ej: 'Julio')
-                'total_donations': operation['total_quantity'] or 0,  # Si no hay donaciones, devolver 0
-                'month_previous': previous_month.strftime('%B'),  # Convertir el mes a un nombre legible (ej: 'Julio')
-                'total_donations_previous': operation['total_quantity'] or 0
+                'month': current_month.strftime('%B'),
+                'total_donations': total_current_month or 0,
+                'month_previous': previous_month.strftime('%B') if previous_month else 'N/A',
+                'total_donations_previous': total_previous_month or 0
             })
-        print(data)
-        return Response(data)  
+
+        return Response(data)
     
 
 # Obtener las donaciones por categoría del ultimo mes
+#HACE FALTA CREAR UN CATEGOTY EN DONATIONS
 class DonationCategoryAPIView(APIView):
     permission_classes = [AllowAny]
 
