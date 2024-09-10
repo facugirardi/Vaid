@@ -1654,7 +1654,9 @@ class DonationHistoryAPIView(APIView):
 
         if category:
             donations_detail = Donation.objects.filter(Organization=organization)
-            serializer = DonationSerializer(donations_detail, many=True).filter(Organization=organization, Category=category)
+            serializer = DonationSerializer(donations_detail, many=True).filter(Organization=organization)
+           #donations_detail = DonationProductDetail.objects.filter(Organization=organization, Product__Category = category) 
+           #serializer = DonationProductDetailSerializer(donations_detail, many=True)  
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         try: 
@@ -1706,7 +1708,8 @@ class TotalAmountDonationAPIView(APIView):
             return Response({'error': 'ong is required'}, status=status.HTTP_400_BAD_REQUEST)
         
         organization = Organization.objects.get(id=organization_id)
-        donations = Donation.objects.filter(Organization=organization) #HACE FLATA HACER QUE SEA SOLO PARA DINERO CON UN CATEGORY
+        donations = DonationProductDetails.objects.filter(Organization=organization)
+       # donations = DonationProductDetails.objects.filter(Organization=organization, Product__Category = 1) suponiendo que la categoria 1 es la de dinero
         total_amount = donations.aggregate(Sum('amount'))
         return Response(total_amount, status=status.HTTP_200_OK)
     
@@ -1851,12 +1854,12 @@ class DonationCategoryAPIView(APIView):
         start_date = current_date - timedelta(days=30)  # Aproximadamente el último mes
 
         # Filtrar y agrupar las donaciones por categoria
-        donations_by_category = Donation.objects.filter(
+        donations_by_category = DonationProductDetails.objects.filter(
             Organization_id=organization_id,
             Donation__date__gte=start_date  # Solo donaciones desde el último mes
-        ).values('Category__name').annotate(
+        ).values('Product__Category__name').annotate(
             total_quantity=Sum('quantity')  # Sumar las cantidades de las donaciones por categoria
-        ).order_by('Category__name')
+        ).order_by('Product__Category__name')
 
         # Generar la respuesta con las categorias
         data = []
