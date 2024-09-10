@@ -138,11 +138,19 @@ const Donations = () => {
               <div className='row'>
                 <div className="mb-3 col-md-4">
                   <label htmlFor="productName" className="form-label">Name</label>
-                  <input type="text" className="form-control" id="productName" name="name" placeholder='Product Name' required />
+                  <input type="text" className="form-control" id="description" name="description" placeholder='Add Name' required />
                 </div>
                 <div className="mb-3 col-md-3">
-                  <label htmlFor="productType" className="form-label">Type</label>
-                  <input type="text" className="form-control" id="Category" name="Category" placeholder='Product Type' required />
+                <label htmlFor="productType" className="form-label">Type</label>
+                  <Form.Control as="select" className="form-select" id="Category" name="Category">
+                                    <option>Clothes</option>
+                                    <option>Food</option>
+                                    <option>Drinks</option>
+                                    <option>Medications</option>
+                                    <option>Tools</option>
+                                    <option>Other</option>
+                                    <option>Money</option>
+                  </Form.Control>
                 </div>
                 <div className="mb-3 col-md-2">
                   <label htmlFor="quantity" className="form-label">Quantity / Amount</label>

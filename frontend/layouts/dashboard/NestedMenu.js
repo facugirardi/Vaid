@@ -41,7 +41,14 @@ const NestedMenu = () => {
       setMenuItems([
         { id: "home", label: "Home", icon: "ph-duotone ph-house", link: `/dashboard/${organizationId}/home`, dataPage: "home" },
         { id: "events", label: "Events", icon: "ph-duotone ph-calendar-blank", link: `/dashboard/${organizationId}/events/view`, dataPage: "events" },
-        { id: "tasks", label: "Tasks", icon: "ph-duotone ph-clipboard-text", link: `/dashboard/${organizationId}/tasks/view`, dataPage: "tasks" },
+        {
+          type: "HASHMENU", id: 1, label: "Tasks", icon: "ph-duotone ph-clipboard-text", dataPage: null, link: "#",
+          submenu: [
+            { id: "view-tasks", label: "View Tasks", icon: "ph-duotone ph-clipboard", link: `/dashboard/${organizationId}/tasks/view`, dataPage: "view-tasks" },
+            { id: "create-tasks", label: "Create Tasks", icon: "ph-duotone ph-file-plus", link: `/dashboard/${organizationId}/tasks/create`, dataPage: "create-tasks" },
+          ],
+        },
+        { id: "analytics", label: "Analytics", icon: "ph-duotone ph-chart-bar", link: `/dashboard/${organizationId}/analytics`, dataPage: "analytics" }
        ]);
     } else {
       setMenuItems([

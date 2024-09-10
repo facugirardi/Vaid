@@ -9,7 +9,7 @@ import { useLogoutMutation } from "@/redux/features/authApiSlice";
 import { logout as setLogout } from '@/redux/features/authSlice'; 
 import { useRouter } from 'next/navigation';
 import { toast } from "react-toastify";
-
+import './topbar.css'
 
 import avatar from "@/public/assets/images/user/avatar-2.jpg";
 import { useAppSelector, useAppDispatch } from '@/redux/hooks';
@@ -72,6 +72,10 @@ const TopBar = ({ handleOffcanvasToggle, changeThemeMode, toogleSidebarHide, too
     const dispatch2 = useAppDispatch();
     const [logout] = useLogoutMutation();
     const { isAuthenticated } = useAppSelector(state => state.auth);
+
+    const handleRedirect = () => {
+        window.location.href = `http://localhost:3000/dashboard/`; // Redireccionar
+    };
 
     const handleLogout = () => {
     logout()
@@ -159,13 +163,15 @@ const TopBar = ({ handleOffcanvasToggle, changeThemeMode, toogleSidebarHide, too
                                                     </div>
                                                 </li>
                                                 <li className="list-group-item">
-                                                <Dropdown.Item>
+                                                <div className="dropdown-item" onClick={handleRedirect}>
                                                         <span className="d-flex align-items-center">
                                                             <i className="ph-duotone ph-user-circle"></i>
-                                                            <a href='/dashboard'>Profile</a>
+                                                            <a>Profile</a>
                                                         </span>
-                                                    </Dropdown.Item>
-                                                    <div className="dropdown-item">
+                                                        </div>
+                                                </li>
+                                                <li className="list-group-item">
+                                                <div className="dropdown-item">
                                                         <span className="d-flex align-items-center">
                                                             <i className="ph-duotone ph-globe-hemisphere-west"></i>
                                                             <span>Languages</span>
@@ -176,15 +182,15 @@ const TopBar = ({ handleOffcanvasToggle, changeThemeMode, toogleSidebarHide, too
                                                                 <option value="2">Spain</option>
                                                             </select>
                                                         </span>
-                                                    </div>
+                                                        </div>
                                                 </li>
                                                 <li className="list-group-item">
-                                                    <Dropdown.Item>
+                                                <div className="dropdown-item" onClick={handleLogout}>
                                                         <span className="d-flex align-items-center">
                                                             <i className="ph-duotone ph-sign-out"></i>
-                                                            <a onClick={handleLogout}>Logout</a>
+                                                            <a>Logout</a>
                                                         </span>
-                                                    </Dropdown.Item>
+                                                        </div>
                                                 </li>
                                             </ul>
                                         </SimpleBar>

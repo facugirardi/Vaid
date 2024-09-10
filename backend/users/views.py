@@ -1204,8 +1204,32 @@ class CheckMembershipView(APIView):
             return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
 
 
-class  TaskParticipationView(APIView):
+class TaskParticipationView(APIView):
     permission_classes = [AllowAny]
+
+    def get(self, request):
+            person_id = request.query_params.get('person_id')
+            task_id = request.query_params.get('task_id')
+
+            if not person_id or not task_id:
+                return Response({'error': 'person_id and task_id are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+            try:
+                user = User.objects.get(id=person_id)
+                task = Task.objects.get(id=task_id)
+                person = Person.objects.get(User=user)
+
+                # Verificar si la persona ya está asignada a la tarea
+                is_taken = TaskPersonDetails.objects.filter(Person=person, Task=task).exists()
+                print(f'{person} {is_taken} {user} {task}')
+
+                return Response({'is_taken': is_taken}, status=status.HTTP_200_OK)
+
+            except Person.DoesNotExist:
+                return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
+            except Task.DoesNotExist:
+                return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
+
 
     def post(self, request):
         person_id = request.query_params.get('person_id')
@@ -1215,8 +1239,9 @@ class  TaskParticipationView(APIView):
             return Response({'error': 'person_id and task_id are required'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            person = Person.objects.get(id=person_id)
+            user = User.objects.get(id=person_id)
             task = Task.objects.get(id=task_id)
+            person = Person.objects.get(User=user)
 
             if TaskPersonDetails.objects.filter(Person=person, Task=task).exists():
                 return Response({'error': 'Person is already assigned to this task'}, status=status.HTTP_400_BAD_REQUEST)
@@ -1235,8 +1260,9 @@ class  TaskParticipationView(APIView):
         task_id = request.query_params.get('task_id')
 
         try:
-            person = Person.objects.get(id=person_id)
+            user = User.objects.get(id=person_id)
             task = Task.objects.get(id=task_id)
+            person = Person.objects.get(User=user)
 
             try:
                 task_person_details = TaskPersonDetails.objects.get(Person=person, Task=task)
@@ -1666,8 +1692,15 @@ class IsAdminView(APIView):
         user_id = request.query_params.get('user_id')
 
         try:
+            # Buscar el usuario primero
             user = User.objects.get(id=user_id)
-            tags_user = Tag.objects.filter(PersonTagDetails__Person=user, PersonTagDetails__tag__TagType=1)
+
+            # Obtener la instancia de Person relacionada con el usuario
+            person = Person.objects.get(User=user)
+
+            # Filtrar las etiquetas del usuario usando la relación persontagdetails
+            tags_user = Tag.objects.filter(persontagdetails__Person=person, isAdmin=True)  # Usar isAdmin en lugar de TagType
+
             if tags_user.exists():
                 return Response(True, status=status.HTTP_200_OK)
             return Response(False, status=status.HTTP_200_OK)
@@ -1685,9 +1718,75 @@ class UnassignedTagsAPIView(APIView):
         # Obtener IDs de las tags asignadas al usuario
         assigned_tag_ids = PersonTagDetails.objects.filter(Person=person).values_list('Tag', flat=True)
         
-        # Obtener las tags que no están asignadas al usuario
-        unassigned_tags = Tag.objects.exclude(id__in=assigned_tag_ids).distinct()
+        if assigned_tag_ids.exists():
+            # Obtener las tags que no están asignadas al usuario si existen etiquetas asignadas
+            unassigned_tags = Tag.objects.exclude(id__in=assigned_tag_ids).distinct()
+        else:
+            # Si no hay etiquetas asignadas, obtener todas las etiquetas
+            unassigned_tags = Tag.objects.all().distinct()
 
         # Serializar y devolver las tags
         serializer = MemberTagSerializer(unassigned_tags, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class AllProductsView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, organization_id):
+        # Verificamos que la organización existe
+        organization = get_object_or_404(Organization, id=organization_id)
+
+        # Obtenemos todos los IDs de inventarios asociados a la organización
+        inventory_ids = Inventory.objects.filter(Headquarter__Organization=organization).values_list('id', flat=True)
+
+        # Obtenemos los productos asociados a esos inventarios, agrupados por sede y sumando la cantidad total
+        products = Product.objects.filter(
+            productinventorydetails__Inventory_id__in=inventory_ids
+        ).annotate(total_quantity=Sum('productinventorydetails__cuantity')).distinct()
+
+        # Serializamos los productos
+        serializer = ProductSerializer(products, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class EventDetailView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, organization_id, event_id):
+        event = get_object_or_404(Event, id=event_id, Organization_id=organization_id)
+        serializer = EventSerializer(event)
+        return Response(serializer.data, status=200)
+    
+    
+class TaskDetailView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, organization_id, task_id):
+        task = get_object_or_404(Task, id=task_id, Organization_id=organization_id)
+        serializer = TaskSerializer(task)
+        return Response(serializer.data, status=200)
+
+
+class MarkTaskAsDoneView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, task_id):
+        try:
+            task = Task.objects.get(id=task_id)
+            task.state = 'Done'  # Cambia el estado de la tarea
+            task.save()
+            return Response({"message": "Task marked as done successfully"}, status=status.HTTP_200_OK)
+        except Task.DoesNotExist:
+            return Response({"error": "Task not found"}, status=status.HTTP_404_NOT_FOUND)
+
+class MarkTaskAsPendingView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, task_id):
+        try:
+            task = Task.objects.get(id=task_id)
+            task.state = 'Pending'  # Cambia el estado de la tarea a Pending
+            task.save()
+            return Response({"message": "Task marked as pending successfully"}, status=status.HTTP_200_OK)
+        except Task.DoesNotExist:
+            return Response({"error": "Task not found"}, status=status.HTTP_404_NOT_FOUND)

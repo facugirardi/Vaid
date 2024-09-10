@@ -14,10 +14,19 @@ class CandidateDetailSerializer(serializers.ModelSerializer):
     country = serializers.CharField(source='Person.country')
     user_id = serializers.CharField(source='Person.User.id')
     born_date = serializers.DateField(source='Person.born_date')
+    profession = serializers.DateField(source='Person.profession')
+    experience = serializers.DateField(source='Person.experience')
+    street_name = serializers.DateField(source='Person.street_name')
+    street_number = serializers.DateField(source='Person.street_number')
+    city = serializers.DateField(source='Person.city')
+    modality = serializers.DateField(source='Person.modality')
+    topics = serializers.DateField(source='Person.topics')
+    goals = serializers.DateField(source='Person.goals')
+    motivations = serializers.DateField(source='Person.motivations')
 
     class Meta:
         model = Candidate
-        fields = ['first_name', 'last_name', 'disponibility', 'country', 'request_date', 'user_id', 'born_date', 'interviewed', 'id']
+        fields = '__all__'
 
 class PersonSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(source='User.first_name')
