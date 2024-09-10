@@ -70,4 +70,8 @@ urlpatterns = [
     path('organizations/<int:organization_id>/tasks/<int:task_id>/', TaskDetailView.as_view(), name='task-detail'),
     path('tasks/<int:task_id>/mark-as-done/', MarkTaskAsDoneView.as_view(), name='mark-task-as-done'),
     path('tasks/<int:task_id>/mark-as-pending/', MarkTaskAsPendingView.as_view(), name='mark-task-as-pending'),
+    path('organization/event/<int:event_id>/guests/', EventGuestsAPIView.as_view(), name='event-guests'),
+    path('event/participants/', EventParticipantsAPIView.as_view(), name='event-participants'),
+    path('organization/event/guest/<int:guest_id>/', DeleteGuestView.as_view(), name='delete-guest'),
+    path('organization/event/member/<int:member_id>/', DeleteMemberView.as_view(), name='delete-member'),
 ]

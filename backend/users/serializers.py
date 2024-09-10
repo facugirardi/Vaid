@@ -150,11 +150,13 @@ class HistorySerializer(serializers.ModelSerializer):
 
 
 class EventPersonSerializer(serializers.ModelSerializer):
-    Person = PersonSerializer()
+    first_name = serializers.CharField(source='Person.User.first_name', read_only=True)
+    last_name = serializers.CharField(source='Person.User.last_name', read_only=True)
 
     class Meta:
         model = EventPersonDetails
         fields = '__all__'
+
 
 class InvitedEventSerializer(serializers.ModelSerializer):
     class Meta:

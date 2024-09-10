@@ -176,8 +176,8 @@ class EventReport(models.Model):
 
 class Guest(models.Model):
     name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
-    phone = models.CharField(max_length=255)
+    email = models.CharField(max_length=255)
+    role = models.CharField(max_length=255)
     Event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
 
