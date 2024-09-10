@@ -188,3 +188,16 @@ p.amount span {
   background-color: #fff; 
   font-size: 30px;
 }
+
+.page-header .page-header-title{
+  margin-top: -20px;
+  margin-bottom: 10px;
+}
+
+.breadcrumb-item + .breadcrumb-item{
+  padding-left: 0px !important;
+}
+
+.page-header .breadcrumb .breadcrumb-item:last-child{
+  margin-top: 0px !important;
+}
