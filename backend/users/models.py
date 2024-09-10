@@ -167,7 +167,7 @@ class Event(models.Model):
     startTtime = models.TimeField(default=timezone.now)
     endTime = models.TimeField(default=timezone.now)
     image = models.ImageField(upload_to='images/events/', null=True, blank=True)
-    state = models.CharField(max_length=255, default='without_state') 
+    state = models.CharField(max_length=255, default='without_state')
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)  
 
 
