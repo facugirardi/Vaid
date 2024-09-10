@@ -89,12 +89,13 @@ class Person(models.Model):
     street_name = models.CharField(max_length=255, blank=True, null=True)
     street_number = models.CharField(max_length=255, blank=True, null=True)
     city = models.CharField(max_length=255, blank=True, null=True)
-    available_days = models.JSONField(default=list) 
-    available_times = models.JSONField(default=list)  
+    available_days = models.JSONField(default=list)
+    available_times = models.JSONField(default=list)
     modality = models.CharField(max_length=255, blank=True, null=True)
     topics = models.CharField(max_length=255, blank=True, null=True)
     goals = models.TextField(blank=True, null=True)
     motivations = models.TextField(blank=True, null=True)
+
 
 class PersonOrganizationDetails(models.Model):
     Person = models.ForeignKey(Person, on_delete=models.CASCADE)
@@ -150,7 +151,6 @@ class Task(models.Model):
     endTime = models.TimeField(default=timezone.now)
     image = models.ImageField(upload_to='images/tasks/', null=True, blank=True)
     state = models.CharField(max_length=255, default='without_state')
-    category = models.CharField(max_length=255, default='without_category')
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE) 
 
 
@@ -168,7 +168,6 @@ class Event(models.Model):
     endTime = models.TimeField(default=timezone.now)
     image = models.ImageField(upload_to='images/events/', null=True, blank=True)
     state = models.CharField(max_length=255, default='without_state')
-    category = models.CharField(max_length=255, default='without_category')
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)  
 
 
@@ -244,9 +243,9 @@ class History(models.Model):
 
 
 class Tag(models.Model):
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, default='without_tag')
     TagType = models.ForeignKey(TagType, on_delete=models.CASCADE) 
-    Organization = models.ForeignKey(Organization, on_delete=models.CASCADE, default=1)
+    Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
 
 class PersonTagDetails(models.Model):
@@ -257,6 +256,11 @@ class PersonTagDetails(models.Model):
 class TaskTagDetails(models.Model):
     Tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
     Task = models.ForeignKey(Task, on_delete=models.CASCADE)
+
+
+class EventTagDetails(models.Model):
+    Tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
+    Event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
 
 class Invitation(models.Model):
