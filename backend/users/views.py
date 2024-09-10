@@ -628,10 +628,8 @@ class TaskListView(APIView):
         tasks = Task.objects.filter(Organization=organization)
         serializer = TaskSerializer(tasks, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
-    
-    
+
     def post(self, request, pk):
-        
         try:
             organization = Organization.objects.get(id=pk)
         except Organization.DoesNotExist:
@@ -658,7 +656,6 @@ class TaskUpdateDestroyView(APIView):
         
         serializer = TaskSerializer(task)
         return Response(serializer.data)
-        
 
     def put(self, request, pk):
         try:
@@ -675,15 +672,62 @@ class TaskUpdateDestroyView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def delete(self, request, pk):
+# Visualiza y asigna las Etiquetas que tenga la Tarea 
+class TagsOfTaskAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, task_id):
         try:
-            task = Task.objects.get(id=pk)
+            task = get_object_or_404(Task, id=task_id)
+
+            serializer = TaskSerializer(task)
+
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
         except Task.DoesNotExist:
             return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
-        
-        task.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
 
+    def post(self, request, task_id):
+        task = get_object_or_404(Task, id=task_id)
+        data = request.data.copy()
+        data['task'] = task.id
+
+        serializer = AssignTagsToTaskSerializer(data=data)
+        if serializer.is_valid():
+            tags = serializer.validated_data['tags']
+            for tag_id in tags:
+                tag = get_object_or_404(Tag, id=tag_id)
+                TaskTagDetails.objects.create(Task=task, Tag=tag)
+
+            return Response({'message': 'Tags assigned successfully'}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class DeleteTagsOfTaskAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, task_id, tag_id):
+        task = get_object_or_404(Task, id=task_id)
+
+        tag = get_object_or_404(Tag, id=tag_id)
+
+        task_tag = get_object_or_404(TaskTagDetails, Task=task, Tag=tag)
+
+        task_serializer = TaskSerializer(task)
+        tag_serializer = TagSerializer(tag)
+
+        return Response({
+            "task": task_serializer.data,
+            "tag": tag_serializer.data
+        }, status=status.HTTP_200_OK)
+
+    def delete(self, request, task_id, tag_id):
+        task = get_object_or_404(Task, id=task_id)
+        tag = get_object_or_404(Tag, id=tag_id)
+        task_tag = get_object_or_404(TaskTagDetails, Task=task, Tag=tag)
+
+        task_tag.delete()
+
+        return Response({"message": "Relation deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
 
 
 class OrganizationMembersView(APIView):
@@ -697,6 +741,7 @@ class OrganizationMembersView(APIView):
         
         serializer = PersonSerializer(members, many=True)
         return Response(serializer.data)
+
 
 class EventListView(APIView):
     permission_classes = [AllowAny]
@@ -726,7 +771,7 @@ class EventListView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+
 
 class EventUpdateDestroyView(APIView):
     permission_classes = [AllowAny]
@@ -826,7 +871,7 @@ class PersonTagsAPIView(APIView):
             tags = Tag.objects.filter(id__in=tag_ids)
 
             # Serializar las etiquetas
-            serializer = TagSerializer(tags, many=True)
+            serializer = MemberTagSerializer(tags, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Person.DoesNotExist:
             return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
@@ -1073,7 +1118,6 @@ class EventAttendanceView(APIView):
         except Event.DoesNotExist:
             return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
 
-
     def post(self, request):
         person_id = request.query_params.get('person_id')
         event_id = request.query_params.get('event_id')
@@ -1185,7 +1229,6 @@ class  TaskParticipationView(APIView):
             return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
         except Task.DoesNotExist:
             return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
-
 
     def delete(self, request):
         person_id = request.query_params.get('person_id')
@@ -1461,7 +1504,8 @@ class DonationAPIView(APIView):
             return Response(DonationSerializer(donation).data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-   
+
+
 class DonationDetailAPIView(APIView):
     permission_classes = [AllowAny]
     # Obtener, actualizar o eliminar una donación específica
@@ -1545,7 +1589,7 @@ class SendInvitationView(APIView):
 
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-       
+
 
 class SendInvitationPlatView(APIView):
     permission_classes = [AllowAny]
@@ -1613,7 +1657,7 @@ class VideoUploadView(APIView):
                 {'error': f'Error Uploading Video: {str(e)}'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
-        
+
 
 class IsAdminView(APIView):
     permission_classes = [AllowAny]
@@ -1629,7 +1673,7 @@ class IsAdminView(APIView):
             return Response(False, status=status.HTTP_200_OK)
         except User.DoesNotExist:
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
-    
+
 
 class UnassignedTagsAPIView(APIView):
     permission_classes = [AllowAny]
@@ -1645,5 +1689,5 @@ class UnassignedTagsAPIView(APIView):
         unassigned_tags = Tag.objects.exclude(id__in=assigned_tag_ids).distinct()
 
         # Serializar y devolver las tags
-        serializer = TagSerializer(unassigned_tags, many=True)
+        serializer = MemberTagSerializer(unassigned_tags, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

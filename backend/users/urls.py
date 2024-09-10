@@ -33,6 +33,8 @@ urlpatterns = [
     path('logout/', LogoutView.as_view()),
     path('organizations/<int:pk>/tasks/', TaskListView.as_view(), name='task-list'),
     path('organizations/tasks/<int:pk>', TaskUpdateDestroyView.as_view(), name='task-update-delete'),
+    path('tasks/<int:task_id>/tags/', TagsOfTaskAPIView.as_view(), name='tags-of-task'),
+    path('tasks/<int:task_id>/tags/<int:tag_id>', DeleteTagsOfTaskAPIView.as_view(), name='delete-tags-of-task'),
     path('organizations/<int:organization_id>/members/', OrganizationMembersView.as_view(), name='organization-members'),
     path('organizations/<int:pk>/events/', EventListView.as_view(), name='event-list'),
     path('organizations/events/<int:pk>', EventUpdateDestroyView.as_view(), name='event-update-delete'),
