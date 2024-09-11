@@ -672,7 +672,7 @@ class TaskUpdateDestroyView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# Visualiza y asigna las Etiquetas que tenga la Tarea 
+# Visualiza y asigna las Etiquetas que tenga la Tarea.
 class TagsOfTaskAPIView(APIView):
     permission_classes = [AllowAny]
 
@@ -702,6 +702,7 @@ class TagsOfTaskAPIView(APIView):
             return Response({'message': 'Tags assigned successfully'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+#Elimina la relacion entre Tarea y Etiqueta.
 class DeleteTagsOfTaskAPIView(APIView):
     permission_classes = [AllowAny]
 
@@ -784,7 +785,6 @@ class EventUpdateDestroyView(APIView):
         
         serializer = EventSerializer(event)
         return Response(serializer.data)
-        
 
     def put(self, request, pk):
         try:
@@ -1188,7 +1188,6 @@ class CheckMembershipView(APIView):
         user_id = request.query_params.get('person_id')
         event_id = request.query_params.get('event_id')
 
-
         try:
             person = Person.objects.get(id=user_id)
             event = Event.objects.get(id=event_id)
@@ -1208,28 +1207,27 @@ class TaskParticipationView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-            person_id = request.query_params.get('person_id')
-            task_id = request.query_params.get('task_id')
+        person_id = request.query_params.get('person_id')
+        task_id = request.query_params.get('task_id')
 
-            if not person_id or not task_id:
-                return Response({'error': 'person_id and task_id are required'}, status=status.HTTP_400_BAD_REQUEST)
+        if not person_id or not task_id:
+            return Response({'error': 'person_id and task_id are required'}, status=status.HTTP_400_BAD_REQUEST)
 
-            try:
-                user = User.objects.get(id=person_id)
-                task = Task.objects.get(id=task_id)
-                person = Person.objects.get(User=user)
+        try:
+            user = User.objects.get(id=person_id)
+            task = Task.objects.get(id=task_id)
+            person = Person.objects.get(User=user)
 
-                # Verificar si la persona ya está asignada a la tarea
-                is_taken = TaskPersonDetails.objects.filter(Person=person, Task=task).exists()
-                print(f'{person} {is_taken} {user} {task}')
+            # Verificar si la persona ya está asignada a la tarea
+            is_taken = TaskPersonDetails.objects.filter(Person=person, Task=task).exists()
+            print(f'{person} {is_taken} {user} {task}')
 
-                return Response({'is_taken': is_taken}, status=status.HTTP_200_OK)
+            return Response({'is_taken': is_taken}, status=status.HTTP_200_OK)
 
-            except Person.DoesNotExist:
-                return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
-            except Task.DoesNotExist:
-                return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
-
+        except Person.DoesNotExist:
+            return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Task.DoesNotExist:
+            return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request):
         person_id = request.query_params.get('person_id')
@@ -1246,9 +1244,15 @@ class TaskParticipationView(APIView):
             if TaskPersonDetails.objects.filter(Person=person, Task=task).exists():
                 return Response({'error': 'Person is already assigned to this task'}, status=status.HTTP_400_BAD_REQUEST)
 
-            # Crear la instancia de TaskPersonDetails
-            task_person_details = TaskPersonDetails.objects.create(Person=person, Task=task)
-            return Response({'message': 'Task taken successfully', 'task_person_details': TaskPersonDetailsSerializer(task_person_details).data}, status=status.HTTP_201_CREATED)
+            person_tags = set(PersonTagDetails.objects.filter(Person=person).values_list('Tag__name', flat=True))
+
+            task_tags = set(TaskTagDetails.objects.filter(Task=task).values_list('Tag__name', flat=True))
+
+            if 'without_tag' in task_tags or person_tags.intersection(task_tags):
+                task_person_details = TaskPersonDetails.objects.create(Person=person, Task=task)
+                return Response({'message': 'Task taken successfully', 'task_person_details': TaskPersonDetailsSerializer(task_person_details).data}, status=status.HTTP_201_CREATED)
+            else:
+                return Response({'error': 'Person does not have the required tags for this task'}, status=status.HTTP_400_BAD_REQUEST)
 
         except Person.DoesNotExist:
             return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
