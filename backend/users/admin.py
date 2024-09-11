@@ -3,6 +3,10 @@ from .models import *
 
 # Register your models here.
 
+admin.site.register(UserAccount)
+
+admin.site.register(Organization)
+
 admin.site.register(Person)
 
 admin.site.register(Task)
