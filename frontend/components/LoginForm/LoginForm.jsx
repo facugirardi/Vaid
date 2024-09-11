@@ -9,11 +9,14 @@ import { useAppDispatch } from '@/redux/hooks';
 import { toast } from 'react-toastify';
 import Spinner from '@/components/common/Spinner';
 import googleAuth from '@/utility/google-auth';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const LoginForm = () => {
     const dispatch = useAppDispatch();
     const { push } = useRouter();
     const [login, { isLoading }] = useLoginMutation();
+    const [showPassword, setShowPassword] = useState(false); // Estado para alternar la visibilidad de la contraseña
 
     const [formData, setFormData] = useState({
         email : '',
@@ -58,6 +61,11 @@ const LoginForm = () => {
             });
     }
     
+    const toggleShowPassword = () => {
+        setShowPassword(!showPassword); // Alterna la visibilidad de la contraseña
+    };
+
+
 
     return (
         <div className='wrapper'>
@@ -70,14 +78,25 @@ const LoginForm = () => {
                     <h3>Welcome!</h3>
                 </div>
 
-                <div className="input-box flex-item">
+                <div className="input-box flex-item email-box">
                     <label className='label_input'>Email</label>
                     <input onChange={onChange} value={email} name='email' type="email" placeholder='Enter your email' required />
                 </div>
 
                 <div className="input-box flex-item">
                     <label className='label_input'>Password</label>
-                    <input onChange={onChange} value={password} name='password' type="password" placeholder='Enter your password' required />
+                    <div className='password-container'>
+                    <input
+                        onChange={onChange}
+                        value={password} 
+                        name='password' 
+                        type={showPassword ? 'text' : 'password'} // Alterna entre texto y password
+                        placeholder='Enter your password' 
+                        required />
+                        <span onClick={toggleShowPassword} className='password-toggle'>
+                            <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                        </span>
+                    </div>
                 </div>
 
                 <div className="remember-forgot flex-item">

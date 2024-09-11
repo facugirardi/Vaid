@@ -74,4 +74,9 @@ urlpatterns = [
     path('event/participants/', EventParticipantsAPIView.as_view(), name='event-participants'),
     path('organization/event/guest/<int:guest_id>/', DeleteGuestView.as_view(), name='delete-guest'),
     path('organization/event/member/<int:member_id>/', DeleteMemberView.as_view(), name='delete-member'),
+    path('organization/event/<int:event_id>/', DeleteEventView.as_view(), name='delete-event'),
+    path('organization/event/<int:event_id>/finish/', FinishEventView.as_view(), name='finish-event'),
+    path('organization/event/<int:event_id>/toggle-state/', ToggleEventStateView.as_view(), name='toggle-event-state'),
+    path('event/<int:event_id>/toggle-attendance/<int:user_id>/', EventToggleAttendanceAPIView.as_view(), name='toggle_attendance'),
+    path('event/<int:event_id>/check-attendance/<int:user_id>/', CheckAttendanceAPIView.as_view(), name='check_attendance'),
 ]

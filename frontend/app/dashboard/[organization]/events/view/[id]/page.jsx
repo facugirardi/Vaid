@@ -9,8 +9,13 @@ import cover1 from "@/public/assets/images/wallpaper_event.jpg";
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toast } from "react-toastify";
+import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 
 const Page = () => {
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [isAttending, setIsAttending] = useState(false);
+    const [isOrgAccount, setIsOrgAccount] = useState(false);
+    const [userId, setUserId] = useState(null); // Estado para guardar el ID del usuario
     const [event, setEvent] = useState(null);
     const [organizationId, setOrganizationId] = useState("");
     const [eventId, setEventId] = useState("");
@@ -21,6 +26,7 @@ const Page = () => {
         email: "",
         role: ""
     }); // Estado para los nuevos datos de invitados
+    const { data: user, isError, isLoading } = useRetrieveUserQuery();
 
     // Obtener el organizationId y el eventId de la URL
     useEffect(() => {
@@ -38,6 +44,8 @@ const Page = () => {
         }
     }, []);
 
+
+    
     // Fetch del evento, miembros e invitados
     useEffect(() => {
         if (organizationId && eventId) {
@@ -83,6 +91,43 @@ const Page = () => {
 
         }
     }, [organizationId, eventId]);
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+                try {
+                    if (user.id) {
+                        const { isAdmin, isOrgAccount } = await checkUserPermissions(user.id);
+                        setIsAdmin(isAdmin);
+                        setIsOrgAccount(isOrgAccount);
+                    }
+
+                } catch (error) {
+                    console.error("Error checking permissions:", error);
+                }
+            
+        };
+
+        fetchData();
+    }, [user.id]);
+
+    const handleToggleAttendance = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/api/event/${eventId}/toggle-attendance/${user.id}/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            const data = await response.json();
+            setIsAttending(!isAttending); 
+            toast.success('Your attendance status has changed successfully!');
+        } catch (error) {
+            console.error('Error toggling attendance:', error);
+            toast.error('Error toggling attendance.');
+        }
+    };
+
 
     // Manejo de cambios en el formulario de nuevo invitado
     const handleInputChange = (e) => {
@@ -152,6 +197,49 @@ const Page = () => {
             toast.error('Error deleting guest.');
         }
     };
+
+    const handleFinishEvent = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/api/organization/event/${eventId}/finish/`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            if (response.ok) {
+                toast.success('Event finished successfully!');
+                // Actualizar el estado del evento a 'Done' en el frontend
+                setEvent({ ...event, state: 'Done' });
+            } else {
+                toast.error('Error finishing event.');
+            }
+        } catch (error) {
+            toast.error('Error finishing event.');
+        }
+    };    
+
+    const handleDeleteEvent = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/api/organization/event/${eventId}/`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            if (response.ok) {
+                toast.success('Event deleted successfully!');
+                // Redirigir o actualizar la página
+                window.location.href = `/dashboard/${organizationId}/events/view`; // Redirige a la lista de eventos
+            } else {
+                toast.error('Error deleting event.');
+            }
+        } catch (error) {
+            toast.error('Error deleting event.');
+        }
+    };
+    
     
     // Eliminar miembro
     const handleDeleteMember = async (memberId) => {
@@ -173,6 +261,98 @@ const Page = () => {
             toast.error('Error deleting member.');
         }
     };
+
+    useEffect(() => {
+        // Verificar si el usuario ya está asistiendo al evento
+        const checkAttendance = async () => {
+            if(user.id && eventId){
+
+            
+            try {
+                const response = await fetch(`http://localhost:8000/api/event/${eventId}/check-attendance/${user.id}/`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                const data = await response.json();
+                setIsAttending(data.is_attending);  // Actualizar el estado
+            } catch (error) {
+                console.error('Error checking attendance:', error);
+            }
+        }
+        };
+        checkAttendance();
+        }, [eventId, userId]);
+
+    // Cambiar el estado del evento entre 'Pending' y 'Done'
+const handleToggleEventState = async () => {
+    try {
+        const response = await fetch(`http://localhost:8000/api/organization/event/${eventId}/toggle-state/`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            toast.success(`Event state changed to ${data.state}!`);
+            // Actualizar el estado del evento en el frontend
+            setEvent({ ...event, state: data.state });
+        } else {
+            toast.error('Error changing event state.');
+        }
+    } catch (error) {
+        toast.error('Error changing event state.');
+    }
+};
+
+// Función para verificar permisos
+const checkUserPermissions = async (userId) => {
+    let isAdmin = false;
+    let isOrgAccount = false;
+
+    try {
+        // Verificar si el usuario es administrador
+        const adminResponse = await fetch(`http://localhost:8000/api/isAdmin/?user_id=${userId}`, { 
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const adminData = await adminResponse.json();
+        isAdmin = adminData;
+
+        // Verificar si el usuario pertenece a una cuenta de organización
+        const orgAccountResponse = await fetch(`http://localhost:8000/api/user/${userId}/check-usertype/`, { 
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const orgAccountData = await orgAccountResponse.json();
+        if (orgAccountData.user_type === 2) {
+            isOrgAccount = true;
+        }
+    } catch (error) {
+        console.error("Error checking user permissions:", error);
+    }
+
+    return { isAdmin, isOrgAccount };
+};
+
+useEffect(() => {
+    const fetchPermissions = async () => {
+        if (userId) {
+            const { isAdmin, isOrgAccount } = await checkUserPermissions(userId);
+            setIsAdmin(isAdmin);
+            setIsOrgAccount(isOrgAccount);
+        }
+    };
+
+    fetchPermissions();
+}, [userId]);
 
     return (
         <Layout>
@@ -217,6 +397,10 @@ const Page = () => {
                                     </div>
                                 </Form.Group>
                             </div>
+
+
+                            {isAdmin || isOrgAccount ? ( <>
+
 
                             <form onSubmit={handleAddGuest}>
                                 <div className='container mt-50 add-guest-container'>
@@ -326,14 +510,24 @@ const Page = () => {
                                     </table>
                                 </div>
                             </div>
+                            </>) : <></>}
 
                             <div className='container last-container'>
                                 <div className='row d-flex justify-content-center'>
-                                    <Button className="btn-close-task mx-2">Finish event</Button>
-                                    <Button className="btn-close-task3 mx-2">Delete</Button>
-                                    <Button className="btn-close-task2 mx-2">
-                                        <i className="fa fa-share-alt" />
-                                    </Button>
+                                {isAdmin || isOrgAccount ? (
+                                <Button className="btn-close-task mx-2" onClick={handleToggleEventState}>
+                                    {event.state === 'Done' ? 'Mark as Pending' : 'Finish Event'}
+                                </Button> ) :
+                                <Button className="btn-close-task mx-2" onClick={handleToggleAttendance}>
+                                    {isAttending ? 'Leave Event' : 'Assist'}
+                                </Button>
+                            }
+                                {isAdmin || isOrgAccount ? (
+                                <Button className="btn-close-task3 mx-2" onClick={handleDeleteEvent}>Delete</Button>
+                                ) : <></>}
+                                <Button className="btn-close-task2 mx-2">
+                                    <i className="fa fa-share-alt" />
+                                </Button>
                                 </div>
                             </div>
                         </div>

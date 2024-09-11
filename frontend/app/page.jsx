@@ -106,7 +106,7 @@ const page = () => {
           data-aos-duration={1000}
           data-aos-offset={50}
         >
-          <h4>Organizations That Trust Us</h4>
+          <h4>Organizations That Supported Us</h4>
         </div>
         <div className="client-logo-wrap logo-white">
           <div

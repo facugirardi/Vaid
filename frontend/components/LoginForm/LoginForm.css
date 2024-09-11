@@ -186,6 +186,25 @@ body{
 }
 
 
+.password-container {
+    position: relative;
+}
+
+.password-container input {
+    width: 100%;
+    padding-right: 40px; /* Espacio para el icono */
+}
+
+.password-toggle {
+    margin-top: 4px;
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+
 @media (max-width: 1200px) {
     .wrapper {
         width: 45%;

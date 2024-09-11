@@ -487,18 +487,28 @@ class UserTypeUpdate(APIView):
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
 
+class CheckAttendanceAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, event_id, user_id):
+        event = get_object_or_404(Event, id=event_id)
+        user = get_object_or_404(UserAccount, id=user_id)
+        
+        # Verificar si la persona ya está registrada como asistente
+        if EventPersonDetails.objects.filter(Event=event, Person__User=user).exists():
+            return Response({'is_attending': True}, status=200)
+        else:
+            return Response({'is_attending': False}, status=200)
 
 class CheckUserType(APIView):
-    permission_classes = [AllowAny]  
+    permission_classes = [AllowAny]
 
-    def get(self, request, *args, **kwargs):
-        user_id = kwargs.get('user_id')
+    def get(self, request, user_id, *args, **kwargs):
         try:
             user = User.objects.get(id=user_id)
             return Response({'user_type': user.user_type})
         except User.DoesNotExist:
             return Response({'error': 'User not found'}, status=404)
-
 
 class CheckCompleteView(APIView):
     permission_classes = [AllowAny]  
@@ -1824,3 +1834,62 @@ class DeleteMemberView(APIView):
             return Response({"message": "Member deleted successfully"}, status=status.HTTP_200_OK)
         except EventPersonDetails.DoesNotExist:
             return Response({"error": "Member not found"}, status=status.HTTP_404_NOT_FOUND)
+
+class DeleteEventView(APIView):
+    permission_classes = [AllowAny]
+
+    def delete(self, request, event_id, *args, **kwargs):
+        try:
+            event = Event.objects.get(id=event_id)  # Busca el evento por su ID
+            event.delete()  # Elimina el evento
+            return Response({"message": "Event deleted successfully"}, status=status.HTTP_200_OK)
+        except Event.DoesNotExist:
+            return Response({"error": "Event not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class FinishEventView(APIView):
+    permission_classes = [AllowAny]
+
+    def patch(self, request, event_id, *args, **kwargs):
+        try:
+            event = Event.objects.get(id=event_id)
+            event.state = 'Done'  # Cambiar el estado a 'Done'
+            event.save()
+            return Response({"message": "Event finished successfully"}, status=status.HTTP_200_OK)
+        except Event.DoesNotExist:
+            return Response({"error": "Event not found"}, status=status.HTTP_404_NOT_FOUND)
+
+class ToggleEventStateView(APIView):
+    permission_classes = [AllowAny]
+
+    def patch(self, request, event_id, *args, **kwargs):
+        try:
+            event = Event.objects.get(id=event_id)
+            if event.state == 'Done':
+                event.state = 'Pending'  # Cambia el estado a "Pending" si estaba "Done"
+            else:
+                event.state = 'Done'  # Cambia el estado a "Done" si estaba en otro estado
+            event.save()
+            return Response({"message": f"Event state changed to {event.state}", "state": event.state}, status=status.HTTP_200_OK)
+        except Event.DoesNotExist:
+            return Response({"error": "Event not found"}, status=status.HTTP_404_NOT_FOUND)
+
+class EventToggleAttendanceAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, event_id, user_id):
+        # Obtener el usuario y la persona correspondiente
+        user = get_object_or_404(User, id=user_id)
+        person = get_object_or_404(Person, User=user)
+        event = get_object_or_404(Event, id=event_id)
+
+        # Verificar si la persona ya está registrada en el evento
+        try:
+            event_person_detail = EventPersonDetails.objects.get(Person=person, Event=event)
+            # Si existe, significa que ya está asistiendo, entonces lo removemos (leave)
+            event_person_detail.delete()
+            return Response({"message": "User has left the event."}, status=status.HTTP_200_OK)
+        except EventPersonDetails.DoesNotExist:
+            # Si no existe, lo registramos como asistente (join)
+            EventPersonDetails.objects.create(Person=person, Event=event)
+            return Response({"message": "User is now attending the event."}, status=status.HTTP_201_CREATED)
