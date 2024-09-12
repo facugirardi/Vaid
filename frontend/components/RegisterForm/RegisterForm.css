@@ -226,6 +226,7 @@ body{
 }
 
 .password-container {
+    height: 55px;
     position: relative;
 }
 

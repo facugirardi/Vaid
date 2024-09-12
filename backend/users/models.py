@@ -264,3 +264,9 @@ class Invitation(models.Model):
     Event = models.ForeignKey(Event, on_delete=models.CASCADE)
     status = models.BooleanField(default=False)
 
+class NewsletterSubscription(models.Model):
+    email = models.EmailField(unique=True)
+    subscribed_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.email

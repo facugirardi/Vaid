@@ -7,7 +7,7 @@ urlpatterns = [
         CustomProviderAuthView.as_view(),
         name='provider-auth'
     ),
-
+    path('subscribe-newsletter/', SubscribeNewsletterView.as_view(), name='subscribe-newsletter'),
     path('person-organization-details/<int:person_id>/<int:organization_id>/delete/', PersonOrganizationDetailsDeleteView.as_view()),
     path('user/<int:user_id>/apply-org/<int:org_id>/', ApplyOrgView.as_view()),
     path('user/form/<int:user_id>/', UserFormView.as_view()),

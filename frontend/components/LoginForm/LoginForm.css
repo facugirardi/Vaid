@@ -187,6 +187,7 @@ body{
 
 
 .password-container {
+    height: 55px;
     position: relative;
 }
 
@@ -196,7 +197,7 @@ body{
 }
 
 .password-toggle {
-    margin-top: 4px;
+    margin-top: 8px;
     position: absolute;
     top: 50%;
     right: 20px;

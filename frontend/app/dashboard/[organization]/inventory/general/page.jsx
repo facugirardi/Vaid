@@ -8,6 +8,7 @@ import Layout from '@/layouts/dashboard/index';
 import BreadcrumbItem from '@/common/BreadcrumbItem';
 import { Modal, Button, Form} from 'react-bootstrap';
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
+import { toast } from "react-toastify";
 
 const Inventory = ({ headquarterId, addHistoryEntry }) => {
   const [inventory, setInventory] = useState([]);
@@ -126,8 +127,16 @@ const Inventory = ({ headquarterId, addHistoryEntry }) => {
 
     const formData = new FormData(event.target);
     let expDate = formData.get('expDate');
+    const quantity = parseInt(formData.get('quantity'));
+
+    // Verificar si la cantidad es negativa
+    if (quantity < 0) {
+        toast.error('Quantity cannot be negative.');
+        return;
+    }
+
     if (expDate === '') {
-        expDate = null; // Si la fecha está vacía, establecerla como null
+        expDate = null;  // Si la fecha está vacía, establecerla como null
     }
 
     const data = {
@@ -135,12 +144,11 @@ const Inventory = ({ headquarterId, addHistoryEntry }) => {
         Category: formData.get('Category'),
         expDate: expDate,
         Status: 1,
-        quantity: parseInt(formData.get('quantity')),
+        quantity: quantity,
         headquarter: selectedHeadquarter
     };
 
     try {
-        console.log(data)
         const response = await fetch(`http://localhost:8000/api/headquarters/${organizationId}/${selectedHeadquarter}/products/`, {
             method: 'POST',
             headers: {
@@ -151,7 +159,6 @@ const Inventory = ({ headquarterId, addHistoryEntry }) => {
 
         if (response.ok) {
             const newProduct = await response.json();
-            console.log(newProduct)
             setInventory([...inventory, newProduct]);
             addHistoryEntry(`Product "${newProduct.name}" added by ${user.first_name} ${user.last_name}`);
             setShowInventoryModal(false);

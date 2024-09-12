@@ -25,6 +25,19 @@ from django.core.mail import send_mail
 from .serializers import GuestSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
 
+class SubscribeNewsletterView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = NewsletterSubscriptionSerializer(data=request.data)
+        if serializer.is_valid():
+            email = serializer.validated_data['email']
+            subscription, created = NewsletterSubscription.objects.get_or_create(email=email)
+            if created:
+                return Response({'message': 'Subscribed successfully'}, status=status.HTTP_201_CREATED)
+            else:
+                return Response({'message': 'Email already subscribed'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class PersonOrganizationDetailsDeleteView(generics.GenericAPIView):
     permission_classes = [AllowAny]
