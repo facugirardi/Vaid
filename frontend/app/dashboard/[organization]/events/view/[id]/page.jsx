@@ -15,7 +15,6 @@ const Page = () => {
     const [isAdmin, setIsAdmin] = useState(false);
     const [isAttending, setIsAttending] = useState(false);
     const [isOrgAccount, setIsOrgAccount] = useState(false);
-    const [userId, setUserId] = useState(null); // Estado para guardar el ID del usuario
     const [event, setEvent] = useState(null);
     const [organizationId, setOrganizationId] = useState("");
     const [eventId, setEventId] = useState("");
@@ -283,7 +282,7 @@ const Page = () => {
         }
         };
         checkAttendance();
-        }, [eventId, userId]);
+        }, [eventId, user.id]);
 
     // Cambiar el estado del evento entre 'Pending' y 'Done'
 const handleToggleEventState = async () => {
@@ -344,15 +343,15 @@ const checkUserPermissions = async (userId) => {
 
 useEffect(() => {
     const fetchPermissions = async () => {
-        if (userId) {
-            const { isAdmin, isOrgAccount } = await checkUserPermissions(userId);
+        if (user.id) {
+            const { isAdmin, isOrgAccount } = await checkUserPermissions(user.id);
             setIsAdmin(isAdmin);
             setIsOrgAccount(isOrgAccount);
         }
     };
 
     fetchPermissions();
-}, [userId]);
+}, [user.id]);
 
     return (
         <Layout>

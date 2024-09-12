@@ -65,6 +65,8 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry, headquarters, setHe
 
             addHistoryEntry(`Headquarter "${selectedHeadquarter.name}" deleted by ${user.first_name} ${user.last_name}`);
             handleDeleteModalClose();
+
+
         } else {
             toast.error('Error al borrar la sede:', response.status);
         }
@@ -276,6 +278,14 @@ const Inventory = ({ headquarterId, organizationId }) => {
 
     const formData = new FormData(event.target);
     let expDate = formData.get('expDate');
+    const quantity = parseInt(formData.get('quantity'));
+
+    // Verificar si la cantidad es negativa
+    if (quantity < 0) {
+        toast.error('Quantity cannot be negative.');
+        return;
+    }
+
     if (expDate === '') {
         expDate = null;  // Si la fecha está vacía, establecerla como null
     }
@@ -286,7 +296,7 @@ const Inventory = ({ headquarterId, organizationId }) => {
         Category: formData.get('Category'), 
         expDate: expDate,
         Status: 1,
-        quantity: parseInt(formData.get('quantity')), 
+        quantity: quantity, 
     };
 
     try {
@@ -310,7 +320,7 @@ const Inventory = ({ headquarterId, organizationId }) => {
     } catch (error) {
         console.error('Error:', error);
     }
-  };
+};
 
   return (
     <div className="card product-container">

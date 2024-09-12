@@ -6,6 +6,10 @@ class ImageSerializer(serializers.ModelSerializer):
         model = Image
         fields = '__all__'
 
+class NewsletterSubscriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewsletterSubscription
+        fields = ['email']
 
 class CandidateDetailSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(source='Person.User.first_name')

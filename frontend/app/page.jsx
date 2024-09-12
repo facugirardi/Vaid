@@ -2,8 +2,9 @@
 import AkpagerAccordion from "@/components/AkpagerAccordion";
 import LandingLayout from "@/layouts/LandingLayout";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Accordion, Nav, Tab } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 const accordionItems = [
   {
@@ -45,10 +46,38 @@ const accordionItems = [
 ];
 
 const page = () => {
+  const [email, setEmail] = useState('');
+  const [active, setActive] = useState("collapse1");
+
   useEffect(() => {
     document.querySelector("body").classList.add("home-three");
   }, []);
-  const [active, setActive] = useState("collapse1");
+
+
+  const handleEmailSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('http://localhost:8000/api/subscribe-newsletter/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        toast.success(result.message);
+        setEmail(''); // Limpiar el campo después de la suscripción
+      } else {
+        const error = await response.json();
+        toast.error(error.message || 'Failed to subscribe');
+      }
+    } catch (err) {
+      toast.error('An error occurred. Please try again later.');
+    }
+  };
+
   return (
     <LandingLayout header footer bodyClass={"home-three"} onePage>
       {/* Hero area start */}
@@ -791,8 +820,15 @@ const page = () => {
                   <h3>Suscribe to Newsletter!</h3>
                   <p>Please enter your email and get your answer.</p>
                 </div>
-                <form className="newsletter-form style-three" action="#">
-                  <input type="email" placeholder="Email Address" required="" className="input-nl"/>
+                <form className="newsletter-form style-three" onSubmit={handleEmailSubmit}>
+                  <input
+                  type="email"
+                  placeholder="Email Address"
+                  required
+                  className="input-nl"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
                   <button type="submit">
                     Send <i className="far fa-arrow-right" />
                   </button>

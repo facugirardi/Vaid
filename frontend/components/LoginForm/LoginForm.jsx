@@ -80,7 +80,9 @@ const LoginForm = () => {
 
                 <div className="input-box flex-item email-box">
                     <label className='label_input'>Email</label>
+                    <div className='password-container'>
                     <input onChange={onChange} value={email} name='email' type="email" placeholder='Enter your email' required />
+                </div>
                 </div>
 
                 <div className="input-box flex-item">
