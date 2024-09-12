@@ -176,8 +176,8 @@ class EventReport(models.Model):
 
 class Guest(models.Model):
     name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
-    phone = models.CharField(max_length=255)
+    email = models.CharField(max_length=255)
+    role = models.CharField(max_length=255)
     Event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
 
@@ -264,3 +264,9 @@ class Invitation(models.Model):
     Event = models.ForeignKey(Event, on_delete=models.CASCADE)
     status = models.BooleanField(default=False)
 
+class NewsletterSubscription(models.Model):
+    email = models.EmailField(unique=True)
+    subscribed_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.email

@@ -6,6 +6,10 @@ class ImageSerializer(serializers.ModelSerializer):
         model = Image
         fields = '__all__'
 
+class NewsletterSubscriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = NewsletterSubscription
+        fields = ['email']
 
 class CandidateDetailSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(source='Person.User.first_name')
@@ -150,11 +154,13 @@ class HistorySerializer(serializers.ModelSerializer):
 
 
 class EventPersonSerializer(serializers.ModelSerializer):
-    Person = PersonSerializer()
+    first_name = serializers.CharField(source='Person.User.first_name', read_only=True)
+    last_name = serializers.CharField(source='Person.User.last_name', read_only=True)
 
     class Meta:
         model = EventPersonDetails
         fields = '__all__'
+
 
 class InvitedEventSerializer(serializers.ModelSerializer):
     class Meta:

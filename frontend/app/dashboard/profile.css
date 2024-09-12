@@ -1,3 +1,6 @@
+body{
+  font-family: 'Inter', sans-serif;
+}
 .card-header-tabs{
     margin-bottom: 0 !important;
 }
@@ -32,6 +35,12 @@
 }
 .g-2{
     margin-top: 20px !important;
+}
+.img-members{
+  margin-top: 20px;
+}
+.rounded-video{
+    border-radius: 10px;
 }
 @media (max-width: 767px) {
   .img-profile-avtar{
