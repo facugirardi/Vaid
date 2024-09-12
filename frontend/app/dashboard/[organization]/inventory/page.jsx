@@ -10,8 +10,7 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 import { toast } from "react-toastify";
 
-const Headquarters = ({ onHeadquarterClick, addHistoryEntry }) => {
-  const [headquarters, setHeadquarters] = useState([]);
+const Headquarters = ({ onHeadquarterClick, addHistoryEntry, headquarters, setHeadquarters }) => {
   const [organizationId, setOrganizationId] = useState("");
   const [showHeadquarterModal, setShowHeadquarterModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -111,25 +110,32 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry }) => {
     <div className="card">
       <h2>Headquarters</h2>
       <table className='table'>
-        <tbody>
-          {headquarters.length === 0 ? (
-            <>
-            <p className='p-inventory'>No headquarters available.<br></br><br></br>Start by adding your first headquarters using the '+' button.</p>
-            </>
-          ) : (
-            headquarters.map(hq => (
-              <tr key={hq.id} className="d-flex tr-class" onClick={() => onHeadquarterClick(hq.id)}>
-                <td className="flex-grow-1 d-flex align-items-center justify-content-start p-inventory">{hq.name}</td>
-                <td className="flex-grow-1 d-flex align-items-center justify-content-start p-inventory">{hq.address}</td>
-                <td className="d-flex align-items-center justify-content-end">
-                  <button className="edit-button trash-btn" onClick={(e) => { e.stopPropagation(); handleDeleteModalShow(hq); }}>
-                    <FontAwesomeIcon icon={faTrash} className='hover-button-trash'/>
-                  </button>
-                </td>
-              </tr>
-            ))
-          )}
-        </tbody>
+      <tbody>
+        {headquarters.length === 0 ? (
+          <>
+          <p className='p-inventory'>No headquarters available.<br></br><br></br>Start by adding your first headquarters using the '+' button.</p>
+          </>
+        ) : (
+          headquarters.map(hq => (
+            <tr
+              key={hq.id}
+              className={`d-flex tr-class ${selectedHeadquarter?.id === hq.id ? 'selected-headquarter' : ''}`}
+              onClick={() => {
+                onHeadquarterClick(hq.id);
+                setSelectedHeadquarter(hq); // Establece la sede seleccionada
+              }}
+            >
+              <td className="flex-grow-1 d-flex align-items-center justify-content-start p-inventory">{hq.name}</td>
+              <td className="flex-grow-1 d-flex align-items-center justify-content-start p-inventory">{hq.address}</td>
+              <td className="d-flex align-items-center justify-content-end">
+                <button className="edit-button trash-btn" onClick={(e) => { e.stopPropagation(); handleDeleteModalShow(hq); }}>
+                  <FontAwesomeIcon icon={faTrash} className='hover-button-trash'/>
+                </button>
+              </td>
+            </tr>
+          ))
+        )}
+      </tbody>
       </table>
       <button className="add-button" onClick={handleHeadquarterModalShow}>
         <FontAwesomeIcon icon={faPlus} className='hover-button'/>
@@ -497,6 +503,8 @@ const Page = () => {
   const [selectedHeadquarterId, setSelectedHeadquarterId] = useState(null);
   const [organizationId, setOrganizationId] = useState("");
   const [localHistory, setLocalHistory] = useState([]);
+  const [selectedHeadquarter, setSelectedHeadquarter] = useState(null);
+  const [headquarters, setHeadquarters] = useState([]); // Mover headquarters al componente Page
 
   useEffect(() => {
       const currentUrl = window.location.href;
@@ -508,10 +516,11 @@ const Page = () => {
       }
   }, []);
 
-  const handleHeadquarterClick = (id) => {
-      setSelectedHeadquarterId(id);
+  const handleHeadquarterClick = (hqId) => {
+    setSelectedHeadquarterId(hqId);
+    setSelectedHeadquarter(headquarters.find(hq => hq.id === hqId)); // Actualiza la sede seleccionada
   };
-
+  
   const addHistoryEntry = async (entry) => {
       try {
           const response = await fetch(`http://localhost:8000/api/${organizationId}/history/`, {
@@ -544,21 +553,26 @@ const Page = () => {
   };
 
   return (
-      <Layout>
-          <div className="container">
-              <BreadcrumbItem mainTitle="Resource Management" subTitle="Headquarter Inventory" />
-              <div className='row'>
-                  <div className="col-md-6">
-                      <Headquarters onHeadquarterClick={handleHeadquarterClick} addHistoryEntry={addHistoryEntry} />
-                      <History organizationId={organizationId} localHistory={localHistory} setLocalHistory={setLocalHistory} />
-                  </div>
-                  <div className="col-md-6">
-                      <Inventory headquarterId={selectedHeadquarterId} organizationId={organizationId} />
-                  </div>
-              </div>
-          </div>
-      </Layout>
-  );
+    <Layout>
+        <div className="container">
+            <BreadcrumbItem mainTitle="Resource Management" subTitle="Headquarter Inventory" />
+            <div className='row'>
+                <div className="col-md-6">
+                    <Headquarters
+                      onHeadquarterClick={handleHeadquarterClick}
+                      addHistoryEntry={addHistoryEntry}
+                      headquarters={headquarters} // Pasar headquarters como prop
+                      setHeadquarters={setHeadquarters} // Pasar la función para actualizar el estado
+                    />
+                    <History organizationId={organizationId} localHistory={localHistory} setLocalHistory={setLocalHistory} />
+                </div>
+                <div className="col-md-6">
+                    <Inventory headquarterId={selectedHeadquarterId} organizationId={organizationId} />
+                </div>
+            </div>
+        </div>
+    </Layout>
+);
 };
 
 export default Page;
