@@ -53,6 +53,7 @@ const Page = () => {
           <SocialProfile />
           {userType === 1 ? (
             <Tab.Container defaultActiveKey="friendsRequests">
+              <SocialTab />
               <Row>
                 <Tab.Content>
                   <FriendsRequest />
@@ -63,6 +64,7 @@ const Page = () => {
             </Tab.Container>
           ) : userType === 2 ? (
             <Tab.Container defaultActiveKey="friendsRequest">
+              <SocialTab />
               <Row>
                 <Tab.Content>
                   <FriendsRequest />
