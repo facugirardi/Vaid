@@ -189,6 +189,7 @@ const Inventory = ({ headquarterId, addHistoryEntry }) => {
             <thead>
               <tr>
                 <th className='text-center'>Name</th>
+                <th className='text-center'>quantity</th>
                 <th className='text-center'>Expiration Date</th>
                 <th className='text-center'>Category</th>
                 <th className='text-center'>Status</th>
@@ -199,6 +200,7 @@ const Inventory = ({ headquarterId, addHistoryEntry }) => {
               {inventory.map(item => (
                 <tr key={item.id}>
                   <td className='text-center'>{item.name}</td>
+                  <td className='text-center'>{item.total_quantity}</td>
                   <td className='text-center'>{item.expDate ? item.expDate : '-'}</td>
                   <td className='text-center'>{item.category_name}</td>
                   <td className='text-center'>{item.status_name}</td>
