@@ -202,7 +202,7 @@ const handleSubmit = async (event) => {
                             <Form.Group>
                                 <Form.Label className="form-label-2">Category</Form.Label>
                                 <Form.Control as="select" className="form-select" name="category" value={formData.category} onChange={handleChange}>
-                                    <option>a</option>
+                                    <option>Select an option.</option>
                                     <option>b</option>
                                     <option>c</option>
                                 </Form.Control>
