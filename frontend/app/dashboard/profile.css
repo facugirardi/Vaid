@@ -25,6 +25,12 @@ body{
     margin-right: 0px !important;
 }
 }
+.img-members{
+  margin-top: 20px;
+}
+.rounded-video{
+    border-radius: 10px;
+}
 @media (max-width: 767px) {
   .img-profile-avtar{
     height: 77px !important;

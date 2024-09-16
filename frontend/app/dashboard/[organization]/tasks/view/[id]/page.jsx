@@ -102,7 +102,8 @@ const Page = () => {
                     }
                 });
                 if (response.ok) {
-                    setIsTaken(true); // Si el backend devuelve que la tarea está tomada, actualizar el estado.
+                    const data = await response.json();
+                    setIsTaken(data.is_taken); // Si el backend devuelve que la tarea está tomada, actualizar el estado.
                 }
             } catch (error) {
                 console.error("Error checking task participation:", error);
