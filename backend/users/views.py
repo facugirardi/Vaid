@@ -1241,11 +1241,11 @@ class TaskParticipationView(APIView):
             task = Task.objects.get(id=task_id)
             person = Person.objects.get(User=user)
 
-                # Verificar si la persona ya está asignada a la tarea
-                is_taken = TaskPersonDetails.objects.filter(Person=person, Task=task).exists()
-                print(f'{person} {is_taken} {user} {task}')
-                
-                return Response({'is_taken': is_taken}, status=status.HTTP_200_OK)
+            # Verificar si la persona ya está asignada a la tarea
+            is_taken = TaskPersonDetails.objects.filter(Person=person, Task=task).exists()
+            print(f'{person} {is_taken} {user} {task}')
+            
+            return Response({'is_taken': is_taken}, status=status.HTTP_200_OK)
 
         except Person.DoesNotExist:
             return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
