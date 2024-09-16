@@ -345,18 +345,40 @@ const Inventory = ({ headquarterId, organizationId }) => {
               <tr>
                 <th className='text-center'>Name</th>
                 <th className='text-center'>Units</th>
-                <th className='text-center'>Category</th>
                 <th className='text-center'>Status</th>
+                <th className='text-center'>Category</th>
                 <th className='text-center'>Actions</th>
               </tr>
             </thead>
             <tbody>
               {inventory.map(item => (
                 <tr key={item.id}>
-                  <td className='text-center p-inventory'>{item.Product.name}</td>
+                  <td className='text-center p-inventory'><b>{item.Product.name}</b></td>
                   <td className='text-center '>{item.cuantity}</td>
-                  <td className='text-center p-inventory'>{item.Product.category_name}</td>
-                  <td className='text-center p-inventory'>{item.Product.status_name}</td>
+                  <td className='text-center p-inventory'><b>{item.Product.status_name}</b></td>
+                  <td
+                    className="text-center p-donation"
+                    style={{
+                      color:
+                        item.Product.category_name === "Food"
+                          ? "#795548"
+                          : item.Product.category_name === "Tools"
+                          ? "#2196F3"
+                          : item.Product.category_name === "Drinks"
+                          ? "#FF9800"
+                          : item.Product.category_name === "Money"
+                          ? "#2BC155"
+                          : item.Product.category_name === "Other"
+                          ? "#9E9E9E"
+                          : item.Product.category_name === "Medications"
+                          ? "#FF3E3E"
+                          : item.Product.category_name === "Clothes"
+                          ? "#9C27B0"
+                          : "inherit", // Color por defecto si no coincide ningún caso
+                    }}
+                  >
+                    {item.Product.category_name}
+                  </td>
                   <td className='text-center'>
                     <button className="icon-button" onClick={() => handleProductModalShow(item.Product)}>
                       <FontAwesomeIcon icon={faEye} className='hover-button'/>

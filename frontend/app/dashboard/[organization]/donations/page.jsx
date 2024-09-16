@@ -125,7 +125,7 @@ const Donations = () => {
                 <th className='text-center'>Description</th>
                 <th className='text-center'>Units</th>
                 <th className='text-center'>Date</th>
-                <th className='text-center'>Type</th>
+                <th className='text-center'>Category</th>
                 <th className='text-center'>Actions</th>
               </tr>
             </thead>
