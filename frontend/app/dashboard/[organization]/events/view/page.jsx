@@ -7,13 +7,49 @@ import Image from "next/image";
 import './viewEvent.css';
 import { Button, Card, Col, Form, Row, Modal } from "react-bootstrap";
 import cover1 from "@/public/assets/images/wallpaper_event.jpg";
+import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 
 const Page = () => {
     const [events, setEvents] = useState([]);
     const [organizationId, setOrganizationId] = useState("");
     const [showModal, setShowModal] = useState(false);
     const [selectedEvent, setSelectedEvent] = useState(null);
-
+    const [isAdmin, setIsAdmin] = useState(false);
+    const [isOrgAccount, setIsOrgAccount] = useState(false);
+    const { data: user, isError, isLoading } = useRetrieveUserQuery();
+    const checkUserPermissions = async (userId) => {
+        let isAdmin = false;
+        let isOrgAccount = false;
+    
+        try {
+            // Verificar si el usuario es administrador
+            const adminResponse = await fetch(`http://localhost:8000/api/isAdmin/?user_id=${userId}`, { 
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const adminData = await adminResponse.json();
+            isAdmin = adminData;
+    
+            // Verificar si el usuario pertenece a una cuenta de organización
+            const orgAccountResponse = await fetch(`http://localhost:8000/api/user/${userId}/check-usertype/`, { 
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const orgAccountData = await orgAccountResponse.json();
+            if (orgAccountData.user_type === 2) {
+                isOrgAccount = true;
+            }
+        } catch (error) {
+            console.error("Error checking user permissions:", error);
+        }
+    
+        return { isAdmin, isOrgAccount };
+    };
+    
     useEffect(() => {
         const currentUrl = window.location.href;
         const url = new URL(currentUrl);
@@ -23,6 +59,26 @@ const Page = () => {
             setOrganizationId(pathSegments[dashboardIndex + 1]);
         }
     }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+                try {
+                    if (user.id) {
+                        const { isAdmin, isOrgAccount } = await checkUserPermissions(user.id);
+                        setIsAdmin(isAdmin);
+                        setIsOrgAccount(isOrgAccount);
+                        console.log("isAdmin", isAdmin);
+                        console.log("isOrgAccount", isOrgAccount);
+                    }
+
+                } catch (error) {
+                    console.error("Error checking permissions:", error);
+                }
+            
+        };
+
+        fetchData();
+    }, [user.id]);
 
     useEffect(() => {
         if (organizationId) {
@@ -59,14 +115,19 @@ const Page = () => {
         <Layout>
             <div className="header">
                 <BreadcrumbItem mainTitle="Events" subTitle="View Events" />
+                {isAdmin || isOrgAccount ? (
                 <button className="button-add-task" onClick={() => window.location.href = `/dashboard/${organizationId}/events/create`}>
                     add <i className='ph-duotone ph-plus-circle plus-icon'></i>
-                </button>
+                </button>) : <></>}
             </div>
             <Row>
                 {events.length === 0 ? (
                     <div className="no-events-message">
+                        {isAdmin || isOrgAccount ? (
                         <p className="p-history">No events available. Start by adding your first event using the 'add' button.</p>
+                    ) : 
+                    <p className="p-history">No events available.</p>
+                }
                     </div>
                 ) : (
                     events.map((item, index) => (
@@ -104,7 +165,7 @@ const Page = () => {
                                         </Form.Group>
                                     </div>
                                     <div className="saprator my-2">
-                                        <span className='ver-mas' onClick={() => handleShowModal(item)}>view more</span>
+                                    <span className='ver-mas' onClick={() => window.location.href = `http://localhost:3000/dashboard/${organizationId}/events/view/${item.id}`}>view more</span>
                                     </div>
                                 </Card.Body>
                             </Card>
@@ -160,11 +221,6 @@ const Page = () => {
                         </div>
                     )}
                 </Modal.Body>
-                <Modal.Footer className='d-flex justify-content-center'>
-                    <button className="button-close" onClick={handleCloseModal}>
-                        Close
-                    </button>
-                </Modal.Footer>
             </Modal>
         </Layout>
     );

@@ -25,6 +25,19 @@ from django.core.mail import send_mail
 from .serializers import GuestSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
 
+class SubscribeNewsletterView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request):
+        serializer = NewsletterSubscriptionSerializer(data=request.data)
+        if serializer.is_valid():
+            email = serializer.validated_data['email']
+            subscription, created = NewsletterSubscription.objects.get_or_create(email=email)
+            if created:
+                return Response({'message': 'Subscribed successfully'}, status=status.HTTP_201_CREATED)
+            else:
+                return Response({'message': 'Email already subscribed'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class PersonOrganizationDetailsDeleteView(generics.GenericAPIView):
     permission_classes = [AllowAny]
@@ -487,18 +500,28 @@ class UserTypeUpdate(APIView):
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
 
+class CheckAttendanceAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, event_id, user_id):
+        event = get_object_or_404(Event, id=event_id)
+        user = get_object_or_404(UserAccount, id=user_id)
+        
+        # Verificar si la persona ya está registrada como asistente
+        if EventPersonDetails.objects.filter(Event=event, Person__User=user).exists():
+            return Response({'is_attending': True}, status=200)
+        else:
+            return Response({'is_attending': False}, status=200)
 
 class CheckUserType(APIView):
-    permission_classes = [AllowAny]  
+    permission_classes = [AllowAny]
 
-    def get(self, request, *args, **kwargs):
-        user_id = kwargs.get('user_id')
+    def get(self, request, user_id, *args, **kwargs):
         try:
             user = User.objects.get(id=user_id)
             return Response({'user_type': user.user_type})
         except User.DoesNotExist:
             return Response({'error': 'User not found'}, status=404)
-
 
 class CheckCompleteView(APIView):
     permission_classes = [AllowAny]  
@@ -1160,8 +1183,32 @@ class CheckMembershipView(APIView):
             return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
 
 
-class  TaskParticipationView(APIView):
+class TaskParticipationView(APIView):
     permission_classes = [AllowAny]
+
+    def get(self, request):
+            person_id = request.query_params.get('person_id')
+            task_id = request.query_params.get('task_id')
+
+            if not person_id or not task_id:
+                return Response({'error': 'person_id and task_id are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+            try:
+                user = User.objects.get(id=person_id)
+                task = Task.objects.get(id=task_id)
+                person = Person.objects.get(User=user)
+
+                # Verificar si la persona ya está asignada a la tarea
+                is_taken = TaskPersonDetails.objects.filter(Person=person, Task=task).exists()
+                print(f'{person} {is_taken} {user} {task}')
+                
+                return Response({'is_taken': is_taken}, status=status.HTTP_200_OK)
+
+            except Person.DoesNotExist:
+                return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
+            except Task.DoesNotExist:
+                return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
+
 
     def post(self, request):
         person_id = request.query_params.get('person_id')
@@ -1171,8 +1218,9 @@ class  TaskParticipationView(APIView):
             return Response({'error': 'person_id and task_id are required'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            person = Person.objects.get(id=person_id)
+            user = User.objects.get(id=person_id)
             task = Task.objects.get(id=task_id)
+            person = Person.objects.get(User=user)
 
             if TaskPersonDetails.objects.filter(Person=person, Task=task).exists():
                 return Response({'error': 'Person is already assigned to this task'}, status=status.HTTP_400_BAD_REQUEST)
@@ -1186,14 +1234,14 @@ class  TaskParticipationView(APIView):
         except Task.DoesNotExist:
             return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
 
-
     def delete(self, request):
         person_id = request.query_params.get('person_id')
         task_id = request.query_params.get('task_id')
 
         try:
-            person = Person.objects.get(id=person_id)
+            user = User.objects.get(id=person_id)
             task = Task.objects.get(id=task_id)
+            person = Person.objects.get(User=user)
 
             try:
                 task_person_details = TaskPersonDetails.objects.get(Person=person, Task=task)
@@ -1382,23 +1430,41 @@ class GuestEventsAPIView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        event_id = request.query_params.get('event_id')
+        print(request.data)
+        event_id = request.data.get('event_id')
+        print(f"Received event_id: {event_id}")
 
         if not event_id:
             return Response({'error': 'event_id is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        request.data['Event'] = event_id
         try:
             event = Event.objects.get(id=event_id)
+            print(f"Event found: {event}")
 
-            serializers = GuestSerializer(data=request.data)
-            if serializers.is_valid():
-                guest = serializers.save(Event=event)
+            # Excluye 'Event' de los datos que se pasarán al serializador, ya que lo estamos manejando manualmente
+            guest_data = {
+                'name': request.data.get('name'),
+                'email': request.data.get('email'),
+                'role': request.data.get('role'),
+                'Event': event_id 
+            }
+            print(f"Guest data: {guest_data}")
+
+            # Crea el invitado sin pasar el campo 'Event'
+            serializer = GuestSerializer(data=guest_data)
+
+            if serializer.is_valid():
+                guest = serializer.save(Event=event)
+                print(f"Guest added!")
                 return Response({'message': 'Guest added successfully', 'guest': GuestSerializer(guest).data}, status=status.HTTP_201_CREATED)
-            return Response(serializers.errors, status=status.HTTP_400_BAD_REQUEST)
+
+            # Si el serializador no es válido, imprimir los errores
+            print(serializer.errors)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
         except Event.DoesNotExist:
             return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
+
         
     def delete(self, request):
         guest_id = request.query_params.get('guest_id')
@@ -1622,13 +1688,22 @@ class IsAdminView(APIView):
         user_id = request.query_params.get('user_id')
 
         try:
+            # Buscar el usuario primero
             user = User.objects.get(id=user_id)
-            tags_user = Tag.objects.filter(PersonTagDetails__Person=user, PersonTagDetails__tag__TagType=1)
+
+            # Obtener la instancia de Person relacionada con el usuario
+            person = Person.objects.get(User=user)
+
+            # Filtrar las etiquetas del usuario usando la relación persontagdetails
+            tags_user = Tag.objects.filter(persontagdetails__Person=person, isAdmin=True)  # Usar isAdmin en lugar de TagType
+
             if tags_user.exists():
                 return Response(True, status=status.HTTP_200_OK)
             return Response(False, status=status.HTTP_200_OK)
         except User.DoesNotExist:
             return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Person.DoesNotExist:
+            return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
     
 
 class UnassignedTagsAPIView(APIView):
@@ -1641,9 +1716,193 @@ class UnassignedTagsAPIView(APIView):
         # Obtener IDs de las tags asignadas al usuario
         assigned_tag_ids = PersonTagDetails.objects.filter(Person=person).values_list('Tag', flat=True)
         
-        # Obtener las tags que no están asignadas al usuario
-        unassigned_tags = Tag.objects.exclude(id__in=assigned_tag_ids).distinct()
+        if assigned_tag_ids.exists():
+            # Obtener las tags que no están asignadas al usuario si existen etiquetas asignadas
+            unassigned_tags = Tag.objects.exclude(id__in=assigned_tag_ids).distinct()
+        else:
+            # Si no hay etiquetas asignadas, obtener todas las etiquetas
+            unassigned_tags = Tag.objects.all().distinct()
 
         # Serializar y devolver las tags
         serializer = TagSerializer(unassigned_tags, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+class AllProductsView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, organization_id):
+        # Verificamos que la organización existe
+        organization = get_object_or_404(Organization, id=organization_id)
+
+        # Obtenemos todos los IDs de inventarios asociados a la organización
+        inventory_ids = Inventory.objects.filter(Headquarter__Organization=organization).values_list('id', flat=True)
+
+        # Obtenemos los productos asociados a esos inventarios, agrupados por sede y sumando la cantidad total
+        products = Product.objects.filter(
+            productinventorydetails__Inventory_id__in=inventory_ids
+        ).annotate(total_quantity=Sum('productinventorydetails__cuantity')).distinct()
+
+        # Serializamos los productos
+        serializer = ProductSerializer(products, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+class EventDetailView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, organization_id, event_id):
+        event = get_object_or_404(Event, id=event_id, Organization_id=organization_id)
+        serializer = EventSerializer(event)
+        return Response(serializer.data, status=200)
+    
+    
+class TaskDetailView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, organization_id, task_id):
+        task = get_object_or_404(Task, id=task_id, Organization_id=organization_id)
+        serializer = TaskSerializer(task)
+        return Response(serializer.data, status=200)
+
+
+class MarkTaskAsDoneView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, task_id):
+        try:
+            task = Task.objects.get(id=task_id)
+            task.state = 'Done'  # Cambia el estado de la tarea
+            task.save()
+            return Response({"message": "Task marked as done successfully"}, status=status.HTTP_200_OK)
+        except Task.DoesNotExist:
+            return Response({"error": "Task not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class MarkTaskAsPendingView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, task_id):
+        try:
+            task = Task.objects.get(id=task_id)
+            task.state = 'Pending'  # Cambia el estado de la tarea a Pending
+            task.save()
+            return Response({"message": "Task marked as pending successfully"}, status=status.HTTP_200_OK)
+        except Task.DoesNotExist:
+            return Response({"error": "Task not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class EventGuestsAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, event_id):
+        try:
+            # Obtén los invitados del evento por el ID del evento
+            guests = Guest.objects.filter(Event_id=event_id)
+            serializer = GuestSerializer(guests, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Guest.DoesNotExist:
+            return Response({'error': 'No guests found for this event.'}, status=status.HTTP_404_NOT_FOUND)
+
+
+class EventParticipantsAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        event_id = request.query_params.get('event_id')
+        if not event_id:
+            return Response({'error': 'event_id is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Obtener todas las relaciones de personas para el evento
+        event_person_details = EventPersonDetails.objects.filter(Event_id=event_id)
+
+        if not event_person_details.exists():
+            return Response({'error': 'No participants found for this event.'}, status=status.HTTP_404_NOT_FOUND)
+
+        # Obtener las personas relacionadas con el evento
+        persons = [details.Person for details in event_person_details]
+
+        # Serializar los datos de las personas
+        serialized_persons = PersonSerializer(persons, many=True).data
+
+        return Response(serialized_persons, status=status.HTTP_200_OK)
+
+class DeleteGuestView(APIView):
+    permission_classes = [AllowAny]
+
+    def delete(self, request, guest_id, *args, **kwargs):
+        try:
+            guest = Guest.objects.get(id=guest_id)  # Asegúrate de usar el modelo 'Guest'
+            guest.delete()
+            return Response({"message": "Guest deleted successfully"}, status=status.HTTP_200_OK)
+        except Guest.DoesNotExist:
+            return Response({"error": "Guest not found"}, status=status.HTTP_404_NOT_FOUND)
+
+class DeleteMemberView(APIView):
+    permission_classes = [AllowAny]
+
+    def delete(self, request, member_id, *args, **kwargs):
+        try:
+            member = EventPersonDetails.objects.get(id=member_id)
+            member.delete()
+            return Response({"message": "Member deleted successfully"}, status=status.HTTP_200_OK)
+        except EventPersonDetails.DoesNotExist:
+            return Response({"error": "Member not found"}, status=status.HTTP_404_NOT_FOUND)
+
+class DeleteEventView(APIView):
+    permission_classes = [AllowAny]
+
+    def delete(self, request, event_id, *args, **kwargs):
+        try:
+            event = Event.objects.get(id=event_id)  # Busca el evento por su ID
+            event.delete()  # Elimina el evento
+            return Response({"message": "Event deleted successfully"}, status=status.HTTP_200_OK)
+        except Event.DoesNotExist:
+            return Response({"error": "Event not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class FinishEventView(APIView):
+    permission_classes = [AllowAny]
+
+    def patch(self, request, event_id, *args, **kwargs):
+        try:
+            event = Event.objects.get(id=event_id)
+            event.state = 'Done'  # Cambiar el estado a 'Done'
+            event.save()
+            return Response({"message": "Event finished successfully"}, status=status.HTTP_200_OK)
+        except Event.DoesNotExist:
+            return Response({"error": "Event not found"}, status=status.HTTP_404_NOT_FOUND)
+
+class ToggleEventStateView(APIView):
+    permission_classes = [AllowAny]
+
+    def patch(self, request, event_id, *args, **kwargs):
+        try:
+            event = Event.objects.get(id=event_id)
+            if event.state == 'Done':
+                event.state = 'Pending'  # Cambia el estado a "Pending" si estaba "Done"
+            else:
+                event.state = 'Done'  # Cambia el estado a "Done" si estaba en otro estado
+            event.save()
+            return Response({"message": f"Event state changed to {event.state}", "state": event.state}, status=status.HTTP_200_OK)
+        except Event.DoesNotExist:
+            return Response({"error": "Event not found"}, status=status.HTTP_404_NOT_FOUND)
+
+class EventToggleAttendanceAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, event_id, user_id):
+        # Obtener el usuario y la persona correspondiente
+        user = get_object_or_404(User, id=user_id)
+        person = get_object_or_404(Person, User=user)
+        event = get_object_or_404(Event, id=event_id)
+
+        # Verificar si la persona ya está registrada en el evento
+        try:
+            event_person_detail = EventPersonDetails.objects.get(Person=person, Event=event)
+            # Si existe, significa que ya está asistiendo, entonces lo removemos (leave)
+            event_person_detail.delete()
+            return Response({"message": "User has left the event."}, status=status.HTTP_200_OK)
+        except EventPersonDetails.DoesNotExist:
+            # Si no existe, lo registramos como asistente (join)
+            EventPersonDetails.objects.create(Person=person, Event=event)
+            return Response({"message": "User is now attending the event."}, status=status.HTTP_201_CREATED)

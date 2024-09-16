@@ -18,7 +18,14 @@
   border-radius: 20px;
   border: 3.5px solid rgb(255, 255, 255);
 }
+.input-nl{
+  border: 1px solid gray !important;
+}
 
+.btn-footer-ln{
+  border: 1px solid white !important;
+
+}
 .main-menu .navbar-collapse .mobile-menu li ul {
   opacity: 1 !important;
   visibility: unset !important;
@@ -180,4 +187,17 @@ p.amount span {
 .close{
   background-color: #fff; 
   font-size: 30px;
+}
+
+.page-header .page-header-title{
+  margin-top: -20px;
+  margin-bottom: 10px;
+}
+
+.breadcrumb-item + .breadcrumb-item{
+  padding-left: 0px !important;
+}
+
+.page-header .breadcrumb .breadcrumb-item:last-child{
+  margin-top: 0px !important;
 }

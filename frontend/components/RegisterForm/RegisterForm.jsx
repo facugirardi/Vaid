@@ -7,10 +7,13 @@ import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
 import Spinner from '@/components/common/Spinner';
 import googleAuth from '@/utility/google-auth';
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const RegisterForm = () => {
     const { push } = useRouter();
     const [register, { isLoading }] = useRegisterMutation();
+    const [showPassword, setShowPassword] = useState(false); // Estado para alternar la visibilidad de la contraseña
 
     const [formData, setFormData] = useState({
         first_name : '',
@@ -64,6 +67,10 @@ const RegisterForm = () => {
             })
     }
 
+    const toggleShowPassword = () => {
+        setShowPassword(!showPassword); // Alterna la visibilidad de la contraseña
+    };
+
 
 
     return (
@@ -76,30 +83,49 @@ const RegisterForm = () => {
                 <div className="cont-sm input-box flex-item">
                     <div className='sm-input'>
                         <label htmlFor='first_name' className='label_input'>First Name</label>
+                        <div className='password-container'>
+
                         <input onChange={onChange} value={first_name} name='first_name' type="text" placeholder='First Name' required />
+                    </div>
                     </div>
 
                     <div className='sm-input'>
                         <label htmlFor='last_name' className='label_input'>Last Name</label>
+                        <div className='password-container'>
                         <input onChange={onChange} value={last_name} name='last_name' type="text" placeholder='Last Name' required />
                     </div>
+                    </div>
+
                 </div>
 
                 <div className="input-box flex-item">
                     <label htmlFor='email' className='label_input'>Email</label>
+                    <div className='password-container'>
                     <input onChange={onChange} value={email} name='email' type="text" placeholder='Enter your email' required />
                 </div>
-
+                </div>
                 <div className="input-box flex-item">
                     <label htmlFor='password' className='label_input'>Password</label>
-                    <input onChange={onChange} value={password} name='password' type="password" placeholder='Enter your password' required />
+                    <div className='password-container'>
+                    <input onChange={onChange} value={password} name='password'                         
+                    type={showPassword ? 'text' : 'password'} placeholder='Enter your password' required />
+                        <span onClick={toggleShowPassword} className='password-toggle'>
+                            <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                        </span>
+                    </div>
                 </div>
 
                 <div className="input-box flex-item">
                     <label htmlFor='re_password' className='label_input'>Confirm Password</label>
-                    <input onChange={onChange} value={re_password} name='re_password' type="password" placeholder='Confirm your password' required />
+                    <div className='password-container'>
+                    <input onChange={onChange} value={re_password} name='re_password' 
+                    type={showPassword ? 'text' : 'password'}
+                    placeholder='Confirm your password' required />
+                        <span onClick={toggleShowPassword} className='password-toggle'>
+                            <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                        </span>
+                    </div>
                 </div>
-
                 
                 <div className='flex-item btn_cont'>
                 <button type="submit">{isLoading ? <Spinner sm /> : 'Register'}</button>

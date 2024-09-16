@@ -104,7 +104,7 @@ const Page = () => {
                                         </Form.Group>
                                     </div>
                                     <div className="saprator my-2">
-                                        <span className='ver-mas' onClick={() => handleShowModal(item)}>view more</span>
+                                        <span className='ver-mas' onClick={() => window.location.href = `http://localhost:3000/dashboard/${organizationId}/tasks/view/${item.id}`}>view more</span>
                                     </div>
                                 </Card.Body>
                             </Card>
@@ -161,9 +161,6 @@ const Page = () => {
                 <Modal.Footer className='d-flex justify-content-center'>
                     <button className="button-take">
                         Take
-                    </button>
-                    <button className="button-close" onClick={handleCloseModal}>
-                        Close
                     </button>
                 </Modal.Footer>
             </Modal>

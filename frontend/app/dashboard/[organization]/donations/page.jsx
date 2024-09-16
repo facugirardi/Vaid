@@ -89,6 +89,7 @@ const Donations = () => {
     const donationData = {
       description: formData.get('description'),
       date: formData.get('expDate'),
+      type: formData.get('Category'),
       quantity: formData.get('quantity')
     };
   
@@ -124,15 +125,41 @@ const Donations = () => {
                 <th className='text-center'>Description</th>
                 <th className='text-center'>Units</th>
                 <th className='text-center'>Date</th>
+                <th className='text-center'>Type</th>
                 <th className='text-center'>Actions</th>
               </tr>
             </thead>
             <tbody>
               {donations.map(item => (
                 <tr key={item.id}>
-                  <td className='text-center p-donation'>{item.description}</td>
-                  <td className='text-center p-donation'>{item.quantity}</td>
-                  <td className='text-center p-donation'>{item.date}</td>
+                  <td className='text-center p-donation'><b>{item.description}</b></td>
+                  <td className="text-center p-donation">
+                    {item.type === "Money" ? `$ ${item.quantity}` : item.quantity}
+                  </td>
+                  <td className='text-center p-donation'><b>{item.date}</b></td>
+                  <td
+                    className="text-center p-donation"
+                    style={{
+                      color:
+                        item.type === "Food"
+                          ? "#795548"
+                          : item.type === "Tools"
+                          ? "#2196F3"
+                          : item.type === "Drinks"
+                          ? "#FF9800"
+                          : item.type === "Money"
+                          ? "#2BC155"
+                          : item.type === "Other"
+                          ? "#9E9E9E"
+                          : item.type === "Medications"
+                          ? "#FF3E3E"
+                          : item.type === "Clothes"
+                          ? "#9C27B0"
+                          : "inherit", // Color por defecto si no coincide ningún caso
+                    }}
+                  >
+                    {item.type}
+                  </td>
                   <td className='text-center'>
                     <button className="icon-button" onClick={() => handleProductModalShow(item)}>
                       <FontAwesomeIcon icon={faEye} className='hover-button' />
@@ -161,12 +188,20 @@ const Donations = () => {
             <div className='container'>
               <div className='row'>
                 <div className="mb-3 col-md-4">
-                  <label htmlFor="productName" className="form-label">Donation Description</label>
-                  <input type="text" className="form-control" id="description" name="description" placeholder='Add Description' required />
+                  <label htmlFor="productName" className="form-label">Name</label>
+                  <input type="text" className="form-control" id="description" name="description" placeholder='Add Name' required />
                 </div>
                 <div className="mb-3 col-md-3">
-                  <label htmlFor="productType" className="form-label">Type</label>
-                  <input type="text" className="form-control" id="Category" name="Category" placeholder='Product Type' required />
+                <label htmlFor="productType" className="form-label">Type</label>
+                  <Form.Control as="select" className="form-select" id="Category" name="Category">
+                                    <option>Clothes</option>
+                                    <option>Food</option>
+                                    <option>Drinks</option>
+                                    <option>Medications</option>
+                                    <option>Tools</option>
+                                    <option>Other</option>
+                                    <option>Money</option>
+                  </Form.Control>
                 </div>
                 <div className="mb-3 col-md-2">
                   <label htmlFor="quantity" className="form-label">Quantity / Amount</label>
@@ -198,6 +233,7 @@ const Donations = () => {
             <p><strong>Description:</strong> {selectedProduct.description}</p>
             <p><strong>Date:</strong> {selectedProduct.date}</p>
             <p><strong>Quantity:</strong> {selectedProduct.quantity}</p>
+            <p><strong>Type:</strong> {selectedProduct.type}</p>
           </div>
         )}
       </Modal.Body>
@@ -346,12 +382,12 @@ const BuySell = () => {
             <tbody>
               {buysell.map(item => (
                 <tr key={item.id}>
-                  <td className='text-center p-donation'>{item.description}</td>
+                  <td className='text-center p-donation'><b>{item.description}</b></td>
                   <td className='text-center p-donation'>{item.quantity}</td>
                   <td className='text-center p-donation'>$ {item.amount}</td>
-                  <td className='text-center p-donation'>{item.date}</td>
-                  <td className={`text-center p-donation ${item.type === 'Sale' ? 'text-green' : 'text-red'}`}>
-                    {item.type === 'Sale' ? (
+                  <td className='text-center p-donation'><b>{item.date}</b></td>
+                  <td className={`text-center p-donation ${item.type === 'Purchase' ? 'text-green' : 'text-red'}`}>
+                    {item.type === 'Purchase' ? (
                       <>
                         <i className="fa fa-arrow-up text-green"></i> {item.type}
                       </>

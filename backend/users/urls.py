@@ -7,7 +7,7 @@ urlpatterns = [
         CustomProviderAuthView.as_view(),
         name='provider-auth'
     ),
-
+    path('subscribe-newsletter/', SubscribeNewsletterView.as_view(), name='subscribe-newsletter'),
     path('person-organization-details/<int:person_id>/<int:organization_id>/delete/', PersonOrganizationDetailsDeleteView.as_view()),
     path('user/<int:user_id>/apply-org/<int:org_id>/', ApplyOrgView.as_view()),
     path('user/form/<int:user_id>/', UserFormView.as_view()),
@@ -65,5 +65,18 @@ urlpatterns = [
     path('isAdmin/', IsAdminView.as_view(), name='is-admin'),
     path('user/<int:user_id>/unassigned-tags/', UnassignedTagsAPIView.as_view(), name='unassigned-tags'),
     path('send-email-plat/', SendInvitationPlatView.as_view()),
-
+    path('organization/<int:organization_id>/all-products/', AllProductsView.as_view(), name='all-products'),
+    path('organizations/<int:organization_id>/events/<int:event_id>/', EventDetailView.as_view(), name='event-detail'),
+    path('organizations/<int:organization_id>/tasks/<int:task_id>/', TaskDetailView.as_view(), name='task-detail'),
+    path('tasks/<int:task_id>/mark-as-done/', MarkTaskAsDoneView.as_view(), name='mark-task-as-done'),
+    path('tasks/<int:task_id>/mark-as-pending/', MarkTaskAsPendingView.as_view(), name='mark-task-as-pending'),
+    path('organization/event/<int:event_id>/guests/', EventGuestsAPIView.as_view(), name='event-guests'),
+    path('event/participants/', EventParticipantsAPIView.as_view(), name='event-participants'),
+    path('organization/event/guest/<int:guest_id>/', DeleteGuestView.as_view(), name='delete-guest'),
+    path('organization/event/member/<int:member_id>/', DeleteMemberView.as_view(), name='delete-member'),
+    path('organization/event/<int:event_id>/', DeleteEventView.as_view(), name='delete-event'),
+    path('organization/event/<int:event_id>/finish/', FinishEventView.as_view(), name='finish-event'),
+    path('organization/event/<int:event_id>/toggle-state/', ToggleEventStateView.as_view(), name='toggle-event-state'),
+    path('event/<int:event_id>/toggle-attendance/<int:user_id>/', EventToggleAttendanceAPIView.as_view(), name='toggle_attendance'),
+    path('event/<int:event_id>/check-attendance/<int:user_id>/', CheckAttendanceAPIView.as_view(), name='check_attendance'),
 ]

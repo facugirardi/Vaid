@@ -463,7 +463,7 @@ const TagModal = ({ show, handleClose, handleSearch, organizationId, selectedCan
                                     {filteredTags.map((tag) => (
                                         <tr key={tag.id} className='tr-tags'>
                                             <td className="text-center">{tag.name}</td>
-                                            <td className="text-center">{tag.isAdmin ? 'Member' : 'Administrator'}</td>
+                                            <td className="text-center">{tag.isAdmin ? 'Administrator' : 'Member'}</td>
                                             <td className="text-center"><i className="ti ti-user"></i> {tag.member_count}</td>
                                             <td className="text-center">
                                                 <button className="icon-button btn btn-light btn-sm mx-1" onClick={() => handleDeleteTag(tag.id)}>
@@ -477,11 +477,6 @@ const TagModal = ({ show, handleClose, handleSearch, organizationId, selectedCan
                         )}
                     </div>
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Close
-                    </Button>
-                </Modal.Footer>
             </Modal>
 
             <Modal show={showNewTagModal} onHide={handleCloseNewTagModal} centered>
@@ -505,7 +500,7 @@ const TagModal = ({ show, handleClose, handleSearch, organizationId, selectedCan
                                         />
                                     </div>
                                     <div className="col-1 col-md-1 icon-switch">
-                                        <i className="ph-duotone ph-user-gear icon-admin"></i>
+                                        <i className="ph-duotone ph-user icon-admin"></i>
                                     </div>
                                     <div className="col-1 col-md-1 icon-switch">
                                         <div className="">
@@ -525,7 +520,7 @@ const TagModal = ({ show, handleClose, handleSearch, organizationId, selectedCan
                                         </div>
                                     </div>
                                     <div className="col-1 col-md-1 icon-switch">
-                                        <i className="ph-duotone ph-user icon-admin"></i>
+                                        <i className="ph-duotone ph-user-gear icon-admin"></i>
                                     </div>
                                 </div>
                             </div>
@@ -569,7 +564,7 @@ const TagModalAssign = ({ show, handleClose, handleSearch, organizationId, selec
 
     useEffect(() => {
         const fetchTags = async () => {
-            if (show && selectedCandidate) { // Hace fetch solo cuando el modal se muestra y hay un candidato seleccionado
+            if (show && selectedCandidate) {
                 setLoading(true);
                 try {
                     const response = await axios.get(`http://localhost:8000/api/user/${selectedCandidate.id}/tags/`);
@@ -584,12 +579,13 @@ const TagModalAssign = ({ show, handleClose, handleSearch, organizationId, selec
         };
 
         const fetchUnassignedTags = async () => {
-            if (show && selectedCandidate) { // Hace fetch solo cuando el modal se muestra y hay un candidato seleccionado
+            if (show && selectedCandidate) {
                 setLoading(true);
                 try {
                     const response = await axios.get(`http://localhost:8000/api/user/${selectedCandidate.id}/unassigned-tags/`);
-                    setTagsNot(response.data);  // Actualiza el estado con las tags no asignadas
-                    setFilteredTagsNot(response.data);  // También actualiza los tags filtrados
+                    setTagsNot(response.data);
+                    setFilteredTagsNot(response.data);
+                    console.log(tagsNot);  // Para verificar que se están obteniendo las etiquetas no asignadas
                 } catch (error) {
                     toast.error('Error fetching unassigned tags:', error);
                 } finally {
@@ -597,19 +593,22 @@ const TagModalAssign = ({ show, handleClose, handleSearch, organizationId, selec
                 }
             }
         };
-        
-        fetchUnassignedTags();
+
         fetchTags();
-    }, [show, selectedCandidate]); // Ejecutar cuando `show` o `selectedCandidate` cambian
+        fetchUnassignedTags();
+    }, [show, selectedCandidate]);
 
     const handleTagSearch = (keyword) => {
         const filtered = tags.filter(tag => tag.name.toLowerCase().includes(keyword.toLowerCase()));
         setFilteredTags(filtered);
+
+        const filteredNot = tagsNot.filter(tag => tag.name.toLowerCase().includes(keyword.toLowerCase()));
+        setFilteredTagsNot(filteredNot);
     };
 
     const handleDeleteTag = async (tagId) => {
         if (!selectedCandidate) return;
-    
+
         try {
             await axios.delete(`http://localhost:8000/api/user/${selectedCandidate.id}/tags/?tag_id=${tagId}`);
             const updatedTags = tags.filter(tag => tag.id !== tagId);
@@ -620,7 +619,7 @@ const TagModalAssign = ({ show, handleClose, handleSearch, organizationId, selec
             toast.error('Error deleting tag:', error);
         }
     };
-    
+
     const handleAssignTag = async (tagId) => {
         if (!selectedCandidate) return;
 
@@ -628,8 +627,7 @@ const TagModalAssign = ({ show, handleClose, handleSearch, organizationId, selec
             await axios.post(`http://localhost:8000/api/user/${selectedCandidate.id}/tags/`, {
                 tags: [tagId]
             });
-            toast.success('Tag Added Successfully!')
-    
+            toast.success('Tag Added Successfully!');
         } catch (error) {
             toast.error('Error assigning tag to member:', error);
         }
@@ -660,61 +658,54 @@ const TagModalAssign = ({ show, handleClose, handleSearch, organizationId, selec
                     <div className="table-responsive">
                         {loading ? (
                             <p className="text-center">Loading tags...</p>
-                        ) : filteredTags.length === 0 ? (
-                            <p className="text-center">No tags available.</p>
                         ) : (
                             <>
-                            <table className="table">
-                                <thead>
-                                    <tr>
-                                        <th className="text-center">Tags</th>
-                                        <th className="text-center">Type</th>
-                                        <th className="text-center">Members</th>
-                                        <th className="text-center">Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {filteredTags.map((tag) => (
-                                        <tr key={tag.id} className='tr-tags tr-assigned'>
-                                            <td className="text-center">{tag.name}</td>
-                                            <td className="text-center">{tag.isAdmin ? 'Administrator' : 'Member'}</td>
-                                            <td className="text-center"><i className="ti ti-user"></i> {tag.member_count}</td>
-                                            <td className="text-center">
-                                                <button className="icon-button btn btn-light btn-sm mx-1" onClick={() => handleDeleteTag(tag.id)}>
-                                                    <i className="ti ti-x"></i>
-                                                </button>
-                                            </td>
+                                <table className="table">
+                                    <thead>
+                                        <tr>
+                                            <th className="text-center">Tags</th>
+                                            <th className="text-center">Type</th>
+                                            <th className="text-center">Members</th>
+                                            <th className="text-center">Action</th>
                                         </tr>
-                                    ))}
-                                </tbody>
-                                <tbody>
-                                    {filteredTagsNot.map((tag) => (
-                                        <tr key={tag.id} className='tr-tags'>
-                                            <td className="text-center">{tag.name}</td>
-                                            <td className="text-center">{tag.isAdmin ? 'Administrator' : 'Member'}</td>
-                                            <td className="text-center"><i className="ti ti-user"></i> {tag.member_count}</td>
-                                            <td className="text-center">
-                                                <button className="icon-button btn btn-light btn-sm mx-1" onClick={() => handleAssignTag(tag.id)}>
-                                                    <i className="ti ti-plus"></i>
-                                                </button>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-
-                            </table>
+                                    </thead>
+                                    <tbody>
+                                        {/* Renderizar las etiquetas asignadas */}
+                                        {filteredTags.length > 0 && filteredTags.map((tag) => (
+                                            <tr key={tag.id} className='tr-tags tr-assigned'>
+                                                <td className="text-center">{tag.name}</td>
+                                                <td className="text-center">{tag.isAdmin ? 'Administrator' : 'Member'}</td>
+                                                <td className="text-center"><i className="ti ti-user"></i> {tag.member_count}</td>
+                                                <td className="text-center">
+                                                    <button className="icon-button btn btn-light btn-sm mx-1" onClick={() => handleDeleteTag(tag.id)}>
+                                                        <i className="ti ti-x"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                        {/* Renderizar las etiquetas no asignadas */}
+                                        {filteredTagsNot.length > 0 && filteredTagsNot.map((tag) => (
+                                            <tr key={tag.id} className='tr-tags'>
+                                                <td className="text-center">{tag.name}</td>
+                                                <td className="text-center">{tag.isAdmin ? 'Administrator' : 'Member'}</td>
+                                                <td className="text-center"><i className="ti ti-user"></i> {tag.member_count}</td>
+                                                <td className="text-center">
+                                                    <button className="icon-button btn btn-light btn-sm mx-1" onClick={() => handleAssignTag(tag.id)}>
+                                                        <i className="ti ti-plus"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
                             </>
                         )}
                     </div>
                 </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={handleClose}>
-                        Close
-                    </Button>
-                </Modal.Footer>
             </Modal>
         </>
     );
 };
+
 
 export default Page;

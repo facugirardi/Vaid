@@ -1,3 +1,7 @@
+body{
+  font-family: 'Inter', sans-serif;
+}
+
 .button-cancel{
   background-color: white;
   border: #f44336 1px solid;

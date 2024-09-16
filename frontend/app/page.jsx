@@ -2,15 +2,16 @@
 import AkpagerAccordion from "@/components/AkpagerAccordion";
 import LandingLayout from "@/layouts/LandingLayout";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Accordion, Nav, Tab } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 const accordionItems = [
   {
     id: 1,
     title: "What is Vaid?",
     value:
-    "Vaid is a comprehensive platform designed to streamline and manage the operations of Non-profit Organizations. It offers various modules and functionalities aimed at digitizing internal processes, enhancing volunteer management, and optimizing resource allocation."
+    "Vaid is a comprehensive platform designed to streamline and manage the operations of Non-profit Organizations. It offers various modules and functionalities aimed at digitizing internal processes, enhancing the entire organization management, and optimizing resource allocation."
   },
   {
     id: 2,
@@ -34,7 +35,7 @@ const accordionItems = [
     id: 5,
     title: "What are the key features of Vaid software?",
     value:
-    "Some key features of Vaid software include: volunteer management tools, event and activity management, resource allocation and project management, E-learning resources for volunteers, statistical reporting capabilities, Progressive Web Application (PWA) accessibility for mobile devices."
+    "Some key features of Vaid software include: HR management tools, event and activity management, resource allocation and project management, statistical reporting capabilities, Progressive Web Application (PWA) accessibility for mobile devices, and others!"
   },
   {
     id: 6,
@@ -45,10 +46,38 @@ const accordionItems = [
 ];
 
 const page = () => {
+  const [email, setEmail] = useState('');
+  const [active, setActive] = useState("collapse1");
+
   useEffect(() => {
     document.querySelector("body").classList.add("home-three");
   }, []);
-  const [active, setActive] = useState("collapse1");
+
+
+  const handleEmailSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('http://localhost:8000/api/subscribe-newsletter/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        toast.success(result.message);
+        setEmail(''); // Limpiar el campo después de la suscripción
+      } else {
+        const error = await response.json();
+        toast.error(error.message || 'Failed to subscribe');
+      }
+    } catch (err) {
+      toast.error('An error occurred. Please try again later.');
+    }
+  };
+
   return (
     <LandingLayout header footer bodyClass={"home-three"} onePage>
       {/* Hero area start */}
@@ -106,7 +135,7 @@ const page = () => {
           data-aos-duration={1000}
           data-aos-offset={50}
         >
-          <h4>Organizations That Trust Us</h4>
+          <h4>Organizations That Supported Us</h4>
         </div>
         <div className="client-logo-wrap logo-white">
           <div
@@ -444,7 +473,7 @@ const page = () => {
                   </h5>
                   <p>
                     From initiation to completion, manage your tasks, resources, 
-                    and timelines efficiently using our comprehensive project management tools.                   </p>
+                    and timelines efficiently using our project management tools.                   </p>
                 </div>
               </div>
             </div>
@@ -486,7 +515,7 @@ const page = () => {
                   </h5>
                   <p>
                   Utilize Vaid to effortlessly monitor your work progress. 
-                  This system captures real-time data on tasks and milestones, providing you insights and analytics.</p>
+                  This system captures real-time data on tasks, providing you insights and analytics.</p>
                 </div>
               </div>
             </div>
@@ -516,7 +545,7 @@ const page = () => {
                 <p>
                 Our platform offers you the tools and flexibility needed to
                  streamline your processes, enhance team coordination, and
-                  increase operational efficiency. From volunteer management 
+                  increase operational efficiency. From HR management 
                   to event planning and resource tracking, our solution provides 
                   you with the control you need to drive your organization's success to new heights.
                   </p>
@@ -784,15 +813,22 @@ const page = () => {
               className="row justify-content-center text-center"
               data-aos="fade-up"
               data-aos-duration={1000}
-              data-aos-offset={50}
+              data-aos-offset={15}
             >
               <div className="col-lg-7">
                 <div className="section-title mb-30">
-                  <h3>Have Any Question On Mind?</h3>
-                  <p>Please enter your email and get your answer</p>
+                  <h3>Suscribe to Newsletter!</h3>
+                  <p>Please enter your email and get your answer.</p>
                 </div>
-                <form className="newsletter-form style-three" action="#">
-                  <input type="email" placeholder="Email Address" required="" style={{border:'.1px solid gray !important'}}/>
+                <form className="newsletter-form style-three" onSubmit={handleEmailSubmit}>
+                  <input
+                  type="email"
+                  placeholder="Email Address"
+                  required
+                  className="input-nl"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
                   <button type="submit">
                     Send <i className="far fa-arrow-right" />
                   </button>

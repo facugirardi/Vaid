@@ -6,12 +6,11 @@ import { faEye, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import './styles.css';
 import Layout from '@/layouts/dashboard/index';
 import BreadcrumbItem from '@/common/BreadcrumbItem';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, Form } from 'react-bootstrap';
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 import { toast } from "react-toastify";
 
-const Headquarters = ({ onHeadquarterClick, addHistoryEntry }) => {
-  const [headquarters, setHeadquarters] = useState([]);
+const Headquarters = ({ onHeadquarterClick, addHistoryEntry, headquarters, setHeadquarters }) => {
   const [organizationId, setOrganizationId] = useState("");
   const [showHeadquarterModal, setShowHeadquarterModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -66,6 +65,8 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry }) => {
 
             addHistoryEntry(`Headquarter "${selectedHeadquarter.name}" deleted by ${user.first_name} ${user.last_name}`);
             handleDeleteModalClose();
+
+
         } else {
             toast.error('Error al borrar la sede:', response.status);
         }
@@ -111,25 +112,32 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry }) => {
     <div className="card">
       <h2>Headquarters</h2>
       <table className='table'>
-        <tbody>
-          {headquarters.length === 0 ? (
-            <>
-            <p className='p-inventory'>No headquarters available.<br></br><br></br>Start by adding your first headquarters using the '+' button.</p>
-            </>
-          ) : (
-            headquarters.map(hq => (
-              <tr key={hq.id} className="d-flex tr-class" onClick={() => onHeadquarterClick(hq.id)}>
-                <td className="flex-grow-1 d-flex align-items-center justify-content-start p-inventory">{hq.name}</td>
-                <td className="flex-grow-1 d-flex align-items-center justify-content-start p-inventory">{hq.address}</td>
-                <td className="d-flex align-items-center justify-content-end">
-                  <button className="edit-button trash-btn" onClick={(e) => { e.stopPropagation(); handleDeleteModalShow(hq); }}>
-                    <FontAwesomeIcon icon={faTrash} className='hover-button-trash'/>
-                  </button>
-                </td>
-              </tr>
-            ))
-          )}
-        </tbody>
+      <tbody>
+        {headquarters.length === 0 ? (
+          <>
+          <p className='p-inventory'>No headquarters available.<br></br><br></br>Start by adding your first headquarters using the '+' button.</p>
+          </>
+        ) : (
+          headquarters.map(hq => (
+            <tr
+              key={hq.id}
+              className={`d-flex tr-class ${selectedHeadquarter?.id === hq.id ? 'selected-headquarter' : ''}`}
+              onClick={() => {
+                onHeadquarterClick(hq.id);
+                setSelectedHeadquarter(hq); // Establece la sede seleccionada
+              }}
+            >
+              <td className="flex-grow-1 d-flex align-items-center justify-content-start p-inventory">{hq.name}</td>
+              <td className="flex-grow-1 d-flex align-items-center justify-content-start p-inventory">{hq.address}</td>
+              <td className="d-flex align-items-center justify-content-end">
+                <button className="edit-button trash-btn" onClick={(e) => { e.stopPropagation(); handleDeleteModalShow(hq); }}>
+                  <FontAwesomeIcon icon={faTrash} className='hover-button-trash'/>
+                </button>
+              </td>
+            </tr>
+          ))
+        )}
+      </tbody>
       </table>
       <button className="add-button" onClick={handleHeadquarterModalShow}>
         <FontAwesomeIcon icon={faPlus} className='hover-button'/>
@@ -270,6 +278,14 @@ const Inventory = ({ headquarterId, organizationId }) => {
 
     const formData = new FormData(event.target);
     let expDate = formData.get('expDate');
+    const quantity = parseInt(formData.get('quantity'));
+
+    // Verificar si la cantidad es negativa
+    if (quantity < 0) {
+        toast.error('Quantity cannot be negative.');
+        return;
+    }
+
     if (expDate === '') {
         expDate = null;  // Si la fecha está vacía, establecerla como null
     }
@@ -280,7 +296,7 @@ const Inventory = ({ headquarterId, organizationId }) => {
         Category: formData.get('Category'), 
         expDate: expDate,
         Status: 1,
-        quantity: parseInt(formData.get('quantity')), 
+        quantity: quantity, 
     };
 
     try {
@@ -304,7 +320,7 @@ const Inventory = ({ headquarterId, organizationId }) => {
     } catch (error) {
         console.error('Error:', error);
     }
-  };
+};
 
   return (
     <div className="card product-container">
@@ -380,8 +396,16 @@ const Inventory = ({ headquarterId, organizationId }) => {
                   <input type="date" className="form-control" id="expDate" name="expDate" />
                 </div>
                 <div className="mb-3 col-md-3">
-                  <label htmlFor="productType" className="form-label">Type</label>
-                  <input type="text" className="form-control" id="Category" name="Category" placeholder='Product Type' required />
+                <label htmlFor="productType" className="form-label">Category</label>
+                  <Form.Control as="select" className="form-select" id="Category" name="Category">
+                                    <option>Clothes</option>
+                                    <option>Food</option>
+                                    <option>Drinks</option>
+                                    <option>Medications</option>
+                                    <option>Tools</option>
+                                    <option>Other</option>
+                                    <option>Money</option>
+                  </Form.Control>
                 </div>
               </div>
               <div className='d-flex justify-content-center'>
@@ -489,6 +513,8 @@ const Page = () => {
   const [selectedHeadquarterId, setSelectedHeadquarterId] = useState(null);
   const [organizationId, setOrganizationId] = useState("");
   const [localHistory, setLocalHistory] = useState([]);
+  const [selectedHeadquarter, setSelectedHeadquarter] = useState(null);
+  const [headquarters, setHeadquarters] = useState([]); // Mover headquarters al componente Page
 
   useEffect(() => {
       const currentUrl = window.location.href;
@@ -500,10 +526,11 @@ const Page = () => {
       }
   }, []);
 
-  const handleHeadquarterClick = (id) => {
-      setSelectedHeadquarterId(id);
+  const handleHeadquarterClick = (hqId) => {
+    setSelectedHeadquarterId(hqId);
+    setSelectedHeadquarter(headquarters.find(hq => hq.id === hqId)); // Actualiza la sede seleccionada
   };
-
+  
   const addHistoryEntry = async (entry) => {
       try {
           const response = await fetch(`http://localhost:8000/api/${organizationId}/history/`, {
@@ -536,21 +563,26 @@ const Page = () => {
   };
 
   return (
-      <Layout>
-          <div className="container">
-              <BreadcrumbItem mainTitle="Resource Management" subTitle="Headquarter Inventory" />
-              <div className='row'>
-                  <div className="col-md-6">
-                      <Headquarters onHeadquarterClick={handleHeadquarterClick} addHistoryEntry={addHistoryEntry} />
-                      <History organizationId={organizationId} localHistory={localHistory} setLocalHistory={setLocalHistory} />
-                  </div>
-                  <div className="col-md-6">
-                      <Inventory headquarterId={selectedHeadquarterId} organizationId={organizationId} />
-                  </div>
-              </div>
-          </div>
-      </Layout>
-  );
+    <Layout>
+        <div className="container">
+            <BreadcrumbItem mainTitle="Resource Management" subTitle="Headquarter Inventory" />
+            <div className='row'>
+                <div className="col-md-6">
+                    <Headquarters
+                      onHeadquarterClick={handleHeadquarterClick}
+                      addHistoryEntry={addHistoryEntry}
+                      headquarters={headquarters} // Pasar headquarters como prop
+                      setHeadquarters={setHeadquarters} // Pasar la función para actualizar el estado
+                    />
+                    <History organizationId={organizationId} localHistory={localHistory} setLocalHistory={setLocalHistory} />
+                </div>
+                <div className="col-md-6">
+                    <Inventory headquarterId={selectedHeadquarterId} organizationId={organizationId} />
+                </div>
+            </div>
+        </div>
+    </Layout>
+);
 };
 
 export default Page;

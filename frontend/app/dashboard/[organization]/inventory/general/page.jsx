@@ -6,8 +6,9 @@ import { faEye, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import './styles.css';
 import Layout from '@/layouts/dashboard/index';
 import BreadcrumbItem from '@/common/BreadcrumbItem';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, Form} from 'react-bootstrap';
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
+import { toast } from "react-toastify";
 
 const Inventory = ({ headquarterId, addHistoryEntry }) => {
   const [inventory, setInventory] = useState([]);
@@ -32,7 +33,7 @@ const Inventory = ({ headquarterId, addHistoryEntry }) => {
 
   const loadInventory = () => {
     if (organizationId) {
-      fetch(`http://localhost:8000/api/organization/${organizationId}/inventory/`)
+      fetch(`http://localhost:8000/api/organization/${organizationId}/all-products/`)
         .then(response => response.json())
         .then(data => {
           if (Array.isArray(data)) {
@@ -126,42 +127,50 @@ const Inventory = ({ headquarterId, addHistoryEntry }) => {
 
     const formData = new FormData(event.target);
     let expDate = formData.get('expDate');
+    const quantity = parseInt(formData.get('quantity'));
+
+    // Verificar si la cantidad es negativa
+    if (quantity < 0) {
+        toast.error('Quantity cannot be negative.');
+        return;
+    }
+
     if (expDate === '') {
-      expDate = null; // Si la fecha está vacía, establecerla como null
+        expDate = null;  // Si la fecha está vacía, establecerla como null
     }
 
     const data = {
-      name: formData.get('name'),
-      description: formData.get('description'),
-      Category: formData.get('Category'),
-      expDate: expDate,
-      Status: 1,
-      quantity: parseInt(formData.get('quantity')),
-      headquarter: selectedHeadquarter
+        name: formData.get('name'),
+        Category: formData.get('Category'),
+        expDate: expDate,
+        Status: 1,
+        quantity: quantity,
+        headquarter: selectedHeadquarter
     };
 
     try {
-      const response = await fetch(`http://localhost:8000/api/headquarters/${organizationId}/${selectedHeadquarter}/products/`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
+        const response = await fetch(`http://localhost:8000/api/headquarters/${organizationId}/${selectedHeadquarter}/products/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+        });
 
-      if (response.ok) {
-        const newProduct = await response.json();
-        setInventory([...inventory, newProduct]);
-        addHistoryEntry(`Product "${newProduct.name}" added by ${user.first_name} ${user.last_name}`);
-        setShowInventoryModal(false);
-      } else {
-        const errorData = await response.json();
-        console.error('Error en la respuesta:', response.status, errorData);
-      }
+        if (response.ok) {
+            const newProduct = await response.json();
+            setInventory([...inventory, newProduct]);
+            addHistoryEntry(`Product "${newProduct.name}" added by ${user.first_name} ${user.last_name}`);
+            setShowInventoryModal(false);
+        } else {
+            const errorData = await response.json();
+            console.error('Error en la respuesta:', response.status, errorData);
+        }
     } catch (error) {
-      console.error('Error:', error);
+        console.error('Error:', error);
     }
-  };
+};
+
 
   return (
     <div className="card">
@@ -180,6 +189,7 @@ const Inventory = ({ headquarterId, addHistoryEntry }) => {
             <thead>
               <tr>
                 <th className='text-center'>Name</th>
+                <th className='text-center'>quantity</th>
                 <th className='text-center'>Expiration Date</th>
                 <th className='text-center'>Category</th>
                 <th className='text-center'>Status</th>
@@ -190,6 +200,7 @@ const Inventory = ({ headquarterId, addHistoryEntry }) => {
               {inventory.map(item => (
                 <tr key={item.id}>
                   <td className='text-center'>{item.name}</td>
+                  <td className='text-center'>{item.total_quantity}</td>
                   <td className='text-center'>{item.expDate ? item.expDate : '-'}</td>
                   <td className='text-center'>{item.category_name}</td>
                   <td className='text-center'>{item.status_name}</td>
@@ -250,8 +261,16 @@ const Inventory = ({ headquarterId, addHistoryEntry }) => {
                   <input type="date" className="form-control" id="expDate" name="expDate" />
                 </div>
                 <div className="mb-3 col-md-4">
-                  <label htmlFor="productType" className="form-label">Category</label>
-                  <input type="text" className="form-control" id="Category" name="Category" placeholder='Product Category' required />
+                <label htmlFor="productType" className="form-label">Category</label>
+                  <Form.Control as="select" className="form-select" id="Category" name="Category">
+                                    <option>Clothes</option>
+                                    <option>Food</option>
+                                    <option>Drinks</option>
+                                    <option>Medications</option>
+                                    <option>Tools</option>
+                                    <option>Other</option>
+                                    <option>Money</option>
+                  </Form.Control>
                 </div>
               </div>
               <div className='d-flex justify-content-center'>
