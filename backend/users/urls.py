@@ -72,4 +72,7 @@ urlpatterns = [
     path('organization/DonationCategory/', DonationCategoryAPIView.as_view(), name='donation-category'),
     path('organization/TotalAmountOperation/', TotalAmountOperationAPIView.as_view(), name='operation-total-amount'),
     path('organization/TotalAmountDonation/', TotalAmountDonationAPIView.as_view(), name='donation-total-amount'),
-]
+
+    path('organization/OrganizationList/', ListOrganizationAPIView.as_view(), name='organization-list'),
+    
+    ]
