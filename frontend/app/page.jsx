@@ -2,8 +2,9 @@
 import AkpagerAccordion from "@/components/AkpagerAccordion";
 import LandingLayout from "@/layouts/LandingLayout";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Accordion, Nav, Tab } from "react-bootstrap";
+import { toast } from "react-toastify";
 
 const accordionItems = [
   {
@@ -45,10 +46,38 @@ const accordionItems = [
 ];
 
 const page = () => {
+  const [email, setEmail] = useState('');
+  const [active, setActive] = useState("collapse1");
+
   useEffect(() => {
     document.querySelector("body").classList.add("home-three");
   }, []);
-  const [active, setActive] = useState("collapse1");
+
+
+  const handleEmailSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch('http://localhost:8000/api/subscribe-newsletter/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      if (response.ok) {
+        const result = await response.json();
+        toast.success(result.message);
+        setEmail(''); // Limpiar el campo después de la suscripción
+      } else {
+        const error = await response.json();
+        toast.error(error.message || 'Failed to subscribe');
+      }
+    } catch (err) {
+      toast.error('An error occurred. Please try again later.');
+    }
+  };
+
   return (
     <LandingLayout header footer bodyClass={"home-three"} onePage>
       {/* Hero area start */}
@@ -66,20 +95,22 @@ const page = () => {
                 data-aos-offset={50}
               >
                 <h1>
-                  AI Management Solutions for <span>Nonprofits</span>
+                  
+                
+                  #1 en Soluciones de Gestión de <span>Organizaciones</span>
                 </h1>
                 <p>
-                Designed to empower nonprofit organizations by providing streamlined, 
-                innovative management software solutions.                </p>
+                Diseñado para empoderar a todo tipo de organizaciones, ofreciendo soluciones de gestión innovadoras y eficientes.               </p>
+              
                 <a href="/auth/register" className="theme-btn mt-15 mb-10">
-                  Get Started <i className="far fa-arrow-right" />
+                  Comenzar <i className="far fa-arrow-right" />
                 </a>
                 <ul className="icon-list style-two">
                   <li>
-                    <i className="fal fa-check" /> Free
+                    <i className="fal fa-check" /> Gratuito
                   </li>
                   <li>
-                    <i className="fal fa-check" /> No credit card required
+                    <i className="fal fa-check" /> Seguro
                   </li>
                 </ul>
               </div>
@@ -106,7 +137,7 @@ const page = () => {
           data-aos-duration={1000}
           data-aos-offset={50}
         >
-          <h4>Organizations That Trust Us</h4>
+          <h4>Organizaciones Que Nos Apoyaron</h4>
         </div>
         <div className="client-logo-wrap logo-white">
           <div
@@ -194,10 +225,10 @@ const page = () => {
             >
               <div className="section-title text-center mb-35">
                 <span className="subtitle-one mb-20">
-                  <i className="flaticon-layers" /> Why Use Vaid
+                  <i className="flaticon-layers" /> ¿Por Qué Usar Vaid?
                 </span>
                 <h2>
-                  All-in-one, simple, and innovative management software
+                  Software de gestión todo en uno, simple e innovador.
                 </h2>
               </div>
             </div>
@@ -217,17 +248,19 @@ const page = () => {
                 >
                   <Nav.Item as={"li"}>
                     <Nav.Link as={"button"} eventKey="tabTwo1">
-                      Innovative Solutions
+                      
+                      Soluciones Innovadoras
+
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item as={"li"}>
                     <Nav.Link as={"button"} eventKey="tabTwo2">
-                      Easy to Use
+                      Fácil de Usar
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item as={"li"}>
                     <Nav.Link as={"button"} eventKey="tabTwo3">
-                      Great Analytics
+                      Excelentes Analíticas
                     </Nav.Link>
                   </Nav.Item>
                 </Nav>
@@ -244,21 +277,21 @@ const page = () => {
                       data-aos-offset={50}
                     >
                       <div className="section-title mb-30">
-                        <h3>Revolutionizing Productivity</h3>
+                        <h3>Revolucionando la Productividad</h3>
                       </div>
                       <p>
-                      Unlocking innovative solutions means embracing
-                       features that maximize efficiency and minimize friction. 
-                       This approach fosters a culture of innovation, where every 
-                       interaction is optimized for productivity and convenience, 
-                       empowering users to achieve their goals with ease.
+                      Desbloquear soluciones innovadoras significa adoptar características que maximizan la eficiencia y minimizan los obstáculos. Este enfoque fomenta una cultura de innovación, donde cada interacción se optimiza para la productividad y la comodidad, empoderando a los usuarios para alcanzar sus objetivos con facilidad.
                      </p>
                       <ul className="icon-list style-two my-35">
                         <li>
-                          <i className="fal fa-check" /> Embrace Seamless Connectivity
+                          <i className="fal fa-check" /> Adopta una Conexión Sin Fronteras
+
                         </li>
                         <li>
-                          <i className="fal fa-check" /> Empowering Productivity at Every Turn
+                          <i className="fal fa-check" /> Potenciando la Productividad en Cada Paso
+
+
+
                         </li>
                       </ul>
                     </div>
@@ -285,21 +318,18 @@ const page = () => {
                   <div className="col-xl-5 col-lg-6">
                     <div className="content rmt-55">
                       <div className="section-title mb-30">
-                        <h3>Effortless Solutions for Every Task</h3>
+                        <h3>Soluciones Sin Esfuerzo para Cada Tarea</h3>
                       </div>
                       <p>
-                      In the realm of innovative solutions, prioritizing ease of 
-                      use is paramount. Our platform embodies this ethos by offering 
-                      intuitive features that simplify even the most complex tasks. 
-                      Every interaction is designed with user-friendliness in mind. With our approach,
-                       navigating through tasks becomes a breeze, empowering users to accomplish more with less effort.
+En el mundo de las soluciones innovadoras, la facilidad de uso es primordial. Nuestra plataforma encarna esta filosofía al ofrecer características intuitivas que simplifican incluso las tareas más complejas. Cada interacción está diseñada pensando en la experiencia del usuario. Con nuestro enfoque, navegar por las tareas se vuelve sencillo, permitiendo a los usuarios lograr más con menos esfuerzo.
+
                       </p>
                       <ul className="icon-list style-two my-35">
                         <li>
-                          <i className="fal fa-check" /> User-Friendly Design
+                          <i className="fal fa-check" /> Diseño Amigable
                         </li>
                         <li>
-                          <i className="fal fa-check" /> Seamless Integration: Where Efficiency Meets Ease
+                          <i className="fal fa-check" /> Donde la Eficiencia se Encuentra con la Facilidad
                         </li>
                       </ul>
                     </div>
@@ -311,21 +341,18 @@ const page = () => {
                   <div className="col-xl-5 col-lg-6">
                     <div className="content rmb-55">
                       <div className="section-title mb-30">
-                        <h3>Unveiling the Power of Data</h3>
+                        <h3>Revelando el Poder de los Datos</h3>
                       </div>
                       <p>
-                      With robust data analytics tools at your disposal, we empower
-                       you to unlock the full potential of your data, transforming 
-                       raw information into actionable intelligence. From identifying
-                        emerging trends to forecasting future opportunities, our platform 
-                        equips you with the tools to drive growth and innovation. 
+Con potentes herramientas de análisis de datos a tu alcance, te brindamos el poder de desbloquear todo el potencial de tu información, transformando datos en bruto en inteligencia procesable. Desde la identificación de tendencias emergentes hasta la previsión de futuras oportunidades, nuestra plataforma te equipa con las herramientas necesarias para impulsar el crecimiento y la innovación.
+
                       </p>
                       <ul className="icon-list style-two my-35">
                         <li>
-                          <i className="fal fa-check" /> Transforming Insights into Actionable Intelligence
+                          <i className="fal fa-check" /> Transformando Conocimientos en Inteligencia Accionable
                         </li>
                         <li>
-                          <i className="fal fa-check" /> Empowering Growth and Innovation
+                          <i className="fal fa-check" /> Impulsando el Crecimiento y la Innovación
                         </li>
                       </ul>
                     </div>
@@ -791,8 +818,15 @@ const page = () => {
                   <h3>Suscribe to Newsletter!</h3>
                   <p>Please enter your email and get your answer.</p>
                 </div>
-                <form className="newsletter-form style-three" action="#">
-                  <input type="email" placeholder="Email Address" required="" className="input-nl"/>
+                <form className="newsletter-form style-three" onSubmit={handleEmailSubmit}>
+                  <input
+                  type="email"
+                  placeholder="Email Address"
+                  required
+                  className="input-nl"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
                   <button type="submit">
                     Send <i className="far fa-arrow-right" />
                   </button>

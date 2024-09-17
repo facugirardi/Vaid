@@ -24,7 +24,7 @@ const Footer3 = () => {
                 className="footer-widget widget-about"
               >
                 <div className="section-title text-white">
-                  <h2>We’re Also Available On Mobile.</h2>
+                  <h2>We’re Also Mobile Friendly.</h2>
                   <p>No credit card requirement it’s full free for all</p>
                 </div>
                 <div className="footer-btns">
@@ -51,9 +51,6 @@ const Footer3 = () => {
                     <a href="#about">About</a>
                   </li>
                   <li>
-                    <a href="#services">Services</a>
-                  </li>
-                  <li>
                     <a href="#faqs">FAQs</a>
                   </li>
                 </ul>
@@ -64,19 +61,16 @@ const Footer3 = () => {
                 className="footer-widget widget-links"
 
               >
-                <h6 className="footer-title">External Links</h6>
+                <h6 className="footer-title">Other Links</h6>
                 <ul>
                   <li>
-                    <a href="#">Linkedin</a>
+                    <a href="https://www.linkedin.com/company/vaidteam/">Linkedin</a>
                   </li>
                   <li>
-                    <a href="pricing">Instagram</a>
+                    <a href="/auth/register">Sign Up</a>
                   </li>
                   <li>
-                    <a href="about">Medium</a>
-                  </li>
-                  <li>
-                    <a href="contact">Contact</a>
+                    <a href="/auth/login">Login</a>
                   </li>
                 </ul>
               </div>

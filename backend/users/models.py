@@ -149,7 +149,7 @@ class Task(models.Model):
     endDate = models.DateField(default=timezone.now)
     startTtime = models.TimeField(default=timezone.now)
     endTime = models.TimeField(default=timezone.now)
-    image = models.ImageField(upload_to='images/tasks/', null=True, blank=True)
+    image = models.ImageField(upload_to='images/tasks/', null=True, blank=True) 
     state = models.CharField(max_length=255, default='without_state')
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE) 
 
@@ -166,8 +166,8 @@ class Event(models.Model):
     endDate = models.DateField(default=timezone.now)
     startTtime = models.TimeField(default=timezone.now)
     endTime = models.TimeField(default=timezone.now)
-    image = models.ImageField(upload_to='images/events/', null=True, blank=True)
-    state = models.CharField(max_length=255, default='without_state') 
+    image = models.ImageField(upload_to='images/events/', null=True, blank=True) 
+    state = models.CharField(max_length=255, default='without_state')
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)  
 
 
@@ -180,8 +180,8 @@ class EventReport(models.Model):
 
 class Guest(models.Model):
     name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
-    phone = models.CharField(max_length=255)
+    email = models.CharField(max_length=255)
+    role = models.CharField(max_length=255)
     Event = models.ForeignKey(Event, on_delete=models.CASCADE)
 
 
@@ -193,7 +193,9 @@ class EventPersonDetails(models.Model):
 class Donation(models.Model):
     description = models.TextField(null=True, blank=True)
     date = models.DateField(default=timezone.now)
-    Headquarter = models.ForeignKey(Headquarter, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=0)
+    type = models.CharField(max_length=255)
+    Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
 
 class DonationProductDetails(models.Model):
@@ -266,3 +268,10 @@ class EventTagDetails(models.Model):
 class Invitation(models.Model):
     Event = models.ForeignKey(Event, on_delete=models.CASCADE)
     status = models.BooleanField(default=False)
+
+class NewsletterSubscription(models.Model):
+    email = models.EmailField(unique=True)
+    subscribed_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.email
