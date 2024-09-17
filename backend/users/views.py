@@ -784,7 +784,6 @@ class EventUpdateDestroyView(APIView):
         
         serializer = EventSerializer(event)
         return Response(serializer.data)
-        
 
     def put(self, request, pk):
         try:
@@ -830,6 +829,7 @@ class TagListCreateAPIView(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class TagDetailAPIView(APIView):
     permission_classes = [AllowAny]
@@ -1243,12 +1243,15 @@ class TaskParticipationView(APIView):
             task = Task.objects.get(id=task_id)
             person = Person.objects.get(User=user)
 
-            if TaskPersonDetails.objects.filter(Person=person, Task=task).exists():
-                return Response({'error': 'Person is already assigned to this task'}, status=status.HTTP_400_BAD_REQUEST)
+            person_tags = set(PersonTagDetails.objects.filter(Person=person).values_list('Tag__name', flat=True))
 
-            # Crear la instancia de TaskPersonDetails
-            task_person_details = TaskPersonDetails.objects.create(Person=person, Task=task)
-            return Response({'message': 'Task taken successfully', 'task_person_details': TaskPersonDetailsSerializer(task_person_details).data}, status=status.HTTP_201_CREATED)
+            task_tags = set(TaskTagDetails.objects.filter(Task=task).values_list('Tag__name', flat=True))
+
+            if 'without_tag' in task_tags or person_tags.intersection(task_tags):
+                task_person_details = TaskPersonDetails.objects.create(Person=person, Task=task)
+                return Response({'message': 'Task taken successfully', 'task_person_details': TaskPersonDetailsSerializer(task_person_details).data}, status=status.HTTP_201_CREATED)
+            else:
+                return Response({'error': 'Person does not have the required tags for this task'}, status=status.HTTP_400_BAD_REQUEST)
 
         except Person.DoesNotExist:
             return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)

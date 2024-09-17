@@ -12,8 +12,8 @@ admin.site.register(Person)
 admin.site.register(Task)
 admin.site.register(TaskPersonDetails)
 
-# admin.site.register(Event)
-# admin.site.register(EventPersonDetails)
+admin.site.register(Event)
+admin.site.register(EventPersonDetails)
 
 admin.site.register(Tag)
 admin.site.register(TagType)
