@@ -24,7 +24,7 @@ const Footer3 = () => {
                 className="footer-widget widget-about"
               >
                 <div className="section-title text-white">
-                  <h2>We’re Also Available On Mobile.</h2>
+                  <h2>We’re Also Mobile Friendly.</h2>
                   <p>No credit card requirement it’s full free for all</p>
                 </div>
                 <div className="footer-btns">
