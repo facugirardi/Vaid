@@ -672,18 +672,22 @@ class TaskUpdateDestroyView(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-# Visualiza y asigna las Etiquetas que tenga la Tarea 
-class TagsOfTaskAPIView(APIView):
+
+class TaskTagsAPIView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request, task_id):
         try:
-            task = get_object_or_404(Task, id=task_id)
+            # Obtener todas las etiquetas asociadas a la tarea y eliminar duplicados
+            task_tags = TaskTagDetails.objects.filter(Task__id=task_id).values('Tag').distinct()
+            tag_ids = [detail['Tag'] for detail in task_tags]
 
-            serializer = TaskSerializer(task)
+            # Obtener las instancias de las etiquetas basadas en los IDs
+            tags = Tag.objects.filter(id__in=tag_ids)
 
+            # Utilizar el serializador de Tag en lugar de TaskTagDetailsSerializer
+            serializer = TagSerializer(tags, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
-
         except Task.DoesNotExist:
             return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -702,32 +706,17 @@ class TagsOfTaskAPIView(APIView):
             return Response({'message': 'Tags assigned successfully'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-class DeleteTagsOfTaskAPIView(APIView):
-    permission_classes = [AllowAny]
+    def delete(self, request, task_id):
+        tag_id = request.query_params.get('tag_id')
+        if not tag_id:
+            return Response({'error': 'Tag ID is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-    def get(self, request, task_id, tag_id):
-        task = get_object_or_404(Task, id=task_id)
-
-        tag = get_object_or_404(Tag, id=tag_id)
-
-        task_tag = get_object_or_404(TaskTagDetails, Task=task, Tag=tag)
-
-        task_serializer = TaskSerializer(task)
-        tag_serializer = TagSerializer(tag)
-
-        return Response({
-            "task": task_serializer.data,
-            "tag": tag_serializer.data
-        }, status=status.HTTP_200_OK)
-
-    def delete(self, request, task_id, tag_id):
-        task = get_object_or_404(Task, id=task_id)
-        tag = get_object_or_404(Tag, id=tag_id)
-        task_tag = get_object_or_404(TaskTagDetails, Task=task, Tag=tag)
-
-        task_tag.delete()
-
-        return Response({"message": "Relation deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+        try:
+            task_tag = TaskTagDetails.objects.filter(Task__id=task_id, Tag__id=tag_id)
+            task_tag.delete()
+            return Response({'message': 'Tag deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+        except TaskTagDetails.DoesNotExist:
+            return Response({'error': 'Tag not found for this user'}, status=status.HTTP_404_NOT_FOUND)
 
 
 class OrganizationMembersView(APIView):
@@ -808,6 +797,49 @@ class EventUpdateDestroyView(APIView):
         
         event.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class EventTagsAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, event_id):
+        try:
+            event_tags = EventTagDetails.objects.filter(Event__id=event_id).values('Tag').distinct()
+            tag_ids = [detail['Tag'] for detail in event_tags]
+
+            tags = Tag.objects.filter(id__in=tag_ids)
+
+            serializer = TagSerializer(tags, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Event.DoesNotExist:
+            return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
+
+    def post(self, request, event_id):
+        event = get_object_or_404(Event, id=event_id)
+        data = request.data.copy()
+        data['event'] = event.id
+
+        serializer = AssignTagsToEventSerializer(data=data)
+        if serializer.is_valid():
+            tags = serializer.validated_data['tags']
+            for tag_id in tags:
+                tag = get_object_or_404(Tag, id=tag_id)
+                EventTagDetails.objects.create(Event=event, Tag=tag)
+
+            return Response({'message': 'Tags assigned successfully'}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, event_id):
+        tag_id = request.query_params.get('tag_id')
+        if not tag_id:
+            return Response({'error': 'Tag ID is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            task_tag = EventTagDetails.objects.filter(Event__id=event_id, Tag__id=tag_id)
+            task_tag.delete()
+            return Response({'message': 'Tag deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+        except EventTagDetails.DoesNotExist:
+            return Response({'error': 'Tag not found for this user'}, status=status.HTTP_404_NOT_FOUND)
 
 
 class TagListCreateAPIView(APIView):
@@ -930,6 +962,7 @@ class HeadquarterListCreateView(APIView):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class HeadquarterDetailUpdateDestroyView(APIView):
     permission_classes = [AllowAny]
 
@@ -981,6 +1014,7 @@ class ProductView(APIView):
         product = get_object_or_404(Product, pk=pk)
         product.delete()
         return Response({"message": "Product deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+
 
 class ProductForHeadquarterView(APIView):
     permission_classes = [AllowAny]
@@ -1069,6 +1103,7 @@ class OrganizationHistoryView(APIView):
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class ProductCreateView(APIView):
     permission_classes = [AllowAny]
 
@@ -1102,7 +1137,6 @@ class ProductCreateView(APIView):
 
 
 #PROBRAR LA FUNCONES DE ABAJO(Si funciona el query_params y en postman. Sino cambia pasando el user_id por parametro en la url)
-
 class EventAttendanceView(APIView):
     permission_classes = [AllowAny]
 
@@ -1208,28 +1242,27 @@ class TaskParticipationView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-            person_id = request.query_params.get('person_id')
-            task_id = request.query_params.get('task_id')
+        person_id = request.query_params.get('person_id')
+        task_id = request.query_params.get('task_id')
 
-            if not person_id or not task_id:
-                return Response({'error': 'person_id and task_id are required'}, status=status.HTTP_400_BAD_REQUEST)
+        if not person_id or not task_id:
+            return Response({'error': 'person_id and task_id are required'}, status=status.HTTP_400_BAD_REQUEST)
 
-            try:
-                user = User.objects.get(id=person_id)
-                task = Task.objects.get(id=task_id)
-                person = Person.objects.get(User=user)
+        try:
+            user = User.objects.get(id=person_id)
+            task = Task.objects.get(id=task_id)
+            person = Person.objects.get(User=user)
 
-                # Verificar si la persona ya está asignada a la tarea
-                is_taken = TaskPersonDetails.objects.filter(Person=person, Task=task).exists()
-                print(f'{person} {is_taken} {user} {task}')
+            # Verificar si la persona ya está asignada a la tarea
+            is_taken = TaskPersonDetails.objects.filter(Person=person, Task=task).exists()
+            print(f'{person} {is_taken} {user} {task}')
 
-                return Response({'is_taken': is_taken}, status=status.HTTP_200_OK)
+            return Response({'is_taken': is_taken}, status=status.HTTP_200_OK)
 
-            except Person.DoesNotExist:
-                return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
-            except Task.DoesNotExist:
-                return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
-
+        except Person.DoesNotExist:
+            return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Task.DoesNotExist:
+            return Response({'error': 'Task not found'}, status=status.HTTP_404_NOT_FOUND)
 
     def post(self, request):
         person_id = request.query_params.get('person_id')
@@ -1416,17 +1449,21 @@ class MemberEventsAPIView(APIView):
             person = Person.objects.get(id=person_id)
             event = Event.objects.get(id=event_id)
 
-            if EventPersonDetails.objects.filter(Person=person, Event=event).exists():
-                return Response({'error': 'Person is already attending this event'}, status=status.HTTP_400_BAD_REQUEST)
+            person_tags = set(PersonTagDetails.objects.filter(Person=person).values_list('Tag__name', flat=True))
 
-            event_person_details = EventPersonDetails.objects.create(Person=person, Event=event)
-            return Response({'message': 'Person added successfully', 'event_person_details': EventPersonDetailsSerializer(event_person_details).data}, status=status.HTTP_201_CREATED)
+            event_tags = set(EventTagDetails.objects.filter(Event=event).values_list('Tag__name', flat=True))
+
+            if 'without_tag' in event_tags or person_tags.intersection(event_tags):
+                event_person_details = EventPersonDetails.objects.create(Person=person, Event=event)
+                return Response({'message': 'Event taken successfully', 'event_person_details': EventPersonDetailsSerializer(event_person_details).data}, status=status.HTTP_201_CREATED)
+            else:
+                return Response({'error': 'Person does not have the required tags for this event'}, status=status.HTTP_400_BAD_REQUEST)
 
         except Person.DoesNotExist:
             return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
         except Event.DoesNotExist:
             return Response({'error': 'Event not found'}, status=status.HTTP_404_NOT_FOUND)
-        
+
     def delete(self, request):
         person_id = request.query_params.get('person_id')
         event_id = request.query_params.get('event_id')

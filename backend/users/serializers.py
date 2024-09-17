@@ -81,11 +81,6 @@ class MemberTagSerializer(serializers.ModelSerializer):
     def get_member_count(self, obj):
         return PersonTagDetails.objects.filter(Tag=obj).values('Person').distinct().count()
 
-class TagsToTaskDetailsSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Tag
-        fields = ['id', 'name']
-
 class PersonTagDetailsSerializer(serializers.ModelSerializer):
     class Meta:
         model = PersonTagDetails
@@ -103,6 +98,10 @@ class AssignTagsToPersonSerializer(serializers.Serializer):
 class AssignTagsToTaskSerializer(serializers.Serializer):
     tags = serializers.ListField(child=serializers.IntegerField())
     task = serializers.PrimaryKeyRelatedField(queryset=Task.objects.all())
+
+class AssignTagsToEventSerializer(serializers.Serializer):
+    tags = serializers.ListField(child=serializers.IntegerField())
+    event = serializers.PrimaryKeyRelatedField(queryset=Event.objects.all())
 
 class HeadquarterSerializer(serializers.ModelSerializer):
     class Meta:

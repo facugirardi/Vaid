@@ -20,4 +20,4 @@ admin.site.register(TagType)
 
 admin.site.register(PersonTagDetails)
 admin.site.register(TaskTagDetails)
-# admin.site.register(EventTagDetails)
+admin.site.register(EventTagDetails)
