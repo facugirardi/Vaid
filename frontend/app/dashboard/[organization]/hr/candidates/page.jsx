@@ -1,3 +1,4 @@
+
 "use client"
 
 import React, { useState, useMemo, useEffect } from "react";
@@ -13,36 +14,24 @@ const Page = () => {
     const [showModal, setShowModal] = useState(false);
     const [selectedCandidate, setSelectedCandidate] = useState(null);
     const [candidates, setCandidates] = useState([]);
-    const [organizationId, setOrganizationId] = useState("");
 
     useEffect(() => {
-        const currentUrl = window.location.href;
-        const url = new URL(currentUrl);
-        const pathSegments = url.pathname.split('/');
-        const dashboardIndex = pathSegments.indexOf('dashboard');
-        if (dashboardIndex !== -1 && pathSegments.length > dashboardIndex + 1) {
-            setOrganizationId(pathSegments[dashboardIndex + 1]);
-        }
-    }, []);
-
-    useEffect(() => {
-      if(organizationId){
         const fetchData = async () => {
             try {
-                const response = await axios.get(`http://localhost:8000/api/candidate-details/${organizationId}/`);
+                const response = await axios.get('http://localhost:8000/api/candidate-details');
                 console.log('Fetched candidates:', response.data);
                 setCandidates(response.data);
             } catch (error) {
                 console.error('Error fetching candidate details:', error);
             }
         };
-        fetchData();}
-    }, [organizationId]);
+        fetchData();
+    }, []);
 
     const handleShowModal = (candidate) => {
         setSelectedCandidate(candidate);
-        console.log(candidate);
-        console.log(selectedCandidate);
+        console.log(candidate)
+        console.log(selectedCandidate)
         setShowModal(true);
     };
 
@@ -182,31 +171,27 @@ const Page = () => {
     return (
         <Layout>
             <BreadcrumbItem mainTitle="Human Resources" subTitle="Candidate List" />
-
+            
             <Row>
                 <Col sm={12}>
                     <Card className="border-0 table-card user-profile-list">
                         <Card.Body>
-                            {candidates.length === 0 ? (
-                                <p className="text-center p-donation">No candidates available.</p>
-                            ) : (
-                                <TableContainer
-                                    columns={columns}
-                                    data={candidates}
-                                    isGlobalFilter={true}
-                                    isBordered={false}
-                                    customPageSize={5}
-                                    tableClass="table-hover"
-                                    theadClass="table-light"
-                                    isPagination={true}
-                                />
-                            )}
+                            <TableContainer
+                                columns={columns}
+                                data={candidates}
+                                isGlobalFilter={true}
+                                isBordered={false}
+                                customPageSize={5}
+                                tableClass="table-hover"
+                                theadClass="table-light"
+                                isPagination={true}
+                            />
                         </Card.Body>
                     </Card>
                 </Col>
             </Row>
 
-            <Modal show={showModal} onHide={handleCloseModal} centered backdropClassName="modal-backdrop">
+            <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>Candidate Information</Modal.Title>
                 </Modal.Header>

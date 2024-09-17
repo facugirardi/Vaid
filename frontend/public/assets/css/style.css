@@ -7,16 +7,8 @@
   padding: 0;
   border: none;
   outline: none;
-  zoom: 100%;
   -webkit-box-shadow: none;
   box-shadow: none; }
-
-  @media (max-width: 1500px) {
-    *{
-    zoom: 98%;
-  }
-  }
-
 
 body {
   color: var(--base-color);
@@ -8318,9 +8310,8 @@ a.theme-btn {
       font-size: 16px; } }
   .breadcrumb .breadcrumb-item {
     padding: 0;
-    color: #0d0f15;
+    color: white;
     font-weight: 400;
-    margin-bottom: 20px;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -8331,7 +8322,7 @@ a.theme-btn {
     -ms-flex-pack: center;
     justify-content: center; }
     .breadcrumb .breadcrumb-item a {
-      color: #1a202b; }
+      color: white; }
     .breadcrumb .breadcrumb-item.active {
       text-decoration: underline;
       text-underline-offset: 3px;
@@ -8342,13 +8333,10 @@ a.theme-btn {
       -webkit-box-flex: 0;
       -ms-flex: none;
       flex: none;
-      color: #1a202b;
+      color: white;
       content: "\f105";
       font-family: "Font Awesome 5 Pro"; }
 
-      .page-header .breadcrumb .breadcrumb-item:last-child{
-        margin-top:2px;
-      }
 /*******************************************************/
 /******************* ## About Area ********************/
 /*******************************************************/

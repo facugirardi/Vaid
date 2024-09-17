@@ -138,6 +138,31 @@ const TableContainer = ({
     <Fragment>
       {isGlobalFilter && (
         <React.Fragment>
+          <div className="datatable-top">
+            <div className="datatable-dropdown">
+              <label>
+                <select
+                  onChange={onChangeInSelect}
+                  className="datatable-selector"
+                >
+                  {[5, 10, 15, 20, 25].map((pageSize) => (
+                    <option key={pageSize} value={pageSize}>
+                      {pageSize}
+                    </option>
+                  ))}
+                </select>{" "}
+                entries per page
+              </label>
+            </div>
+            <div className="datatable-search">
+              <DebouncedInput
+                value={globalFilter ?? ""}
+                onChange={(value) => setGlobalFilter(String(value))}
+                className="form-control search"
+                placeholder={SearchPlaceholder}
+              />
+            </div>
+          </div>
         </React.Fragment>
       )}
       <div

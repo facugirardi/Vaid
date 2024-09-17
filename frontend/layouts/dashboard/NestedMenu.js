@@ -9,17 +9,6 @@ const NestedMenu = () => {
   const [menuItems, setMenuItems] = useState([]);
   const [userType, setUserType] = useState(null);
   const [openMenu, setOpenMenu] = useState(null);
-  const [organizationId, setOrganizationId] = useState("");
-  
-  useEffect(() => {
-    const currentUrl = window.location.href;
-    const url = new URL(currentUrl);
-    const pathSegments = url.pathname.split('/');
-    const dashboardIndex = pathSegments.indexOf('dashboard');
-    if (dashboardIndex !== -1 && pathSegments.length > dashboardIndex + 1) {
-      setOrganizationId(pathSegments[dashboardIndex + 1]);
-    }
-  }, []);
 
   const checkComplete = async () => {
     if (user?.id) {
@@ -75,13 +64,14 @@ const NestedMenu = () => {
         {
           type: "HASHMENU", id: 1, label: "Human Resources", icon: "ph-duotone ph-users-three", dataPage: null, link: "#",
           submenu: [
-            { id: "members-list", label: "Members List", icon: "ph-duotone ph-user-list", link: `/dashboard/${organizationId}/hr/members`, dataPage: "members-list" },
-            { id: "candidates", label: "Candidates", icon: "ph-duotone ph-users", link: `/dashboard/${organizationId}/hr/candidates`, dataPage: "candidates" },
+            { id: "members-list", label: "Members List", icon: "ph-duotone ph-user-list", link: "/dashboard/hr/list", dataPage: "members-list" },
+            { id: "add-members", label: "Add Members", icon: "ph-duotone ph-user-circle-plus", link: "/dashboard/hr/add-members", dataPage: "add-members" },
+            { id: "candidates", label: "Candidates", icon: "ph-duotone ph-users", link: "/dashboard/hr/candidates", dataPage: "candidates" },
           ],
         },
         { id: "analytics", label: "Analytics", icon: "ph-duotone ph-chart-bar", link: `/dashboard/${organizationId}/analytics`, dataPage: "analytics" },
         {
-          type: "HASHMENU", id: 1, label: "Resources", icon: "ph-duotone ph-archive", dataPage: null, link: "#",
+          type: "HASHMENU", id: 1, label: "Resources", icon: "ph-duotone ph-package", dataPage: null, link: "#",
           submenu: [
             { id: "inventory", label: "Inventory", icon: "ph-duotone ph-package", link: `/dashboard/${organizationId}/inventory/general`, dataPage: "inventory" },
             { id: "headquarter-inv", label: "Headquarter Inventory", icon: "ph-duotone ph-warehouse", link: `/dashboard/${organizationId}/inventory`, dataPage: "headquarter-inv" },

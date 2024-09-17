@@ -33,12 +33,9 @@ class CandidateDetailSerializer(serializers.ModelSerializer):
         model = Candidate
         fields = '__all__'
 
-
 class PersonSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(source='User.first_name')
     last_name =serializers.CharField(source='User.last_name')
-    
-
 
     class Meta:
         model = Person
@@ -49,28 +46,37 @@ class OrganizationSerializer(serializers.ModelSerializer):
         model = Organization
         fields = '__all__'
 
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = '__all__'
 
 class TaskSerializer(serializers.ModelSerializer):
+    tags = serializers.SerializerMethodField()
+
     class Meta:
         model = Task
-        fields = '__all__'
+        fields = ['id', 'title', 'description', 'startDate', 'endDate', 'startTtime', 'endTime', 'image', 'state', 'Organization', 'tags']
         extra_kwargs = {
             'date': {'required': True},
             'endDate': {'required': True}
         }
+
+    def get_tags(self, obj):
+        tags = Tag.objects.filter(tasktagdetails__Task=obj)
+        return TagSerializer(tags, many=True).data
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserAccount
         fields = '__all__'
 
-
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = '__all__'
 
-class TagSerializer(serializers.ModelSerializer):
+class MemberTagSerializer(serializers.ModelSerializer):
     member_count = serializers.SerializerMethodField()
 
     class Meta:
@@ -94,6 +100,14 @@ class AssignTagsToPersonSerializer(serializers.Serializer):
     tags = serializers.ListField(child=serializers.IntegerField())
     person = serializers.PrimaryKeyRelatedField(queryset=Person.objects.all())
 
+class AssignTagsToTaskSerializer(serializers.Serializer):
+    tags = serializers.ListField(child=serializers.IntegerField())
+    task = serializers.PrimaryKeyRelatedField(queryset=Task.objects.all())
+
+class AssignTagsToEventSerializer(serializers.Serializer):
+    tags = serializers.ListField(child=serializers.IntegerField())
+    event = serializers.PrimaryKeyRelatedField(queryset=Event.objects.all())
+
 class HeadquarterSerializer(serializers.ModelSerializer):
     class Meta:
         model = Headquarter
@@ -106,7 +120,6 @@ class HeadquarterSerializer(serializers.ModelSerializer):
         return headquarter
 
 class InventorySerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Inventory
         fields = '__all__'
@@ -134,11 +147,10 @@ class ProductSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'expDate': {'required': False, 'allow_null': True}  # Permitir null
         }
-    
+
     def get_total_quantity(self, obj):
         # Calcula la cantidad total si el objeto tiene la anotación total_quantity
-        return getattr(obj, 'total_quantity', None)    
-
+        return getattr(obj, 'total_quantity', None)
 
 class ProductInventoryDetailsSerializer(serializers.ModelSerializer):
     Product = ProductSerializer()
@@ -151,7 +163,6 @@ class HistorySerializer(serializers.ModelSerializer):
     class Meta:
         model = History
         fields = '__all__'
-
 
 class EventPersonSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(source='Person.User.first_name', read_only=True)
@@ -206,9 +217,9 @@ class OperationSerializer(serializers.ModelSerializer):
     #         quantity = product_data['quantity']
     #         product_id = product_data['product']
     #         product = Product.objects.get(id=product_id)
-            
+
     #         OperationProductDetails.objects.create(Operation=operation, Product_id=product_id, quantity=quantity)
-            
+
     #         try:
     #             product_inventory = ProductInventoryDetails.objects.get(Product=product)
     #             product_inventory.cuantity += quantity
@@ -228,7 +239,6 @@ class GuestSerializer(serializers.ModelSerializer):
         model = Guest
         fields = '__all__'
 
-
 class DonationProductDetailsSerializer(serializers.ModelSerializer):
     product_name = serializers.CharField(source='Product.name')
 
@@ -236,9 +246,7 @@ class DonationProductDetailsSerializer(serializers.ModelSerializer):
         model = DonationProductDetails
         fields = '__all__'
 
-
 class DonationSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Donation
         fields = ['id', 'description', 'quantity', 'date', 'type', 'Organization']
@@ -246,19 +254,19 @@ class DonationSerializer(serializers.ModelSerializer):
     # def create(self, validated_data):
     #     products_data = validated_data.pop('products')
     #     donation = Donation.objects.create(**validated_data)
-        
+
     #     for product_data in products_data:
     #         product_id = product_data['product']
     #         quantity = product_data['quantity']
     #         product = Product.objects.get(id=product_id)
-            
-    #         # Create DonationProductDetails entry
+
+    #         #   Create DonationProductDetails entry
     #         DonationProductDetails.objects.create(
-    #             Donation=donation, 
-    #             Product=product,  
+    #             Donation=donation,
+    #             Product=product,
     #             quantity=quantity
     #         )
-            
+
     #         # Update ProductInventoryDetails
     #         try:
     #             product_inventory = ProductInventoryDetails.objects.get(Product=product)
@@ -269,6 +277,3 @@ class DonationSerializer(serializers.ModelSerializer):
     #             pass
 
     #     return donation
-    
-
-

@@ -5,36 +5,25 @@ body{
     margin-bottom: 0 !important;
 }
 
-.cont-btn-ent{
-  margin-right: -50%;
-  margin-left: 50%;
-}
-
 .buttonorg_perf{
-    margin-left: 40% !important;
-    margin-right: -60% !important;
-}
-
-.buttonorg_perf2{
-    width: 100px !important;
-}
-
-.applybtn{
-    color: #fff !important;
-
+    margin-left: 50% !important;
+    margin-right: -50% !important
 }
 
 .img-profile-avtar{
     height: 90px !important;
-    width: 140px !important;
+    width: 88% !important;
     margin-right: -50px !important;
 }
 
-.suggestionsTitle{
-    margin-left: 26.5px;
-}
-.g-2{
+
+@media (max-width: 767px) {
+.img-profile-avtar{
+    height: 80px !important;
+    width:28% !important;
     margin-top: 20px !important;
+    margin-right: 0px !important;
+}
 }
 .img-members{
   margin-top: 20px;
@@ -47,12 +36,15 @@ body{
     height: 77px !important;
     width: 80px !important;
     margin-right: 0px !important;
-  }
+}
 }
 
 
-@media (max-width: 605px) {
-  .img-profile-avtar{
-    margin-top: 20px !important
-  }
+@media (max-width: 410px) {
+.img-profile-avtar{
+    height: 50px !important;
+    width: 14% !important;
+    margin-top: 20px !important;
+    margin-right: 0px !important;
+}
 }

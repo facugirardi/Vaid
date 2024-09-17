@@ -29,7 +29,6 @@ class Migration(migrations.Migration):
                 ('is_staff', models.BooleanField(default=False)),
                 ('is_superuser', models.BooleanField(default=False)),
                 ('is_completed', models.BooleanField(default=False)),
-                ('is_form', models.BooleanField(default=False)),
                 ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.group', verbose_name='groups')),
                 ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.permission', verbose_name='user permissions')),
             ],
@@ -52,13 +51,9 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=255)),
-                ('description', models.TextField()),
-                ('date', models.DateField()),
-                ('endDate', models.DateField()),
-                ('time', models.TimeField()),
-                ('endTime', models.TimeField()),
-                ('file', models.FileField(blank=True, null=True, upload_to='events/')),
-                ('state', models.CharField(max_length=255)),
+                ('description', models.CharField(default='Details to be announced', max_length=255)),
+                ('date', models.DateField(default=django.utils.timezone.now)),
+                ('time', models.TimeField(default=django.utils.timezone.now)),
             ],
         ),
         migrations.CreateModel(
@@ -91,10 +86,6 @@ class Migration(migrations.Migration):
                 ('description', models.CharField(default='Regular operation', max_length=255)),
                 ('date', models.DateField(default=django.utils.timezone.now)),
                 ('time', models.TimeField(default=django.utils.timezone.now)),
-                ('quantity', models.IntegerField(default=0)),
-                ('amount', models.IntegerField(default=0)),
-                ('type', models.CharField(default='', max_length=255)),
-                ('invoice', models.FileField(blank=True, null=True, upload_to='invoices/')),
             ],
         ),
         migrations.CreateModel(
@@ -125,17 +116,6 @@ class Migration(migrations.Migration):
                 ('born_date', models.DateField(default=django.utils.timezone.now)),
                 ('country', models.CharField(max_length=255)),
                 ('description', models.CharField(max_length=255)),
-                ('profession', models.CharField(blank=True, max_length=255, null=True)),
-                ('experience', models.TextField(blank=True, null=True)),
-                ('street_name', models.CharField(blank=True, max_length=255, null=True)),
-                ('street_number', models.CharField(blank=True, max_length=255, null=True)),
-                ('city', models.CharField(blank=True, max_length=255, null=True)),
-                ('available_days', models.JSONField(default=list)),
-                ('available_times', models.JSONField(default=list)),
-                ('modality', models.CharField(blank=True, max_length=255, null=True)),
-                ('topics', models.CharField(blank=True, max_length=255, null=True)),
-                ('goals', models.TextField(blank=True, null=True)),
-                ('motivations', models.TextField(blank=True, null=True)),
                 ('User', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
         ),
@@ -144,7 +124,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=255)),
-                ('expDate', models.DateField(default=None, null=True)),
+                ('description', models.CharField(max_length=255)),
             ],
         ),
         migrations.CreateModel(
@@ -162,15 +142,6 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='Tag',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=255)),
-                ('isAdmin', models.BooleanField()),
-                ('Organization', models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='users.organization')),
-            ],
-        ),
-        migrations.CreateModel(
             name='TagType',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -182,13 +153,9 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=255)),
-                ('description', models.TextField()),
-                ('date', models.DateField()),
-                ('endDate', models.DateField()),
-                ('time', models.TimeField()),
-                ('endTime', models.TimeField()),
-                ('file', models.FileField(blank=True, null=True, upload_to='tasks/')),
-                ('state', models.CharField(max_length=255)),
+                ('description', models.CharField(default='No description provided', max_length=255)),
+                ('date', models.DateField(default=django.utils.timezone.now)),
+                ('time', models.TimeField(default=django.utils.timezone.now)),
                 ('Organization', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.organization')),
             ],
         ),
@@ -206,16 +173,8 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('title', models.CharField(max_length=255)),
                 ('description', models.CharField(default='Video content', max_length=255)),
-                ('video_file', models.FileField(blank=True, null=True, upload_to='videos/')),
+                ('url', models.CharField(default='http://example.com', max_length=255)),
                 ('Organization', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.organization')),
-            ],
-        ),
-        migrations.CreateModel(
-            name='TaskTagDetails',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('Tag', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.tag')),
-                ('Task', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.task')),
             ],
         ),
         migrations.CreateModel(
@@ -224,6 +183,14 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('Person', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.person')),
                 ('Task', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.task')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='Tag',
+            fields=[
+                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('name', models.CharField(max_length=255)),
+                ('TagType', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.tagtype')),
             ],
         ),
         migrations.CreateModel(
@@ -254,18 +221,9 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='PersonOrganizationDetails',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('Organization', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.organization')),
-                ('Person', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.person')),
-            ],
-        ),
-        migrations.CreateModel(
             name='OperationProductDetails',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('quantity', models.IntegerField(default=0)),
                 ('Operation', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.operation')),
                 ('Product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.product')),
             ],
@@ -275,13 +233,10 @@ class Migration(migrations.Migration):
             name='Organization',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.organization'),
         ),
-        migrations.CreateModel(
-            name='Invitation',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('status', models.BooleanField(default=False)),
-                ('Event', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.event')),
-            ],
+        migrations.AddField(
+            model_name='operation',
+            name='Type',
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.operationtype'),
         ),
         migrations.CreateModel(
             name='Image',
@@ -291,21 +246,6 @@ class Migration(migrations.Migration):
                 ('alt', models.CharField(default='logo', max_length=255)),
                 ('User', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
-        ),
-        migrations.CreateModel(
-            name='History',
-            fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('action', models.CharField(max_length=255)),
-                ('description', models.CharField(max_length=255)),
-                ('date', models.DateField(default=django.utils.timezone.now)),
-                ('Organization', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.organization')),
-            ],
-        ),
-        migrations.AddField(
-            model_name='headquarter',
-            name='Organization',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.organization'),
         ),
         migrations.CreateModel(
             name='Guest',
@@ -344,7 +284,6 @@ class Migration(migrations.Migration):
             name='DonationProductDetails',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('quantity', models.IntegerField(default=0)),
                 ('Donation', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.donation')),
                 ('Product', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.product')),
             ],
@@ -358,8 +297,6 @@ class Migration(migrations.Migration):
             name='Candidate',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('interviewed', models.BooleanField(default=False)),
-                ('request_date', models.DateField(default=django.utils.timezone.now)),
                 ('Organization', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.organization')),
                 ('Person', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='users.person')),
             ],

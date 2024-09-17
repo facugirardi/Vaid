@@ -37,7 +37,7 @@ const LoginForm = () => {
             .unwrap()
             .then((response) => {
                 dispatch(setAuth()); 
-                window.location.href = '/dashboard';
+                window.location.href = '/';
             })
             .catch((error) => {
                 console.log(error);

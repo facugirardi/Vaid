@@ -273,10 +273,6 @@ body{
 
 }
 
-.asterisco-rojo{
-    color: red;
-}
-
 @media (max-width: 1200px) {
     .wrapper-complete-user {
         width: 45%;
