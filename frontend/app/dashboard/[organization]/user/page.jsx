@@ -27,11 +27,10 @@ const Page = () => {
         <Col sm={2}></Col>
         <Col sm={8}>
           <SocialProfile />
-            <Tab.Container defaultActiveKey="friendsRequests">
+            <Tab.Container defaultActiveKey="friendsRequest">
               <SocialTab />
               <Row>
                 <Tab.Content>
-                  <Friends />
                   <FriendsRequest />
                 </Tab.Content>
               </Row>

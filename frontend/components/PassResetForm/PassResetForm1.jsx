@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './PassResetForm1.css';
 import { useResetPasswordMutation } from '@/redux/features/authApiSlice';
 import { toast } from 'react-toastify';
@@ -9,7 +9,6 @@ const PassResetForm1 = () => {
     const [resetPassword, { isLoading }] = useResetPasswordMutation();
 
     const [email, setEmail] = useState();
-
 
     const onChange = (event) => {
         setEmail(event.target.value);
@@ -21,7 +20,7 @@ const PassResetForm1 = () => {
         resetPassword(email)
             .unwrap()
             .then(() => {
-                toast.success('If there is an existing account with that credentials, you will receive an email with a reset link')
+                toast.success('Si existe una cuenta con esas credenciales, recibirás un correo con un enlace para restablecer la contraseña.')
             })
             .catch((error) => {            
                 if (error.data && typeof error.data === 'object') {
@@ -38,11 +37,10 @@ const PassResetForm1 = () => {
                 } else if (error.message) {
                     toast.error(error.message);
                 } else {
-                    toast.error('Failed to send request. Please try again.');
+                    toast.error('Error al enviar la solicitud. Por favor, inténtalo de nuevo.');
                 }
             })
     }
-
 
     return (
         <div className='wrapper'>
@@ -52,19 +50,17 @@ const PassResetForm1 = () => {
                 </div>
 
                 <div className='flex-item-logo'>
-                    <h3>Change your password</h3>
+                    <h3>Cambia tu contraseña</h3>
                 </div>
 
                 <div className="input-box flex-item">
-                    <label className='label_input'>Enter your email</label>
-                    <input onChange={onChange} value={email} name='email' type="text" placeholder='Enter your email' required />
+                    <label className='label_input'>Ingresa tu correo electrónico</label>
+                    <input onChange={onChange} value={email} name='email' type="text" placeholder='Ingresa tu correo electrónico' required />
                 </div>
 
                 <div className='flex-item'>
-                <button type="submit" className='btn-pass'>Send</button>
+                    <button type="submit" className='btn-pass'>Enviar</button>
                 </div>
-
-                
             </form>
         </div>
     )

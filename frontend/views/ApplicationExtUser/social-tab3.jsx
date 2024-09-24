@@ -39,11 +39,8 @@ const SocialTab = () => {
         <Card.Body className="py-0">
           <Nav variant="tabs" className="profile-tabs" id="myTab" role="tablist">
             <Nav.Item>
-                  <Nav.Link eventKey="friendsRequests" id="friends-tab">
-                    <i className="ph-duotone ph-user-circle-plus me-2"></i>Organizations
-                  </Nav.Link>
                   <Nav.Link eventKey="friendsRequest" id="friends-tab">
-                    <i className="ph-duotone ph-user-circle-plus me-2"></i>User Details
+                    <i className="ph-duotone ph-user-circle-plus me-2"></i>Detalles
                   </Nav.Link>
             </Nav.Item>
           </Nav>

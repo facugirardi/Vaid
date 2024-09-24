@@ -41,12 +41,12 @@ const SocialTab = () => {
             <Nav.Item>
               {userType === 2 ? (
                 <Nav.Link eventKey="friendsRequest" id="friends-tab">
-                  <i className="ph-duotone ph-user-circle-plus me-2"></i>Details
+                  <i className="ph-duotone ph-user-circle-plus me-2"></i>Detalles
                 </Nav.Link>
               ) : (
                 <>
                   <Nav.Link eventKey="friendsRequest" id="friends-tab">
-                    <i className="ph-duotone ph-user-circle-plus me-2"></i>Details
+                    <i className="ph-duotone ph-user-circle-plus me-2"></i>Detalles
                   </Nav.Link>
                 </>
               )}

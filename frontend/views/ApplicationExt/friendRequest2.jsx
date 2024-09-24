@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import { Card, Col, Row, Tab } from "react-bootstrap";
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
@@ -13,13 +12,13 @@ const FriendsRequest = () => {
   const [organization, setOrganization] = useState(null);
   const [error, setError] = useState(null);
   useEffect(() => {
-    // Get the current URL
+    // Obtener la URL actual
     const currentUrl = window.location.href;
-    // Use URL constructor to parse the URL
+    // Usar el constructor de URL para analizar la URL
     const url = new URL(currentUrl);
-    // Split the pathname into segments
+    // Dividir el pathname en segmentos
     const pathSegments = url.pathname.split('/');
-    // Find the segment after 'dashboard'
+    // Buscar el segmento después de 'dashboard'
     const dashboardIndex = pathSegments.indexOf('dashboard');
     if (dashboardIndex !== -1 && pathSegments.length > dashboardIndex + 1) {
       setOrganizationId(pathSegments[dashboardIndex + 1]);
@@ -38,13 +37,13 @@ const fetchOrganization = async () => {
         });
 
         if (!response.ok) {
-          throw new Error('Failed to fetch organization');
+          throw new Error('Error al obtener la organización');
         }
 
         const data = await response.json();
         setOrganization(data);
       } catch (error) {
-        console.error('An error occurred:', error);
+        console.error('Ocurrió un error:', error);
       }
     }
   };
@@ -63,38 +62,38 @@ const fetchOrganization = async () => {
         <Tab.Pane eventKey="friendsRequest" id="friends" role="tabpanel" aria-labelledby="friends-tab">
           <Card>
             <Card.Header>
-              <h5>Details</h5>
+              <h5>Detalles</h5>
             </Card.Header>
             <Card.Body>
               <Row className="g-3">
                 <Col md={4}>
-                  <p className="mb-0 text-muted">Organization Name</p>
+                  <p className="mb-0 text-muted">Nombre de la Organización</p>
                 </Col>
                 <Col md={6}>
-                  <h6 className="mb-0">{organization ? organization.name : 'Loading...'}</h6>
+                  <h6 className="mb-0">{organization ? organization.name : 'Cargando...'}</h6>
                 </Col>
               </Row>
               <Row className="g-3 mt-0">
                 <Col md={4}>
-                  <p className="mb-0 text-muted">Country</p>
+                  <p className="mb-0 text-muted">País</p>
                 </Col>
                 <Col md={6}>
-                  <h6 className="mb-0">{organization ? organization.country : 'Loading...'}</h6>
+                  <h6 className="mb-0">{organization ? organization.country : 'Cargando...'}</h6>
                 </Col>
               </Row>
             </Card.Body>
           </Card>
           <Card>
             <Card.Header>
-              <h5>Other Information</h5>
+              <h5>Otra Información</h5>
             </Card.Header>
             <Card.Body>
               <Row className="g-3">
                 <Col md={4}>
-                  <p className="mb-0 text-muted">Description</p>
+                  <p className="mb-0 text-muted">Descripción</p>
                 </Col>
                 <Col md={6}>
-                  <h6 className="mb-0">{organization ? organization.description : 'Loading...'}</h6>
+                  <h6 className="mb-0">{organization ? organization.description : 'Cargando...'}</h6>
                 </Col>
               </Row>
             </Card.Body>

@@ -37,10 +37,10 @@ const Page = () => {
             if (organizationId) {
                 try {
                     const response = await axios.get(`http://localhost:8000/api/organizations/${organizationId}/members`);
-                    console.log('Fetched candidates:', response.data);
+                    console.log('Candidatos obtenidos:', response.data);
                     setCandidates(response.data);
                 } catch (error) {
-                    toast.error('Error fetching candidate details:', error);
+                    toast.error('Error al obtener los detalles de los candidatos:', error);
                 }
             }
         };
@@ -59,7 +59,7 @@ const Page = () => {
     };
 
     const handleSearch = (keyword) => {
-        console.log('Search keyword:', keyword);
+        console.log('Palabra clave de búsqueda:', keyword);
     };
 
     const handleShowModal = (candidate) => {
@@ -91,14 +91,14 @@ const Page = () => {
             setCandidates(candidates.filter(candidate => candidate.id !== selectedCandidate.id));
             handleCloseModal();
         } catch (error) {
-            toast.error('Error deleting:', error);
+            toast.error('Error al eliminar:', error);
         }
     };
 
     const columns = useMemo(
         () => [
             {
-                header: "Name",
+                header: "Nombre",
                 enableColumnFilter: false,
                 accessorKey: "name",
                 cell: (cellProps) => {
@@ -107,34 +107,34 @@ const Page = () => {
                         <div className="d-inline-block align-middle">
                             <div className="d-inline-block">
                                 <h6 className="m-b-0">{row.first_name} {row.last_name}</h6>
-                                <p className="m-b-0 text-primary">Member</p>
+                                <p className="m-b-0 text-primary">Miembro</p>
                             </div>
                         </div>
                     );
                 },
             },
             {
-                header: "Available Days",
+                header: "Días Disponibles",
                 accessorKey: "available_days",
                 enableColumnFilter: false,
             },
             {
-                header: "Available Times",
+                header: "Horas Disponibles",
                 accessorKey: "available_times",
                 enableColumnFilter: false,
             },
             {
-                header: "Born Date",
+                header: "Nacimiento",
                 accessorKey: "born_date",
                 enableColumnFilter: false,
             },
             {
-                header: "Country",
+                header: "País",
                 accessorKey: "country",
                 enableColumnFilter: false,
             },
             {
-                header: "User Tags",
+                header: "Etiquetas Usuario",
                 accessorKey: "status",
                 enableColumnFilter: false,
                 cell: (cellProps) => {
@@ -143,7 +143,7 @@ const Page = () => {
                             <div className="overlay-edit-3">
                                 <ul className="list-inline mb-0">
                                     <li className="list-inline-item m-0">
-                                        <Button className="btn-action avtar avtar-s btn btn-secondary" onClick={() => handleShowTagModalAssign(cellProps.row.original)}>
+                                        <Button className="btn-action btn-action2 avtar avtar-s btn btn-secondary" onClick={() => handleShowTagModalAssign(cellProps.row.original)}>
                                             <i className="ph-duotone ph-tag f-18 icon-action"></i>
                                         </Button>
                                     </li>
@@ -154,7 +154,7 @@ const Page = () => {
                 },
             },
             {
-                header: "Information",
+                header: "Información",
                 enableColumnFilter: false,
                 accessorKey: "status",
                 cell: (cellProps) => {
@@ -163,7 +163,7 @@ const Page = () => {
                             <div className="overlay-edit-3">
                                 <ul className="list-inline mb-0">
                                     <li className="list-inline-item m-0">
-                                        <Button className="btn-action avtar avtar-s btn btn-primary" onClick={() => handleShowModal(cellProps.row.original)}>
+                                        <Button className="btn-action  avtar avtar-s btn btn-primary" onClick={() => handleShowModal(cellProps.row.original)}>
                                             <i className="ph-duotone ph-info f-18 icon-action"></i>
                                         </Button>
                                     </li>
@@ -178,7 +178,7 @@ const Page = () => {
 
     return (
         <Layout>
-            <BreadcrumbItem mainTitle="Human Resources" subTitle="Members List" />
+            <BreadcrumbItem mainTitle="Recursos Humanos" subTitle="Lista de Miembros" />
 
             <Row>
                 <Col sm={12}>
@@ -186,18 +186,18 @@ const Page = () => {
                         <Card.Body>
                             <div className="container">
                                 <div className="row">
-                                    <button className="col-md-2 btn-tags-create theme-btn style-two" onClick={() => handleShowInviteModal()}>Invite Users <span>
+                                    <button className="col-md-2 btn-tags-create theme-btn style-two" onClick={() => handleShowInviteModal()}>Invitar<span>
                                     <i className="ph-duotone ph-user"></i> 
                                         </span></button>
                                     <div className="col-md-8"></div>
-                                    <button className="col-md-2 btn-tags-create theme-btn style-one" onClick={() => handleShowTagModal()}>View Tags <span>
+                                    <button className="col-md-2 btn-tags-create theme-btn style-one" onClick={() => handleShowTagModal()}>Etiquetas <span>
                                     <i className="ph-duotone ph-tag"></i> 
                                         </span></button>
                                 </div>
                             </div>
                         {candidates.length === 0 ? (
                             <div className="text-center mt-4">
-                                <p className='p-history'>No members available.</p>
+                                <p className='p-history'>No hay miembros disponibles.</p>
                             </div>
                         ) : (
                             <TableContainer
@@ -218,36 +218,36 @@ const Page = () => {
 
             <Modal show={showModal} onHide={handleCloseModal} centered backdropClassName="modal-backdrop">
                 <Modal.Header closeButton>
-                    <Modal.Title>Member Information</Modal.Title>
+                    <Modal.Title>Información del Miembro</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     {selectedCandidate && (
                         <div>
-                            <p><strong>Name:</strong> {selectedCandidate.first_name} {selectedCandidate.last_name}</p>
-                            <p><strong>Available Days:</strong> {selectedCandidate.available_days}</p>
-                            <p><strong>Available Times:</strong> {selectedCandidate.available_times}</p>              
-                            <p><strong>Country:</strong> {selectedCandidate.country}</p>
-                            <p><strong>City:</strong> {selectedCandidate.born_date}</p>
-                            <p><strong>Street:</strong> {selectedCandidate.street_name}</p>
-                            <p><strong>Profession:</strong> {selectedCandidate.profession}</p>
-                            <p><strong>Experience:</strong> {selectedCandidate.experience}</p>
-                            <p><strong>Topics:</strong> {selectedCandidate.topics}</p>
-                            <p><strong>Goals:</strong> {selectedCandidate.goals}</p>
-                            <p><strong>Motivations:</strong> {selectedCandidate.motivations}</p>
+                            <p><strong>Nombre:</strong> {selectedCandidate.first_name} {selectedCandidate.last_name}</p>
+                            <p><strong>Días Disponibles:</strong> {selectedCandidate.available_days}</p>
+                            <p><strong>Horas Disponibles:</strong> {selectedCandidate.available_times}</p>              
+                            <p><strong>País:</strong> {selectedCandidate.country}</p>
+                            <p><strong>Fecha de Nacimiento:</strong> {selectedCandidate.born_date}</p>
+                            <p><strong>Calle:</strong> {selectedCandidate.street_name}</p>
+                            <p><strong>Profesión:</strong> {selectedCandidate.profession}</p>
+                            <p><strong>Experiencia:</strong> {selectedCandidate.experience}</p>
+                            <p><strong>Temas:</strong> {selectedCandidate.topics}</p>
+                            <p><strong>Objetivos:</strong> {selectedCandidate.goals}</p>
+                            <p><strong>Motivaciones:</strong> {selectedCandidate.motivations}</p>
                         </div>
                     )}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="primary" className="button-cancel" onClick={handleDelete}>
-                        Delete
+                        Eliminar
                     </Button>
                 </Modal.Footer>
             </Modal>
 
-            {/* Render TagModal */}
+            {/* Renderizar TagModal */}
             <TagModal show={showTagModal} handleClose={handleCloseTagModal} organizationId={organizationId} handleSearch={handleSearch} selectedCandidate={selectedCandidate} />
 
-            {/* Render TagModalAssign */}
+            {/* Renderizar TagModalAssign */}
             <TagModalAssign show={showTagModalAssign} handleClose={handleCloseTagModalAssign} organizationId={organizationId} handleSearch={handleSearch} selectedCandidate={selectedCandidate} />
 
   <InviteUserModal
@@ -273,11 +273,11 @@ const InviteUserModal = ({ show, handleClose, organizationId }) => {
                 email: inviteEmail,
                 org_id: organizationId
             });
-            toast.success('Invitation sent successfully!');
+            toast.success('¡Invitación enviada con éxito!');
             setInviteEmail("");
             handleClose();
         } catch (error) {
-            toast.error('Error sending invitation');
+            toast.error('Error al enviar la invitación');
       
         }
     };
@@ -285,7 +285,7 @@ const InviteUserModal = ({ show, handleClose, organizationId }) => {
     return (
          <Modal show={show} onHide={handleClose} centered size='lg'>
             <Modal.Header closeButton>
-                <Modal.Title>Invite User</Modal.Title>
+                <Modal.Title>Invitar Usuario</Modal.Title>
             </Modal.Header>
             <Modal.Body>
                 <Form onSubmit={handleInviteUser}>
@@ -294,7 +294,7 @@ const InviteUserModal = ({ show, handleClose, organizationId }) => {
 
                             <div className="d-grid col-md-1"></div>
                             <div className="d-grid col-md-7 mt-user-email">
-                                <h6>Email Address</h6>
+                                <h6>Dirección de Email</h6>
                             </div>
                             <div className='d-grid col-md-4'></div>
                         </div>
@@ -306,7 +306,7 @@ const InviteUserModal = ({ show, handleClose, organizationId }) => {
                                   
                                     type="text"
                                     className="form-control"
-                                    placeholder="Enter user's email address"
+                                    placeholder="Ingrese la dirección de email del usuario"
                                     value={inviteEmail}
                                     required
                                     onChange={(e) => setInviteEmail(e.target.value)}
@@ -319,7 +319,7 @@ const InviteUserModal = ({ show, handleClose, organizationId }) => {
                                     type="button"
                                     onClick={handleInviteUser} 
                                 >
-                                    Invite
+                                    Invitar
                                 </button>
                             </div>
                             <div className="d-grid col-md-1"></div>
@@ -348,7 +348,7 @@ const TagModal = ({ show, handleClose, handleSearch, organizationId, selectedCan
                     setTags(response.data);
                     setFilteredTags(response.data);
                 } catch (error) {
-                    toast.error('Error fetching tags:', error);
+                    toast.error('Error al obtener etiquetas:', error);
                 } finally {
                     setLoading(false);
                 }
@@ -369,9 +369,9 @@ const TagModal = ({ show, handleClose, handleSearch, organizationId, selectedCan
             const updatedTags = tags.filter(tag => tag.id !== tagId);
             setTags(updatedTags);
             setFilteredTags(updatedTags);
-            toast.success('Tag deleted successfully!')
+            toast.success('¡Etiqueta eliminada con éxito!')
         } catch (error) {
-            toast.error('Error deleting tag:', error);
+            toast.error('Error al eliminar etiqueta:', error);
         }
     };
 
@@ -394,7 +394,7 @@ const TagModal = ({ show, handleClose, handleSearch, organizationId, selectedCan
             setFilteredTags([...filteredTags, response.data]);
             handleCloseNewTagModal();
         } catch (error) {
-            toast.error('Error creating tag:', error);
+            toast.error('Error al crear la etiqueta:', error);
         }
     };
 
@@ -405,10 +405,10 @@ const TagModal = ({ show, handleClose, handleSearch, organizationId, selectedCan
             await axios.post(`http://localhost:8000/api/user/${selectedCandidate.id}/tags/`, {
                 tags: [tagId]
             });
-            toast.success('Tag Added Successfully!')
-            handleClose();  // Cierra el modal después de asignar la tag
+            toast.success('¡Etiqueta asignada con éxito!')
+            handleClose();  // Cierra el modal después de asignar la etiqueta
         } catch (error) {
-            toast.error('Error assigning tag to member:', error);
+            toast.error('Error al asignar la etiqueta al miembro:', error);
         }
     };
 
@@ -416,7 +416,7 @@ const TagModal = ({ show, handleClose, handleSearch, organizationId, selectedCan
         <>
             <Modal show={show} onHide={handleClose} size="lg" centered>
                 <Modal.Header closeButton>
-                    <Modal.Title>View Tags</Modal.Title>
+                    <Modal.Title>Ver Etiquetas</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div className="container">
@@ -426,7 +426,7 @@ const TagModal = ({ show, handleClose, handleSearch, organizationId, selectedCan
                                 <input
                                     type="text"
                                     className="form-control"
-                                    placeholder="Search a Keyword"
+                                    placeholder="Buscar una palabra clave"
                                     onChange={(event) => handleTagSearch(event.target.value)}
                                     disabled={loading}
                                 />
@@ -438,7 +438,7 @@ const TagModal = ({ show, handleClose, handleSearch, organizationId, selectedCan
                                     onClick={handleShowNewTagModal}
                                     disabled={loading}
                                 >
-                                    New Tag
+                                    Nueva Etiqueta
                                 </button>
                             </div>
                             <div className="d-grid col-md-1"></div>
@@ -446,24 +446,24 @@ const TagModal = ({ show, handleClose, handleSearch, organizationId, selectedCan
                     </div>
                     <div className="table-responsive">
                         {loading ? (
-                            <p className="text-center">Loading tags...</p>
+                            <p className="text-center">Cargando etiquetas...</p>
                         ) : filteredTags.length === 0 ? (
-                            <p className="text-center">No tags available.</p>
+                            <p className="text-center">No hay etiquetas disponibles.</p>
                         ) : (
                             <table className="table">
                                 <thead>
                                     <tr>
-                                        <th className="text-center">Tags</th>
-                                        <th className="text-center">Type</th>
-                                        <th className="text-center">Members</th>
-                                        <th className="text-center">Delete</th>
+                                        <th className="text-center">Etiquetas</th>
+                                        <th className="text-center">Tipo</th>
+                                        <th className="text-center">Miembros</th>
+                                        <th className="text-center">Eliminar</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {filteredTags.map((tag) => (
                                         <tr key={tag.id} className='tr-tags'>
                                             <td className="text-center">{tag.name}</td>
-                                            <td className="text-center">{tag.isAdmin ? 'Administrator' : 'Member'}</td>
+                                            <td className="text-center">{tag.isAdmin ? 'Administrador' : 'Miembro'}</td>
                                             <td className="text-center"><i className="ti ti-user"></i> {tag.member_count}</td>
                                             <td className="text-center">
                                                 <button className="icon-button btn btn-light btn-sm mx-1" onClick={() => handleDeleteTag(tag.id)}>
@@ -481,7 +481,7 @@ const TagModal = ({ show, handleClose, handleSearch, organizationId, selectedCan
 
             <Modal show={showNewTagModal} onHide={handleCloseNewTagModal} centered>
                 <Modal.Header closeButton>
-                    <Modal.Title className='title-tag-cnt'>Create Tag</Modal.Title>
+                    <Modal.Title className='title-tag-cnt'>Crear Etiqueta</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
 
@@ -492,7 +492,7 @@ const TagModal = ({ show, handleClose, handleSearch, organizationId, selectedCan
                                     <div className="col-7 col-md-9">
                                         <Form.Control
                                             type="text"
-                                            placeholder="Tag Name"
+                                            placeholder="Nombre de la etiqueta"
                                             value={tagName}
                                             onChange={(e) => setTagName(e.target.value)}
                                             required
@@ -528,16 +528,16 @@ const TagModal = ({ show, handleClose, handleSearch, organizationId, selectedCan
                         <div className="box-create-btn container">
                             <div className="row row-text-admin">
                                 <span className='col-1 col-md-1 icon-span-adm'><i className="ph-duotone ph-user-gear icon-admin"></i></span>
-                                <p className='col-3 col-md-5 p-adm1'>This is an administrator</p>
+                                <p className='col-3 col-md-5 p-adm1'>Esto es administrador</p>
                                 <span className='col-1 col-md-1 icon-span-adm p-adm2'><i className="ph-duotone ph-user icon-admin"></i></span>
-                                <p className='col-3 col-md-5'>This is a member</p>
+                                <p className='col-3 col-md-5'>Esto es un miembro</p>
                             </div>
                             <div className="row">
                                 <div className="col-2 col-md-4">
                                 </div>
                                 <div className="col-6 d-flex justify-content-center col-md-4">
                                     <Button variant="primary" type="submit" className="create-tag-btn">
-                                        Create Tag
+                                        Crear Etiqueta
                                     </Button>
                                 </div>
 
@@ -553,7 +553,7 @@ const TagModal = ({ show, handleClose, handleSearch, organizationId, selectedCan
     );
 };
 
-// Aquí está el nuevo TagModalAssign, que hace fetch de las tags cada vez que se muestra.
+// Aquí está el nuevo TagModalAssign, que hace fetch de las etiquetas cada vez que se muestra.
 
 const TagModalAssign = ({ show, handleClose, handleSearch, organizationId, selectedCandidate }) => {
     const [tags, setTags] = useState([]);
@@ -571,7 +571,7 @@ const TagModalAssign = ({ show, handleClose, handleSearch, organizationId, selec
                     setTags(response.data);
                     setFilteredTags(response.data);
                 } catch (error) {
-                    toast.error('Error fetching tags:', error);
+                    toast.error('Error al obtener etiquetas:', error);
                 } finally {
                     setLoading(false);
                 }
@@ -587,7 +587,7 @@ const TagModalAssign = ({ show, handleClose, handleSearch, organizationId, selec
                     setFilteredTagsNot(response.data);
                     console.log(tagsNot);  // Para verificar que se están obteniendo las etiquetas no asignadas
                 } catch (error) {
-                    toast.error('Error fetching unassigned tags:', error);
+                    toast.error('Error al obtener etiquetas no asignadas:', error);
                 } finally {
                     setLoading(false);
                 }
@@ -614,9 +614,9 @@ const TagModalAssign = ({ show, handleClose, handleSearch, organizationId, selec
             const updatedTags = tags.filter(tag => tag.id !== tagId);
             setTags(updatedTags);
             setFilteredTags(updatedTags);
-            toast.success('Tag unassigned successfully!');
+            toast.success('¡Etiqueta desasignada con éxito!');
         } catch (error) {
-            toast.error('Error deleting tag:', error);
+            toast.error('Error al desasignar la etiqueta:', error);
         }
     };
 
@@ -627,9 +627,9 @@ const TagModalAssign = ({ show, handleClose, handleSearch, organizationId, selec
             await axios.post(`http://localhost:8000/api/user/${selectedCandidate.id}/tags/`, {
                 tags: [tagId]
             });
-            toast.success('Tag Added Successfully!');
+            toast.success('¡Etiqueta asignada con éxito!');
         } catch (error) {
-            toast.error('Error assigning tag to member:', error);
+            toast.error('Error al asignar la etiqueta al miembro:', error);
         }
     };
 
@@ -637,7 +637,7 @@ const TagModalAssign = ({ show, handleClose, handleSearch, organizationId, selec
         <>
             <Modal show={show} onHide={handleClose} size="lg" centered>
                 <Modal.Header closeButton>
-                    <Modal.Title>User Tags</Modal.Title>
+                    <Modal.Title>Etiquetas de Usuario</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <div className="container">
@@ -647,7 +647,7 @@ const TagModalAssign = ({ show, handleClose, handleSearch, organizationId, selec
                                 <input
                                     type="text"
                                     className="form-control"
-                                    placeholder="Search a Keyword"
+                                    placeholder="Buscar una palabra clave"
                                     onChange={(event) => handleTagSearch(event.target.value)}
                                     disabled={loading}
                                 />
@@ -657,16 +657,16 @@ const TagModalAssign = ({ show, handleClose, handleSearch, organizationId, selec
                     </div>
                     <div className="table-responsive">
                         {loading ? (
-                            <p className="text-center">Loading tags...</p>
+                            <p className="text-center">Cargando etiquetas...</p>
                         ) : (
                             <>
                                 <table className="table">
                                     <thead>
                                         <tr>
-                                            <th className="text-center">Tags</th>
-                                            <th className="text-center">Type</th>
-                                            <th className="text-center">Members</th>
-                                            <th className="text-center">Action</th>
+                                            <th className="text-center">Etiquetas</th>
+                                            <th className="text-center">Tipo</th>
+                                            <th className="text-center">Miembros</th>
+                                            <th className="text-center">Acción</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -674,7 +674,7 @@ const TagModalAssign = ({ show, handleClose, handleSearch, organizationId, selec
                                         {filteredTags.length > 0 && filteredTags.map((tag) => (
                                             <tr key={tag.id} className='tr-tags tr-assigned'>
                                                 <td className="text-center">{tag.name}</td>
-                                                <td className="text-center">{tag.isAdmin ? 'Administrator' : 'Member'}</td>
+                                                <td className="text-center">{tag.isAdmin ? 'Administrador' : 'Miembro'}</td>
                                                 <td className="text-center"><i className="ti ti-user"></i> {tag.member_count}</td>
                                                 <td className="text-center">
                                                     <button className="icon-button btn btn-light btn-sm mx-1" onClick={() => handleDeleteTag(tag.id)}>
@@ -687,7 +687,7 @@ const TagModalAssign = ({ show, handleClose, handleSearch, organizationId, selec
                                         {filteredTagsNot.length > 0 && filteredTagsNot.map((tag) => (
                                             <tr key={tag.id} className='tr-tags'>
                                                 <td className="text-center">{tag.name}</td>
-                                                <td className="text-center">{tag.isAdmin ? 'Administrator' : 'Member'}</td>
+                                                <td className="text-center">{tag.isAdmin ? 'Administrador' : 'Miembro'}</td>
                                                 <td className="text-center"><i className="ti ti-user"></i> {tag.member_count}</td>
                                                 <td className="text-center">
                                                     <button className="icon-button btn btn-light btn-sm mx-1" onClick={() => handleAssignTag(tag.id)}>

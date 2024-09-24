@@ -33,7 +33,7 @@ const Page = () => {
                 console.log('Fetched candidates:', response.data);
                 setCandidates(response.data);
             } catch (error) {
-                console.error('Error fetching candidate details:', error);
+                console.error('Error al obtener detalles de los candidatos:', error);
             }
         };
         fetchData();}
@@ -58,7 +58,7 @@ const Page = () => {
             setCandidates(candidates.filter(candidate => candidate.id !== selectedCandidate.id));
             handleCloseModal();
         } catch (error) {
-            console.error('Error approving candidate:', error);
+            console.error('Error al aprobar candidato:', error);
         }
     };
 
@@ -69,14 +69,14 @@ const Page = () => {
             setCandidates(candidates.filter(candidate => candidate.id !== selectedCandidate.id));
             handleCloseModal();
         } catch (error) {
-            console.error('Error rejecting candidate:', error);
+            console.error('Error al rechazar candidato:', error);
         }
     };
 
     const columns = useMemo(
         () => [
             {
-                header: "Name",
+                header: "Nombre",
                 enableColumnFilter: false,
                 accessorKey: "avatar",
                 cell: (cellProps) => {
@@ -85,76 +85,74 @@ const Page = () => {
                         <div className="d-inline-block align-middle">
                             <div className="d-inline-block">
                                 <h6 className="m-b-0">{row.first_name} {row.last_name}</h6>
-                                <p className="m-b-0 text-primary">Candidate</p>
+                                <p className="m-b-0 text-primary">Candidato</p>
                             </div>
                         </div>
                     );
                 },
             },
             {
-                header: "Disponibility",
+                header: "Disponibilidad",
                 accessorKey: "disponibility",
                 enableColumnFilter: false,
                 cell: (cellProps) => {
                     const dayMap = {
-                        'Mon': 'Monday',
-                        'Tue': 'Tuesday',
-                        'Wed': 'Wednesday',
-                        'Thu': 'Thursday',
-                        'Fri': 'Friday',
-                        'Sat': 'Saturday',
-                        'Sun': 'Sunday',
+                        'Mon': 'Lunes',
+                        'Tue': 'Martes',
+                        'Wed': 'Miércoles',
+                        'Thu': 'Jueves',
+                        'Fri': 'Viernes',
+                        'Sat': 'Sábado',
+                        'Sun': 'Domingo',
                     };
             
                     let disponibility = cellProps.getValue();
             
-                    // Si disponibility es un string que parece un array, lo transformamos en un array
                     if (typeof disponibility === 'string' && disponibility.startsWith('[') && disponibility.endsWith(']')) {
                         try {
                             disponibility = disponibility
-                                .slice(1, -1) // Elimina los corchetes
-                                .replace(/'/g, '') // Elimina las comillas simples
-                                .split(',') // Separa en elementos
-                                .map(day => day.trim()); // Elimina espacios innecesarios
+                                .slice(1, -1)
+                                .replace(/'/g, '')
+                                .split(',')
+                                .map(day => day.trim());
                         } catch (error) {
-                            console.error('Error processing disponibility:', error);
-                            disponibility = []; // Si ocurre algún error, manejamos un array vacío
+                            console.error('Error al procesar la disponibilidad:', error);
+                            disponibility = [];
                         }
                     }
             
-                    // Verifica si disponibility es ahora un array y mapear sus valores
                     if (Array.isArray(disponibility)) {
                         const fullDays = disponibility.map(day => dayMap[day] || day);
                         return <span>{fullDays.join(', ')}</span>;
                     }
             
-                    return <span>No disponibility data</span>; // Si no es un array, muestra un mensaje alternativo
+                    return <span>No hay datos de disponibilidad</span>;
                 }
             },            
             {
-                header: "Country",
+                header: "País",
                 accessorKey: "country",
                 enableColumnFilter: false,
             },
             {
-                header: "Born Date",
+                header: "Nacimiento",
                 accessorKey: "born_date",
                 enableColumnFilter: false,
             },
             {
-                header: "Request Date",
+                header: "Fecha de Solicitud",
                 accessorKey: "request_date",
                 enableColumnFilter: false,
             },
             {
-                header: "Interviewed",
+                header: "Entrevistado",
                 enableColumnFilter: false,
                 accessorKey: "interviewed",
                 cell: (cellProps) => {
                     return (
                         <>
                             {cellProps.getValue() === "True" ?
-                                <span className="badge bg-light-success">Yes</span>
+                                <span className="badge bg-light-success">Sí</span>
                                 :
                                 <span className="badge bg-light-danger">No</span>
                             }
@@ -176,19 +174,19 @@ const Page = () => {
 
     const { data: user, isError, isLoading } = useRetrieveUserQuery();
 
-    if (isLoading) return <p>Loading...</p>;
-    if (isError || !user) return <p>Error loading user data!</p>;
+    if (isLoading) return <p>Cargando...</p>;
+    if (isError || !user) return <p>¡Error al cargar los datos del usuario!</p>;
 
     return (
         <Layout>
-            <BreadcrumbItem mainTitle="Human Resources" subTitle="Candidate List" />
+            <BreadcrumbItem mainTitle="Recursos Humanos" subTitle="Lista de Candidatos" />
 
             <Row>
                 <Col sm={12}>
                     <Card className="border-0 table-card user-profile-list">
                         <Card.Body>
                             {candidates.length === 0 ? (
-                                <p className="text-center p-donation">No candidates available.</p>
+                                <p className="text-center p-donation">No hay candidatos disponibles.</p>
                             ) : (
                                 <TableContainer
                                     columns={columns}
@@ -208,33 +206,33 @@ const Page = () => {
 
             <Modal show={showModal} onHide={handleCloseModal} centered backdropClassName="modal-backdrop">
                 <Modal.Header closeButton>
-                    <Modal.Title>Candidate Information</Modal.Title>
+                    <Modal.Title>Información del Candidato</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     {selectedCandidate && (
                         <div>
-                            <p><strong>Name:</strong> {selectedCandidate.first_name} {selectedCandidate.last_name}</p>
-                            <p><strong>Country:</strong> {selectedCandidate.country}</p>
-                            <p><strong>Born Date:</strong> {selectedCandidate.born_date}</p>
-                            <p><strong>Request Date:</strong> {selectedCandidate.request_date}</p>
-                            <p><strong>Street:</strong> {selectedCandidate.street_name} {selectedCandidate.street_number}</p>
-                            <p><strong>City:</strong> {selectedCandidate.city}</p>
-                            <p><strong>Profession:</strong> {selectedCandidate.profession}</p>
-                            <p><strong>Experience:</strong> {selectedCandidate.experience}</p>
-                            <p><strong>Modality:</strong> {selectedCandidate.modality}</p>
-                            <p><strong>Topics of interest:</strong> {selectedCandidate.topics}</p>
-                            <p><strong>Goals:</strong> {selectedCandidate.goals}</p>
-                            <p><strong>Motivations:</strong> {selectedCandidate.motivations}</p>
+                            <p><strong>Nombre:</strong> {selectedCandidate.first_name} {selectedCandidate.last_name}</p>
+                            <p><strong>País:</strong> {selectedCandidate.country}</p>
+                            <p><strong>Fecha de Nacimiento:</strong> {selectedCandidate.born_date}</p>
+                            <p><strong>Fecha de Solicitud:</strong> {selectedCandidate.request_date}</p>
+                            <p><strong>Calle:</strong> {selectedCandidate.street_name} {selectedCandidate.street_number}</p>
+                            <p><strong>Ciudad:</strong> {selectedCandidate.city}</p>
+                            <p><strong>Profesión:</strong> {selectedCandidate.profession}</p>
+                            <p><strong>Experiencia:</strong> {selectedCandidate.experience}</p>
+                            <p><strong>Modalidad:</strong> {selectedCandidate.modality}</p>
+                            <p><strong>Temas de interés:</strong> {selectedCandidate.topics}</p>
+                            <p><strong>Objetivos:</strong> {selectedCandidate.goals}</p>
+                            <p><strong>Motivaciones:</strong> {selectedCandidate.motivations}</p>
                         </div>
                     )}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" className="button-cancel" onClick={handleReject}>
-                        Reject
+                        Rechazar
                     </Button>
 
                     <Button variant="secondary" className="button-ok" onClick={handleApprove}>
-                        Approve
+                        Aprobar
                     </Button>
                 </Modal.Footer>
             </Modal>

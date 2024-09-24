@@ -33,21 +33,21 @@ const Header3 = ({ onePage }) => {
       .unwrap()
       .then(() => {
         dispatch(setLogout())
-        toast.success('Logged out successfully.');
+        toast.success('Cierre de sesión exitoso.');
         window.location.href = '/auth/login';
       })
       .catch(() => {
         dispatch(setLogout())
-        toast.success('Logged out successfully.');
+        toast.success('Cierre de sesión exitoso.');
         window.location.href = '/auth/login';
       })
   }
 
   const menus = [
-    { id: 1, href: "/#home", title: "Home" },
-    { id: 2, href: "/#about", title: "about" },
-    { id: 3, href: "/#services", title: "services" },
-    { id: 4, href: "/#faqs", title: "FAQs" },
+    { id: 1, href: "/#home", title: "Inicio" },
+    { id: 2, href: "/#about", title: "Nosotros" },
+    { id: 3, href: "/#services", title: "Servicios" },
+    { id: 4, href: "/#faqs", title: "FAQ" },
   ];
   return (
     <header className="main-header menu-absolute">
@@ -81,24 +81,22 @@ const Header3 = ({ onePage }) => {
             {isAuthenticated
               ? <div className="menu-btns ms-lg-auto">
                   <button onClick={handleLogout} className="light-btn">
-                    Logout
+                    Cerrar Sesión
                   </button>
                   <a href="/dashboard" className="theme-btn style-two">
-                    Profile <i className="far fa-arrow-right" />
+                    Perfil <i className="far fa-arrow-right" />
                   </a>
                 </div>
 
               : <div className="menu-btns ms-lg-auto">
                   <a href="/auth/login" className="light-btn">
-                    Login
+                    Entrar
                   </a>
                   <a href="/auth/register" className="theme-btn style-two">
-                    Sign Up <i className="far fa-arrow-right" />
+                  Registro <i className="far fa-arrow-right" />
                   </a>
                 </div>
               }
-
-
           </div>
         </div>
       </div>
@@ -106,8 +104,6 @@ const Header3 = ({ onePage }) => {
     </header>
   );
 };
-
-
 
 const HeaderEmpty = ({ onePage }) => {
   return (
@@ -143,7 +139,6 @@ const HeaderEmpty = ({ onePage }) => {
     </header>
   );
 };
-
 
 const Nav = ({
   logo = "/assets/images/vaidpng2.png",
@@ -183,31 +178,31 @@ const Nav = ({
           ) : (
             <ul className="navigation clearfix ">
               <li className="dropdown">
-                <a href="#">Home</a>
+                <a href="#">Inicio</a>
                 <ul>
                   <li className="dropdown">
                     <a href="#">MultiPage</a>
                     <ul>
                       <li>
-                        <Link href="/">Business</Link>
+                        <Link href="/">Negocios</Link>
                       </li>
                       <li>
-                        <Link href="index2">Lead Capture</Link>
+                        <Link href="index2">Captura de Leads</Link>
                       </li>
                       <li>
-                        <Link href="index3">Software Landing</Link>
+                        <Link href="index3">Landing de Software</Link>
                       </li>
                       <li>
                         <Link href="index4">E-learning</Link>
                       </li>
                       <li>
-                        <Link href="index5">Saas Landing</Link>
+                        <Link href="index5">Landing de Saas</Link>
                       </li>
                       <li>
-                        <Link href="index6">AI Software</Link>
+                        <Link href="index6">Software de IA</Link>
                       </li>
                       <li>
-                        <Link href="index7">Website Builder</Link>
+                        <Link href="index7">Constructor de Sitios Web</Link>
                       </li>
                       <li>
                         <Link href="index8">Fintech</Link>
@@ -224,25 +219,25 @@ const Nav = ({
                     <a href="#">OnePage</a>
                     <ul>
                       <li>
-                        <Link href="index1-onepage">Business</Link>
+                        <Link href="index1-onepage">Negocios</Link>
                       </li>
                       <li>
-                        <Link href="index2-onepage">Lead Capture</Link>
+                        <Link href="index2-onepage">Captura de Leads</Link>
                       </li>
                       <li>
-                        <Link href="index3-onepage">Software Landing</Link>
+                        <Link href="index3-onepage">Landing de Software</Link>
                       </li>
                       <li>
                         <Link href="index4-onepage">E-learning</Link>
                       </li>
                       <li>
-                        <Link href="index5-onepage">Saas Landing</Link>
+                        <Link href="index5-onepage">Landing de Saas</Link>
                       </li>
                       <li>
-                        <Link href="index6-onepage">AI Software</Link>
+                        <Link href="index6-onepage">Software de IA</Link>
                       </li>
                       <li>
-                        <Link href="index7-onepage">Website Builder</Link>
+                        <Link href="index7-onepage">Constructor de Sitios Web</Link>
                       </li>
                       <li>
                         <Link href="index8-onepage">Fintech</Link>
@@ -261,34 +256,34 @@ const Nav = ({
                 </div>
               </li>
               <li className="dropdown">
-                <a href="#">pages</a>
+                <a href="#">Páginas</a>
                 <ul>
                   <li>
-                    <Link href="about">About Us</Link>
+                    <Link href="about">Sobre Nosotros</Link>
                   </li>
                   <li>
-                    <Link href="faqs">faqs</Link>
+                    <Link href="faqs">Preguntas Frecuentes</Link>
                   </li>
                   <li>
-                    <Link href="team">Team Members</Link>
+                    <Link href="team">Miembros del Equipo</Link>
                   </li>
                   <li>
-                    <Link href="pricing">Pricing Plan</Link>
+                    <Link href="pricing">Planes de Precios</Link>
                   </li>
                   <li>
-                    <Link href="contact">Contact us</Link>
+                    <Link href="contact">Contáctanos</Link>
                   </li>
                   <li>
-                    <Link href="sign-in">Sign In</Link>
+                    <Link href="sign-in">Iniciar Sesión</Link>
                   </li>
                   <li>
-                    <Link href="sign-up">Sign Up</Link>
+                    <Link href="sign-up">Registrarse</Link>
                   </li>
                   <li>
-                    <Link href="coming-soon">Coming Soon</Link>
+                    <Link href="coming-soon">Próximamente</Link>
                   </li>
                   <li>
-                    <Link href="404">404 error</Link>
+                    <Link href="404">Error 404</Link>
                   </li>
                 </ul>
                 <div className="dropdown-btn">
@@ -296,13 +291,13 @@ const Nav = ({
                 </div>
               </li>
               <li className="dropdown">
-                <a href="#">Services</a>
+                <a href="#">Servicios</a>
                 <ul>
                   <li>
-                    <Link href="services">Our Services</Link>
+                    <Link href="services">Nuestros Servicios</Link>
                   </li>
                   <li>
-                    <Link href="service-details">Service Details</Link>
+                    <Link href="service-details">Detalles del Servicio</Link>
                   </li>
                 </ul>
                 <div className="dropdown-btn">
@@ -310,19 +305,19 @@ const Nav = ({
                 </div>
               </li>
               <li className="dropdown">
-                <a href="#">Shop</a>
+                <a href="#">Tienda</a>
                 <ul>
                   <li>
-                    <Link href="shop">our Products</Link>
+                    <Link href="shop">Nuestros Productos</Link>
                   </li>
                   <li>
-                    <Link href="product-details">Product Details</Link>
+                    <Link href="product-details">Detalles del Producto</Link>
                   </li>
                   <li>
-                    <Link href="cart">Shopping Cart</Link>
+                    <Link href="cart">Carrito de Compras</Link>
                   </li>
                   <li>
-                    <Link href="checkout">Checkout</Link>
+                    <Link href="checkout">Pagar</Link>
                   </li>
                 </ul>
                 <div className="dropdown-btn">
@@ -330,19 +325,19 @@ const Nav = ({
                 </div>
               </li>
               <li className="dropdown">
-                <a href="#">Projects</a>
+                <a href="#">Proyectos</a>
                 <ul>
                   <li>
-                    <Link href="projects">Project Grid</Link>
+                    <Link href="projects">Cuadrícula de Proyectos</Link>
                   </li>
                   <li>
-                    <Link href="project-list">Project List</Link>
+                    <Link href="project-list">Lista de Proyectos</Link>
                   </li>
                   <li>
-                    <Link href="project-masonry">Project Masonry</Link>
+                    <Link href="project-masonry">Masonry de Proyectos</Link>
                   </li>
                   <li>
-                    <Link href="project-details">Project Details</Link>
+                    <Link href="project-details">Detalles del Proyecto</Link>
                   </li>
                 </ul>
                 <div className="dropdown-btn">
@@ -350,13 +345,13 @@ const Nav = ({
                 </div>
               </li>
               <li className="dropdown">
-                <a href="#">blog</a>
+                <a href="#">Blog</a>
                 <ul>
                   <li>
-                    <Link href="blog">blog standard</Link>
+                    <Link href="blog">Blog Estándar</Link>
                   </li>
                   <li>
-                    <Link href="blog-details">blog details</Link>
+                    <Link href="blog-details">Detalles del Blog</Link>
                   </li>
                 </ul>
                 <div className="dropdown-btn">
@@ -415,7 +410,7 @@ const NavSearch = () => {
       >
         <input
           type="text"
-          placeholder="Search"
+          placeholder="Buscar"
           className="searchbox"
           required=""
         />
@@ -439,14 +434,14 @@ const MobileMenu = ({ sidebar, onePage, menus }) => {
         localStorage.removeItem('token');
         localStorage.removeItem('id');
         dispatch(setLogout())
-        toast.success('Logged out successfully.');
+        toast.success('Cierre de sesión exitoso.');
         window.location.href = '/auth/login';
       })
       .catch(() => {
         localStorage.removeItem('token');
         localStorage.removeItem('id');
         dispatch(setLogout())
-        toast.success('Logged out successfully.');
+        toast.success('Cierre de sesión exitoso.');
         window.location.href = '/auth/login';
       })
   }
@@ -477,44 +472,44 @@ const MobileMenu = ({ sidebar, onePage, menus }) => {
             {isAuthenticated
               ? 
               <>
-                <li><a onClick={handleLogout}>Logout</a></li>
-                <li><a href="/dashboard">Profile</a></li>      
+                <li><a onClick={handleLogout}>Cerrar Sesión</a></li>
+                <li><a href="/dashboard">Perfil</a></li>      
               </>
               :
               <>
-                <li><a href="/auth/login">Login</a></li>      
-                <li><a href="/auth/register">Sign Up</a></li>      
+                <li><a href="/auth/login">Entrar</a></li>      
+                <li><a href="/auth/register">Registro</a></li>      
               </>
               }
         </ul>
       ) : (
         <ul className={`${sidebar ? "sidebar-menu" : "navigation"} clearfix`}>
           <li className="dropdown">
-            <a href="#">Home</a>
+            <a href="#">Inicio</a>
             <ul style={activeLi("home")}>
               <li className="dropdown">
                 <a href="#">MultiPage</a>
                 <ul style={multiMenuActiveLi("multiPage")}>
                   <li>
-                    <Link href="/">Business</Link>
+                    <Link href="/">Negocios</Link>
                   </li>
                   <li>
-                    <Link href="index2">Lead Capture</Link>
+                    <Link href="index2">Captura de Leads</Link>
                   </li>
                   <li>
-                    <Link href="index3">Software Landing</Link>
+                    <Link href="index3">Landing de Software</Link>
                   </li>
                   <li>
                     <Link href="index4">E-learning</Link>
                   </li>
                   <li>
-                    <Link href="index5">Saas Landing</Link>
+                    <Link href="index5">Landing de Saas</Link>
                   </li>
                   <li>
-                    <Link href="index6">AI Software</Link>
+                    <Link href="index6">Software de IA</Link>
                   </li>
                   <li>
-                    <Link href="index7">Website Builder</Link>
+                    <Link href="index7">Constructor de Sitios Web</Link>
                   </li>
                   <li>
                     <Link href="index8">Fintech</Link>
@@ -534,25 +529,25 @@ const MobileMenu = ({ sidebar, onePage, menus }) => {
                 <a href="#">OnePage</a>
                 <ul style={multiMenuActiveLi("OnePage")}>
                   <li>
-                    <Link href="index1-onepage">Business</Link>
+                    <Link href="index1-onepage">Negocios</Link>
                   </li>
                   <li>
-                    <Link href="index2-onepage">Lead Capture</Link>
+                    <Link href="index2-onepage">Captura de Leads</Link>
                   </li>
                   <li>
-                    <Link href="index3-onepage">Software Landing</Link>
+                    <Link href="index3-onepage">Landing de Software</Link>
                   </li>
                   <li>
                     <Link href="index4-onepage">E-learning</Link>
                   </li>
                   <li>
-                    <Link href="index5-onepage">Saas Landing</Link>
+                    <Link href="index5-onepage">Landing de Saas</Link>
                   </li>
                   <li>
-                    <Link href="index6-onepage">AI Software</Link>
+                    <Link href="index6-onepage">Software de IA</Link>
                   </li>
                   <li>
-                    <Link href="index7-onepage">Website Builder</Link>
+                    <Link href="index7-onepage">Constructor de Sitios Web</Link>
                   </li>
                   <li>
                     <Link href="index8-onepage">Fintech</Link>
@@ -574,34 +569,34 @@ const MobileMenu = ({ sidebar, onePage, menus }) => {
             </div>
           </li>
           <li className="dropdown">
-            <a href="#">pages</a>
+            <a href="#">Páginas</a>
             <ul style={activeLi("pages")}>
               <li>
-                <Link href="about">About Us</Link>
+                <Link href="about">Sobre Nosotros</Link>
               </li>
               <li>
-                <Link href="faqs">faqs</Link>
+                <Link href="faqs">Preguntas Frecuentes</Link>
               </li>
               <li>
-                <Link href="team">Team Members</Link>
+                <Link href="team">Miembros del Equipo</Link>
               </li>
               <li>
-                <Link href="pricing">Pricing Plan</Link>
+                <Link href="pricing">Planes de Precios</Link>
               </li>
               <li>
-                <Link href="contact">Contact us</Link>
+                <Link href="contact">Contáctanos</Link>
               </li>
               <li>
-                <Link href="sign-in">Sign In</Link>
+                <Link href="sign-in">Iniciar Sesión</Link>
               </li>
               <li>
-                <Link href="sign-up">Sign Up</Link>
+                <Link href="sign-up">Registrarse</Link>
               </li>
               <li>
-                <Link href="coming-soon">Coming Soon</Link>
+                <Link href="coming-soon">Próximamente</Link>
               </li>
               <li>
-                <Link href="404">404 error</Link>
+                <Link href="404">Error 404</Link>
               </li>
             </ul>
             <div
@@ -612,13 +607,13 @@ const MobileMenu = ({ sidebar, onePage, menus }) => {
             </div>
           </li>
           <li className="dropdown">
-            <a href="#">Services</a>
+            <a href="#">Servicios</a>
             <ul style={activeLi("Services")}>
               <li>
-                <Link href="services">Our Services</Link>
+                <Link href="services">Nuestros Servicios</Link>
               </li>
               <li>
-                <Link href="service-details">Service Details</Link>
+                <Link href="service-details">Detalles del Servicio</Link>
               </li>
             </ul>
             <div
@@ -629,19 +624,19 @@ const MobileMenu = ({ sidebar, onePage, menus }) => {
             </div>
           </li>
           <li className="dropdown">
-            <a href="#">Shop</a>
+            <a href="#">Tienda</a>
             <ul style={activeLi("Shop")}>
               <li>
-                <Link href="shop">our Products</Link>
+                <Link href="shop">Nuestros Productos</Link>
               </li>
               <li>
-                <Link href="product-details">Product Details</Link>
+                <Link href="product-details">Detalles del Producto</Link>
               </li>
               <li>
-                <Link href="cart">Shopping Cart</Link>
+                <Link href="cart">Carrito de Compras</Link>
               </li>
               <li>
-                <Link href="checkout">Checkout</Link>
+                <Link href="checkout">Pagar</Link>
               </li>
             </ul>
             <div className="dropdown-btn" onClick={() => activeMenuSet("Shop")}>
@@ -649,19 +644,19 @@ const MobileMenu = ({ sidebar, onePage, menus }) => {
             </div>
           </li>
           <li className="dropdown">
-            <a href="#">Projects</a>
+            <a href="#">Proyectos</a>
             <ul style={activeLi("Projects")}>
               <li>
-                <Link href="projects">Project Grid</Link>
+                <Link href="projects">Cuadrícula de Proyectos</Link>
               </li>
               <li>
-                <Link href="project-list">Project List</Link>
+                <Link href="project-list">Lista de Proyectos</Link>
               </li>
               <li>
-                <Link href="project-masonry">Project Masonry</Link>
+                <Link href="project-masonry">Masonry de Proyectos</Link>
               </li>
               <li>
-                <Link href="project-details">Project Details</Link>
+                <Link href="project-details">Detalles del Proyecto</Link>
               </li>
             </ul>
             <div
@@ -672,13 +667,13 @@ const MobileMenu = ({ sidebar, onePage, menus }) => {
             </div>
           </li>
           <li className="dropdown">
-            <a href="#">blog</a>
+            <a href="#">Blog</a>
             <ul style={activeLi("blog")}>
               <li>
-                <Link href="blog">blog standard</Link>
+                <Link href="blog">Blog Estándar</Link>
               </li>
               <li>
-                <Link href="blog-details">blog details</Link>
+                <Link href="blog-details">Detalles del Blog</Link>
               </li>
             </ul>
             <div className="dropdown-btn" onClick={() => activeMenuSet("blog")}>

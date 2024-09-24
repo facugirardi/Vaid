@@ -7,7 +7,6 @@ const FriendsRequest = () => {
   const { data: user } = useRetrieveUserQuery();  
   const [userType, setUserType] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
-
   const [organization, setOrganization] = useState(null);
   const [error, setError] = useState(null);
 
@@ -22,13 +21,13 @@ const FriendsRequest = () => {
         });
 
         if (!response.ok) {
-          throw new Error('Failed to fetch completion status');
+          throw new Error('No se pudo obtener el estado de finalización');
         }
 
         const data = await response.json();
         setUserType(data.user_type);
       } catch (error) {
-        console.error('An error occurred:', error);
+        console.error('Ocurrió un error:', error);
       }
     }
   };
@@ -48,13 +47,13 @@ const FriendsRequest = () => {
         });
 
         if (!response.ok) {
-          throw new Error('Network response was not ok');
+          throw new Error('La respuesta de la red no fue satisfactoria');
         }
 
         const data = await response.json();
         setUserDetails(data);
       } catch (error) {
-        toast.error(`Failed to retrieve user. Error: ${error.message}`);
+        toast.error(`No se pudo obtener el usuario. Error: ${error.message}`);
       }
     };
 
@@ -74,13 +73,13 @@ const FriendsRequest = () => {
         });
 
         if (!response.ok) {
-          throw new Error('Failed to fetch organization');
+          throw new Error('No se pudo obtener la organización');
         }
 
         const data = await response.json();
         setOrganization(data);
       } catch (error) {
-        console.error('An error occurred:', error);
+        console.error('Ocurrió un error:', error);
         setError(error.message);
       }
     }
@@ -93,11 +92,11 @@ const FriendsRequest = () => {
   }, [user, userType]);
 
   if (userType === 1 && (!user || !userDetails)) {
-    return <p>Loading...</p>;
+    return <p>Cargando...</p>;
   }
 
   if (userType === 2 && (!user || !organization)) {
-    return <p>Loading...</p>;
+    return <p>Cargando...</p>;
   }
 
   return (
@@ -106,12 +105,12 @@ const FriendsRequest = () => {
         <Tab.Pane eventKey="friendsRequest" id="friends" role="tabpanel" aria-labelledby="friends-tab">
           <Card>
             <Card.Header>
-              <h5>Personal Details</h5>
+              <h5>Detalles Personales</h5>
             </Card.Header>
             <Card.Body>
               <Row className="g-3">
                 <Col md={4}>
-                  <p className="mb-0 text-muted">Full Name</p>
+                  <p className="mb-0 text-muted">Nombre Completo</p>
                 </Col>
                 <Col md={6}>
                   <h6 className="mb-0">{user.first_name} {user.last_name}</h6>
@@ -119,7 +118,7 @@ const FriendsRequest = () => {
               </Row>
               <Row className="g-3 mt-0">
                 <Col md={4}>
-                  <p className="mb-0 text-muted">Country</p>
+                  <p className="mb-0 text-muted">País</p>
                 </Col>
                 <Col md={6}>
                   <h6 className="mb-0">{userDetails.person.country}</h6>
@@ -127,7 +126,7 @@ const FriendsRequest = () => {
               </Row>
               <Row className="g-3 mt-0">
                 <Col md={4}>
-                  <p className="mb-0 text-muted">Phone</p>
+                  <p className="mb-0 text-muted">Teléfono</p>
                 </Col>
                 <Col md={6}>
                   <h6 className="mb-0">{userDetails.person.phone_number}</h6>
@@ -135,7 +134,7 @@ const FriendsRequest = () => {
               </Row>
               <Row className="g-3 mt-0">
                 <Col md={4}>
-                  <p className="mb-0 text-muted">Email</p>
+                  <p className="mb-0 text-muted">Correo Electrónico</p>
                 </Col>
                 <Col md={6}>
                   <h6 className="mb-0"><a href={`mailto:${user.email}`} className="link-primary">{user.email}</a></h6>
@@ -145,12 +144,12 @@ const FriendsRequest = () => {
           </Card>
           <Card>
             <Card.Header>
-              <h5>Other Information</h5>
+              <h5>Otra Información</h5>
             </Card.Header>
             <Card.Body>
               <Row className="g-3">
                 <Col md={4}>
-                  <p className="mb-0 text-muted">Description</p>
+                  <p className="mb-0 text-muted">Descripción</p>
                 </Col>
                 <Col md={6}>
                   <h6 className="mb-0">{userDetails.person.description}</h6>
@@ -163,20 +162,20 @@ const FriendsRequest = () => {
         <Tab.Pane eventKey="friendsRequest" id="friends" role="tabpanel" aria-labelledby="friends-tab">
           <Card>
             <Card.Header>
-              <h5>Details</h5>
+              <h5>Detalles</h5>
             </Card.Header>
             <Card.Body>
               <Row className="g-3">
                 <Col md={4}>
-                  <p className="mb-0 text-muted">Organization Name</p>
+                  <p className="mb-0 text-muted">Nombre de la Organización</p>
                 </Col>
                 <Col md={6}>
-                  <h6 className="mb-0">{organization ? organization.name : 'Loading...'}</h6>
+                  <h6 className="mb-0">{organization ? organization.name : 'Cargando...'}</h6>
                 </Col>
               </Row>
               <Row className="g-3 mt-0">
                 <Col md={4}>
-                  <p className="mb-0 text-muted">Country</p>
+                  <p className="mb-0 text-muted">País</p>
                 </Col>
                 <Col md={6}>
                   <h6 className="mb-0">{organization.country}</h6>
@@ -184,7 +183,7 @@ const FriendsRequest = () => {
               </Row>
               <Row className="g-3 mt-0">
                 <Col md={4}>
-                  <p className="mb-0 text-muted">Email</p>
+                  <p className="mb-0 text-muted">Correo Electrónico</p>
                 </Col>
                 <Col md={6}>
                   <h6 className="mb-0"><a href={`mailto:${user.email}`} className="link-primary">{user.email}</a></h6>
@@ -194,22 +193,22 @@ const FriendsRequest = () => {
           </Card>
           <Card>
             <Card.Header>
-              <h5>Other Information</h5>
+              <h5>Otra Información</h5>
             </Card.Header>
             <Card.Body>
               <Row className="g-3">
                 <Col md={4}>
-                  <p className="mb-0 text-muted">Description</p>
+                  <p className="mb-0 text-muted">Descripción</p>
                 </Col>
                 <Col md={6}>
-                  <h6 className="mb-0">{organization ? organization.description : 'Loading...'}</h6>
+                  <h6 className="mb-0">{organization ? organization.description : 'Cargando...'}</h6>
                 </Col>
               </Row>
             </Card.Body>
           </Card>
         </Tab.Pane>
       ) : (
-        <p>User type not recognized</p>
+        <p>Tipo de usuario no reconocido</p>
       )}
     </React.Fragment>
   );
