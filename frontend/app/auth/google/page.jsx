@@ -1,6 +1,5 @@
 'use client';
 
-
 import { useSocialAuthenticateMutation } from "@/redux/features/authApiSlice"
 import { useSocialAuth } from "@/hooks"
 
@@ -8,13 +7,12 @@ import LandingLayout from "@/layouts/LandingLayout";
 
 const page = () => {
 
-
     const [googleAuthenticate] = useSocialAuthenticateMutation()
     useSocialAuth(googleAuthenticate, 'google-oauth2')
 
     return (
         <LandingLayout header footer bodyClass={"home-three"} onePage>
-          {/* Signup area start */}
+          {/* Área de Registro Inicio */}
           <section className="error-area py-150 rpy-100">
             <div className="container">
               <div className="row justify-content-center">
@@ -25,7 +23,7 @@ const page = () => {
                       data-aos-duration={1500}
                       data-aos-offset={50}
                     >
-                      Google<br/>Authentification
+                      Autenticación<br/>con Google
                     </h1>
                     <p
                       data-aos="fade-up"
@@ -33,8 +31,8 @@ const page = () => {
                       data-aos-duration={1500}
                       data-aos-offset={50}
                     >
-                      You will be redirected soon to the dashboard page. 
-                      If not redirected please click the button below.
+                      Serás redirigido pronto a la página del panel. 
+                      Si no eres redirigido, por favor haz clic en el botón de abajo.
                     </p>
                     <a
                       href="/dashboard"
@@ -44,14 +42,14 @@ const page = () => {
                       data-aos-duration={1500}
                       data-aos-offset={50}
                     >
-                      <span>Profile</span>
+                      <span>Perfil</span>
                     </a>
                   </div>
                 </div>
               </div>
             </div>
           </section>
-          {/* Signup area End */}
+          {/* Área de Registro Fin */}
         </LandingLayout>
       );
     };

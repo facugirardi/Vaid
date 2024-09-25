@@ -102,7 +102,8 @@ const Page = () => {
                     }
                 });
                 if (response.ok) {
-                    setIsTaken(true); // Si el backend devuelve que la tarea está tomada, actualizar el estado.
+                    const data = await response.json();
+                    setIsTaken(data.is_taken); // Si el backend devuelve que la tarea está tomada, actualizar el estado.
                 }
             } catch (error) {
                 console.error("Error checking task participation:", error);
@@ -132,10 +133,10 @@ const Page = () => {
             });
 
             if (response.ok) {
-                toast.success('Task marked as done!');
-                setTask({ ...task, state: 'Done' });
+                toast.success('¡Tarea marcada como hecha!');
+                setTask({ ...task, state: 'Hecho' });
             } else {
-                toast.error('Error marking task as done');
+                toast.error('Error al marcar la tarea como hecha');
             }
         } catch (error) {
             console.error('Error:', error);
@@ -153,10 +154,10 @@ const Page = () => {
             });
 
             if (response.ok) {
-                toast.success('Task marked as pending!');
-                setTask({ ...task, state: 'Pending' });
+                toast.success('¡Tarea marcada como pendiente!');
+                setTask({ ...task, state: 'Pendiente' });
             } else {
-                toast.error('Error marking task as pending');
+                toast.error('Error al marcar la tarea como pendiente');
             }
         } catch (error) {
             console.error('Error:', error);
@@ -174,10 +175,10 @@ const Page = () => {
             });
 
             if (response.ok) {
-                toast.success('Task deleted successfully');
+                toast.success('Tarea eliminada con éxito');
                 handleRedirect();
             } else {
-                console.error('Error deleting task:', response.status);
+                console.error('Error al eliminar la tarea:', response.status);
             }
         } catch (error) {
             console.error('Error:', error);
@@ -195,11 +196,11 @@ const Page = () => {
             });
     
             if (response.ok) {
-                const successMessage = isTaken ? 'Task untaken successfully' : 'Task taken successfully';
+                const successMessage = isTaken ? 'Tarea dejada exitosamente' : 'Tarea tomada exitosamente';
                 toast.success(successMessage);
                 setIsTaken(!isTaken); 
             } else {
-                const errorMessage = isTaken ? 'Error untaking task' : 'Error taking task';
+                const errorMessage = isTaken ? 'Error al dejar la tarea' : 'Error al tomar la tarea';
                 toast.error(errorMessage);
                 console.error('Error:', response.status);
             }
@@ -210,7 +211,7 @@ const Page = () => {
     
     return (
         <Layout>
-            <BreadcrumbItem mainTitle="Tasks" subTitle="View Tasks"/>
+            <BreadcrumbItem mainTitle="Tareas" subTitle="Ver Tareas"/>
             {task && (
                 <div className="d-flex">
                     <div className='container event-cont position-relative mt-30'>
@@ -234,7 +235,7 @@ const Page = () => {
                             <div className="image-container col-12 col-md-5 d-flex justify-content-center">
                                 <Image 
                                     src={cover1} 
-                                    alt="image" 
+                                    alt="imagen" 
                                     className="img-fluid img-popup-event" 
                                     width={300} 
                                     height={300}
@@ -244,29 +245,29 @@ const Page = () => {
                             <div className="cover-data">
                                         <div className="d-inline-flex align-items-center mb-10">
                                             <span className="text-dark"> {task.state}</span>
-                                            <i className={`chat-badge ${task.state === 'Done' ? 'bg-success' : 'bg-danger'}`}></i>
+                                            <i className={`chat-badge ${task.state === 'Hecho' ? 'bg-success' : 'bg-danger'}`}></i>
                                         </div>
                                     </div> 
-                                <p className='title2-modal'>Title </p>
+                                <p className='title2-modal'>Título </p>
                                 <p class='title-modal-13'>{task.name}</p>
-                                <p className='title3-modal'>Description</p>
+                                <p className='title3-modal'>Descripción</p>
                                 <p className='title-modal-12'>{task.description}</p>
                                 <Form.Group className='form-group-all'>
                                     <div className="row">
                                         <div className='col-md-3'>
-                                            <p className='title-dates'>Start Date</p>
+                                            <p className='title-dates'>Fecha de inicio</p>
                                             <Form.Control type="date" defaultValue={task.date} readOnly/>
                                         </div>
                                         <div className="col-md-3">
-                                            <p className='title-dates'>End Date</p>
+                                            <p className='title-dates'>Fecha de fin</p>
                                             <Form.Control type="date" defaultValue={task.endDate} readOnly/>
                                         </div>
                                         <div className="col-md-3">
-                                            <p className='title-dates'>Start Time</p>
+                                            <p className='title-dates'>Hora de inicio</p>
                                             <Form.Control type="time" defaultValue={task.time} readOnly/>
                                         </div>
                                         <div className="col-md-3">
-                                            <p className='title-dates'>End Time</p>
+                                            <p className='title-dates'>Hora de fin</p>
                                             <Form.Control type="time" defaultValue={task.endTime} readOnly/>
                                         </div>
                                     </div>
@@ -280,7 +281,7 @@ const Page = () => {
                                         className="button-take btn-delete-task mx-2" 
                                         onClick={handleDelete}
                                     >
-                                        Delete
+                                        Eliminar
                                     </Button>
                                 </>
                                 ) : (
@@ -288,22 +289,22 @@ const Page = () => {
                                         className="button-take mx-2 size-btn-big" 
                                         onClick={handleTakeOrUntake}
                                     >
-                                        {isTaken ? "Leave" : "Take"}
+                                        {isTaken ? "Dejar" : "Tomar"}
                                     </Button>
                                 )}
-                                {task.state === 'Done' ? (
+                                {task.state === 'Hecho' ? (
                                     <Button 
                                         className="button-close btn-close-task mx-2" 
                                         onClick={handleMarkAsPending}
                                     >
-                                        Mark as Pending
+                                        Pendiente
                                     </Button>
                                 ) : (
                                     <Button 
                                         className="button-close btn-close-task mx-2" 
                                         onClick={handleMarkAsDone}
                                     >
-                                        Mark as Done
+                                      Hecho
                                     </Button>
                                 )}
                             </div>

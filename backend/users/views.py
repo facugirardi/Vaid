@@ -1201,7 +1201,7 @@ class TaskParticipationView(APIView):
                 # Verificar si la persona ya está asignada a la tarea
                 is_taken = TaskPersonDetails.objects.filter(Person=person, Task=task).exists()
                 print(f'{person} {is_taken} {user} {task}')
-
+                
                 return Response({'is_taken': is_taken}, status=status.HTTP_200_OK)
 
             except Person.DoesNotExist:

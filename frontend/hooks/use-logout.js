@@ -15,17 +15,17 @@ const handleLogout = () => {
     .then(() => {
       localStorage.removeItem('token');
       localStorage.removeItem('id');
-      dispatch(setLogout())
-      toast.success('Logged out successfully.');
+      dispatch(setLogout());
+      toast.success('Cierre de sesión exitoso.');
       window.location.href = '/auth/login';
     })
     .catch(() => {
       localStorage.removeItem('token');
       localStorage.removeItem('id');
-      dispatch(setLogout())
-      toast.success('Logged out successfully.');
+      dispatch(setLogout());
+      toast.success('Cierre de sesión exitoso.');
       window.location.href = '/auth/login';
-    })
+    });
 }
 
-export default handleLogout
+export default handleLogout;

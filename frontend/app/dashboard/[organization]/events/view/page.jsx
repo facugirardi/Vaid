@@ -1,4 +1,4 @@
-'use client';
+"use client"
 
 import React, { useState, useEffect } from "react";
 import Layout from '@/layouts/dashboard/index';
@@ -17,6 +17,7 @@ const Page = () => {
     const [isAdmin, setIsAdmin] = useState(false);
     const [isOrgAccount, setIsOrgAccount] = useState(false);
     const { data: user, isError, isLoading } = useRetrieveUserQuery();
+
     const checkUserPermissions = async (userId) => {
         let isAdmin = false;
         let isOrgAccount = false;
@@ -44,7 +45,7 @@ const Page = () => {
                 isOrgAccount = true;
             }
         } catch (error) {
-            console.error("Error checking user permissions:", error);
+            console.error("Error al verificar los permisos del usuario:", error);
         }
     
         return { isAdmin, isOrgAccount };
@@ -62,19 +63,17 @@ const Page = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-                try {
-                    if (user.id) {
-                        const { isAdmin, isOrgAccount } = await checkUserPermissions(user.id);
-                        setIsAdmin(isAdmin);
-                        setIsOrgAccount(isOrgAccount);
-                        console.log("isAdmin", isAdmin);
-                        console.log("isOrgAccount", isOrgAccount);
-                    }
-
-                } catch (error) {
-                    console.error("Error checking permissions:", error);
+            try {
+                if (user.id) {
+                    const { isAdmin, isOrgAccount } = await checkUserPermissions(user.id);
+                    setIsAdmin(isAdmin);
+                    setIsOrgAccount(isOrgAccount);
+                    console.log("isAdmin", isAdmin);
+                    console.log("isOrgAccount", isOrgAccount);
                 }
-            
+            } catch (error) {
+                console.error("Error al verificar los permisos:", error);
+            }
         };
 
         fetchData();
@@ -93,7 +92,7 @@ const Page = () => {
                     const data = await response.json();
                     setEvents(data);
                 } catch (error) {
-                    console.error("Error fetching data:", error);
+                    console.error("Error al obtener los datos:", error);
                 }
             };
 
@@ -114,19 +113,19 @@ const Page = () => {
     return (
         <Layout>
             <div className="header">
-                <BreadcrumbItem mainTitle="Events" subTitle="View Events" />
+                <BreadcrumbItem mainTitle="Eventos" subTitle="Ver Eventos" />
                 {isAdmin || isOrgAccount ? (
                 <button className="button-add-task" onClick={() => window.location.href = `/dashboard/${organizationId}/events/create`}>
-                    add <i className='ph-duotone ph-plus-circle plus-icon'></i>
+                    añadir <i className='ph-duotone ph-plus-circle plus-icon'></i>
                 </button>) : <></>}
             </div>
             <Row>
                 {events.length === 0 ? (
                     <div className="no-events-message">
                         {isAdmin || isOrgAccount ? (
-                        <p className="p-history">No events available. Start by adding your first event using the 'add' button.</p>
+                        <p className="p-history">No hay eventos disponibles. Comienza agregando tu primer evento usando el botón 'añadir'.</p>
                     ) : 
-                    <p className="p-history">No events available.</p>
+                    <p className="p-history">No hay eventos disponibles.</p>
                 }
                     </div>
                 ) : (
@@ -137,7 +136,7 @@ const Page = () => {
                                     <div className="user-cover-bg">
                                         <Image 
                                             src={cover1} 
-                                            alt="image" 
+                                            alt="imagen" 
                                             className="img-fluid img-task-list" 
                                             width={500} 
                                             height={200}
@@ -165,7 +164,7 @@ const Page = () => {
                                         </Form.Group>
                                     </div>
                                     <div className="saprator my-2">
-                                    <span className='ver-mas' onClick={() => window.location.href = `http://localhost:3000/dashboard/${organizationId}/events/view/${item.id}`}>view more</span>
+                                    <span className='ver-mas' onClick={() => window.location.href = `http://localhost:3000/dashboard/${organizationId}/events/view/${item.id}`}>ver más</span>
                                     </div>
                                 </Card.Body>
                             </Card>
@@ -186,31 +185,31 @@ const Page = () => {
                                     <div className="image-container col-12 col-md-5">
                                         <Image 
                                             src={cover1} 
-                                            alt="image" 
+                                            alt="imagen" 
                                             className="img-fluid img-popup-event" 
                                             width={300} 
                                             height={300}
                                         />
                                     </div>
                                     <div className="details-container col-md-7">
-                                        <p className='title-modal-12'>Title</p><p class='title2-modal'>{selectedEvent.name}</p>
-                                        <p className='title-modal-12'>Description</p><p className='title3-modal'>{selectedEvent.description}</p>
+                                        <p className='title-modal-12'>Título</p><p class='title2-modal'>{selectedEvent.name}</p>
+                                        <p className='title-modal-12'>Descripción</p><p className='title3-modal'>{selectedEvent.description}</p>
                                         <Form.Group className='form-group-all'>
                                             <div className="row">
                                                 <div className='col-md-3'>
-                                                    <p className='title-dates'>Start Date</p>
+                                                    <p className='title-dates'>Fecha de inicio</p>
                                                     <Form.Control type="date" defaultValue={selectedEvent.date} readOnly/>
                                                 </div>
                                                 <div className="col-md-3">
-                                                    <p className='title-dates'>End Date</p>
+                                                    <p className='title-dates'>Fecha de finalización</p>
                                                     <Form.Control type="date" defaultValue={selectedEvent.endDate} readOnly/>
                                                 </div>
                                                 <div className="col-md-3">
-                                                    <p className='title-dates'>Start Time</p>
+                                                    <p className='title-dates'>Hora de inicio</p>
                                                     <Form.Control type="time" defaultValue={selectedEvent.time} readOnly/>
                                                 </div>
                                                 <div className="col-md-3">
-                                                    <p className='title-dates'>End Time</p>
+                                                    <p className='title-dates'>Hora de finalización</p>
                                                     <Form.Control type="time" defaultValue={selectedEvent.endTime} readOnly/>
                                                 </div>
                                             </div>

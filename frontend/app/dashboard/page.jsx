@@ -72,7 +72,7 @@ const Page = () => {
               </Row>
             </Tab.Container>
           ) : (
-            <p>User type not recognized</p>
+            <p>Tipo de usuario no reconocido</p>
           )}
         </Col>
         <Col sm={2}></Col>

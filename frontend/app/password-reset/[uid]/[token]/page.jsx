@@ -8,7 +8,6 @@ import { useRouter } from 'next/navigation';
 
 const breaks = Array(10).fill(0).map((_, i) => <br key={i} />); // borrar cuando se haga el login
 
-
 const page = ( { params } ) => {
   const [resetPasswordConfirm, { isLoading }] = useResetPasswordConfirmMutation();
   const { push } = useRouter();
@@ -19,7 +18,6 @@ const page = ( { params } ) => {
   });
 
   const { new_password, re_new_password } = formData
-
 
   const onChange = (event) => {
       const { name, value } = event.target;
@@ -33,7 +31,7 @@ const page = ( { params } ) => {
     resetPasswordConfirm({ uid, token, new_password, re_new_password })
         .unwrap()
         .then(() => {
-            toast.success('Password succesfully changed')
+            toast.success('Contraseña cambiada exitosamente')
             window.location.href = '/auth/login';
         })
         .catch((error) => {
@@ -55,72 +53,66 @@ const page = ( { params } ) => {
                 toast.error(error.message);
             } else {
                 // Mensaje de error genérico si no hay información específica
-                toast.error('Failed to change password. Please try again.');
+                toast.error('Error al cambiar la contraseña. Por favor, inténtalo de nuevo.');
             }
         })
-}
-
-
-
-
-
+  }
 
   useEffect(() => {
     document.querySelector("body").classList.add("home-three");
   }, []);
+
   const [active, setActive] = useState("collapse1");
+
   return (
     <LandingLayout header footer bodyClass={"home-three"} onePage>
-      {/* Signup area start */}
+      {/* Área de Registro Inicio */}
       <section
         className="hero-area-three bgs-cover bgc-lighter pt-210 rpt-150 pb-100"
       >
         <div className="container">
           <div className="d-flex justify-content-center">
-        <div className='wrapper'>
-            <form onSubmit={onSubmit}>
+            <div className='wrapper'>
+              <form onSubmit={onSubmit}>
                 <div className='flex-item-logo'>
-                    <img src="/assets/images/vaidpng3.png" alt="" className='imgLogo_login'/>
+                  <img src="/assets/images/vaidpng3.png" alt="" className='imgLogo_login'/>
                 </div>
 
                 <div className='flex-item-logo'>
-                    <h3>Change your password</h3>
+                  <h3>Cambia tu contraseña</h3>
                 </div>
 
                 <div className="input-box flex-item">
-                    <label className='label_input'>Enter your new password</label>
-                    <input onChange={onChange} value={new_password} name='new_password' type="password" placeholder='Enter new password' required />
+                  <label className='label_input'>Ingresa tu nueva contraseña</label>
+                  <input onChange={onChange} value={new_password} name='new_password' type="password" placeholder='Ingresa la nueva contraseña' required />
                 </div>
 
                 <div className="password-requirements">
-                    <p className="text-password">Your password needs:</p>
-                    <ul>
-                      <li className="li-requirements">At least 8 characters</li>
-                      <li className="li-requirements">At least 1 letter</li>
-                      <li className="li-requirements">At least 1 special character (ex. !; *; /.)</li>
-                    </ul>
+                  <p className="text-password">Tu contraseña necesita:</p>
+                  <ul>
+                    <li className="li-requirements">Al menos 8 caracteres</li>
+                    <li className="li-requirements">Al menos 1 letra</li>
+                    <li className="li-requirements">Al menos 1 carácter especial (ej. !; *; /.)</li>
+                  </ul>
                 </div>
 
                 <div className="input-box input-box-2 flex-item">
-                    <label className='label_input'>Confirm your new password</label>
-                    <input onChange={onChange}  value={re_new_password} name='re_new_password' type="password" placeholder='Confirm new password' required />
+                  <label className='label_input'>Confirma tu nueva contraseña</label>
+                  <input onChange={onChange}  value={re_new_password} name='re_new_password' type="password" placeholder='Confirma la nueva contraseña' required />
                 </div>
 
                 <div className='flex-item'>
-                <button type="submit" className="btn-pass">Change</button>
+                  <button type="submit" className="btn-pass">Cambiar</button>
                 </div>
-
-                
-            </form>
-        </div>
+              </form>
+            </div>
             {breaks} {/*borrar cuando se haga el login*/}      
-
           </div>
         </div>
       </section>
-      {/* Signup area End */}
+      {/* Área de Registro Fin */}
     </LandingLayout>
   );
 };
-export default page;
 
+export default page;

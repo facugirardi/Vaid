@@ -190,6 +190,7 @@ class Donation(models.Model):
     description = models.CharField(max_length=255, default='General donation')
     date = models.DateField(default=timezone.now)
     quantity = models.IntegerField(default=0)
+    type = models.CharField(max_length=255)
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
 

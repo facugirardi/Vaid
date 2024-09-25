@@ -5,6 +5,17 @@ body {
     padding: 0;
 }
 
+
+.selected-headquarter {
+    background-color: #f0f8ff; /* Color de fondo distinto */
+    border-left: 5px solid #007bff; /* Borde que destaca la sede seleccionada */
+  }
+  
+  .selected-headquarter:hover {
+    background-color: #f0f8ff; /* Mantener el mismo color en hover */
+  }
+  
+
 .hover-button-trash:hover{
     color: #c81d1d;
     transition: .2s;

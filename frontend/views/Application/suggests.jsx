@@ -15,66 +15,65 @@ const Suggestions = ({ userId }) => {
     const { push } = useRouter();
     const [userDetails, setUserDetails] = useState(null);
 
-  useEffect(() => {
-    const fetchUserDetails = async () => {
-      if (user.id) {
-        try {
-          const response = await fetch(`http://localhost:8000/api/person/${user.id}`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            if (user.id) {
+                try {
+                    const response = await fetch(`http://localhost:8000/api/person/${user.id}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    });
 
-          if (response.status === 404) {
-            window.location.href = '/not-found';
-            return;
-          }
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
+                    if (response.status === 404) {
+                        window.location.href = '/not-found';
+                        return;
+                    }
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
 
-          const data = await response.json();
-          setUserDetails(data);
-        } catch (error) {
-          toast.error(`Failed to retrieve user. Error: ${error.message}`);
+                    const data = await response.json();
+                    setUserDetails(data);
+                } catch (error) {
+                    toast.error(`No se pudo recuperar el usuario. Error: ${error.message}`);
+                }
+            }
+        };
+
+        if (user.id) {
+            fetchUserDetails();
         }
-      }
+    }, [user.id]);
+    
+    const handleApply = async (orgId) => {
+        if (userDetails.user.is_form === true) {
+            try {
+                const response = await fetch(`http://localhost:8000/api/user/${user.id}/apply-org/${orgId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user_id: user.id,
+                        org_id: orgId,
+                    }),
+                });
+                const data = await response.json();
+                if (response.ok) {
+                    toast.success('¡Solicitud de unión enviada con éxito! ¡Espera la aprobación!');
+                } else {
+                    toast.error('Error al enviar la solicitud de unión. Contacte al soporte.');
+                }
+            } catch (error) {
+                console.error('Error: ', error);
+            }
+        } else {
+            window.location.href = '/complete/form';
+        }
     };
 
-    if (user.id) {
-      fetchUserDetails();
-    }
-  }, [user.id]);
-    
-
-
-const handleApply = async (orgId) => {
-    if (userDetails.user.is_form === true) {
-        try {
-            const response = await fetch(`http://localhost:8000/api/user/${user.id}/apply-org/${orgId}/`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    user_id: user.id,
-                    org_id: orgId,
-                }),
-            });
-            const data = await response.json();
-            if (response.ok) {
-                toast.success('Join request sent successfully! Wait for approval!');
-            } else {
-                toast.error('Error sending join request. Contact support.');
-            }
-        } catch (error) {
-            console.error('Error: ', error);
-        }
-    } else {
-        window.location.href = '/complete/form';
-    }
-};
     useEffect(() => {
         // Function to fetch user's organizations
         const fetchOrganizations = async () => {
@@ -84,11 +83,11 @@ const handleApply = async (orgId) => {
                 if (response.ok) {
                     setOrganizations(data); // Assuming the API returns an array of organizations
                 } else {
-                    console.error('Error fetching organizations:', data);
+                    console.error('Error al obtener organizaciones:', data);
                     setOrganizations([]);
                 }
             } catch (error) {
-                console.error('Error fetching organizations:', error);
+                console.error('Error al obtener organizaciones:', error);
                 setOrganizations([]);
             } finally {
                 setLoading(false);
@@ -99,14 +98,14 @@ const handleApply = async (orgId) => {
     }, []);
 
     if (loading) {
-        return <div>Loading...</div>;
+        return <div>Cargando...</div>;
     }
 
     return (
         <React.Fragment>
             <Tab.Pane eventKey="friendsRequests">
                 <Row>
-                    <h5 className='suggestionsTitle'>Suggestions</h5>
+                    <h5 className='suggestionsTitle'>Sugerencias</h5>
                     <h1></h1><h1></h1>
                     {
                         organizations.slice(0, 6).length > 0 ? (
@@ -119,13 +118,13 @@ const handleApply = async (orgId) => {
                                                     <Image 
                                                         className="rounded-circle img-thumbnail img-fluid wid-80" 
                                                         src={org.image || avatar1} 
-                                                        alt={org.name || "Organization image"} 
+                                                        alt={org.name || "Imagen de la organización"} 
                                                     />
                                                 </div>
                                                 <div className="my-3">
                                                     <h5 className="mb-0">{org.name}</h5><br/>
                                                     <p className="text-muted">{org.description}</p>
-                                                    <p className="text-muted">Country: {org.country}</p>
+                                                    <p className="text-muted">País: {org.country}</p>
                                                 </div>
                                             </div>
                                             <Row className="g-2">
@@ -136,14 +135,14 @@ const handleApply = async (orgId) => {
                                                             onClick={() => handleApply(org.id)}   
                                                             size="sm"
                                                         >
-                                                            Apply
+                                                            Unirse
                                                         </a> 
                                                         <a
                                                             className="btn btn-outline-primary buttonorg_perf"
                                                             href={`dashboard/${org.id}/organization`}
                                                             size="sm"
                                                         >
-                                                            Profile
+                                                            Perfil
                                                         </a>
                                                     </div>
                                                 </Col>
@@ -155,7 +154,7 @@ const handleApply = async (orgId) => {
                         ) : (
                             <Col>
                                 <div className="text-center">
-                                    <h6>No suggestions found for this user.</h6>
+                                    <h6>No se encontraron sugerencias para este usuario.</h6>
                                 </div>
                             </Col>
                         )
