@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import React, { useState, useEffect } from 'react';
 import Layout from '@/layouts/dashboard/index';
@@ -20,10 +20,12 @@ const CreateTaskPage = () => {
         endTime: '',
         file: null,
         state: 'Pendiente',
+        category: ''
     });
     const [preview, setPreview] = useState(null);
     const [errors, setErrors] = useState({});
     const [organizationId, setOrganizationId] = useState("");
+    const [categories, setCategories] = useState([]); // Estado para guardar las etiquetas de la organización
 
     useEffect(() => {
         // Obtener la URL actual
@@ -38,6 +40,28 @@ const CreateTaskPage = () => {
             setOrganizationId(pathSegments[dashboardIndex + 1]);
         }
     }, []);
+
+    useEffect(() => {
+        // Fetch para obtener las etiquetas de la organización
+        const fetchCategories = async () => {
+            if (organizationId) {
+                try {
+                    const response = await fetch(`http://localhost:8000/api/organizations/${organizationId}/tags/`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    });
+                    const data = await response.json();
+                    setCategories(data); // Guardar las etiquetas en el estado
+                } catch (error) {
+                    console.error('Error fetching categories:', error);
+                }
+            }
+        };
+
+        fetchCategories();
+    }, [organizationId]);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -63,54 +87,51 @@ const CreateTaskPage = () => {
         }
     };
 
-const handleSubmit = async (event) => {
-    event.preventDefault();
+    const handleSubmit = async (event) => {
+        event.preventDefault();
 
-    const { name, description, date, endDate, time, endTime, file, state } = formData;
-    const newErrors = {};
+        const { name, description, date, endDate, time, endTime, file, state, category } = formData;
+        const newErrors = {};
 
-    if (!name) newErrors.name = 'El nombre es obligatorio';
-    if (!description) newErrors.description = 'La descripción es obligatoria';
-    if (!date) newErrors.date = 'La fecha es obligatoria';
-    if (!time) newErrors.time = 'La hora es obligatoria';
-    if (!endDate) newErrors.endDate = 'La fecha de finalización es obligatoria';
-    if (!endTime) newErrors.endTime = 'La hora de finalización es obligatoria';
+        if (!name) newErrors.name = 'El nombre es obligatorio';
+        if (!description) newErrors.description = 'La descripción es obligatoria';
+        if (!date) newErrors.date = 'La fecha es obligatoria';
+        if (!time) newErrors.time = 'La hora es obligatoria';
+        if (!endDate) newErrors.endDate = 'La fecha de finalización es obligatoria';
+        if (!endTime) newErrors.endTime = 'La hora de finalización es obligatoria';
+        if (!category) newErrors.category = 'La categoría es obligatoria';
 
-    if (Object.keys(newErrors).length > 0) {
-        setErrors(newErrors);
-        return;
-    }
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+        }
 
-    const data = new FormData();
-    data.append('name', name);
-    data.append('description', description);
-    data.append('date', date); // Solo la fecha
-    data.append('time', time);
-    data.append('endTime', endTime);
-    data.append('endDate', endDate); // Solo la fecha
-    data.append('state', state);
-    if (file) {
-        data.append('file', file);
-    }
-
-    try {
-        const response = await fetch(`http://localhost:8000/api/organizations/${organizationId}/events/`, {
-            method: 'POST',
-            headers: {},
-            body: data,
-        });
-
-        const responseText = await response.text(); // Obtener el texto completo de la respuesta
+        const data = new FormData();
+        data.append('name', name);
+        data.append('description', description);
+        data.append('date', date); // Solo la fecha
+        data.append('time', time);
+        data.append('endTime', endTime);
+        data.append('endDate', endDate); // Solo la fecha
+        data.append('state', state);
+        data.append('category', category);
+        if (file) {
+            data.append('file', file);
+        }
 
         try {
-            const responseData = JSON.parse(responseText); // Intentar analizar como JSON
+            const response = await fetch(`http://localhost:8000/api/organizations/${organizationId}/events/`, {
+                method: 'POST',
+                headers: {},
+                body: data,
+            });
 
             if (!response.ok) {
+                const responseData = await response.json();
                 console.error('Error al crear el evento:', responseData);
                 setErrors(responseData);
             } else {
                 toast.success('¡Evento creado con éxito!')
-                // Limpiar el formulario
                 setFormData({
                     name: '',
                     description: '',
@@ -120,18 +141,16 @@ const handleSubmit = async (event) => {
                     endDate: '',
                     file: null,
                     state: '',
+                    category: ''
                 });
                 setPreview(null);
                 setErrors({});
             }
         } catch (error) {
-            // Si falla el análisis como JSON, mostrar la respuesta completa
-            console.error('La respuesta del servidor no es un JSON válido:', responseText);
+            console.error('Error de red:', error);
         }
-    } catch (error) {
-        console.error('Error de red:', error);
-    }
-};
+    };
+
     if (isLoading) return <p>Cargando...</p>;
     if (isError || !user) return <p>Error al cargar los datos del usuario.</p>;
 
@@ -198,14 +217,26 @@ const handleSubmit = async (event) => {
                                     </Form.Group>
                                 </Col>
                             </Row>
+
                             <Form.Group>
-                                <Form.Label className="form-label-2">Categoría</Form.Label>
-                                <Form.Control as="select" className="form-select" name="category" value={formData.category} onChange={handleChange}>
-                                    <option>Selecciona una opción</option>
-                                    <option>b</option>
-                                    <option>c</option>
+                                <Form.Label className="form-label-2">Etiqueta</Form.Label>
+                                <Form.Control
+                                    as="select"
+                                    className="form-select"
+                                    name="category"
+                                    value={formData.category}
+                                    onChange={handleChange}
+                                >
+                                    <option value="">Selecciona una opción</option>
+                                    {categories.map((category) => (
+                                        <option key={category.id} value={category.id}>
+                                            {category.name}
+                                        </option>
+                                    ))}
                                 </Form.Control>
+                                {errors.category && <small className="text-danger">{errors.category}</small>}
                             </Form.Group>
+
                             <Row className="form-group-2">
                                 <Col sm={6} md={3}>
                                     <Form.Label className="form-label-2">Fecha de inicio</Form.Label>
@@ -228,10 +259,11 @@ const handleSubmit = async (event) => {
                                     {errors.endTime && <small className="text-danger">{errors.endTime}</small>}
                                 </Col>
                             </Row>
+
                             <div className='d-flex justify-content-center mt-50'>
-                            <Button variant="success" type="submit" className="botontask submit-task">
-                                Enviar
-                            </Button>
+                                <Button variant="success" type="submit" className="botontask submit-task">
+                                    Enviar
+                                </Button>
                             </div>
                         </Form>
                     </Card.Body>

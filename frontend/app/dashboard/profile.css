@@ -23,6 +23,11 @@ body{
     color: #fff !important;
 
 }
+.changeimg:hover{
+    opacity: 0.5;
+    color: #000000;
+    transition: .5s;
+}
 
 .img-profile-avtar{
     height: 90px !important;
@@ -42,6 +47,66 @@ body{
 .rounded-video{
     border-radius: 10px;
 }
+.profilepic {
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.profilepic:hover .profilepic__content {
+  opacity: 1;
+}
+
+.profilepic:hover .profilepic__image {
+  opacity: .5;
+}
+
+.profilepic__image {
+  opacity: 1;
+  transition: opacity .2s ease-in-out;
+}
+
+.profilepic__content {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  opacity: 0;
+  transition: opacity .2s ease-in-out;
+}
+
+.profilepic__icon {
+  color: black;
+  padding-bottom: 8px;
+}
+
+.fas {
+  font-size: 20px;
+}
+
+.profilepic__text {
+  text-transform: uppercase;
+  font-size: 12px;
+  width: 50%;
+  text-align: center;
+}
+
+.btn-actualizar{
+  width: 25%;
+  font-size: 18px;
+}
+
+.social-profile .img-profile-avtar{
+  margin-top: 0px;
+}
+
+
 @media (max-width: 767px) {
   .img-profile-avtar{
     height: 77px !important;

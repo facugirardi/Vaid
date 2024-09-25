@@ -1,21 +1,19 @@
 import Image from "next/image";
 import React, { useRef, useState, useEffect } from "react";
 import { Card, Col, Row } from "react-bootstrap";
-import Link from "next/link";
-
-import '@/app/dashboard/profile.css'
 import { toast } from "react-toastify";
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
-// img
-import profileCover from "@/public/assets/images/backgrounds/counter.png"
+import profileCover from "@/public/assets/images/backgrounds/counter.png";
 import avatar from "@/public/assets/images/user/avatar-5.jpg";
+import '@/app/dashboard/profile.css';
 
 const SocialProfile = () => {
     const { data: user, isFetching } = useRetrieveUserQuery();
-    const [avatar2, setImage] = useState(avatar);
+    const [avatar2, setImage] = useState(avatar);  // Estado para la imagen
     const [organization, setOrganization] = useState(null);
     const [userType, setUserType] = useState(null);
-    const backendUrl = 'http://localhost:8000'; // Cambia esto a la URL de tu backend
+    const backendUrl = 'http://localhost:8000';  // URL del backend
+    const inputFileRef = useRef(null);  // Referencia para el input file
 
     const checkComplete = async () => {
         if (user?.id) {
@@ -44,8 +42,6 @@ const SocialProfile = () => {
     }, [user]);
 
     const fetchImage = async () => {
-        const formData = new FormData();
-        formData.append('user_id', user.id);
         try {
             const response = await fetch(`http://localhost:8000/api/retrieve-logo?user_id=${user.id}`, {
                 method: 'GET',
@@ -53,17 +49,11 @@ const SocialProfile = () => {
 
             if (response.ok) {
                 const data = await response.json();
-
                 if (data.images.length > 0) {
-                    console.log(data.images);
                     const imageUrl = `${backendUrl}${data.images[0].image}`;
-
-                    if (imageUrl) {
-                        setImage(imageUrl);
-                    } else {
-                        setImage(avatar);
-                    }
+                    setImage(imageUrl);
                 } else {
+                    setImage(avatar);
                     toast.error('No se encontró ninguna imagen para el usuario especificado');
                 }
             } else {
@@ -74,11 +64,11 @@ const SocialProfile = () => {
         }
     };
 
-    if (!isFetching) {
-        useEffect(() => {
+    useEffect(() => {
+        if (!isFetching && user) {
             fetchImage();
-        }, []);
-    }
+        }
+    }, [user]);
 
     const fetchOrganization = async () => {
         if (user?.id) {
@@ -98,7 +88,6 @@ const SocialProfile = () => {
                 setOrganization(data);
             } catch (error) {
                 console.error('Ocurrió un error:', error);
-                setError(error.message);
             }
         }
     };
@@ -109,18 +98,64 @@ const SocialProfile = () => {
         }
     }, [user, userType]);
 
+    // Manejar el clic en la imagen para abrir el input de archivo
+    const handleImageClick = () => {
+        inputFileRef.current.click();  // Simular el clic en el input de archivo
+    };
+
+    // Manejar el cambio de archivo y subir la nueva imagen
+    const handleFileChange = async (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const formData = new FormData();
+            formData.append('file', file);
+            formData.append('user_id', user.id);
+
+            try {
+                const response = await fetch(`http://localhost:8000/api/upload-profile-image/`, {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    toast.success('Imagen de perfil actualizada');
+                    setImage(data.image_url);  // Actualiza la imagen con la nueva URL
+                } else {
+                    toast.error('Error al actualizar la imagen de perfil');
+                }
+            } catch (error) {
+                toast.error('Error al subir la imagen');
+            }
+        }
+    };
+
     return (
         <React.Fragment>
             <Card className="social-profile">
                 <Image src={profileCover} alt="" className="w-100 h-100 card-img-top" />
                 <Card.Body className="pt-0">
                     <Row className="align-items-end">
-                        <div className="col-md-auto text-md-start">
-                            {userType === 2 ? (
-                                <Image className="img-fluid img-profile-avtar" src={avatar2} width={100} height={100} alt="Imagen del usuario" />
-                            ) : (
-                                <Image className="img-fluid img-profile-avtar" src={avatar2} width={100} height={100} alt="Imagen del usuario" />
-                            )}
+                        <div className="col-md-auto text-md-start profilepic" onClick={handleImageClick}>
+                            <Image
+                                className="img-fluid img-profile-avtar changeimg profilepic__image"
+                                src={avatar2}  // Mostrar la imagen actual
+                                width={100}
+                                height={100}
+                                alt="Imagen del usuario"
+                                onClick={handleImageClick}  // Al hacer clic, abrir el input
+                                style={{ cursor: 'pointer' }}  // Añadir un estilo de cursor
+                            />
+                            <input
+                                type="file"
+                                ref={inputFileRef}  // Referencia para abrir el input desde el clic
+                                style={{ display: 'none' }}  // Ocultar el input
+                                onChange={handleFileChange}  // Manejar el cambio de archivo
+                            />
+                          <div class="profilepic__content" onClick={handleImageClick}>
+                            <span class="profilepic__icon"><i class="fas ph-duotone ph-camera"></i></span>
+                            <span class="profilepic__text">Edit Profile</span>
+                          </div>
                         </div>
                         <div className="col">
                             <Row className="justify-content-between align-items-end">

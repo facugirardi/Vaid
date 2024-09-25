@@ -79,4 +79,5 @@ urlpatterns = [
     path('organization/event/<int:event_id>/toggle-state/', ToggleEventStateView.as_view(), name='toggle-event-state'),
     path('event/<int:event_id>/toggle-attendance/<int:user_id>/', EventToggleAttendanceAPIView.as_view(), name='toggle_attendance'),
     path('event/<int:event_id>/check-attendance/<int:user_id>/', CheckAttendanceAPIView.as_view(), name='check_attendance'),
+    path('upload-profile-image/', UploadProfileImageView.as_view(), name='upload_profile_image'), 
 ]
