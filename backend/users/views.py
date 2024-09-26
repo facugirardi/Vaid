@@ -1880,18 +1880,18 @@ class ListOrganizationAPIView(APIView):
     def get(self, request):
         person_id = request.query_params.get('person_id')
 
-        if not Person.objects.filter(id=person_id).exists():
-                return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
-
+        
         try:
             person_organizations = PersonOrganizationDetails.objects.filter(Person=person_id).values_list('Organization', flat=True)
             # Excluye las organizaciones a las que la persona ya pertenece
-            organizations = Organization.objects.exclude(id__in=person_organizations)     
-            # Serializa las organizaciones restantes
+            organizations = Organization.objects.exclude(id__in=person_organizations).annotate(
+                person_count=models.Count('personorganizationdetails')  # Contar cuántas personas pertenecen a la organización
+            )
+            # Serializar las organizaciones restantes con imagen y cantidad de personas
             serializer = OrganizationSerializer(organizations, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
+
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
         

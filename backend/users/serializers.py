@@ -31,11 +31,20 @@ class PersonSerializer(serializers.ModelSerializer):
         model = Person
         fields = '__all__'
 
-class OrganizationSerializer(serializers.ModelSerializer):
+class OrganizationSerializer(serializers.ModelSerializer):    
+    person_count = serializers.IntegerField()
+    profile_image = serializers.SerializerMethodField()
+
     class Meta:
         model = Organization
-        fields = '__all__'
+        fields = ['id', 'name', 'description', 'country', 'website', 'person_count', 'profile_image']
 
+    def get_profile_image(self, obj):
+        # Obtiene la imagen del usuario principal de la organización
+        user_image = Image.objects.filter(User=obj.User).first()
+        if user_image:
+            return user_image.image.url  # Retorna la URL de la imagen si existe
+        return None
 
 class TaskSerializer(serializers.ModelSerializer):
     class Meta:
