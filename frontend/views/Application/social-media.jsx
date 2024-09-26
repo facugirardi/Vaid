@@ -171,7 +171,7 @@ const SocialProfile = () => {
                                     <Row className="g-1 text-center">
                                         <Col xs={12}>
                                             {userType === 2 ? (
-                                                <a className="btn btn-primary" href={`dashboard/${organization ? organization.id : ''}/home`}>Dashboard</a>
+                                                <a className="btn-dash-perf theme-btn style-two" href={`dashboard/${organization ? organization.id : ''}/home`}>Dashboard</a>
                                             ) : (
                                                 <h5 className="mb-0">‎</h5>
                                             )}

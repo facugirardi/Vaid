@@ -23,6 +23,13 @@ body{
     color: #fff !important;
 
 }
+
+.btn-dash-perf{
+  font-size: 16px !important;
+  width: 90% !important;
+  height: 50px !important;
+}
+
 .changeimg:hover{
     opacity: 0.5;
     color: #000000;

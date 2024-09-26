@@ -496,7 +496,7 @@ const History = ({ organizationId, localHistory, setLocalHistory }) => {
       <br></br>
 <ul className="history-list mt-20">
   {Array.isArray(localHistory) && localHistory.length === 0 ? (
-    <p>No hay historial todavía</p>
+    <p className='p-inventory'>No hay historial todavía</p>
   ) : (
     Array.isArray(localHistory) &&
     localHistory.map((entry, index) => (
