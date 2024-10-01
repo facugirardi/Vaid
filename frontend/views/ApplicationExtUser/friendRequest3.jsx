@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from "react";
 import { Card, Col, Row, Tab } from "react-bootstrap";
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
@@ -14,13 +12,13 @@ const FriendsRequest = () => {
   const [organization, setOrganization] = useState(null);
   const [error, setError] = useState(null);
   useEffect(() => {
-    // Get the current URL
+    // Obtener la URL actual
     const currentUrl = window.location.href;
-    // Use URL constructor to parse the URL
+    // Usar el constructor de URL para analizar la URL
     const url = new URL(currentUrl);
-    // Split the pathname into segments
+    // Dividir el pathname en segmentos
     const pathSegments = url.pathname.split('/');
-    // Find the segment after 'dashboard'
+    // Encontrar el segmento después de 'dashboard'
     const dashboardIndex = pathSegments.indexOf('dashboard');
     if (dashboardIndex !== -1 && pathSegments.length > dashboardIndex + 1) {
       setOrganizationId(pathSegments[dashboardIndex + 1]);
@@ -43,14 +41,14 @@ const FriendsRequest = () => {
             return;
           }
           if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error('La respuesta de la red no fue satisfactoria');
           }
 
           const data = await response.json();
-          console.log('Fetched userDetails:', data); // Logging fetched data
+          console.log('Datos del usuario obtenidos:', data); // Registro de datos obtenidos
           setUserDetails(data);
         } catch (error) {
-          toast.error(`Failed to retrieve user. Error: ${error.message}`);
+          toast.error(`Error al recuperar el usuario. Error: ${error.message}`);
         }
       }
     };
@@ -68,32 +66,32 @@ const FriendsRequest = () => {
         <Tab.Pane eventKey="friendsRequest" id="friends" role="tabpanel" aria-labelledby="friends-tab">
           <Card>
             <Card.Header>
-              <h5>Details</h5>
+              <h5>Detalles</h5>
             </Card.Header>
             <Card.Body>
               <Row className="g-3">
                 <Col md={4}>
-                  <p className="mb-0 text-muted">Name</p>
+                  <p className="mb-0 text-muted">Nombre</p>
                 </Col>
                 <Col md={6}>
                   <h6 className="mb-0">
-                    {userDetails ? `${userDetails.user.first_name} ${userDetails.user.last_name}` : 'Loading...'}</h6>
+                    {userDetails ? `${userDetails.user.first_name} ${userDetails.user.last_name}` : 'Cargando...'}</h6>
                 </Col>
               </Row>
               <Row className="g-3 mt-0">
                 <Col md={4}>
-                  <p className="mb-0 text-muted">Country</p>
+                  <p className="mb-0 text-muted">País</p>
                 </Col>
                 <Col md={6}>
-                  <h6 className="mb-0">{userDetails ? userDetails.person.country : 'Loading...'}</h6>
+                  <h6 className="mb-0">{userDetails ? userDetails.person.country : 'Cargando...'}</h6>
                 </Col>
               </Row>
               <Row className="g-3 mt-0">
                 <Col md={4}>
-                  <p className="mb-0 text-muted">Email</p>
+                  <p className="mb-0 text-muted">Correo Electrónico</p>
                 </Col>
                 <Col md={6}>
-                  <h6 className="mb-0">{userDetails ? userDetails.user.email : 'Loading...'}</h6>
+                  <h6 className="mb-0">{userDetails ? userDetails.user.email : 'Cargando...'}</h6>
                 </Col>
               </Row>
 
@@ -101,15 +99,15 @@ const FriendsRequest = () => {
           </Card>
           <Card>
             <Card.Header>
-              <h5>Other Information</h5>
+              <h5>Otra Información</h5>
             </Card.Header>
             <Card.Body>
               <Row className="g-3">
                 <Col md={4}>
-                  <p className="mb-0 text-muted">Description</p>
+                  <p className="mb-0 text-muted">Descripción</p>
                 </Col>
                 <Col md={6}>
-                  <h6 className="mb-0">{userDetails ? userDetails.person.description : 'Loading...'}</h6>
+                  <h6 className="mb-0">{userDetails ? userDetails.person.description : 'Cargando...'}</h6>
                 </Col>
               </Row>
             </Card.Body>

@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import React, { useState, useEffect } from 'react';
 import Layout from '@/layouts/dashboard/index';
@@ -19,25 +19,49 @@ const CreateTaskPage = () => {
         time: '',
         endTime: '',
         file: null,
-        state: 'Pending'
+        state: 'Pendiente',
+        category: '' // Estado para la categoría seleccionada
     });
     const [preview, setPreview] = useState(null);
     const [errors, setErrors] = useState({});
     const [organizationId, setOrganizationId] = useState("");
+    const [categories, setCategories] = useState([]); // Estado para guardar las categorías de la organización
 
     useEffect(() => {
-        // Get the current URL
+        // Obtener la URL actual
         const currentUrl = window.location.href;
-        // Use URL constructor to parse the URL
+        // Usar el constructor de URL para analizar la URL
         const url = new URL(currentUrl);
-        // Split the pathname into segments
+        // Dividir el pathname en segmentos
         const pathSegments = url.pathname.split('/');
-        // Find the segment after 'dashboard'
+        // Encontrar el segmento después de 'dashboard'
         const dashboardIndex = pathSegments.indexOf('dashboard');
         if (dashboardIndex !== -1 && pathSegments.length > dashboardIndex + 1) {
             setOrganizationId(pathSegments[dashboardIndex + 1]);
         }
     }, []);
+
+    useEffect(() => {
+        // Fetch para obtener las categorías de la organización
+        const fetchCategories = async () => {
+            if (organizationId) {
+                try {
+                    const response = await fetch(`http://localhost:8000/api/organizations/${organizationId}/tags/`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    });
+                    const data = await response.json();
+                    setCategories(data); // Guardar las categorías en el estado
+                } catch (error) {
+                    console.error('Error al obtener las categorías:', error);
+                }
+            }
+        };
+
+        fetchCategories();
+    }, [organizationId]);
 
     const handleChange = (event) => {
         const { name, value } = event.target;
@@ -63,55 +87,52 @@ const CreateTaskPage = () => {
         }
     };
 
-const handleSubmit = async (event) => {
-    event.preventDefault();
+    const handleSubmit = async (event) => {
+        event.preventDefault();
 
-    const { name, description, date, endDate, time, endTime, file, state } = formData;
-    const newErrors = {};
+        const { name, description, date, endDate, time, endTime, file, state, category } = formData;
+        const newErrors = {};
 
-    if (!name) newErrors.name = 'Name is required';
-    if (!description) newErrors.description = 'Description is required';
-    if (!date) newErrors.date = 'Date is required';
-    if (!time) newErrors.time = 'Time is required';
-    if (!endDate) newErrors.endDate = 'End Date is required';
-    if (!endTime) newErrors.endTime = 'End Time is required';
+        if (!name) newErrors.name = 'El nombre es obligatorio';
+        if (!description) newErrors.description = 'La descripción es obligatoria';
+        if (!date) newErrors.date = 'La fecha es obligatoria';
+        if (!time) newErrors.time = 'La hora de inicio es obligatoria';
+        if (!endDate) newErrors.endDate = 'La fecha de fin es obligatoria';
+        if (!endTime) newErrors.endTime = 'La hora de fin es obligatoria';
+        if (!category) newErrors.category = 'La categoría es obligatoria';
 
-    if (Object.keys(newErrors).length > 0) {
-        setErrors(newErrors);
-        return;
-    }
+        if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+        }
 
-    const data = new FormData();
-    data.append('name', name);
-    data.append('description', description);
-    data.append('date', date); // Date only
-    data.append('time', time);
-    data.append('endTime', endTime);
-    data.append('endDate', endDate); // Date only
-    if (file) {
-        data.append('file', file);
-    }
-    data.append('state', state);
-
-    try {
-        const response = await fetch(`http://localhost:8000/api/organizations/${organizationId}/tasks/`, {
-            method: 'POST',
-            headers: {
-            },
-            body: data,
-        });
-
-        const responseText = await response.text(); // Get the full response text
+        const data = new FormData();
+        data.append('name', name);
+        data.append('description', description);
+        data.append('date', date); // Solo la fecha
+        data.append('time', time);
+        data.append('endTime', endTime);
+        data.append('endDate', endDate); // Solo la fecha
+        data.append('category', category);
+        if (file) {
+            data.append('file', file);
+        }
+        data.append('state', state);
 
         try {
-            const responseData = JSON.parse(responseText); // Try to parse as JSON
+            const response = await fetch(`http://localhost:8000/api/organizations/${organizationId}/tasks/`, {
+                method: 'POST',
+                headers: {},
+                body: data,
+            });
 
             if (!response.ok) {
-                console.error('Error creating task:', responseData);
+                const responseData = await response.json();
+                console.error('Error al crear la tarea:', responseData);
                 setErrors(responseData);
             } else {
-                toast.success('Task created successfully!')
-                // Clear the form
+                toast.success('¡Tarea creada con éxito!');
+                // Limpiar el formulario
                 setFormData({
                     name: '',
                     description: '',
@@ -120,32 +141,30 @@ const handleSubmit = async (event) => {
                     endTime: '',
                     endDate: '',
                     file: null,
-                    state: ''
+                    state: 'Pendiente',
+                    category: ''
                 });
                 setPreview(null);
                 setErrors({});
             }
         } catch (error) {
-            // If parsing as JSON fails, show the full response
-            console.error('Server response is not valid JSON:', responseText);
+            console.error('Error de red:', error);
         }
-    } catch (error) {
-        console.error('Network error:', error);
-    }
-};
-    if (isLoading) return <p>Loading...</p>;
-    if (isError || !user) return <p>Error loading user data!</p>;
+    };
+
+    if (isLoading) return <p>Cargando...</p>;
+    if (isError || !user) return <p>Error al cargar los datos del usuario.</p>;
 
     return (
         <Layout>
-            <BreadcrumbItem mainTitle="Tasks" subTitle="Task" />
+            <BreadcrumbItem mainTitle="Tareas" subTitle="Tarea" />
             <Row>
                 <Card>
                     <div id="sticky-action" className="sticky-action">
                         <Card.Header>
                             <Row className="align-items-center">
                                 <Col sm={6}>
-                                    <h4>Create Task</h4>
+                                    <h4>Crear Tarea</h4>
                                 </Col>
                             </Row>
                         </Card.Header>
@@ -157,7 +176,7 @@ const handleSubmit = async (event) => {
                                 <Col md={4} className="d-flex flex-column align-items-center">
                                     <label htmlFor="upload-button" className="upload-button">
                                         {preview ? (
-                                            <img src={preview} alt="Preview" className="preview-img" />
+                                            <img src={preview} alt="Vista previa" className="preview-img" />
                                         ) : (
                                             <div className="icon-container">
                                                 <FeatherIcon icon="upload" />
@@ -174,24 +193,24 @@ const handleSubmit = async (event) => {
                                 </Col>
                                 <Col md={8}>
                                     <Form.Group>
-                                        <Form.Label className="form-group-label">Title</Form.Label>
+                                        <Form.Label className="form-group-label">Título</Form.Label>
                                         <Form.Control
                                             type="text"
                                             name="name"
-                                            placeholder="Enter a title"
+                                            placeholder="Ingrese un título"
                                             value={formData.name}
                                             onChange={handleChange}
                                         />
                                         {errors.name && <small className="text-danger">{errors.name}</small>}
                                     </Form.Group>
                                     <Form.Group>
-                                        <Form.Label className="form-group-label">Description</Form.Label>
+                                        <Form.Label className="form-group-label">Descripción</Form.Label>
                                         <Form.Control
                                             className="textarea-task"
                                             as="textarea"
                                             rows={3}
                                             name="description"
-                                            placeholder="Enter a description"
+                                            placeholder="Ingrese una descripción"
                                             value={formData.description}
                                             onChange={handleChange}
                                         />
@@ -200,39 +219,49 @@ const handleSubmit = async (event) => {
                                 </Col>
                             </Row>
                             <Form.Group>
-                                <Form.Label className="form-label-2">Category</Form.Label>
-                                <Form.Control as="select" className="form-select" name="category" value={formData.category} onChange={handleChange}>
-                                    <option>Select an option.</option>
-                                    <option>b</option>
-                                    <option>c</option>
+                                <Form.Label className="form-label-2">Etiqueta</Form.Label>
+                                <Form.Control
+                                    as="select"
+                                    className="form-select"
+                                    name="category"
+                                    value={formData.category}
+                                    onChange={handleChange}
+                                >
+                                    <option value="">Seleccione una opción</option>
+                                    {categories.map((category) => (
+                                        <option key={category.id} value={category.id}>
+                                            {category.name}
+                                        </option>
+                                    ))}
                                 </Form.Control>
+                                {errors.category && <small className="text-danger">{errors.category}</small>}
                             </Form.Group>
                             <Row className="form-group-2">
                                 <Col sm={6} md={3}>
-                                    <Form.Label className="form-label-2">Start Date</Form.Label>
+                                    <Form.Label className="form-label-2">Fecha de inicio</Form.Label>
                                     <Form.Control type="date" name="date" value={formData.date} onChange={handleChange} />
                                     {errors.date && <small className="text-danger">{errors.date}</small>}
                                 </Col>
                                 <Col sm={6} md={3}>
-                                    <Form.Label className="form-label-2">End Date</Form.Label>
+                                    <Form.Label className="form-label-2">Fecha de fin</Form.Label>
                                     <Form.Control type="date" name="endDate" value={formData.endDate} onChange={handleChange} />
                                     {errors.endDate && <small className="text-danger">{errors.endDate}</small>}
                                 </Col>
                                 <Col sm={6} md={3}>
-                                    <Form.Label className="form-label-2">Start Time</Form.Label>
+                                    <Form.Label className="form-label-2">Hora de inicio</Form.Label>
                                     <Form.Control type="time" name="time" value={formData.time} onChange={handleChange} />
                                     {errors.time && <small className="text-danger">{errors.time}</small>}
                                 </Col>
                                 <Col sm={6} md={3}>
-                                    <Form.Label className="form-label-2">End Time</Form.Label>
+                                    <Form.Label className="form-label-2">Hora de fin</Form.Label>
                                     <Form.Control type="time" name="endTime" value={formData.endTime} onChange={handleChange} />
                                     {errors.endTime && <small className="text-danger">{errors.endTime}</small>}
                                 </Col>
                             </Row>
                             <div className='d-flex justify-content-center mt-50'>
-                            <Button variant="success" type="submit" className="botontask submit-task">
-                                Submit
-                            </Button>
+                                <Button variant="success" type="submit" className="botontask submit-task">
+                                    Enviar
+                                </Button>
                             </div>
                         </Form>
                     </Card.Body>

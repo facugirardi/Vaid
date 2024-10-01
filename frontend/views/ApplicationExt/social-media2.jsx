@@ -36,13 +36,13 @@ const SocialProfile = () => {
             return;
           }
           if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error('La respuesta de la red no fue satisfactoria');
           }
 
           const data = await response.json();
           setUserDetails(data);
         } catch (error) {
-          toast.error(`Failed to retrieve user. Error: ${error.message}`);
+          toast.error(`Error al recuperar el usuario. Error: ${error.message}`);
         }
       }
     };
@@ -58,9 +58,9 @@ const SocialProfile = () => {
                 const response = await fetch(`http://localhost:8000/api/user/${user.id}/apply-org/${orgId}`);
                 const data = await response.json();
                 if (response.ok) {
-                    toast.success('Join request sent successfully! Wait for approval!');
+                    toast.success('¡Solicitud para unirse enviada con éxito! ¡Espera la aprobación!');
                 } else {
-                    toast.error('Error sending join request. Contact support.');
+                    toast.error('Error al enviar la solicitud. Contacta con soporte.');
                 }
             } catch (error) {
                 console.error('Error: ', error);
@@ -82,13 +82,13 @@ const SocialProfile = () => {
         });
 
         if (!response.ok) {
-          throw new Error('Failed to fetch completion status');
+          throw new Error('Error al verificar el estado de finalización');
         }
 
         const data = await response.json();
         setUserType(data.user_type);
       } catch (error) {
-        console.error('An error occurred:', error);
+        console.error('Ocurrió un error:', error);
       }
     }
   };
@@ -98,13 +98,13 @@ const SocialProfile = () => {
   }, [user]);
 
   useEffect(() => {
-    // Get the current URL
+    // Obtener la URL actual
     const currentUrl = window.location.href;
-    // Use URL constructor to parse the URL
+    // Usar el constructor de URL para analizar la URL
     const url = new URL(currentUrl);
-    // Split the pathname into segments
+    // Dividir el pathname en segmentos
     const pathSegments = url.pathname.split('/');
-    // Find the segment after 'dashboard'
+    // Buscar el segmento después de 'dashboard'
     const dashboardIndex = pathSegments.indexOf('dashboard');
     if (dashboardIndex !== -1 && pathSegments.length > dashboardIndex + 1) {
       setOrganizationId(pathSegments[dashboardIndex + 1]);
@@ -130,13 +130,13 @@ const SocialProfile = () => {
               setImage(avatar); // Usar imagen por defecto si no se encuentra imagen
             }
           } else {
-            toast.error('No image found for the specified user');
+            toast.error('No se encontró imagen para el usuario especificado');
           }
         } else {
-          toast.error('Error fetching image');
+          toast.error('Error al recuperar la imagen');
         }
       } catch (error) {
-        toast.error('Error fetching image');
+        toast.error('Error al recuperar la imagen');
       }
     }
   };
@@ -158,13 +158,13 @@ const SocialProfile = () => {
         });
 
         if (!response.ok) {
-          throw new Error('Failed to fetch organization');
+          throw new Error('Error al obtener la organización');
         }
 
         const data = await response.json();
         setOrganization(data);
       } catch (error) {
-        console.error('An error occurred:', error);
+        console.error('Ocurrió un error:', error);
       }
     }
   };
@@ -182,12 +182,12 @@ const SocialProfile = () => {
         <Card.Body className="pt-0">
           <Row className="align-items-end">
             <div className="col-md-auto text-md-start">
-              <Image className="img-fluid img-profile-avtar" src={avatar2} width={100} height={100} alt="User image" />
+              <Image className="img-fluid img-profile-avtar" src={avatar2} width={100} height={100} alt="Imagen de usuario" />
             </div>
             <div className="col">
               <Row className="justify-content-between align-items-end">
                 <Col md={5} xl={6} className="soc-profile-data">
-                  <h5 className="mb-1">{organization ? organization.name : 'Loading...'}</h5>
+                  <h5 className="mb-1">{organization ? organization.name : 'Cargando...'}</h5>
                   <p className="mb-0">‎<a href="#" className="link-primary"></a></p>
                 </Col>
                 <Col md={3} xl={2} xxl={2}>
@@ -196,7 +196,7 @@ const SocialProfile = () => {
                       {userType === 1 ? (
                         <a className="btn btn-primary applybtn" onClick={
                           () => handleApply(organizationId)
-                        }>Apply</a>
+                        }>Unirse</a>
                       ) : (
                         <h5 className="mb-0">‎</h5>
                       )}

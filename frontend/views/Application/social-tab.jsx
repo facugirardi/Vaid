@@ -17,13 +17,13 @@ const SocialTab = () => {
         });
 
         if (!response.ok) {
-          throw new Error('Failed to fetch completion status');
+          throw new Error('No se pudo obtener el estado de finalización');
         }
 
         const data = await response.json();
         setUserType(data.user_type);
       } catch (error) {
-        console.error('An error occurred:', error);
+        console.error('Ocurrió un error:', error);
       }
     }
   };
@@ -40,16 +40,19 @@ const SocialTab = () => {
             <Nav.Item>
               {userType === 2 ? (
                 <Nav.Link eventKey="friendsRequest" id="friends-tab">
-                  <i className="ph-duotone ph-user-circle-plus me-2"></i>Details
+                  <i className="ph-duotone ph-user-circle-plus me-2"></i>Detalles
                 </Nav.Link>
               ) : (
                 <>
                   <Nav.Link eventKey="friendsRequests" id="friends-tab">
-                    <i className="ph-duotone ph-user-circle-plus me-2"></i>Organizations
+                    <i className="ph-duotone ph-user-circle-plus me-2"></i>Organizaciones
                   </Nav.Link>
                   <Nav.Link eventKey="friendsRequest" id="friends-tab">
-                    <i className="ph-duotone ph-user-circle-plus me-2"></i>User Details
+                    <i className="ph-duotone ph-info me-2"></i>Detalles del Usuario
                   </Nav.Link>
+                  <Nav.Link eventKey="form" id="friends-tab">
+                    <i className="ph-duotone ph-notebook me-2"></i>Detalles del Formulario
+                  </Nav.Link> 
                 </>
               )}
             </Nav.Item>

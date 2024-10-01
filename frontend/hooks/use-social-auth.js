@@ -1,4 +1,3 @@
-
 import { useEffect, useRef } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAppDispatch } from '@/redux/hooks';
@@ -21,11 +20,11 @@ export default function useSocialAuth(authenticate, provider) {
 				.unwrap()
 				.then(() => {
 					dispatch(setAuth());
-					toast.success('Logged in');
+					toast.success('Sesión iniciada');
 					window.location.href = '/dashboard';
 				})
 				.catch(() => {
-					toast.error('Failed to log in');
+					toast.error('Error al iniciar sesión');
 					window.location.href = '/auth/login';
 				});
 		}

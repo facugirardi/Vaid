@@ -58,15 +58,15 @@ const Page = () => {
     return (
         <Layout>
             <div className="header">
-            <BreadcrumbItem mainTitle="Tasks" subTitle="View Tasks" />
+            <BreadcrumbItem mainTitle="Tareas" subTitle="Ver Tareas" />
             <button className="button-add-task" onClick={() => window.location.href = `/dashboard/${organizationId}/tasks/create`}>
-                    add <i className='ph-duotone ph-plus-circle plus-icon'></i>
+                    añadir <i className='ph-duotone ph-plus-circle plus-icon'></i>
             </button>
             </div>
             <Row>
                 {tasks.length === 0 ? (
                     <div className="no-tasks-message">
-                        <p className="p-history">No tasks available. Start by adding your first task using the 'add' button.</p>
+                        <p className="p-history">No hay tareas disponibles. Comienza añadiendo tu primera tarea usando el botón 'añadir'.</p>
                     </div>
                 ) : (
                     tasks.map((item, index) => (
@@ -76,7 +76,7 @@ const Page = () => {
                                     <div className="user-cover-bg">
                                         <Image 
                                             src={cover1} 
-                                            alt="image" 
+                                            alt="imagen" 
                                             className="img-fluid img-task-list" 
                                             width={500} 
                                             height={200}
@@ -84,7 +84,7 @@ const Page = () => {
                                         <div className="cover-data">
                                             <div className="d-inline-flex align-items-center">
                                                 <span className="text-white"> {item.state}</span>
-                                                <i className={`chat-badge ${item.state === 'Done' ? 'bg-success' : 'bg-danger'}`}></i>
+                                                <i className={`chat-badge ${item.state === 'Hecho' ? 'bg-success' : 'bg-danger'}`}></i>
                                             </div>
                                         </div>
                                     </div>
@@ -104,7 +104,7 @@ const Page = () => {
                                         </Form.Group>
                                     </div>
                                     <div className="saprator my-2">
-                                        <span className='ver-mas' onClick={() => window.location.href = `http://localhost:3000/dashboard/${organizationId}/tasks/view/${item.id}`}>view more</span>
+                                        <span className='ver-mas' onClick={() => window.location.href = `http://localhost:3000/dashboard/${organizationId}/tasks/view/${item.id}`}>ver más</span>
                                     </div>
                                 </Card.Body>
                             </Card>
@@ -123,31 +123,31 @@ const Page = () => {
                             <div className="image-container col-12 col-md-5">
                                 <Image 
                                     src={cover1} 
-                                    alt="image" 
+                                    alt="imagen" 
                                     className="img-fluid img-popup-event" 
                                     width={300} 
                                     height={300}
                                 />
                             </div>
                             <div className="details-container col-md-7">
-                                <p className='title-modal-12'>Title</p><p className='title2-modal'>{selectedTask.name}</p>
-                                <p className='title-modal-12'>Description</p><p className='title3-modal'>{selectedTask.description}</p>
+                                <p className='title-modal-12'>Título</p><p className='title2-modal'>{selectedTask.name}</p>
+                                <p className='title-modal-12'>Descripción</p><p className='title3-modal'>{selectedTask.description}</p>
                                 <Form.Group className='form-group-all'>
                                     <div className="row">
                                         <div className='col-md-3'>
-                                          <p className='title-dates'>Start Date</p>
+                                          <p className='title-dates'>Fecha de inicio</p>
                                             <Form.Control type="date" defaultValue={selectedTask.date} />
                                         </div>
                                         <div className="col-md-3">
-                                          <p className='title-dates'>End Date</p>
+                                          <p className='title-dates'>Fecha de fin</p>
                                           <Form.Control type="date" defaultValue={selectedTask.endDate} />
                                         </div>
                                         <div className="col-md-3">
-                                            <p className='title-dates'>Start Time</p>
+                                            <p className='title-dates'>Hora de inicio</p>
                                             <Form.Control type="time" defaultValue={selectedTask.time} />
                                         </div>
                                         <div className="col-md-3">
-                                            <p className='title-dates'>End Time</p>
+                                            <p className='title-dates'>Hora de fin</p>
                                             <Form.Control type="time" defaultValue={selectedTask.endTime} />
                                         </div>
                                     </div>
@@ -160,7 +160,7 @@ const Page = () => {
                 </Modal.Body>
                 <Modal.Footer className='d-flex justify-content-center'>
                     <button className="button-take">
-                        Take
+                        Tomar
                     </button>
                 </Modal.Footer>
             </Modal>

@@ -9,39 +9,39 @@ import { toast } from "react-toastify";
 const accordionItems = [
   {
     id: 1,
-    title: "What is Vaid?",
+    title: "¿Qué es Vaid?",
     value:
-    "Vaid is a comprehensive platform designed to streamline and manage the operations of Non-profit Organizations. It offers various modules and functionalities aimed at digitizing internal processes, enhancing the entire organization management, and optimizing resource allocation."
+      "Vaid es una plataforma integral diseñada para optimizar y gestionar las operaciones de organizaciones. Ofrece varios módulos y funcionalidades orientadas a digitalizar los procesos internos, mejorar la gestión de toda la organización y optimizar la asignación de recursos."
   },
   {
     id: 2,
-    title: "Is Vaid software free to use?",
+    title: "¿Es Vaid un software gratuito?",
     value:
-      "Yes, Vaid software is available for free to qualifying Non-profit Organizations that meet certain criteria. Please contact our team for more information on eligibility options."
+      "Sí, el software de Vaid está disponible de forma gratuita para cualquier tipo de organización. Por favor, póngase en contacto con nuestro equipo para obtener más información sobre las opciones de elegibilidad."
   },
   {
     id: 3,
-    title: "Is Vaid software customizable to fit our organization's specific needs?",
+    title: "¿Es personalizable el software de Vaid para adaptarse a las necesidades específicas de nuestra organización?",
     value:
-      "Yes, Vaid software is designed to be customizable to accommodate the unique requirements of each organization. Our team can work with you to tailor the platform to suit your organization's workflows, processes, and branding."
+      "Sí, el software de Vaid está diseñado para ser personalizable y adaptarse a los requisitos únicos de cada organización. Nuestro equipo puede trabajar con usted para adaptar la plataforma a los flujos de trabajo, procesos y branding de su organización."
   },
   {
     id: 4,
-    title: "Is Vaid software secure?",
+    title: "¿Es seguro el software de Vaid?",
     value:
-    "Yes, security is a top priority for us. Vaid software employs robust security measures to protect your organization's data and ensure compliance with data protection regulations. We continuously monitor and update our systems to safeguard against potential threats."
+      "Sí, la seguridad es una prioridad para nosotros. El software de Vaid emplea medidas de seguridad robustas para proteger los datos de su organización y garantizar el cumplimiento de las regulaciones de protección de datos. Continuamente monitoreamos y actualizamos nuestros sistemas para protegernos contra posibles amenazas."
   },
   {
     id: 5,
-    title: "What are the key features of Vaid software?",
+    title: "¿Cuáles son las características clave del software de Vaid?",
     value:
-    "Some key features of Vaid software include: HR management tools, event and activity management, resource allocation and project management, statistical reporting capabilities, Progressive Web Application (PWA) accessibility for mobile devices, and others!"
+      "Algunas de las características clave del software de Vaid incluyen: herramientas de gestión de recursos humanos, gestión de eventos y actividades, asignación de recursos y gestión de proyectos, capacidades de generación de informes estadísticos, accesibilidad como Aplicación Web Progresiva (PWA) para dispositivos móviles, ¡y más!"
   },
   {
     id: 6,
-    title: "Can I access Vaid software on mobile devices?",
+    title: "¿Puedo acceder al software de Vaid en dispositivos móviles?",
     value:
-      "Yes, Vaid software is accessible as a Progressive Web Application (PWA), allowing users to access the platform from any device with a web browser. The PWA is optimized for mobile use, providing a seamless user experience on smartphones and tablets."
+      "Sí, el software de Vaid es accesible como una Aplicación Web Progresiva (PWA), lo que permite a los usuarios acceder a la plataforma desde cualquier dispositivo con un navegador web. La PWA está optimizada para uso móvil, proporcionando una experiencia de usuario fluida en teléfonos inteligentes y tabletas."
   },
 ];
 
@@ -95,20 +95,22 @@ const page = () => {
                 data-aos-offset={50}
               >
                 <h1>
-                  AI Management Solutions for <span>Nonprofits</span>
+                  
+                
+                  #1 en Soluciones de Gestión de <span>Organizaciones</span>
                 </h1>
                 <p>
-                Designed to empower nonprofit organizations by providing streamlined, 
-                innovative management software solutions.                </p>
+                Diseñado para empoderar a todo tipo de organizaciones, ofreciendo soluciones de gestión innovadoras y eficientes.               </p>
+              
                 <a href="/auth/register" className="theme-btn mt-15 mb-10">
-                  Get Started <i className="far fa-arrow-right" />
+                  Comenzar <i className="far fa-arrow-right" />
                 </a>
                 <ul className="icon-list style-two">
                   <li>
-                    <i className="fal fa-check" /> Free
+                    <i className="fal fa-check" /> Gratuito
                   </li>
                   <li>
-                    <i className="fal fa-check" /> No credit card required
+                    <i className="fal fa-check" /> Seguro
                   </li>
                 </ul>
               </div>
@@ -135,7 +137,7 @@ const page = () => {
           data-aos-duration={1000}
           data-aos-offset={50}
         >
-          <h4>Organizations That Supported Us</h4>
+          <h4>Organizaciones Que Nos Apoyaron</h4>
         </div>
         <div className="client-logo-wrap logo-white">
           <div
@@ -223,10 +225,10 @@ const page = () => {
             >
               <div className="section-title text-center mb-35">
                 <span className="subtitle-one mb-20">
-                  <i className="flaticon-layers" /> Why Use Vaid
+                  <i className="flaticon-layers" /> ¿Por Qué Usar Vaid?
                 </span>
                 <h2>
-                  All-in-one, simple, and innovative management software
+                  Software de gestión todo en uno, simple e innovador.
                 </h2>
               </div>
             </div>
@@ -246,17 +248,19 @@ const page = () => {
                 >
                   <Nav.Item as={"li"}>
                     <Nav.Link as={"button"} eventKey="tabTwo1">
-                      Innovative Solutions
+                      
+                      Soluciones Innovadoras
+
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item as={"li"}>
                     <Nav.Link as={"button"} eventKey="tabTwo2">
-                      Easy to Use
+                      Fácil de Usar
                     </Nav.Link>
                   </Nav.Item>
                   <Nav.Item as={"li"}>
                     <Nav.Link as={"button"} eventKey="tabTwo3">
-                      Great Analytics
+                      Excelentes Analíticas
                     </Nav.Link>
                   </Nav.Item>
                 </Nav>
@@ -273,21 +277,21 @@ const page = () => {
                       data-aos-offset={50}
                     >
                       <div className="section-title mb-30">
-                        <h3>Revolutionizing Productivity</h3>
+                        <h3>Revolucionando la Productividad</h3>
                       </div>
                       <p>
-                      Unlocking innovative solutions means embracing
-                       features that maximize efficiency and minimize friction. 
-                       This approach fosters a culture of innovation, where every 
-                       interaction is optimized for productivity and convenience, 
-                       empowering users to achieve their goals with ease.
+                      Desbloquear soluciones innovadoras significa adoptar características que maximizan la eficiencia y minimizan los obstáculos. Este enfoque fomenta una cultura de innovación, donde cada interacción se optimiza para la productividad y la comodidad, empoderando a los usuarios para alcanzar sus objetivos con facilidad.
                      </p>
                       <ul className="icon-list style-two my-35">
                         <li>
-                          <i className="fal fa-check" /> Embrace Seamless Connectivity
+                          <i className="fal fa-check" /> Adopta una Conexión Sin Fronteras
+
                         </li>
                         <li>
-                          <i className="fal fa-check" /> Empowering Productivity at Every Turn
+                          <i className="fal fa-check" /> Potenciando la Productividad en Cada Paso
+
+
+
                         </li>
                       </ul>
                     </div>
@@ -314,21 +318,18 @@ const page = () => {
                   <div className="col-xl-5 col-lg-6">
                     <div className="content rmt-55">
                       <div className="section-title mb-30">
-                        <h3>Effortless Solutions for Every Task</h3>
+                        <h3>Soluciones Sin Esfuerzo para Cada Tarea</h3>
                       </div>
                       <p>
-                      In the realm of innovative solutions, prioritizing ease of 
-                      use is paramount. Our platform embodies this ethos by offering 
-                      intuitive features that simplify even the most complex tasks. 
-                      Every interaction is designed with user-friendliness in mind. With our approach,
-                       navigating through tasks becomes a breeze, empowering users to accomplish more with less effort.
+En el mundo de las soluciones innovadoras, la facilidad de uso es primordial. Nuestra plataforma encarna esta filosofía al ofrecer características intuitivas que simplifican incluso las tareas más complejas. Cada interacción está diseñada pensando en la experiencia del usuario. Con nuestro enfoque, navegar por las tareas se vuelve sencillo, permitiendo a los usuarios lograr más con menos esfuerzo.
+
                       </p>
                       <ul className="icon-list style-two my-35">
                         <li>
-                          <i className="fal fa-check" /> User-Friendly Design
+                          <i className="fal fa-check" /> Diseño Amigable
                         </li>
                         <li>
-                          <i className="fal fa-check" /> Seamless Integration: Where Efficiency Meets Ease
+                          <i className="fal fa-check" /> Donde la Eficiencia se Encuentra con la Facilidad
                         </li>
                       </ul>
                     </div>
@@ -340,21 +341,18 @@ const page = () => {
                   <div className="col-xl-5 col-lg-6">
                     <div className="content rmb-55">
                       <div className="section-title mb-30">
-                        <h3>Unveiling the Power of Data</h3>
+                        <h3>Revelando el Poder de los Datos</h3>
                       </div>
                       <p>
-                      With robust data analytics tools at your disposal, we empower
-                       you to unlock the full potential of your data, transforming 
-                       raw information into actionable intelligence. From identifying
-                        emerging trends to forecasting future opportunities, our platform 
-                        equips you with the tools to drive growth and innovation. 
+Con potentes herramientas de análisis de datos a tu alcance, te brindamos el poder de desbloquear todo el potencial de tu información, transformando datos en bruto en inteligencia procesable. Desde la identificación de tendencias emergentes hasta la previsión de futuras oportunidades, nuestra plataforma te equipa con las herramientas necesarias para impulsar el crecimiento y la innovación.
+
                       </p>
                       <ul className="icon-list style-two my-35">
                         <li>
-                          <i className="fal fa-check" /> Transforming Insights into Actionable Intelligence
+                          <i className="fal fa-check" /> Transformando Conocimientos en Inteligencia Accionable
                         </li>
                         <li>
-                          <i className="fal fa-check" /> Empowering Growth and Innovation
+                          <i className="fal fa-check" /> Impulsando el Crecimiento y la Innovación
                         </li>
                       </ul>
                     </div>
@@ -386,9 +384,9 @@ const page = () => {
             <div className="col-xl-7 col-lg-9 col-md-11">
               <div className="section-title text-center mb-55">
                 <span className="subtitle-one mb-20">
-                  <i className="fas fa-cog" /> What We Offer
+                  <i className="fas fa-cog" /> Lo Que Ofrecemos
                 </span>
-                <h2>Powerful Features To Help You Manage Your Organization</h2>
+                <h2>Funciones Poderosas Para Ayudar a Gestionar Su Organización</h2>
               </div>
             </div>
           </div>
@@ -405,11 +403,10 @@ const page = () => {
                 </div>
                 <div className="content">
                   <h5>
-                      Secure &amp; Confidential
+                      Seguro y Confidencial
                   </h5>
                   <p>
-                  Our advanced security frameworks and encryption 
-                  technologies ensure that all your data remains secure.                  
+                  Nuestros avanzados marcos de seguridad garantizan que todos sus datos permanezcan seguros.                
                   </p>
                 </div>
               </div>
@@ -427,10 +424,10 @@ const page = () => {
                 </div>
                 <div className="content">
                   <h5>
-                      Save time
+                      Ahorra Tiempo
                   </h5>
                   <p>
-                    Vaid can save your time and money, and offer you free and appropriate reasonable business.
+                    Vaid puede ahorrarle tiempo y dinero, y ofrecerle soluciones empresariales gratuitas y adecuadas.
                 </p>
                 </div>
               </div>
@@ -448,11 +445,10 @@ const page = () => {
                 </div>
                 <div className="content">
                   <h5>
-                    Enhance Productivity
+                    Mejore la Productividad
                   </h5>
                   <p>
-                  By focusing on key performance areas, 
-                  Vaid enables your team to achieve more in less time.                   
+                  Al centrarse en las áreas clave, Vaid permite a su equipo lograr más en menos tiempo.
                   </p>
                 </div>
               </div>
@@ -469,11 +465,11 @@ const page = () => {
                 </div>
                 <div className="content">
                   <h5>
-                    Manage all your projects
+                    Gestione Sus Proyectos
                   </h5>
                   <p>
-                    From initiation to completion, manage your tasks, resources, 
-                    and timelines efficiently using our project management tools.                   </p>
+                    Desde el inicio al final, gestione sus tareas, recursos y cronogramas de manera eficiente utilizando nuestras herramientas de gestión de proyectos.
+                 </p>
                 </div>
               </div>
             </div>
@@ -490,11 +486,14 @@ const page = () => {
                 </div>
                 <div className="content">
                   <h5>
-                    Optimize Resources
+                    Optimice los Recursos
                   </h5>
                   <p>
-                  Vaid not only optimizes your resources 
-                  but also provides cost-effective and suitable solutions for your enterprise needs.                  </p>
+                   
+                  Vaid no solo optimiza sus recursos, sino que también proporciona soluciones rentables y adecuadas para las necesidades de su empresa.
+
+
+                  </p>
                 </div>
               </div>
             </div>
@@ -511,11 +510,12 @@ const page = () => {
                 </div>
                 <div className="content">
                   <h5>
-                    Automatically track work
+                    Monitorea tu Trabajo
                   </h5>
                   <p>
-                  Utilize Vaid to effortlessly monitor your work progress. 
-                  This system captures real-time data on tasks, providing you insights and analytics.</p>
+Utilice Vaid para monitorear el progreso de su trabajo sin esfuerzo. Este sistema captura datos en tiempo real, brindándole información y análisis.
+
+                  </p>
                 </div>
               </div>
             </div>
@@ -540,14 +540,11 @@ const page = () => {
                 data-aos-offset={50}
               >
                 <div className="section-title mb-30">
-                  <h2>Take Control of Your Organization Management</h2>
+                  <h2>Tome el Control de su Organización</h2>
                 </div>
                 <p>
-                Our platform offers you the tools and flexibility needed to
-                 streamline your processes, enhance team coordination, and
-                  increase operational efficiency. From HR management 
-                  to event planning and resource tracking, our solution provides 
-                  you with the control you need to drive your organization's success to new heights.
+Nuestra plataforma le ofrece las herramientas y la flexibilidad necesarias para optimizar sus procesos, mejorar la coordinación del equipo y aumentar la eficiencia operativa. Desde la gestión de recursos humanos hasta la planificación de eventos y el seguimiento de recursos, nuestra solución le brinda el control que necesita para llevar el éxito de su organización a nuevos niveles.
+
                   </p>
                 <div className="row gap-50 pt-25">
                   <div className="col-md-6">
@@ -557,10 +554,10 @@ const page = () => {
                       </div>
                       <div className="content">
                         <h5>
-                          Mobile Friendly
+                          Amigable para Móviles
                         </h5>
                         <p>
-                          Our platform is meticulously crafted to be mobile-friendly.                        
+                          Nuestra plataforma está cuidadosamente diseñada para ser compatible con dispositivos móviles.
                         </p>
                       </div>
                     </div>
@@ -572,10 +569,11 @@ const page = () => {
                       </div>
                       <div className="content">
                         <h5>
-                            Powerful Prediction
+                            Potente Predicción
                         </h5>
                         <p>
-                        Experience the strength of precise foresight with our prediction algorithms.</p>
+                        Experimente la fuerza de una previsión precisa con nuestros algoritmos de predicción.
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -623,7 +621,7 @@ const page = () => {
               data-aos-offset={50}
             >
               <i className="fas fa-check" />
-              <h6>Efficient</h6>
+              <h6>Eficiente</h6>
             </div>
             <div
               className="check-list-item two"
@@ -643,7 +641,7 @@ const page = () => {
               data-aos-offset={50}
             >
               <i className="fas fa-check" />
-              <h6>Secure</h6>
+              <h6>Seguro</h6>
             </div>
             <div
               className="check-list-item four"
@@ -653,7 +651,7 @@ const page = () => {
               data-aos-offset={50}
             >
               <i className="fas fa-check" />
-              <h6>Innovative</h6>
+              <h6>Innovador</h6>
             </div>
           </div>
         </div>
@@ -671,9 +669,9 @@ const page = () => {
                 data-aos-offset={50}
               >
                 <span className="subtitle-one mb-20">
-                  <i className="fas fa-tools" /> How To Manage
+                  <i className="fas fa-tools" /> Cómo Gestionar
                 </span>
-                <h2>Increased Your Productivity by Using Vaid</h2>
+                <h2>Aumente Su Productividad con Vaid</h2>
               </div>
             </div>
           </div>
@@ -702,12 +700,11 @@ const page = () => {
                   <div className="icon">
                     <i className="far fa-check" />
                   </div>
-                  <h5>Empower Your Team with Effective HR Management</h5>
+                  <h5>Empodere a Su Equipo con una Gestión Efectiva</h5>
                 </div>
                 <p>
-                Drive your team's growth and productivity with our efficient human resources (HR)
-                 management solution. Our platform offers the tools to attract, and 
-                 develop your organization's members.                 
+Impulse el crecimiento y la productividad de su equipo con nuestra solución eficiente de gestión de recursos humanos (RRHH). Nuestra plataforma ofrece las herramientas necesarias para atraer y desarrollar a los miembros de su organización.
+
                  </p>
               </div>
               <div className="feature-icon-box style-three">
@@ -715,12 +712,10 @@ const page = () => {
                   <div className="icon">
                     <i className="far fa-check" />
                   </div>
-                  <h5>Effortless Event and Task Organization</h5>
+                  <h5>Organización de Eventos y Tareas Sin Esfuerzo</h5>
                 </div>
                 <p>
-                Simplify event and task planning and execution with our integrated management platform. 
-                Our solution provides you 
-                with the tools to efficiently coordinate all your activities.
+                  Simplifique la planificación y ejecución de eventos y tareas con nuestra plataforma de gestión integrada. Nuestra solución le brinda las herramientas para coordinar eficientemente todas sus actividades.
                 </p>
               </div>
               <div className="feature-icon-box style-three">
@@ -728,13 +723,12 @@ const page = () => {
                   <div className="icon">
                     <i className="far fa-check" />
                   </div>
-                  <h5>Optimize Resource Allocation</h5>
+                  <h5>Optimice la Asignación de Recursos</h5>
                 </div>
                 <p>
-                Streamline your resource management with Vaid, maximizing efficiency in 
-                resource allocation and utilization. Our solution equips you with the necessary 
-                tools to make decisions and maximize
-                 the use of your resources.                 
+
+Simplifique la gestión de sus recursos con Vaid, maximizando la eficiencia en la asignación y utilización de recursos. Nuestra solución le proporciona las herramientas necesarias para tomar decisiones informadas y maximizar el uso de sus recursos.
+
                  </p>
               </div>
             </div>
@@ -760,12 +754,11 @@ const page = () => {
                   <span className="subtitle-one mb-20">
                     <i className="fas fa-usd-square" /> FAQs
                   </span>
-                  <h2>Frequently Asked Questions</h2>
+                  <h2>Preguntas Frecuentes</h2>
                 </div>
                 <p>
-                From details about our products and services to usage 
-                guidelines and policies, this questions were designed 
-                to deliver the information you need.               
+Desde detalles sobre nuestros productos y servicios hasta pautas de uso y políticas, estas preguntas están diseñadas para brindarle la información que necesita.
+
                 </p>
               </div>
             </div>
@@ -817,20 +810,20 @@ const page = () => {
             >
               <div className="col-lg-7">
                 <div className="section-title mb-30">
-                  <h3>Suscribe to Newsletter!</h3>
-                  <p>Please enter your email and get your answer.</p>
+                  <h3>¡Suscríbete al Boletín!</h3>
+                  <p>Por favor, ingrese su correo electrónico y obtenga su respuesta.</p>
                 </div>
                 <form className="newsletter-form style-three" onSubmit={handleEmailSubmit}>
                   <input
                   type="email"
-                  placeholder="Email Address"
+                  placeholder="Ingresa tu email"
                   required
                   className="input-nl"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
                   <button type="submit">
-                    Send <i className="far fa-arrow-right" />
+                    Enviar <i className="far fa-arrow-right" />
                   </button>
                 </form>
               </div>

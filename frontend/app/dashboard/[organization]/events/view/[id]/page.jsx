@@ -43,8 +43,6 @@ const Page = () => {
         }
     }, []);
 
-
-    
     // Fetch del evento, miembros e invitados
     useEffect(() => {
         if (organizationId && eventId) {
@@ -70,7 +68,6 @@ const Page = () => {
                     const membersData = await participantsResponse.json();
                     setMembers(membersData); 
 
-
                     // Fetch para obtener los invitados del evento
                     const guestsResponse = await fetch(`http://localhost:8000/api/organization/event/${eventId}/guests/`, {
                         method: 'GET',
@@ -82,29 +79,25 @@ const Page = () => {
                     setGuests(guestsData); 
 
                 } catch (error) {
-                    console.error("Error fetching event data:", error);
+                    console.error("Error al obtener datos del evento:", error);
                 }
             };
 
             fetchData();
-
         }
     }, [organizationId, eventId]);
 
-
     useEffect(() => {
         const fetchData = async () => {
-                try {
-                    if (user.id) {
-                        const { isAdmin, isOrgAccount } = await checkUserPermissions(user.id);
-                        setIsAdmin(isAdmin);
-                        setIsOrgAccount(isOrgAccount);
-                    }
-
-                } catch (error) {
-                    console.error("Error checking permissions:", error);
+            try {
+                if (user.id) {
+                    const { isAdmin, isOrgAccount } = await checkUserPermissions(user.id);
+                    setIsAdmin(isAdmin);
+                    setIsOrgAccount(isOrgAccount);
                 }
-            
+            } catch (error) {
+                console.error("Error al verificar permisos:", error);
+            }
         };
 
         fetchData();
@@ -120,13 +113,24 @@ const Page = () => {
             });
             const data = await response.json();
             setIsAttending(!isAttending); 
-            toast.success('Your attendance status has changed successfully!');
+            toast.success('¡Tu estado de asistencia ha cambiado exitosamente!');
         } catch (error) {
-            console.error('Error toggling attendance:', error);
-            toast.error('Error toggling attendance.');
+            console.error('Error al cambiar estado de asistencia:', error);
+            toast.error('Error al cambiar estado de asistencia.');
         }
     };
 
+    const handleShareLink = async () => {
+        try {
+            const invitationLink = `${window.location.origin}/dashboard/${organizationId}/events/view/${eventId}`;
+            await navigator.clipboard.writeText(invitationLink);
+            toast.success('¡Enlace de invitación copiado al portapapeles!', {
+                autoClose: 10000, // 10 segundos
+            });
+        } catch (error) {
+            toast.error('Error al copiar el enlace.');
+        }
+    };
 
     // Manejo de cambios en el formulario de nuevo invitado
     const handleInputChange = (e) => {
@@ -134,7 +138,6 @@ const Page = () => {
         setNewGuest({ ...newGuest, [name]: value });
     };
 
-    // Agregar invitado al evento
     const handleAddGuest = async (e) => {
         e.preventDefault();
         const currentGuests = Array.isArray(guests) ? guests : [];
@@ -142,7 +145,7 @@ const Page = () => {
         // Verificar si el email ya existe en la lista de invitados
         const emailExists = currentGuests.some(guest => guest.email === newGuest.email);
         if (emailExists) {
-            toast.error('Guest with this email already exists.');
+            toast.error('Este invitado ya existe.');
             return; 
         }
 
@@ -162,21 +165,20 @@ const Page = () => {
                 const data = await response.json();
                 if (data.guest) {
                     setGuests((prevGuests) => Array.isArray(prevGuests) ? [...prevGuests, data.guest] : [data.guest]);
-                    setNewGuest({ name: "", email: "", role: "" }); 
-                    toast.success('Guest added!');
+                    setNewGuest({ name: "", email: "", role: "" });
+                    toast.success('¡Invitado añadido!');
                 } else {
-                    toast.error("Guest data not found in the response.");
+                    toast.error("No se encontraron datos del invitado en la respuesta.");
                 }
             } else {
                 const errorData = await response.json();
-                toast.error("Error adding guest: " + errorData.error);
+                toast.error("Error al añadir invitado: " + errorData.error);
             }
         } catch (error) {
-            toast.error("Error adding guest.");
+            toast.error("Error al añadir invitado.");
         }
     };
 
-    // Eliminar invitado
     const handleDeleteGuest = async (guest_id) => {
         try {
             const response = await fetch(`http://localhost:8000/api/organization/event/guest/${guest_id}/`, {
@@ -188,12 +190,12 @@ const Page = () => {
     
             if (response.ok) {
                 setGuests(guests.filter(guest => guest.id !== guest_id));
-                toast.success('Guest deleted successfully!');
+                toast.success('¡Invitado eliminado exitosamente!');
             } else {
-                toast.error('Error deleting guest.');
+                toast.error('Error al eliminar invitado.');
             }
         } catch (error) {
-            toast.error('Error deleting guest.');
+            toast.error('Error al eliminar invitado.');
         }
     };
 
@@ -207,14 +209,13 @@ const Page = () => {
             });
     
             if (response.ok) {
-                toast.success('Event finished successfully!');
-                // Actualizar el estado del evento a 'Done' en el frontend
+                toast.success('¡Evento finalizado exitosamente!');
                 setEvent({ ...event, state: 'Done' });
             } else {
-                toast.error('Error finishing event.');
+                toast.error('Error al finalizar evento.');
             }
         } catch (error) {
-            toast.error('Error finishing event.');
+            toast.error('Error al finalizar evento.');
         }
     };    
 
@@ -228,19 +229,16 @@ const Page = () => {
             });
     
             if (response.ok) {
-                toast.success('Event deleted successfully!');
-                // Redirigir o actualizar la página
+                toast.success('¡Evento eliminado exitosamente!');
                 window.location.href = `/dashboard/${organizationId}/events/view`; // Redirige a la lista de eventos
             } else {
-                toast.error('Error deleting event.');
+                toast.error('Error al eliminar evento.');
             }
         } catch (error) {
-            toast.error('Error deleting event.');
+            toast.error('Error al eliminar evento.');
         }
     };
     
-    
-    // Eliminar miembro
     const handleDeleteMember = async (memberId) => {
         try {
             const response = await fetch(`http://localhost:8000/api/organization/event/member/${memberId}`, {
@@ -252,106 +250,98 @@ const Page = () => {
 
             if (response.ok) {
                 setMembers(members.filter(member => member.id !== memberId));
-                toast.success('Member deleted!');
+                toast.success('¡Miembro eliminado!');
             } else {
-                toast.error('Error deleting member.');
+                toast.error('Error al eliminar miembro.');
             }
         } catch (error) {
-            toast.error('Error deleting member.');
+            toast.error('Error al eliminar miembro.');
         }
     };
 
     useEffect(() => {
-        // Verificar si el usuario ya está asistiendo al evento
         const checkAttendance = async () => {
             if(user.id && eventId){
-
-            
-            try {
-                const response = await fetch(`http://localhost:8000/api/event/${eventId}/check-attendance/${user.id}/`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
-                const data = await response.json();
-                setIsAttending(data.is_attending);  // Actualizar el estado
-            } catch (error) {
-                console.error('Error checking attendance:', error);
+                try {
+                    const response = await fetch(`http://localhost:8000/api/event/${eventId}/check-attendance/${user.id}/`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    });
+                    const data = await response.json();
+                    setIsAttending(data.is_attending); 
+                } catch (error) {
+                    console.error('Error al verificar asistencia:', error);
+                }
             }
-        }
         };
         checkAttendance();
-        }, [eventId, user.id]);
+    }, [eventId, user.id]);
 
-    // Cambiar el estado del evento entre 'Pending' y 'Done'
-const handleToggleEventState = async () => {
-    try {
-        const response = await fetch(`http://localhost:8000/api/organization/event/${eventId}/toggle-state/`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+    const handleToggleEventState = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/api/organization/event/${eventId}/toggle-state/`, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
 
-        if (response.ok) {
-            const data = await response.json();
-            toast.success(`Event state changed to ${data.state}!`);
-            // Actualizar el estado del evento en el frontend
-            setEvent({ ...event, state: data.state });
-        } else {
-            toast.error('Error changing event state.');
-        }
-    } catch (error) {
-        toast.error('Error changing event state.');
-    }
-};
-
-// Función para verificar permisos
-const checkUserPermissions = async (userId) => {
-    let isAdmin = false;
-    let isOrgAccount = false;
-
-    try {
-        // Verificar si el usuario es administrador
-        const adminResponse = await fetch(`http://localhost:8000/api/isAdmin/?user_id=${userId}`, { 
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
+            if (response.ok) {
+                const data = await response.json();
+                toast.success(`¡El estado del evento cambió a ${data.state}!`);
+                setEvent({ ...event, state: data.state });
+            } else {
+                toast.error('Error al cambiar estado del evento.');
             }
-        });
-        const adminData = await adminResponse.json();
-        isAdmin = adminData;
-
-        // Verificar si el usuario pertenece a una cuenta de organización
-        const orgAccountResponse = await fetch(`http://localhost:8000/api/user/${userId}/check-usertype/`, { 
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        });
-        const orgAccountData = await orgAccountResponse.json();
-        if (orgAccountData.user_type === 2) {
-            isOrgAccount = true;
-        }
-    } catch (error) {
-        console.error("Error checking user permissions:", error);
-    }
-
-    return { isAdmin, isOrgAccount };
-};
-
-useEffect(() => {
-    const fetchPermissions = async () => {
-        if (user.id) {
-            const { isAdmin, isOrgAccount } = await checkUserPermissions(user.id);
-            setIsAdmin(isAdmin);
-            setIsOrgAccount(isOrgAccount);
+        } catch (error) {
+            toast.error('Error al cambiar estado del evento.');
         }
     };
 
-    fetchPermissions();
-}, [user.id]);
+    const checkUserPermissions = async (userId) => {
+        let isAdmin = false;
+        let isOrgAccount = false;
+
+        try {
+            const adminResponse = await fetch(`http://localhost:8000/api/isAdmin/?user_id=${userId}`, { 
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const adminData = await adminResponse.json();
+            isAdmin = adminData;
+
+            const orgAccountResponse = await fetch(`http://localhost:8000/api/user/${userId}/check-usertype/`, { 
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const orgAccountData = await orgAccountResponse.json();
+            if (orgAccountData.user_type === 2) {
+                isOrgAccount = true;
+            }
+        } catch (error) {
+            console.error("Error al verificar permisos:", error);
+        }
+
+        return { isAdmin, isOrgAccount };
+    };
+
+    useEffect(() => {
+        const fetchPermissions = async () => {
+            if (user.id) {
+                const { isAdmin, isOrgAccount } = await checkUserPermissions(user.id);
+                setIsAdmin(isAdmin);
+                setIsOrgAccount(isOrgAccount);
+            }
+        };
+
+        fetchPermissions();
+    }, [user.id]);
 
     return (
         <Layout>
@@ -373,46 +363,44 @@ useEffect(() => {
                                     <span className="text-dark"> {event.state}</span>
                                     <i className={`chat-badge ${event.state === 'Done' ? 'bg-success' : 'bg-danger'}`}></i>
                                 </div>
-                                <p className='title2-modal'>Title</p><p className='title-modal-13'>{event.name}</p>
-                                <p className='title3-modal'>Description</p><p className='title-modal-12'>{event.description}</p>
+                                <p className='title2-modal'>Título</p><p className='title-modal-13'>{event.name}</p>
+                                <p className='title3-modal'>Descripción</p><p className='title-modal-12'>{event.description}</p>
                                 <Form.Group className='form-group-all'>
                                     <div className="row">
                                         <div className='col-md-3'>
-                                            <p className='title-dates'>Start Date</p>
+                                            <p className='title-dates'>Fecha de inicio</p>
                                             <Form.Control type="date" defaultValue={event.date} readOnly/>
                                         </div>
                                         <div className="col-md-3">
-                                            <p className='title-dates'>End Date</p>
+                                            <p className='title-dates'>Fecha de finalización</p>
                                             <Form.Control type="date" defaultValue={event.endDate} readOnly/>
                                         </div>
                                         <div className="col-md-3">
-                                            <p className='title-dates'>Start Time</p>
+                                            <p className='title-dates'>Hora de inicio</p>
                                             <Form.Control type="time" defaultValue={event.time} readOnly/>
                                         </div>
                                         <div className="col-md-3">
-                                            <p className='title-dates'>End Time</p>
+                                            <p className='title-dates'>Hora de finalización</p>
                                             <Form.Control type="time" defaultValue={event.endTime} readOnly/>
                                         </div>
                                     </div>
                                 </Form.Group>
                             </div>
 
-
-                            {isAdmin || isOrgAccount ? ( <>
-
-
+                            {isAdmin || isOrgAccount ? ( 
+                            <>
                             <form onSubmit={handleAddGuest}>
                                 <div className='container mt-50 add-guest-container'>
-                                    <h5 className="add-guest-title mb-40">Add Guest</h5>
-                                    <div className='row d-flex justify-content-center'>
+                                    <h5 className="add-guest-title mb-40">Añadir invitado</h5>
+                                    <div className='row d-flex justificar-content-center'>
                                         <div className="mb-3 col-md-3">
-                                            <label htmlFor="name" className="form-label">Name</label>
+                                            <label htmlFor="name" className="form-label">Nombre</label>
                                             <input 
                                                 type="text" 
                                                 className="form-control" 
                                                 id="name" 
                                                 name="name" 
-                                                placeholder='Add Name' 
+                                                placeholder='Añadir nombre' 
                                                 value={newGuest.name}
                                                 onChange={handleInputChange}
                                                 required 
@@ -425,28 +413,28 @@ useEffect(() => {
                                                 className="form-control" 
                                                 id="email" 
                                                 name="email" 
-                                                placeholder='Add Email' 
+                                                placeholder='Añadir email' 
                                                 value={newGuest.email}
                                                 onChange={handleInputChange}
                                                 required 
                                             />
                                         </div>
                                         <div className="mb-3 col-md-3">
-                                            <label htmlFor="role" className="form-label">Role</label>
+                                            <label htmlFor="role" className="form-label">Rol</label>
                                             <input 
                                                 type="text" 
                                                 className="form-control" 
                                                 id="role" 
                                                 name="role" 
-                                                placeholder='Event Role' 
+                                                placeholder='Rol en el evento' 
                                                 value={newGuest.role}
                                                 onChange={handleInputChange}
                                                 required 
                                             />
                                         </div>
-                                        <div className='col-md-2 d-flex justify-content-center align-items-center'>
+                                        <div className='col-md-2 d-flex justificar-content-center align-items-center'>
                                             <Button variant="primary" type="submit" className='button-add-guest mt-10'>
-                                                Add Guest
+                                                Añadir invitado
                                             </Button>
                                         </div>
                                     </div>
@@ -454,15 +442,15 @@ useEffect(() => {
                             </form>
 
                             <div className="container table-guest-container">
-                                <h5 className='add-member-title mb-40'>Guests List</h5>
-                                <div className='row d-flex justify-content-center'>
+                                <h5 className='add-member-title mb-40'>Lista de invitados</h5>
+                                <div className='row d-flex justificar-content-center'>
                                     <table className="table">
                                         <thead>
                                             <tr>
                                                 <th className='text-center'>ID</th>
-                                                <th className='text-center'>Name</th>
-                                                <th className='text-center'>Role</th>
-                                                <th className='text-center'>Action</th>
+                                                <th className='text-center'>Nombre</th>
+                                                <th className='text-center'>Rol</th>
+                                                <th className='text-center'>Acción</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -471,7 +459,7 @@ useEffect(() => {
                                                 <tr>
                                                     <td colSpan="4" className="text-center">                                                           <br />
                                                     <br />
-                                                    <b>No members or guests found for this event.</b></td>
+                                                    <b>No se encontraron miembros ni invitados para este evento.</b></td>
                                                 </tr>
                                                 </>
                                             ) : (
@@ -481,7 +469,7 @@ useEffect(() => {
                                                         <tr key={member.id}>
                                                             <td className='text-center'>{index + 1}</td>
                                                             <td className='text-center'>{member.first_name} {member.last_name}</td>
-                                                            <td className='text-center'>Member</td>
+                                                            <td className='text-center'>Miembro</td>
                                                             <td className='text-center'>
                                                                 <button className="trash-event" onClick={() => handleDeleteMember(member.id)}>
                                                                     <FontAwesomeIcon icon={faTrash} className='hover-button-trash' />
@@ -512,19 +500,19 @@ useEffect(() => {
                             </>) : <></>}
 
                             <div className='container last-container'>
-                                <div className='row d-flex justify-content-center'>
+                                <div className='row d-flex justificar-content-center'>
                                 {isAdmin || isOrgAccount ? (
                                 <Button className="btn-close-task mx-2" onClick={handleToggleEventState}>
-                                    {event.state === 'Done' ? 'Mark as Pending' : 'Finish Event'}
+                                    {event.state === 'Done' ? 'Pendiente' : 'Finalizar'}
                                 </Button> ) :
                                 <Button className="btn-close-task mx-2" onClick={handleToggleAttendance}>
-                                    {isAttending ? 'Leave Event' : 'Assist'}
+                                    {isAttending ? 'Dejar' : 'Asistir'}
                                 </Button>
                             }
                                 {isAdmin || isOrgAccount ? (
-                                <Button className="btn-close-task3 mx-2" onClick={handleDeleteEvent}>Delete</Button>
+                                <Button className="btn-close-task3 mx-2" onClick={handleDeleteEvent}>Eliminar</Button>
                                 ) : <></>}
-                                <Button className="btn-close-task2 mx-2">
+                                <Button className="btn-close-task2 mx-2" onClick={handleShareLink}>
                                     <i className="fa fa-share-alt" />
                                 </Button>
                                 </div>
