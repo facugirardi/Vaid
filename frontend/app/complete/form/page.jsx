@@ -199,13 +199,7 @@ const Page = () => {
                                                             </div>
                                                             <div className="col-sm-6">
                                                                 <div className="form-group">
-<<<<<<< HEAD
                                                                     <label className="form-label">¿Has tenido experiencia siendo parte de una organización?</label>
-                                                                    <select className="form-select height-checkbox">
-                                                                        <option>Sí</option>
-                                                                        <option>No</option>
-=======
-                                                                    <label className="form-label">¿Has tenido experiencia como voluntario?</label>
                                                                     <select
                                                                         className="form-select height-checkbox"
                                                                         name="hasExperience"
@@ -215,7 +209,6 @@ const Page = () => {
                                                                         <option value="">Selecciona una opción</option>
                                                                         <option value="yes">Sí</option>
                                                                         <option value="no">No</option>
->>>>>>> e5d19aae21938b4ce63f99298c8d481488195cd5
                                                                     </select>                                                                    
                                                                 </div>
                                                             </div>
