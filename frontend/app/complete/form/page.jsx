@@ -22,6 +22,7 @@ const Page = () => {
     const [formData, setFormData] = useState({
         dateOfBirth: '',
         profession: '',
+        hasExperience: '',
         experience: '',
         street: '',
         city: '',
@@ -34,7 +35,6 @@ const Page = () => {
     });
 
     useEffect(() => {
-        // Calcular el progreso cuando el componente se monte
         const calculateProgress = () => {
             return ((parseInt(key.split('-')[1]) - 1) / (totalTabs - 1)) * 100;
         };
@@ -74,7 +74,6 @@ const Page = () => {
         const newErrors = {};
         if (!formData.dateOfBirth) newErrors.dateOfBirth = "La fecha de nacimiento es obligatoria";
         if (!formData.profession) newErrors.profession = "La profesión es obligatoria";
-        if (!formData.experience) newErrors.experience = "La experiencia es obligatoria";
         if (!formData.street) newErrors.street = "La calle es obligatoria";
         if (!formData.city) newErrors.city = "La ciudad es obligatoria";
         if (formData.availableDays.length === 0) newErrors.availableDays = "Se requiere al menos un día disponible";
@@ -200,10 +199,23 @@ const Page = () => {
                                                             </div>
                                                             <div className="col-sm-6">
                                                                 <div className="form-group">
+<<<<<<< HEAD
                                                                     <label className="form-label">¿Has tenido experiencia siendo parte de una organización?</label>
                                                                     <select className="form-select height-checkbox">
                                                                         <option>Sí</option>
                                                                         <option>No</option>
+=======
+                                                                    <label className="form-label">¿Has tenido experiencia como voluntario?</label>
+                                                                    <select
+                                                                        className="form-select height-checkbox"
+                                                                        name="hasExperience"
+                                                                        value={formData.hasExperience}
+                                                                        onChange={handleChange}
+                                                                    >
+                                                                        <option value="">Selecciona una opción</option>
+                                                                        <option value="yes">Sí</option>
+                                                                        <option value="no">No</option>
+>>>>>>> e5d19aae21938b4ce63f99298c8d481488195cd5
                                                                     </select>                                                                    
                                                                 </div>
                                                             </div>
@@ -216,6 +228,7 @@ const Page = () => {
                                                                         placeholder="Describe cualquier experiencia o habilidades relevantes."
                                                                         value={formData.experience}
                                                                         onChange={handleChange}
+                                                                        disabled={formData.hasExperience === 'no'} // Deshabilitar si no tiene experiencia
                                                                     />
                                                                 </div>
                                                             </div>

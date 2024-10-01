@@ -188,7 +188,7 @@ const Donations = () => {
             <div className='container'>
               <div className='row'>
                 <div className="mb-3 col-md-4">
-                  <label htmlFor="productName" className="form-label">Nombre</label>
+                  <label htmlFor="productName" className="form-label">Descripción</label>
                   <input type="text" className="form-control" id="description" name="description" placeholder='Agregar Nombre' required />
                 </div>
                 <div className="mb-3 col-md-3">
@@ -425,7 +425,7 @@ const BuySell = () => {
             <div className='container'>
               <div className='row'>
                 <div className="mb-3 col-md-8">
-                  <label htmlFor="description" className="form-label">Nombre</label>
+                  <label htmlFor="description" className="form-label">Descripción</label>
                   <input type="text" className="form-control" id="description" name="description" placeholder='Nombre del Producto' required />
                 </div>
                 <div className="mb-3 col-md-2">

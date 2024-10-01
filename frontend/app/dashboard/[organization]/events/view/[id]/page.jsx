@@ -210,7 +210,7 @@ const Page = () => {
     
             if (response.ok) {
                 toast.success('¡Evento finalizado exitosamente!');
-                setEvent({ ...event, state: 'Done' });
+                setEvent({ ...event, state: 'Hecho' });
             } else {
                 toast.error('Error al finalizar evento.');
             }
@@ -361,7 +361,7 @@ const Page = () => {
                             <div className="details-container col-md-7">
                                 <div className="d-inline-flex align-items-center mb-10">
                                     <span className="text-dark"> {event.state}</span>
-                                    <i className={`chat-badge ${event.state === 'Done' ? 'bg-success' : 'bg-danger'}`}></i>
+                                    <i className={`chat-badge ${event.state === 'Hecho' ? 'bg-success' : 'bg-danger'}`}></i>
                                 </div>
                                 <p className='title2-modal'>Título</p><p className='title-modal-13'>{event.name}</p>
                                 <p className='title3-modal'>Descripción</p><p className='title-modal-12'>{event.description}</p>
@@ -372,7 +372,7 @@ const Page = () => {
                                             <Form.Control type="date" defaultValue={event.date} readOnly/>
                                         </div>
                                         <div className="col-md-3">
-                                            <p className='title-dates'>Fecha de finalización</p>
+                                            <p className='title-dates'>Fecha de fin</p>
                                             <Form.Control type="date" defaultValue={event.endDate} readOnly/>
                                         </div>
                                         <div className="col-md-3">
@@ -380,7 +380,7 @@ const Page = () => {
                                             <Form.Control type="time" defaultValue={event.time} readOnly/>
                                         </div>
                                         <div className="col-md-3">
-                                            <p className='title-dates'>Hora de finalización</p>
+                                            <p className='title-dates'>Hora de fin</p>
                                             <Form.Control type="time" defaultValue={event.endTime} readOnly/>
                                         </div>
                                     </div>
@@ -392,7 +392,7 @@ const Page = () => {
                             <form onSubmit={handleAddGuest}>
                                 <div className='container mt-50 add-guest-container'>
                                     <h5 className="add-guest-title mb-40">Añadir invitado</h5>
-                                    <div className='row d-flex justificar-content-center'>
+                                    <div className='row d-flex justify-content-center'>
                                         <div className="mb-3 col-md-3">
                                             <label htmlFor="name" className="form-label">Nombre</label>
                                             <input 
@@ -432,7 +432,7 @@ const Page = () => {
                                                 required 
                                             />
                                         </div>
-                                        <div className='col-md-2 d-flex justificar-content-center align-items-center'>
+                                        <div className='col-md-2 d-flex justify-content-center align-items-center'>
                                             <Button variant="primary" type="submit" className='button-add-guest mt-10'>
                                                 Añadir invitado
                                             </Button>
@@ -443,7 +443,7 @@ const Page = () => {
 
                             <div className="container table-guest-container">
                                 <h5 className='add-member-title mb-40'>Lista de invitados</h5>
-                                <div className='row d-flex justificar-content-center'>
+                                <div className='row d-flex justify-content-center'>
                                     <table className="table">
                                         <thead>
                                             <tr>
@@ -500,7 +500,7 @@ const Page = () => {
                             </>) : <></>}
 
                             <div className='container last-container'>
-                                <div className='row d-flex justificar-content-center'>
+                                <div className='row d-flex justify-content-center'>
                                 {isAdmin || isOrgAccount ? (
                                 <Button className="btn-close-task mx-2" onClick={handleToggleEventState}>
                                     {event.state === 'Done' ? 'Pendiente' : 'Finalizar'}
