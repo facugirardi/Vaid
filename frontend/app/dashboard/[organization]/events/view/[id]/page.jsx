@@ -343,6 +343,14 @@ const Page = () => {
         fetchPermissions();
     }, [user.id]);
 
+    const handleInput = (e) => {
+        const textarea = e.target;
+        // Restablecer el tamaño del textarea para recalcular la altura
+        textarea.style.height = 'auto';
+        // Ajustar la altura en función del contenido
+        textarea.style.height = textarea.scrollHeight + 'px';
+      };
+
     return (
         <Layout>
             {event && (
@@ -393,20 +401,20 @@ const Page = () => {
                                 <div className='container mt-50 add-guest-container'>
                                     <h5 className="add-guest-title mb-40">Añadir invitado</h5>
                                     <div className='row d-flex justify-content-center'>
-                                        <div className="mb-3 col-md-3">
+                                        <div className="mb-3 col-md-6">
                                             <label htmlFor="name" className="form-label">Nombre</label>
                                             <input 
                                                 type="text" 
                                                 className="form-control" 
                                                 id="name" 
                                                 name="name" 
-                                                placeholder='Añadir nombre' 
+                                                placeholder='Añadir nombre completo' 
                                                 value={newGuest.name}
                                                 onChange={handleInputChange}
                                                 required 
                                             />
                                         </div>
-                                        <div className="mb-3 col-md-3">
+                                        <div className="mb-3 col-md-6">
                                             <label htmlFor="email" className="form-label">Email</label>
                                             <input 
                                                 type="email" 
@@ -419,20 +427,21 @@ const Page = () => {
                                                 required 
                                             />
                                         </div>
-                                        <div className="mb-3 col-md-3">
-                                            <label htmlFor="role" className="form-label">Rol</label>
-                                            <input 
+                                        <div className="mb-2 col-md-12">
+                                            <label htmlFor="role" className="form-label">Observaciones</label>
+                                            <textarea 
                                                 type="text" 
                                                 className="form-control" 
                                                 id="role" 
                                                 name="role" 
-                                                placeholder='Rol en el evento' 
+                                                placeholder='Observaciones del invitado' 
+                                                onInput={handleInput}
                                                 value={newGuest.role}
                                                 onChange={handleInputChange}
                                                 required 
                                             />
                                         </div>
-                                        <div className='col-md-2 d-flex justify-content-center align-items-center'>
+                                        <div className='col-md-3 d-flex justify-content-center align-items-center'>
                                             <Button variant="primary" type="submit" className='button-add-guest mt-10'>
                                                 Añadir invitado
                                             </Button>
@@ -449,8 +458,8 @@ const Page = () => {
                                             <tr>
                                                 <th className='text-center'>ID</th>
                                                 <th className='text-center'>Nombre</th>
-                                                <th className='text-center'>Rol</th>
-                                                <th className='text-center'>Acción</th>
+                                                <th className='text-center'>Email</th>
+                                                <th className='text-center'>Acciones</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -469,7 +478,7 @@ const Page = () => {
                                                         <tr key={member.id}>
                                                             <td className='text-center'>{index + 1}</td>
                                                             <td className='text-center'>{member.first_name} {member.last_name}</td>
-                                                            <td className='text-center'>Miembro</td>
+                                                            <td className='text-center'>{member.email}</td>
                                                             <td className='text-center'>
                                                                 <button className="trash-event" onClick={() => handleDeleteMember(member.id)}>
                                                                     <FontAwesomeIcon icon={faTrash} className='hover-button-trash' />
@@ -483,7 +492,7 @@ const Page = () => {
                                                         <tr key={guest.id}>
                                                             <td className='text-center'>{index + 1}</td>
                                                             <td className='text-center'>{guest.name}</td>
-                                                            <td className='text-center'>{guest.role}</td>
+                                                            <td className='text-center'>{guest.email}</td>
                                                             <td className='text-center'>
                                                                 <button className="trash-event" onClick={() => handleDeleteGuest(guest.id)}>
                                                                     <FontAwesomeIcon icon={faTrash} className='hover-button-trash' />

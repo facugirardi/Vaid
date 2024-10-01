@@ -228,7 +228,7 @@ const CreateTaskPage = () => {
                                     onChange={handleChange}
                                 >
                                     <option value="">Selecciona una opción</option>
-                                    <option value="">Todos</option>
+                                    <option value={0}>Todos</option>
 
                                     {categories.map((category) => (
                                         <option key={category.id} value={category.id}>
