@@ -60,7 +60,7 @@ const Page = () => {
             <div className="header">
             <BreadcrumbItem mainTitle="Tareas" subTitle="Ver Tareas" />
             <button className="button-add-task" onClick={() => window.location.href = `/dashboard/${organizationId}/tasks/create`}>
-                    añadir <i className='ph-duotone ph-plus-circle plus-icon'></i>
+                    Añadir <i className='ph-duotone ph-plus-circle plus-icon'></i>
             </button>
             </div>
             <Row>

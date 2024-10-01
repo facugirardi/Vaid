@@ -144,7 +144,7 @@ const Page = () => {
                                         <div className="cover-data">
                                             <div className="d-inline-flex align-items-center">
                                                 <span className="text-white"> {item.state}</span>
-                                                <i className={`chat-badge ${item.state === 'Done' ? 'bg-success' : 'bg-danger'}`}></i>
+                                                <i className={`chat-badge ${item.state === 'Hecho' ? 'bg-success' : 'bg-danger'}`}></i>
                                             </div>
                                         </div>
                                     </div>
