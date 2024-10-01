@@ -11,6 +11,7 @@ body{
     margin-right: 10px;
 }
 .button-add-task {
+  font-weight: 500;
   display: inline-flex;
   align-items: center;
   background-color: #ffffff00;
