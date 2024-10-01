@@ -116,7 +116,7 @@ const Page = () => {
                 <BreadcrumbItem mainTitle="Eventos" subTitle="Ver Eventos" />
                 {isAdmin || isOrgAccount ? (
                 <button className="button-add-task" onClick={() => window.location.href = `/dashboard/${organizationId}/events/create`}>
-                    añadir <i className='ph-duotone ph-plus-circle plus-icon'></i>
+                    Añadir <i className='ph-duotone ph-plus-circle plus-icon'></i>
                 </button>) : <></>}
             </div>
             <Row>

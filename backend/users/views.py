@@ -58,7 +58,7 @@ class PersonOrganizationDetailsDeleteView(generics.GenericAPIView):
 class ApplyOrgView(APIView):
     permission_classes = [AllowAny]
 
-    def post(self, request, user_id, org_id):
+    def get(self, request, user_id, org_id):
         try:
 
             if not user_id or not org_id:
