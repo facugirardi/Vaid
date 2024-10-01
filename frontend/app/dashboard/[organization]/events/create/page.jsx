@@ -192,7 +192,7 @@ const CreateTaskPage = () => {
                                 </Col>
                                 <Col md={8}>
                                     <Form.Group>
-                                        <Form.Label className="form-group-label">Título</Form.Label>
+                                        <Form.Label className="form-group-label">Título <span className='asterisco-rojo'>*</span></Form.Label>
                                         <Form.Control
                                             type="text"
                                             name="name"
@@ -203,7 +203,7 @@ const CreateTaskPage = () => {
                                         {errors.name && <small className="text-danger">{errors.name}</small>}
                                     </Form.Group>
                                     <Form.Group>
-                                        <Form.Label className="form-group-label">Descripción</Form.Label>
+                                        <Form.Label className="form-group-label">Descripción <span className='asterisco-rojo'>*</span></Form.Label>
                                         <Form.Control
                                             className="textarea-task"
                                             as="textarea"
@@ -219,7 +219,7 @@ const CreateTaskPage = () => {
                             </Row>
 
                             <Form.Group>
-                                <Form.Label className="form-label-2">Etiqueta</Form.Label>
+                                <Form.Label className="form-label-2">Etiqueta <span className='asterisco-rojo'>*</span></Form.Label>
                                 <Form.Control
                                     as="select"
                                     className="form-select"
@@ -228,6 +228,8 @@ const CreateTaskPage = () => {
                                     onChange={handleChange}
                                 >
                                     <option value="">Selecciona una opción</option>
+                                    <option value="">Todos</option>
+
                                     {categories.map((category) => (
                                         <option key={category.id} value={category.id}>
                                             {category.name}
@@ -239,22 +241,22 @@ const CreateTaskPage = () => {
 
                             <Row className="form-group-2">
                                 <Col sm={6} md={3}>
-                                    <Form.Label className="form-label-2">Fecha de inicio</Form.Label>
+                                    <Form.Label className="form-label-2">Fecha de inicio <span className='asterisco-rojo'>*</span></Form.Label>
                                     <Form.Control type="date" name="date" value={formData.date} onChange={handleChange} />
                                     {errors.date && <small className="text-danger">{errors.date}</small>}
                                 </Col>
                                 <Col sm={6} md={3}>
-                                    <Form.Label className="form-label-2">Fecha de finalización</Form.Label>
+                                    <Form.Label className="form-label-2">Fecha de fin <span className='asterisco-rojo'>*</span></Form.Label>
                                     <Form.Control type="date" name="endDate" value={formData.endDate} onChange={handleChange} />
                                     {errors.endDate && <small className="text-danger">{errors.endDate}</small>}
                                 </Col>
                                 <Col sm={6} md={3}>
-                                    <Form.Label className="form-label-2">Hora de inicio</Form.Label>
+                                    <Form.Label className="form-label-2">Hora de inicio <span className='asterisco-rojo'>*</span></Form.Label>
                                     <Form.Control type="time" name="time" value={formData.time} onChange={handleChange} />
                                     {errors.time && <small className="text-danger">{errors.time}</small>}
                                 </Col>
                                 <Col sm={6} md={3}>
-                                    <Form.Label className="form-label-2">Hora de finalización</Form.Label>
+                                    <Form.Label className="form-label-2">Hora de finalización <span className='asterisco-rojo'>*</span></Form.Label>
                                     <Form.Control type="time" name="endTime" value={formData.endTime} onChange={handleChange} />
                                     {errors.endTime && <small className="text-danger">{errors.endTime}</small>}
                                 </Col>

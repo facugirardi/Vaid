@@ -130,7 +130,7 @@ const page = () => {
                 </div>
                 <div className="input-box flex-item">
                   <label className='label_input'>Número de Teléfono <span className='asterisco-rojo'>*</span></label>
-                  <input name='phone_number' type="text" placeholder='Introduce tu número de teléfono' required />
+                  <input name='phone_number' type="tel" placeholder='Introduce tu número de teléfono' required />
                 </div>
                 <div className="input-box flex-item">
                   <label className='label_input'>¡Cuéntanos sobre ti! <span className='asterisco-rojo'>*</span></label>

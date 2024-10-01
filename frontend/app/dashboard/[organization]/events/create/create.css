@@ -86,3 +86,7 @@ body{
     background-color: #2A50FF !important;
     border-color: #2A50FF !important;
   }
+
+  .asterisco-rojo{
+    color: red;
+  }
