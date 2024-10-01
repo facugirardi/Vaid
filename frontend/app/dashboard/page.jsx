@@ -7,6 +7,7 @@ import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 import './profile.css';
 import Friends from "@/views/Application/Friend";
 import FriendsRequest from "@/views/Application/friendRequest";
+import FormDetails from "@/views/Application/formDetails";
 import SocialTab from "@/views/Application/social-tab";
 import SocialProfile from "@/views/Application/social-media";
 import Suggestions from "@/views/Application/suggests";
@@ -59,6 +60,7 @@ const Page = () => {
                   <FriendsRequest />
                   <Friends />
                   <Suggestions />
+                  <FormDetails />
                 </Tab.Content>
               </Row>
             </Tab.Container>

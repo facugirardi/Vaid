@@ -53,7 +53,6 @@ const NestedMenu = () => {
         { id: "home", label: "Inicio", icon: "ph-duotone ph-house", link: `/dashboard/${organizationId}/home`, dataPage: "home" },
         { id: "events", label: "Eventos", icon: "ph-duotone ph-calendar-blank", link: `/dashboard/${organizationId}/events/view`, dataPage: "events" },
         { id: "view-tasks", label: "Tareas", icon: "ph-duotone ph-clipboard", link: `/dashboard/${organizationId}/tasks/view`, dataPage: "view-tasks" },
-        { id: "analytics", label: "Estadísticas", icon: "ph-duotone ph-chart-bar", link: `/dashboard/${organizationId}/analytics`, dataPage: "analytics" }
        ]);
     } else {
       setMenuItems([

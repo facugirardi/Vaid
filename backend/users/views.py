@@ -24,6 +24,7 @@ from django.db.models import Sum
 from django.core.mail import send_mail
 from .serializers import GuestSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
+import os
 
 class SubscribeNewsletterView(APIView):
     permission_classes = [AllowAny]
@@ -1906,3 +1907,31 @@ class EventToggleAttendanceAPIView(APIView):
             # Si no existe, lo registramos como asistente (join)
             EventPersonDetails.objects.create(Person=person, Event=event)
             return Response({"message": "User is now attending the event."}, status=status.HTTP_201_CREATED)
+
+
+class UploadProfileImageView(APIView):
+    
+    permission_classes = [AllowAny]
+    def post(self, request, *args, **kwargs):
+        user_id = request.data.get('user_id')
+        user = get_object_or_404(UserAccount, id=user_id)
+
+        user_image = Image.objects.filter(User=user).first()
+
+        if user_image and os.path.isfile(user_image.image.path):
+            os.remove(user_image.image.path)
+            user_image.delete()
+
+        if 'file' not in request.FILES:
+            return Response({"error": "No file provided"}, status=status.HTTP_400_BAD_REQUEST)
+
+        new_image = Image(User=user, image=request.FILES['file'], alt="Profile Image")
+        new_image.save()
+
+        image_url = request.build_absolute_uri(new_image.image.url)
+        
+        return Response({
+            'message': 'Imagen de perfil actualizada correctamente',
+            'image_url': image_url
+        }, status=status.HTTP_201_CREATED)
+
