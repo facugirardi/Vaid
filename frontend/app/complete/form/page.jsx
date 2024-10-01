@@ -151,7 +151,7 @@ const Page = () => {
                                             <Nav.Item className="nav-item" data-target-form="#educationDetailForm">
                                                 <Nav.Link eventKey="tab-3" href="#educationDetail" data-bs-toggle="tab" data-toggle="tab" className="nav-link icon-btn">
                                                     <i className="ph-duotone ph-user"></i>
-                                                    <span className="d-none d-sm-inline">Preferencias de Voluntariado</span>
+                                                    <span className="d-none d-sm-inline">Preferencias de Usuario</span>
                                                 </Nav.Link>
                                             </Nav.Item>
 
@@ -186,12 +186,12 @@ const Page = () => {
                                                             </div>
                                                             <div className="col-sm-6">
                                                                 <div className="form-group">
-                                                                    <label className="form-label">Profesión</label>
+                                                                    <label className="form-label">Ocupación</label>
                                                                     <input
                                                                         type="text"
-                                                                        className="form-control"
+                                                                        className="form-control capitalize-input"
                                                                         name="profession"
-                                                                        placeholder="¿Eres un profesional? ¿En qué campo?"
+                                                                        placeholder="¿En qué campo?"
                                                                         value={formData.profession}
                                                                         onChange={handleChange}
                                                                     />
@@ -199,6 +199,12 @@ const Page = () => {
                                                             </div>
                                                             <div className="col-sm-6">
                                                                 <div className="form-group">
+<<<<<<< HEAD
+                                                                    <label className="form-label">¿Has tenido experiencia siendo parte de una organización?</label>
+                                                                    <select className="form-select height-checkbox">
+                                                                        <option>Sí</option>
+                                                                        <option>No</option>
+=======
                                                                     <label className="form-label">¿Has tenido experiencia como voluntario?</label>
                                                                     <select
                                                                         className="form-select height-checkbox"
@@ -209,6 +215,7 @@ const Page = () => {
                                                                         <option value="">Selecciona una opción</option>
                                                                         <option value="yes">Sí</option>
                                                                         <option value="no">No</option>
+>>>>>>> e5d19aae21938b4ce63f99298c8d481488195cd5
                                                                     </select>                                                                    
                                                                 </div>
                                                             </div>
@@ -233,31 +240,31 @@ const Page = () => {
                                             <Tab.Pane eventKey="tab-2" className="tab-pane" id="jobDetail">
                                                 <div className="text-center">
                                                     <h3 className="mb-2">Ubicación y Disponibilidad</h3>
-                                                    <small className="text-muted">Proporciona tu ubicación y cuándo estás disponible para ser voluntario.</small>
+                                                    <small className="text-muted">Proporciona tu ubicación y cuándo estás disponible para realizar actividades.</small>
                                                 </div>
                                                 <div className="row mt-4">
                                                     <div className="col-sm-6">
                                                         <div className="form-group">
-                                                            <label className="form-label">Calle</label>
+                                                            <label className="form-label">Ciudad</label>
                                                             <input
                                                                 type="text"
-                                                                className="form-control"
-                                                                name="street"
-                                                                placeholder="Introduce la calle"
-                                                                value={formData.street}
+                                                                className="form-control capitalize-input"
+                                                                name="city"
+                                                                placeholder="Introduce la ciudad"
+                                                                value={formData.city}
                                                                 onChange={handleChange}
                                                             />
                                                         </div>
                                                     </div>
                                                     <div className="col-sm-6">
                                                         <div className="form-group">
-                                                            <label className="form-label">Ciudad</label>
+                                                            <label className="form-label">Calle</label>
                                                             <input
                                                                 type="text"
-                                                                className="form-control"
-                                                                name="city"
-                                                                placeholder="Introduce la ciudad"
-                                                                value={formData.city}
+                                                                className="form-control capitalize-input"
+                                                                name="street"
+                                                                placeholder="Introduce la calle"
+                                                                value={formData.street}
                                                                 onChange={handleChange}
                                                             />
                                                         </div>
@@ -376,6 +383,7 @@ const Page = () => {
                                                                     <Form.Check
                                                                         inline
                                                                         type="checkbox"
+
                                                                         id="customCheckinlh3"
                                                                         label="Noche"
                                                                         className="small-checkbox"
@@ -393,8 +401,8 @@ const Page = () => {
 
                                             <Tab.Pane eventKey="tab-3" className="tab-pane" id="educationDetail">
                                                 <div className="text-center">
-                                                    <h3 className="mb-2">Preferencias de Voluntariado</h3>
-                                                    <small className="text-muted">Cuéntanos sobre tus objetivos y motivaciones para ser voluntario.</small>
+                                                    <h3 className="mb-2">Preferencias del Usuario</h3>
+                                                    <small className="text-muted">Cuéntanos sobre tus objetivos y motivaciones para estar en una organizacion.</small>
                                                 </div>
                                                 <div className="row">
                                                     <div className="col-sm-6">
@@ -440,13 +448,13 @@ const Page = () => {
                                                     </div>
                                                     <div className="col-md-12">
                                                         <div className="mb-3">
-                                                            <label className="form-label" htmlFor="schoolLocation">Temas Preferidos</label>
+                                                            <label className="form-label" htmlFor="schoolLocation">¿Qué te gusta hacer?</label>
                                                             <input
                                                                 type="text"
                                                                 className="form-control"
                                                                 id="schoolLocation"
                                                                 name="topics"
-                                                                placeholder="Introduce tus temas preferidos. Ej: abuso, medio ambiente, apoyo educativo, etc."
+                                                                placeholder="Introduce tus temas preferidos. Ej: Gimnasia, Hacer deporte, Jugar videojuegos, etc."
                                                                 value={formData.topics}
                                                                 onChange={handleChange}
                                                             />
@@ -459,17 +467,17 @@ const Page = () => {
                                                 <form id="finishForm" onSubmit={handleSubmit}>
                                                     <div className="text-center">
                                                         <h3 className="mb-2">Tus Objetivos</h3>
-                                                        <small className="text-muted">Cuéntanos sobre tus objetivos y motivaciones para ser voluntario.</small>
+                                                        <small className="text-muted">Cuéntanos sobre tus objetivos y motivaciones para estar en una organizacion.</small>
                                                     </div>
                                                     <div className="row mt-4">
                                                         <div className="col-sm-6">
                                                             <div className="form-group">
-                                                                <label className="form-label" htmlFor="goals">Objetivos de Voluntariado</label>
+                                                                <label className="form-label" htmlFor="goals">Objetivos</label>
                                                                 <textarea
                                                                     className="form-control"
                                                                     id="goals"
                                                                     name="goals"
-                                                                    placeholder="¿Cuáles son tus objetivos para ser voluntario?"
+                                                                    placeholder="¿Cuáles son tus objetivos para ser miembro de una organizacion?"
                                                                     value={formData.goals}
                                                                     onChange={handleChange}
                                                                 />
@@ -482,7 +490,7 @@ const Page = () => {
                                                                     className="form-control"
                                                                     id="motivations"
                                                                     name="motivations"
-                                                                    placeholder="¿Qué te motiva a ser voluntario?"
+                                                                    placeholder="¿Qué te motiva a estar en una organizacion?"
                                                                     value={formData.motivations}
                                                                     onChange={handleChange}
                                                                 />

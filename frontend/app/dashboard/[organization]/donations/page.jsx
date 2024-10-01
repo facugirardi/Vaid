@@ -433,7 +433,7 @@ const BuySell = () => {
                   <input type="number" className="form-control" id="quantity" name="quantity" placeholder='1' required />
                 </div>
                 <div className="mb-3 col-md-2">
-                  <label htmlFor="quantity" className="form-label">Monto</label>
+                  <label htmlFor="quantity" className="form-label">Monto Total</label>
                   <input type="number" className="form-control" id="amount" name="amount" placeholder='$ 1' required />
                 </div>
                 <div className="mb-3 col-md-6">

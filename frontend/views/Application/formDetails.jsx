@@ -229,7 +229,7 @@ const translateModality = (modalityString) => {
               </Row>
               <Row className="g-3 mt-0">
                 <Col md={4}>
-                  <p className="mb-0 text-muted">Temas de Interés</p>
+                  <p className="mb-0 text-muted">Que te gusta hacer</p>
                 </Col>
                 <Col md={6}>
                   <h6 className="mb-0">{displayField(userDetails.person.topics)}</h6>

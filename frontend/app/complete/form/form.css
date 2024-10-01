@@ -8,7 +8,10 @@
     align-items: center;
     margin-left: -20px; /* Ajusta el tamaño como desees */
 }
-
+.capitalize-input {
+    text-transform: capitalize;
+  }
+  
 .height-checkbox {
     height: auto;
     padding: 10px 0;
