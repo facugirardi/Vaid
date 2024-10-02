@@ -1586,9 +1586,9 @@ class SendInvitationView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        emails = request.data.get('emails') 
+        emails = [request.data.get('email')] 
         event_id = request.data.get('event_id')  
-        subject = request.data.get('subject', 'Invitación a Evento')
+        subject = 'Invitación a Evento'
         link = request.data.get('link')  
         event = Event.objects.get(id=event_id)
         organization = event.Organization.name
@@ -1598,7 +1598,7 @@ class SendInvitationView(APIView):
             return Response({'error': 'emails, event and link are required fields.'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            message_template = f"Hola,\n\nEstás invitado(a) a nuestro evento '{event.name}' que se llevará a cabo próximamente.\nEsperamos contar con tu presencia.\n{link}\n\nSaludos cordiales,\nEl equipo de {organization}"
+            message_template = f"Hola,\n\nEstás invitado(a) a nuestro evento '{event.name}' que se llevará a cabo próximamente.\nEsperamos contar con tu presencia.\nSaludos cordiales,\nEl equipo de {organization}.\n\nLink de invitación: {link}."
 
             send_mail(
                 subject=subject,  # Asunto del correo
@@ -1628,7 +1628,7 @@ class SendInvitationPlatView(APIView):
             return Response({'error': 'emails, and link are required fields.'}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            message_template = f"Hello,\n\nYou have been invited to join our platform and become a part of the organization: '{organization.name}'.\nWe look forward to your participation.\n{link}\n\nBest regards,\nThe Vaid Team"
+            message_template = f"Hola,\n\nFuiste invitado a unirte a nuestra plataforma y ser parte de: '{organization.name}'.\nDeseamos verte pronto.\n{link}\n\nSaludos."
             send_mail(
                 subject=subject,  # Asunto del correo
                 message=message_template,  # Contenido del mensaje personalizado
@@ -1772,7 +1772,7 @@ class MarkTaskAsDoneView(APIView):
     def post(self, request, task_id):
         try:
             task = Task.objects.get(id=task_id)
-            task.state = 'Done'  # Cambia el estado de la tarea
+            task.state = 'Finalizado'  # Cambia el estado de la tarea
             task.save()
             return Response({"message": "Task marked as done successfully"}, status=status.HTTP_200_OK)
         except Task.DoesNotExist:
@@ -1785,7 +1785,7 @@ class MarkTaskAsPendingView(APIView):
     def post(self, request, task_id):
         try:
             task = Task.objects.get(id=task_id)
-            task.state = 'Pending'  # Cambia el estado de la tarea a Pending
+            task.state = 'Pendiente'  # Cambia el estado de la tarea a Pending
             task.save()
             return Response({"message": "Task marked as pending successfully"}, status=status.HTTP_200_OK)
         except Task.DoesNotExist:
@@ -1867,7 +1867,7 @@ class FinishEventView(APIView):
     def patch(self, request, event_id, *args, **kwargs):
         try:
             event = Event.objects.get(id=event_id)
-            event.state = 'Done'  # Cambiar el estado a 'Done'
+            event.state = 'Finalizado'  # Cambiar el estado a 'Done'
             event.save()
             return Response({"message": "Event finished successfully"}, status=status.HTTP_200_OK)
         except Event.DoesNotExist:
@@ -1879,10 +1879,10 @@ class ToggleEventStateView(APIView):
     def patch(self, request, event_id, *args, **kwargs):
         try:
             event = Event.objects.get(id=event_id)
-            if event.state == 'Done':
-                event.state = 'Pending'  # Cambia el estado a "Pending" si estaba "Done"
+            if event.state == 'Finalizado':
+                event.state = 'Pendiente'  # Cambia el estado a "Pending" si estaba "Done"
             else:
-                event.state = 'Done'  # Cambia el estado a "Done" si estaba en otro estado
+                event.state = 'Finalizado'  # Cambia el estado a "Done" si estaba en otro estado
             event.save()
             return Response({"message": f"Event state changed to {event.state}", "state": event.state}, status=status.HTTP_200_OK)
         except Event.DoesNotExist:

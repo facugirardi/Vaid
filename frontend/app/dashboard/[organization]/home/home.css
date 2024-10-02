@@ -1,8 +1,13 @@
+body{
+font-family: 'Inter', sans-serif;
+}
+
+
 .welcome-msg{
     width: 90%;
-    height: 200px;
-    border-radius: 25px;
-    background-color: #2A50CF;
+    height: 250px;
+    border-radius: 14px;
+    background: linear-gradient(30deg, #0139f2, #1a71f3);
     margin-top: 50px;
 }
 
@@ -48,17 +53,6 @@
     width: calc(100% - 48px);
   }
   
-  .carousel-container::-webkit-scrollbar-track {
-    background: #b1b3b399;
-  }
-  
-  .carousel-container::-webkit-scrollbar-thumb {
-    background: #29AB87;
-  }
-  
-  .carousel-container::-webkit-scrollbar-track-piece:start {
-    background: #29AB87;
-  }
   
   .carousel-slide {
     flex: 1 0 30%;
@@ -66,14 +60,30 @@
     flex-flow: column nowrap;
     display: flex;
     border-radius: 14px;
-    height: 275px;
+    height: 350px;
+    cursor: pointer;
     margin-right: 50px;
     justify-content: center;
+    max-width: 400px;
+    min-width: 400px;
     align-items: center;
     background-color: rgb(255, 255, 255);
     scroll-snap-align: center;
+    box-shadow: none !important;
+  }
+
+  .h4-wel{
+    color: white;
+    font-size: 35px;
+    font-weight: 600;
+  }
+   .p-wel{
+    color: white;
+    font-size: 20px;
+    font-weight: 500;
   }
   
+ 
   @media (max-width: 600px) {
     .carousel-slide {
       flex: 1 0 90%;
