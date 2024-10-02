@@ -146,7 +146,7 @@ class Task(models.Model):
     endDate = models.DateField()
     time = models.TimeField()
     endTime = models.TimeField()
-    file = models.FileField(upload_to='tasks/', null=True, blank=True)
+    image = models.ImageField(upload_to='task_images/', null=True, blank=True)
     state = models.CharField(max_length=255)
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE) 
 
@@ -163,7 +163,7 @@ class Event(models.Model):
     endDate = models.DateField()
     time = models.TimeField()
     endTime = models.TimeField()
-    file = models.FileField(upload_to='events/', null=True, blank=True)
+    image = models.ImageField(upload_to='task_images/', null=True, blank=True)
     state = models.CharField(max_length=255)
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE) 
 
