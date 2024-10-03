@@ -78,7 +78,7 @@ const NestedMenu = () => {
             { id: "candidates", label: "Lista de Candidatos", icon: "ph-duotone ph-users", link: `/dashboard/${organizationId}/hr/candidates`, dataPage: "candidates" },
           ],
         },
-        { id: "analytics", label: "Estadisticas", icon: "ph-duotone ph-chart-bar", link: `/dashboard/${organizationId}/analytics`, dataPage: "analytics" },
+        { id: "analytics", label: "Estadisticas", icon: "ph-duotone ph-chart-bar", link: `/dashboard/${organizationId}/statistics`, dataPage: "analytics" },
         {
           type: "HASHMENU", id: 1, label: "Recursos", icon: "ph-duotone ph-archive", dataPage: null, link: "#",
           submenu: [

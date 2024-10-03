@@ -1,0 +1,10 @@
+.custom-card {
+    height: 200px; /* Ajusta la altura como lo necesites */
+}
+
+.custom-card .card-body {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    margin-top: 10px;
+}
