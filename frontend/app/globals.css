@@ -201,3 +201,15 @@ p.amount span {
 .page-header .breadcrumb .breadcrumb-item:last-child{
   margin-top: 0px !important;
 }
+
+.hover-button-eye{
+  font-size: 18px;
+  
+}
+.hover-button-eye:hover{
+  color: #2950CE;
+  transition: .2s;
+}
+.hover-button-trash{
+  font-size: 18px;
+}
