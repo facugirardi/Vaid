@@ -378,7 +378,7 @@ const Inventory = ({ headquarterId, organizationId }) => {
                   </td>
                   <td className='text-center'>
                     <button className="icon-button" onClick={() => handleProductModalShow(item.Product)}>
-                      <i className='ph-duotone ph-eye hover-button'></i>
+                      <i className='ph-duotone ph-eye hover-button-eye'></i>
                     </button>
                     <button className="icon-button" onClick={() => handleDeleteProductModalShow(item.Product)}>
                       <i className='ph-duotone ph-trash hover-button-trash'></i>
@@ -411,7 +411,7 @@ const Inventory = ({ headquarterId, organizationId }) => {
                   <input type="number" className="form-control" id="quantity" name="quantity" placeholder='1' required />
                 </div>
                 <div className="mb-3 col-md-3">
-                  <label htmlFor="expDate" className="form-label">Fecha de Expiración (Opcional)</label>
+                  <label htmlFor="expDate" className="form-label">Expiración (Opcional)</label>
                   <input type="date" className="form-control" id="expDate" name="expDate" />
                 </div>
                 <div className="mb-3 col-md-3">

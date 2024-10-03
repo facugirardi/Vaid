@@ -9,6 +9,7 @@ import Spinner from '@/components/common/Spinner';
 import googleAuth from '@/utility/google-auth';
 import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Eye, EyeSlash } from 'phosphor-react';
 
 const RegisterForm = () => {
     const { push } = useRouter();
@@ -107,7 +108,7 @@ const RegisterForm = () => {
                             type={showPassword ? 'text' : 'password'}
                             placeholder='Ingresa tu contraseña' required />
                         <span onClick={toggleShowPassword} className='password-toggle'>
-                            <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                            {showPassword ? <EyeSlash  className='hover-button-eye'/> : <Eye className='hover-button-eye'/>}
                         </span>
                     </div>
                 </div>
@@ -119,7 +120,7 @@ const RegisterForm = () => {
                             type={showPassword ? 'text' : 'password'}
                             placeholder='Confirma tu contraseña' required />
                         <span onClick={toggleShowPassword} className='password-toggle'>
-                            <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+                            {showPassword ? <EyeSlash  className='hover-button-eye'/> : <Eye className='hover-button-eye'/>}
                         </span>
                     </div>
                 </div>
