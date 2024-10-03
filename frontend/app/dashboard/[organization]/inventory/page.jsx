@@ -130,7 +130,7 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry, headquarters, setHe
               <td className="flex-grow-1 d-flex align-items-center justify-content-start p-inventory">{hq.address}</td>
               <td className="d-flex align-items-center justify-content-end">
                 <button className="edit-button trash-btn" onClick={(e) => { e.stopPropagation(); handleDeleteModalShow(hq); }}>
-                  <FontAwesomeIcon icon={faTrash} className='hover-button-trash'/>
+                  <i className='ph-duotone ph-trash hover-button-trash'></i>
                 </button>
               </td>
             </tr>
@@ -378,10 +378,10 @@ const Inventory = ({ headquarterId, organizationId }) => {
                   </td>
                   <td className='text-center'>
                     <button className="icon-button" onClick={() => handleProductModalShow(item.Product)}>
-                      <FontAwesomeIcon icon={faEye} className='hover-button'/>
+                      <i className='ph-duotone ph-eye hover-button'></i>
                     </button>
                     <button className="icon-button" onClick={() => handleDeleteProductModalShow(item.Product)}>
-                      <FontAwesomeIcon icon={faTrash} className='hover-button-trash'/>
+                      <i className='ph-duotone ph-trash hover-button-trash'></i>
                     </button>
                   </td>
                 </tr>
