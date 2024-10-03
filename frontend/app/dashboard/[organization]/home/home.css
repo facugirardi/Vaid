@@ -11,6 +11,10 @@ font-family: 'Inter', sans-serif;
     margin-top: 50px;
 }
 
+.btn-create-sm{
+  font-size: 15px;
+}
+
 .event-list{
     margin-top: 100px;
 }
