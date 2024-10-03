@@ -28,6 +28,7 @@ class CandidateDetailSerializer(serializers.ModelSerializer):
     topics = serializers.DateField(source='Person.topics')
     goals = serializers.DateField(source='Person.goals')
     motivations = serializers.DateField(source='Person.motivations')
+    email = serializers.CharField(source='Person.User.email')
 
     class Meta:
         model = Candidate
@@ -38,6 +39,7 @@ class PersonSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(source='User.first_name')
     last_name =serializers.CharField(source='User.last_name')
     
+    email = serializers.CharField(source='User.email')
 
 
     class Meta:
@@ -156,6 +158,7 @@ class HistorySerializer(serializers.ModelSerializer):
 class EventPersonSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(source='Person.User.first_name', read_only=True)
     last_name = serializers.CharField(source='Person.User.last_name', read_only=True)
+    email = serializers.CharField(source='Person.User.email', read_only=True)
 
     class Meta:
         model = EventPersonDetails

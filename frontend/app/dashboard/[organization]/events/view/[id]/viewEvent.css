@@ -308,3 +308,10 @@ backdrop-filter: blur(5px); /* Ajusta la cantidad de desenfoque según sea neces
   background-color: #e62c2c !important;
   color: #fff !important;
 }
+
+.icon-trash-ml{
+  margin-left: 8px;
+}
+.icon-eye-mr{
+  margin-right: 8px;
+}

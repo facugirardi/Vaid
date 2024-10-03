@@ -95,87 +95,141 @@ const Page = () => {
         }
     };
 
-    const columns = useMemo(
-        () => [
-            {
-                header: "Nombre",
-                enableColumnFilter: false,
-                accessorKey: "name",
-                cell: (cellProps) => {
-                    const row = cellProps.row.original;
-                    return (
-                        <div className="d-inline-block align-middle">
-                            <div className="d-inline-block">
-                                <h6 className="m-b-0">{row.first_name} {row.last_name}</h6>
-                                <p className="m-b-0 text-primary">Miembro</p>
-                            </div>
+const columns = useMemo(
+    () => [
+        {
+            header: "Nombre",
+            enableColumnFilter: false,
+            accessorKey: "name",
+            cell: (cellProps) => {
+                const row = cellProps.row.original;
+                return (
+                    <div className="d-inline-block align-middle">
+                        <div className="d-inline-block">
+                            <h6 className="m-b-0">{row.first_name} {row.last_name}</h6>
+                            <p className="m-b-0 text-primary">Miembro</p>
                         </div>
-                    );
-                },
+                    </div>
+                );
             },
-            {
-                header: "Días Disponibles",
-                accessorKey: "available_days",
-                enableColumnFilter: false,
-            },
-            {
-                header: "Horas Disponibles",
-                accessorKey: "available_times",
-                enableColumnFilter: false,
-            },
-            {
-                header: "Nacimiento",
-                accessorKey: "born_date",
-                enableColumnFilter: false,
-            },
-            {
-                header: "País",
-                accessorKey: "country",
-                enableColumnFilter: false,
-            },
-            {
-                header: "Etiquetas Usuario",
-                accessorKey: "status",
-                enableColumnFilter: false,
-                cell: (cellProps) => {
-                    return (
-                        <>
-                            <div className="overlay-edit-3">
-                                <ul className="list-inline mb-0">
-                                    <li className="list-inline-item m-0">
-                                        <Button className="btn-action btn-action2 avtar avtar-s btn btn-secondary" onClick={() => handleShowTagModalAssign(cellProps.row.original)}>
-                                            <i className="ph-duotone ph-tag f-18 icon-action"></i>
-                                        </Button>
-                                    </li>
-                                </ul>
-                            </div>
-                        </>
-                    );
-                },
-            },
-            {
-                header: "Información",
-                enableColumnFilter: false,
-                accessorKey: "status",
-                cell: (cellProps) => {
-                    return (
-                        <>
-                            <div className="overlay-edit-3">
-                                <ul className="list-inline mb-0">
-                                    <li className="list-inline-item m-0">
-                                        <Button className="btn-action  avtar avtar-s btn btn-primary" onClick={() => handleShowModal(cellProps.row.original)}>
-                                            <i className="ph-duotone ph-info f-18 icon-action"></i>
-                                        </Button>
-                                    </li>
-                                </ul>
-                            </div>
-                        </>
-                    );
-                },
-            },
-        ], []
-    );
+        },
+        {
+            header: "Días Disponibles",
+            accessorKey: "available_days",
+            enableColumnFilter: false,
+            cell: (cellProps) => {
+                const dayMap = {
+                    'Mon': 'Lunes',
+                    'Tue': 'Martes',
+                    'Wed': 'Miércoles',
+                    'Thu': 'Jueves',
+                    'Fri': 'Viernes',
+                    'Sat': 'Sábado',
+                    'Sun': 'Domingo',
+                };
 
+                let availableDays = cellProps.getValue();
+
+                if (typeof availableDays === 'string' && availableDays.startsWith('[') && availableDays.endsWith(']')) {
+                    try {
+                        availableDays = availableDays
+                            .slice(1, -1)
+                            .replace(/'/g, '')
+                            .split(',')
+                            .map(day => day.trim());
+                    } catch (error) {
+                        console.error('Error al procesar los días disponibles:', error);
+                        availableDays = [];
+                    }
+                }
+
+                if (Array.isArray(availableDays)) {
+                    const fullDays = availableDays.map(day => dayMap[day] || day);
+                    return <span>{fullDays.join(', ')}</span>;
+                }
+
+                return <span>No hay datos de disponibilidad</span>;
+            },
+        },
+        {
+            header: "Horas Disponibles",
+            accessorKey: "available_times",
+            enableColumnFilter: false,
+            cell: (cellProps) => {
+                let availableTimes = cellProps.getValue();
+                
+                if (typeof availableTimes === 'string' && availableTimes.startsWith('[') && availableTimes.endsWith(']')) {
+                    try {
+                        availableTimes = availableTimes
+                            .slice(1, -1)
+                            .replace(/'/g, '')
+                            .split(',')
+                            .map(time => time.trim());
+                    } catch (error) {
+                        console.error('Error al procesar las horas disponibles:', error);
+                        availableTimes = [];
+                    }
+                }
+
+                if (Array.isArray(availableTimes)) {
+                    return <span>{availableTimes.join(', ')}</span>;
+                }
+
+                return <span>No hay datos de horas disponibles</span>;
+            },
+        },
+        {
+            header: "Nacimiento",
+            accessorKey: "born_date",
+            enableColumnFilter: false,
+        },
+        {
+            header: "País",
+            accessorKey: "country",
+            enableColumnFilter: false,
+        },
+        {
+            header: "Etiquetas Usuario",
+            accessorKey: "status",
+            enableColumnFilter: false,
+            cell: (cellProps) => {
+                return (
+                    <>
+                        <div className="overlay-edit-3">
+                            <ul className="list-inline mb-0">
+                                <li className="list-inline-item m-0">
+                                    <Button className="btn-action btn-action2 avtar avtar-s btn btn-secondary" onClick={() => handleShowTagModalAssign(cellProps.row.original)}>
+                                        <i className="ph-duotone ph-tag f-18 icon-action"></i>
+                                    </Button>
+                                </li>
+                            </ul>
+                        </div>
+                    </>
+                );
+            },
+        },
+        {
+            header: "Información",
+            enableColumnFilter: false,
+            accessorKey: "status",
+            cell: (cellProps) => {
+                return (
+                    <>
+                        <div className="overlay-edit-3">
+                            <ul className="list-inline mb-0">
+                                <li className="list-inline-item m-0">
+                                    <Button className="btn-action  avtar avtar-s btn btn-primary" onClick={() => handleShowModal(cellProps.row.original)}>
+                                        <i className="ph-duotone ph-info f-18 icon-action"></i>
+                                    </Button>
+                                </li>
+                            </ul>
+                        </div>
+                    </>
+                );
+            },
+        },
+    ], []
+);
     return (
         <Layout>
             <BreadcrumbItem mainTitle="Recursos Humanos" subTitle="Lista de Miembros" />
@@ -224,8 +278,6 @@ const Page = () => {
                     {selectedCandidate && (
                         <div>
                             <p><strong>Nombre:</strong> {selectedCandidate.first_name} {selectedCandidate.last_name}</p>
-                            <p><strong>Días Disponibles:</strong> {selectedCandidate.available_days}</p>
-                            <p><strong>Horas Disponibles:</strong> {selectedCandidate.available_times}</p>              
                             <p><strong>País:</strong> {selectedCandidate.country}</p>
                             <p><strong>Fecha de Nacimiento:</strong> {selectedCandidate.born_date}</p>
                             <p><strong>Calle:</strong> {selectedCandidate.street_name}</p>

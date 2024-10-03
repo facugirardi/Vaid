@@ -213,11 +213,6 @@ const TableContainer = ({
         <Row className="align-items-center py-2 gy-2 text-center text-sm-start">
           <div className="col-sm">
             <div className="text-muted">
-              Showing{" "}
-              <span className="fw-semibold">
-                {getState().pagination.pageSize}
-              </span>{" "}
-              of <span className="fw-semibold">{data.length}</span> Results
             </div>
           </div>
           <div className="col-sm-auto">
@@ -231,7 +226,7 @@ const TableContainer = ({
                 onClick={previousPage}
               >
                 <Button variant="link" className="page-link me-2">
-                  Previous
+                  Anterior
                 </Button>
               </li>
               {getPageOptions().map((item, key) => (
@@ -256,7 +251,7 @@ const TableContainer = ({
                 onClick={nextPage}
               >
                 <Button variant="link" className="page-link">
-                  Next
+                  Siguiente
                 </Button>
               </li>
             </ul>

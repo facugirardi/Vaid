@@ -10,7 +10,10 @@ const NestedMenu = () => {
   const [userType, setUserType] = useState(null);
   const [openMenu, setOpenMenu] = useState(null);
   const [organizationId, setOrganizationId] = useState("");
-  
+  const [isAdmin, setIsAdmin] = useState(false);
+  const [isOrgAccount, setIsOrgAccount] = useState(false);
+  const [isFinished, setIsFinished] = useState(null);
+
   useEffect(() => {
     const currentUrl = window.location.href;
     const url = new URL(currentUrl);
@@ -20,6 +23,56 @@ const NestedMenu = () => {
       setOrganizationId(pathSegments[dashboardIndex + 1]);
     }
   }, []);
+
+  const checkUserPermissions = async (userId) => {
+    let isAdmin = false;
+    let isOrgAccount = false;
+
+    try {
+        const adminResponse = await fetch(`http://localhost:8000/api/isAdmin/?user_id=${userId}`, { 
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const adminData = await adminResponse.json();
+        isAdmin = adminData
+        setIsFinished(true)
+
+        const orgAccountResponse = await fetch(`http://localhost:8000/api/user/${userId}/check-usertype/`, { 
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        const orgAccountData = await orgAccountResponse.json();
+        if (orgAccountData.user_type === 2) {
+            isOrgAccount = true;
+        }
+    } catch (error) {
+        console.error("Error al verificar permisos:", error);
+    }
+
+    return { isAdmin, isOrgAccount };
+};
+
+
+useEffect(() => {
+    const fetchData2 = async () => {
+        try {
+            if (user.id) {
+                const { isAdmin, isOrgAccount } = await checkUserPermissions(user.id);
+                setIsAdmin(isAdmin);
+                setIsOrgAccount(isOrgAccount);
+                console.log(isAdmin, isOrgAccount);
+            }
+        } catch (error) {
+            console.error("Error al verificar permisos:", error);
+        }
+    };
+
+    fetchData2();
+}, [user]);
 
   const checkComplete = async () => {
     if (user?.id) {
@@ -48,13 +101,7 @@ const NestedMenu = () => {
   }, [user]);
 
   useEffect(() => {
-    if (userType === 1) {
-      setMenuItems([
-        { id: "home", label: "Inicio", icon: "ph-duotone ph-house", link: `/dashboard/${organizationId}/home`, dataPage: "home" },
-        { id: "events", label: "Eventos", icon: "ph-duotone ph-calendar-blank", link: `/dashboard/${organizationId}/events/view`, dataPage: "events" },
-        { id: "view-tasks", label: "Tareas", icon: "ph-duotone ph-clipboard", link: `/dashboard/${organizationId}/tasks/view`, dataPage: "view-tasks" },
-       ]);
-    } else {
+    if (userType === 2 || isAdmin) {
       setMenuItems([
         { id: "home", label: "Inicio", icon: "ph-duotone ph-house", link: `/dashboard/${organizationId}/home`, dataPage: "home" },
         {
@@ -95,8 +142,16 @@ const NestedMenu = () => {
           ],
         },
       ]);
+
+    } else {
+      setMenuItems([
+        { id: "home", label: "Inicio", icon: "ph-duotone ph-house", link: `/dashboard/${organizationId}/home`, dataPage: "home" },
+        { id: "events", label: "Eventos", icon: "ph-duotone ph-calendar-blank", link: `/dashboard/${organizationId}/events/view`, dataPage: "events" },
+        { id: "view-tasks", label: "Tareas", icon: "ph-duotone ph-clipboard", link: `/dashboard/${organizationId}/tasks/view`, dataPage: "view-tasks" },
+       ]);
+
     }
-  }, [userType]);
+  }, [userType, isFinished]);
 
   useEffect(() => {
     // Initialize openMenu state based on local storage or current location
