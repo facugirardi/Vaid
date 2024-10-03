@@ -4,9 +4,9 @@ import React, { useState, useEffect } from "react";
 import Layout from '@/layouts/dashboard/index';
 import Image from "next/image";
 import './viewEvent.css';
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, Modal } from "react-bootstrap";
 import cover1 from "@/public/assets/images/wallpaper_event.jpg";
-import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toast } from "react-toastify";
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
@@ -26,6 +26,10 @@ const Page = () => {
         role: ""
     }); // Estado para los nuevos datos de invitados
     const { data: user, isError, isLoading } = useRetrieveUserQuery();
+    const [showModalMember, setShowModalMember] = useState(false); // Estado para controlar el modal
+    const [selectedMember, setSelectedMember] = useState(null); // Estado para el miembro seleccionado
+    const [showModal, setShowModal] = useState(false); // Estado para controlar el modal
+    const [selectedGuest, setSelectedGuest] = useState(null); // Estado para el miembro seleccionado
 
     // Obtener el organizationId y el eventId de la URL
     useEffect(() => {
@@ -66,7 +70,7 @@ const Page = () => {
                         }
                     });
                     const membersData = await participantsResponse.json();
-                    setMembers(membersData); 
+                    setMembers(membersData);
 
                     // Fetch para obtener los invitados del evento
                     const guestsResponse = await fetch(`http://localhost:8000/api/organization/event/${eventId}/guests/`, {
@@ -84,7 +88,7 @@ const Page = () => {
             };
 
             fetchData();
-        }
+    }
     }, [organizationId, eventId]);
 
     useEffect(() => {
@@ -138,47 +142,6 @@ const Page = () => {
         setNewGuest({ ...newGuest, [name]: value });
     };
 
-    const handleAddGuest = async (e) => {
-        e.preventDefault();
-        const currentGuests = Array.isArray(guests) ? guests : [];
-
-        // Verificar si el email ya existe en la lista de invitados
-        const emailExists = currentGuests.some(guest => guest.email === newGuest.email);
-        if (emailExists) {
-            toast.error('Este invitado ya existe.');
-            return; 
-        }
-
-        try {
-            const response = await fetch(`http://localhost:8000/api/organization/event/guest`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    event_id: eventId,
-                    ...newGuest
-                })
-            });
-
-            if (response.ok) {
-                const data = await response.json();
-                if (data.guest) {
-                    setGuests((prevGuests) => Array.isArray(prevGuests) ? [...prevGuests, data.guest] : [data.guest]);
-                    setNewGuest({ name: "", email: "", role: "" });
-                    toast.success('¡Invitado añadido!');
-                } else {
-                    toast.error("No se encontraron datos del invitado en la respuesta.");
-                }
-            } else {
-                const errorData = await response.json();
-                toast.error("Error al añadir invitado: " + errorData.error);
-            }
-        } catch (error) {
-            toast.error("Error al añadir invitado.");
-        }
-    };
-
     const handleDeleteGuest = async (guest_id) => {
         try {
             const response = await fetch(`http://localhost:8000/api/organization/event/guest/${guest_id}/`, {
@@ -210,7 +173,7 @@ const Page = () => {
     
             if (response.ok) {
                 toast.success('¡Evento finalizado exitosamente!');
-                setEvent({ ...event, state: 'Hecho' });
+                setEvent({ ...event, state: 'Finalizado' });
             } else {
                 toast.error('Error al finalizar evento.');
             }
@@ -351,6 +314,104 @@ const Page = () => {
         textarea.style.height = textarea.scrollHeight + 'px';
       };
 
+    const handleShowModalMember = (member) => {
+        setSelectedMember(member); // Guardar el miembro seleccionado
+        setShowModalMember(true); // Mostrar el modal
+    };
+
+    const handleCloseModalMember = () => {
+        setShowModalMember(false); // Cerrar el modal
+        setSelectedMember(null); // Limpiar el miembro seleccionado
+    };
+
+    const handleShowModal = (guest) => {
+        setSelectedGuest(guest); // Guardar el miembro seleccionado
+        setShowModal(true); // Mostrar el modal
+    };
+
+    const handleCloseModal = () => {
+        setShowModal(false); // Cerrar el modal
+        setSelectedGuest(null); // Limpiar el miembro seleccionado
+    };
+
+
+// Modificar el handleAddGuest para incluir la validación y el envío del correo
+const handleAddGuest = async (e) => {
+    e.preventDefault();
+    const currentGuests = Array.isArray(guests) ? guests : [];
+
+    // Validar que se haya proporcionado un email
+    if (!newGuest.email) {
+        toast.error('El email es obligatorio para agregar un invitado.');
+        return;
+    }
+
+    // Verificar si el email ya existe en la lista de invitados
+    const emailExists = currentGuests.some(guest => guest.email === newGuest.email);
+    if (emailExists) {
+        toast.error('Este invitado ya existe.');
+        return; 
+    }
+
+    try {
+        const response = await fetch(`http://localhost:8000/api/organization/event/guest`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                event_id: eventId,
+                ...newGuest
+            })
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            if (data.guest) {
+                setGuests((prevGuests) => Array.isArray(prevGuests) ? [...prevGuests, data.guest] : [data.guest]);
+                setNewGuest({ name: "", email: "", role: "" });
+                toast.success('¡Invitado añadido!');
+                
+                // Enviar el correo automáticamente después de añadir el invitado
+                handleSendEmail(data.guest.email);
+            } else {
+                toast.error("No se encontraron datos del invitado en la respuesta.");
+            }
+        } else {
+            const errorData = await response.json();
+            toast.error("Error al añadir invitado: " + errorData.error);
+        }
+    } catch (error) {
+        toast.error("Error al añadir invitado.");
+    }
+};
+
+// Nueva función para enviar el correo
+const handleSendEmail = async (email) => {
+    if (!email) {
+        toast.error('No se puede enviar el correo sin una dirección de email válida.');
+        return;
+    }
+
+    try {
+        await fetch(`http://localhost:8000/api/send-email/`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                email: email,
+                event_id: eventId,
+                link: `${window.location.origin}/dashboard/${organizationId}/events/view/${eventId}`
+            })
+        });
+
+        toast.success('¡Invitación enviada con éxito!');
+    } catch (error) {
+        toast.error('Error al enviar la invitación por correo.');
+    }
+};
+
     return (
         <Layout>
             {event && (
@@ -369,7 +430,7 @@ const Page = () => {
                             <div className="details-container col-md-7">
                                 <div className="d-inline-flex align-items-center mb-10">
                                     <span className="text-dark"> {event.state}</span>
-                                    <i className={`chat-badge ${event.state === 'Hecho' ? 'bg-success' : 'bg-danger'}`}></i>
+                                    <i className={`chat-badge ${event.state === 'Finalizado' ? 'bg-success' : 'bg-danger'}`}></i>
                                 </div>
                                 <p className='title2-modal'>Título</p><p className='title-modal-13'>{event.name}</p>
                                 <p className='title3-modal'>Descripción</p><p className='title-modal-12'>{event.description}</p>
@@ -480,8 +541,11 @@ const Page = () => {
                                                             <td className='text-center'>{member.first_name} {member.last_name}</td>
                                                             <td className='text-center'>{member.email}</td>
                                                             <td className='text-center'>
+                                                                <button className="trash-event" onClick={() => handleShowModalMember(member)}>
+                                                                    <FontAwesomeIcon icon={faEye} className='hover-button-trash icon-eye-mr' />
+                                                                </button>      
                                                                 <button className="trash-event" onClick={() => handleDeleteMember(member.id)}>
-                                                                    <FontAwesomeIcon icon={faTrash} className='hover-button-trash' />
+                                                                    <FontAwesomeIcon icon={faTrash} className='hover-button-trash icon-trash-ml' />
                                                                 </button>
                                                             </td>
                                                         </tr>
@@ -494,8 +558,11 @@ const Page = () => {
                                                             <td className='text-center'>{guest.name}</td>
                                                             <td className='text-center'>{guest.email}</td>
                                                             <td className='text-center'>
+                                                               <button className="trash-event" onClick={() => handleShowModal(guest)}>
+                                                                    <FontAwesomeIcon icon={faEye} className='hover-button-trash icon-eye-mr' />
+                                                                </button>
                                                                 <button className="trash-event" onClick={() => handleDeleteGuest(guest.id)}>
-                                                                    <FontAwesomeIcon icon={faTrash} className='hover-button-trash' />
+                                                                    <FontAwesomeIcon icon={faTrash} className='hover-button-trash icon-trash-ml' />
                                                                 </button>
                                                             </td>
                                                         </tr>
@@ -512,7 +579,7 @@ const Page = () => {
                                 <div className='row d-flex justify-content-center'>
                                 {isAdmin || isOrgAccount ? (
                                 <Button className="btn-close-task mx-2" onClick={handleToggleEventState}>
-                                    {event.state === 'Done' ? 'Pendiente' : 'Finalizar'}
+                                    {event.state === 'Finalizado' ? 'Pendiente' : 'Finalizar'}
                                 </Button> ) :
                                 <Button className="btn-close-task mx-2" onClick={handleToggleAttendance}>
                                     {isAttending ? 'Dejar' : 'Asistir'}
@@ -530,6 +597,54 @@ const Page = () => {
                     </div>
                 </div>
             )}
+
+
+
+              <Modal show={showModalMember} onHide={handleCloseModalMember} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Información del Miembro</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {selectedMember && (
+                        <div>
+                            <p><strong>Nombre:</strong> {selectedMember.first_name} {selectedMember.last_name}</p>
+                            <p><strong>Email:</strong> {selectedMember.email}</p>
+                            <p><strong>Número de teléfono:</strong> {selectedMember.phone_number}</p>
+                            <p><strong>Ciudad:</strong> {selectedMember.city}</p>
+                            <p><strong>Calle:</strong> {selectedMember.street_name} {selectedMember.street_number}</p>
+                            {/* Puedes agregar más información según lo que tengas disponible */}
+                        </div>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseModalMember}>
+                        Cerrar
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+            <Modal show={showModal} onHide={handleCloseModal} centered>
+                <Modal.Header closeButton>
+                    <Modal.Title>Información del Miembro</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    {selectedGuest && (
+                        <div>
+                          <p><strong>Nombre:</strong> {selectedGuest.name}</p>
+                          <p><strong>Email:</strong> {selectedGuest.email}</p>
+                          <p><strong>Observaciones:</strong> {selectedGuest.role}</p>
+
+                        </div>
+                    )}
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseModal}>
+                        Cerrar
+                    </Button>
+                </Modal.Footer>
+            </Modal>
+
+
         </Layout>
     );
 }

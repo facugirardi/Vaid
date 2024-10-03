@@ -134,7 +134,7 @@ const Page = () => {
 
             if (response.ok) {
                 toast.success('¡Tarea marcada como hecha!');
-                setTask({ ...task, state: 'Hecho' });
+                setTask({ ...task, state: 'Finalizado' });
             } else {
                 toast.error('Error al marcar la tarea como hecha');
             }
@@ -245,7 +245,7 @@ const Page = () => {
                             <div className="cover-data">
                                         <div className="d-inline-flex align-items-center mb-10">
                                             <span className="text-dark"> {task.state}</span>
-                                            <i className={`chat-badge ${task.state === 'Hecho' ? 'bg-success' : 'bg-danger'}`}></i>
+                                            <i className={`chat-badge ${task.state === 'Finalizado' ? 'bg-success' : 'bg-danger'}`}></i>
                                         </div>
                                     </div> 
                                 <p className='title2-modal'>Título </p>
@@ -292,7 +292,7 @@ const Page = () => {
                                         {isTaken ? "Dejar" : "Tomar"}
                                     </Button>
                                 )}
-                                {task.state === 'Hecho' ? (
+                                {task.state === 'Finalizado' ? (
                                     <Button 
                                         className="button-close btn-close-task mx-2" 
                                         onClick={handleMarkAsPending}
