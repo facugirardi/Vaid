@@ -8,6 +8,7 @@ urlpatterns = [
         name='provider-auth'
     ),
     path('subscribe-newsletter/', SubscribeNewsletterView.as_view(), name='subscribe-newsletter'),
+    path('person-organization-details-leave/<int:user_id>/<int:organization_id>/delete/', PersonOrganizationDetailsDeleteViewLeave.as_view()),
     path('person-organization-details/<int:person_id>/<int:organization_id>/delete/', PersonOrganizationDetailsDeleteView.as_view()),
     path('user/<int:user_id>/apply-org/<int:org_id>/', ApplyOrgView.as_view()),
     path('user/form/<int:user_id>/', UserFormView.as_view()),
@@ -79,5 +80,6 @@ urlpatterns = [
     path('organization/event/<int:event_id>/toggle-state/', ToggleEventStateView.as_view(), name='toggle-event-state'),
     path('event/<int:event_id>/toggle-attendance/<int:user_id>/', EventToggleAttendanceAPIView.as_view(), name='toggle_attendance'),
     path('event/<int:event_id>/check-attendance/<int:user_id>/', CheckAttendanceAPIView.as_view(), name='check_attendance'),
-    path('upload-profile-image/', UploadProfileImageView.as_view(), name='upload_profile_image'), 
+    path('upload-profile-image/', UploadProfileImageView.as_view(), name='upload_profile_image'),
+    path('check-membership/', CheckMembershipView.as_view(), name='check-membership'),
 ]

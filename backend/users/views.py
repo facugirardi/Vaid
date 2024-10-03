@@ -26,6 +26,7 @@ from .serializers import GuestSerializer
 from rest_framework.parsers import MultiPartParser, FormParser
 import os
 
+
 class SubscribeNewsletterView(APIView):
     permission_classes = [AllowAny]
 
@@ -49,6 +50,23 @@ class PersonOrganizationDetailsDeleteView(generics.GenericAPIView):
 
         try:
             detail = PersonOrganizationDetails.objects.get(Person_id=person_id, Organization_id=organization_id)
+            detail.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except PersonOrganizationDetails.DoesNotExist:
+            return Response({'error': 'Details not found'}, status=status.HTTP_404_NOT_FOUND)
+                          
+
+class PersonOrganizationDetailsDeleteViewLeave(generics.GenericAPIView):
+    permission_classes = [AllowAny]
+    
+    def delete(self, request, *args, **kwargs):
+        user_id = kwargs.get('user_id')
+        organization_id = kwargs.get('organization_id')
+
+        try:
+            user = User.objects.get(id=user_id)
+            person = Person.objects.get(User=user)
+            detail = PersonOrganizationDetails.objects.filter(Person=person, Organization_id=organization_id)
             detail.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
         except PersonOrganizationDetails.DoesNotExist:
@@ -1934,4 +1952,40 @@ class UploadProfileImageView(APIView):
             'message': 'Imagen de perfil actualizada correctamente',
             'image_url': image_url
         }, status=status.HTTP_201_CREATED)
+
+class CheckMembershipView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, *args, **kwargs):
+        # Obtener los parámetros desde los query params
+        organization_id = request.query_params.get('organization_id')
+        user_id = request.query_params.get('user_id')
+        print(request.data)
+        if not organization_id or not user_id:
+            return Response({'error': 'Both organization_id and user_id are required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Busca el usuario en la base de datos
+            user = User.objects.get(id=user_id)
+            
+            # Verifica si existe un perfil asociado a ese usuario
+            try:
+                person = Person.objects.get(User=user)
+            except Person.DoesNotExist:
+                return Response({'error': 'Person not found for the given user'}, status=status.HTTP_404_NOT_FOUND)
+
+            # Busca la organización en la base de datos
+            organization = Organization.objects.get(id=organization_id)
+
+            # Verifica si la persona es miembro de la organización
+            if PersonOrganizationDetails.objects.filter(Person=person, Organization=organization).exists():
+                return Response({'is_member': True}, status=status.HTTP_200_OK)
+            else:
+                return Response({'is_member': False}, status=status.HTTP_200_OK)
+
+        except User.DoesNotExist:
+            return Response({'error': 'User not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Organization.DoesNotExist:
+            return Response({'error': 'Organization not found'}, status=status.HTTP_404_NOT_FOUND)
+
 
