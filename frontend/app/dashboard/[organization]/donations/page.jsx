@@ -162,10 +162,10 @@ const Donations = () => {
                   </td>
                   <td className='text-center'>
                     <button className="icon-button" onClick={() => handleProductModalShow(item)}>
-                      <FontAwesomeIcon icon={faEye} className='hover-button' />
+                      <i className='ph-duotone ph-eye hover-button'></i>
                     </button>
                     <button className="icon-button" onClick={() => handleDeleteProductModalShow(item.id)}>
-                      <FontAwesomeIcon icon={faTrash} className='hover-button-trash' />
+                      <i className='ph-duotone ph-trash hover-button-trash'></i>
                     </button>
                   </td>
                 </tr>
@@ -177,7 +177,7 @@ const Donations = () => {
           </button>
         </>
       )}
-
+        
       {/* Modal para agregar inventario */}
       <Modal show={showInventoryModal} onHide={handleInventoryModalClose} backdropClassName="modal-backdrop" centered size='xl'>
         <Modal.Header closeButton>
@@ -399,10 +399,10 @@ const BuySell = () => {
                   </td>
                   <td className='text-center'>
                     <button className="icon-button" onClick={() => handleProductModalShow(item)}>
-                      <FontAwesomeIcon icon={faEye} className='hover-button' />
+                      <i className='ph-duotone ph-eye hover-button'></i>
                     </button>
                     <button className="icon-button" onClick={() => handleDeleteProductModalShow(item)}>
-                      <FontAwesomeIcon icon={faTrash} className='hover-button-trash' />
+                      <i className='ph-duotone ph-trash hover-button-trash'></i>
                     </button>
                   </td>
                 </tr>

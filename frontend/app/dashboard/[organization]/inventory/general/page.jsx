@@ -203,10 +203,10 @@ const Inventory = ({ headquarterId, addHistoryEntry }) => {
                   <td className='text-center'>{item.status_name}</td>
                   <td className='text-center'>
                     <button className="icon-button" onClick={() => handleProductModalShow(item)}>
-                      <FontAwesomeIcon icon={faEye} className='hover-button' />
+                      <i className='ph-duotone ph-eye hover-button'></i>
                     </button>
                     <button className="icon-button" onClick={() => handleDeleteProductModalShow(item)}>
-                      <FontAwesomeIcon icon={faTrash} className='hover-button-trash' />
+                      <i className='ph-duotone ph-trash hover-button-trash'></i>
                     </button>
                   </td>
                 </tr>
