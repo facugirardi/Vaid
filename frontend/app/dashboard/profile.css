@@ -42,6 +42,11 @@ body{
     margin-right: -50px !important;
 }
 
+.rounded-circle{
+  width: 90px !important;
+  height: 90px !important;
+}
+
 .suggestionsTitle{
     margin-left: 26.5px;
 }

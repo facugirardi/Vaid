@@ -82,4 +82,13 @@ urlpatterns = [
     path('event/<int:event_id>/check-attendance/<int:user_id>/', CheckAttendanceAPIView.as_view(), name='check_attendance'),
     path('upload-profile-image/', UploadProfileImageView.as_view(), name='upload_profile_image'),
     path('check-membership/', CheckMembershipView.as_view(), name='check-membership'),
+    path('organization/DonationHistory/', DonationHistoryAPIView.as_view(), name='donation-history'),
+    path('organization/OperationHistory/', OperationHistoryAPIView.as_view(), name='opedonation-product-detailsration-history'),
+    path('organization/DonationMonth/' , DonationMonthAPIView.as_view(), name='donation-month'),
+    path('organization/OperationMonth/' , OperationMonthAPIView.as_view(), name='operation-month'),
+    path('organization/DonationCategory/', DonationCategoryAPIView.as_view(), name='donation-category'),
+    path('organization/TotalAmountOperation/', TotalAmountOperationAPIView.as_view(), name='operation-total-amount'),
+    path('organization/TotalAmountDonation/', TotalAmountDonationAPIView.as_view(), name='donation-total-amount'),
+    path('organization/OrganizationList/', ListOrganizationAPIView.as_view(), name='organization-list'),
+    path('organizations/candidatesorg/', ListCandidateOrganizationsAPIView.as_view(), name='candidate-organizations-list'),
 ]

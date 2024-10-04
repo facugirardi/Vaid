@@ -42,21 +42,23 @@ const Friends = ({ userId }) => {
                 <Card>
                     <Card.Body>
                         <Row>
-                            <h5>Organizaciones</h5>
+                            <h5>Tus Organizaciones</h5>
                             <h1></h1><h1></h1>
                             {
                                 organizations.length > 0 ? (
                                     organizations.map((org, index) => (
-                                        <Col xl={6} xxl={4} key={index}>
+                                        <Col xl={4} xxl={4} key={index}>
                                             <Card className="border shadow-none">
                                                 <Card.Body>
                                                     <div className="text-center">
                                                         <div className="chat-avtar d-sm-inline-flex">
-                                                            <Image 
-                                                                className="rounded-circle img-thumbnail img-fluid wid-80" 
-                                                                src={org.image || avatar1} 
-                                                                alt={org.name || "Imagen de la organización"} 
-                                                            />
+                                                        <Image 
+                                                        className="rounded-circle img-thumbnail img-fluid wid-80" 
+                                                        src={org.profile_image ? `http://localhost:8000${org.profile_image}` : avatar1} 
+                                                        alt={org.name || "Imagen de la organización"} 
+                                                        width={100}
+                                                        height={100}
+                                                        />
                                                         </div>
                                                         <div className="my-3">
                                                             <h5 className="mb-0">{org.name}</h5>
@@ -64,16 +66,16 @@ const Friends = ({ userId }) => {
                                                     </div>
                                                     <Row className="g-2">
                                                         <Col xs={6}>
-                                                            <div className="d-flex justify-content-between cont-btn-ent">
+                                                            <div className="d-flex justify-content-between ">
                                                                 <a
-                                                                    className="btn btn-primary buttonorg_perf2"
+                                                                    className="btn btn-primary buttonorg_perf"
                                                                     href={`dashboard/${org.id}/home`}   
                                                                     size="sm"
                                                                 >
                                                                     Entrar
                                                                 </a> 
                                                                 <a
-                                                                    className="btn btn-outline-primary buttonorg_perf2"
+                                                                    className="btn btn-outline-primary buttonorg_perf"
                                                                     href={`dashboard/${org.id}/organization`}
                                                                     size="sm"
                                                                 >

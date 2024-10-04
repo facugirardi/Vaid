@@ -75,7 +75,7 @@ const page = () => {
                   layout="responsive" 
                 />
                 <br />
-                Soy usuario, y soy parte<br />de una organización.
+                Soy miembro o empleado <br />de una organización.
               </button>
             </div>
             <button className='btn-pass' onClick={handleContinue}>Continuar</button>

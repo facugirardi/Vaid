@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import *
+from django.core.exceptions import ValidationError
 
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -46,13 +47,32 @@ class PersonSerializer(serializers.ModelSerializer):
         model = Person
         fields = '__all__'
 
-class OrganizationSerializer(serializers.ModelSerializer):
+class OrganizationSerializer(serializers.ModelSerializer):    
+    profile_image = serializers.SerializerMethodField()
+
     class Meta:
         model = Organization
         fields = '__all__'
 
+    def get_profile_image(self, obj):
+        # Obtiene la imagen del usuario principal de la organización
+        user_image = Image.objects.filter(User=obj.User).first()
+        if user_image:
+            return user_image.image.url  # Retorna la URL de la imagen si existe
+        return None
+
+    # Definimos una función de validación para los formatos de imagen permitidos.
+def validate_image_format(value):
+    if value:
+        # Obtenemos el tipo de archivo del contenido de la imagen
+        valid_formats = ['image/png', 'image/jpeg', 'image/jpg']
+        if value.content_type not in valid_formats:
+            raise ValidationError("La imagen debe ser de tipo PNG, JPG o JPEG.")
+    return value
 
 class TaskSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(validators=[validate_image_format], required=False)
+
     class Meta:
         model = Task
         fields = '__all__'
@@ -68,6 +88,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class EventSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(validators=[validate_image_format], required=False)
+
     class Meta:
         model = Event
         fields = '__all__'
