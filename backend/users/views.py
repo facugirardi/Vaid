@@ -140,7 +140,6 @@ class UserFormView(APIView):
             data = request.data
             user = User.objects.get(id=user_id)
             person = Person.objects.get(User=user)
-            
             person.date_of_birth = data.get('dateOfBirth')
             person.profession = data.get('profession')
             person.experience = data.get('experience')
@@ -162,6 +161,7 @@ class UserFormView(APIView):
         except Person.DoesNotExist:
             return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
+            print(e)
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
 class RetrieveOrganizationExtView(APIView):
