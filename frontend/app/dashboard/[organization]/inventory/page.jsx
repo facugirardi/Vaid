@@ -9,6 +9,7 @@ import BreadcrumbItem from '@/common/BreadcrumbItem';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 import { toast } from "react-toastify";
+import { Eye, EyeSlash, Trash } from 'phosphor-react';
 
 const Headquarters = ({ onHeadquarterClick, addHistoryEntry, headquarters, setHeadquarters }) => {
   const [organizationId, setOrganizationId] = useState("");
@@ -150,7 +151,7 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry, headquarters, setHe
     <div className="card">
       <h2>Sedes</h2>
       <table className='table'>
-        <tbody>
+    <tbody>
           {headquarters.length === 0 ? (
             <p>No hay sedes disponibles.</p>
           ) : (
@@ -464,10 +465,10 @@ const Inventory = ({ headquarterId, organizationId }) => {
                   </td>
                   <td className='text-center'>
                     <button className="icon-button" onClick={() => handleProductModalShow(item.Product)}>
-                      <i className='ph-duotone ph-eye hover-button-eye'></i>
+                      <Eye className='hover-button' size={20} weight="bold" />
                     </button>
                     <button className="icon-button" onClick={() => handleDeleteProductModalShow(item.Product)}>
-                      <i className='ph-duotone ph-trash hover-button-trash'></i>
+                      <Trash className='hover-button-trash' size={20} weight="bold" />
                     </button>
                   </td>
                 </tr>
