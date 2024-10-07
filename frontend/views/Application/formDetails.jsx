@@ -272,6 +272,9 @@ const FormDetails = () => {
               </Row>
             </Card.Body>
           </Card>
+          {userDetails?.user?.is_form === true ? 
+          (
+          <>
           <Card>
             <Card.Header>
               <h5>Detalles</h5>
@@ -332,6 +335,8 @@ const FormDetails = () => {
               </Row>
             </Card.Body>
           </Card>
+          </> ) : <></>
+      }
         </Tab.Pane>
       ) : userType === 2 ? (
         <Tab.Pane eventKey="form" id="friends" role="tabpanel" aria-labelledby="friends-tab">
