@@ -9,6 +9,7 @@ import BreadcrumbItem from '@/common/BreadcrumbItem';
 import { Modal, Button, Form} from 'react-bootstrap';
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 import { toast } from "react-toastify";
+import { Eye, EyeSlash, Trash } from 'phosphor-react';
 
 const Inventory = ({ headquarterId, addHistoryEntry }) => {
   const [inventory, setInventory] = useState([]);
@@ -203,10 +204,10 @@ const Inventory = ({ headquarterId, addHistoryEntry }) => {
                   <td className='text-center'>{item.status_name}</td>
                   <td className='text-center'>
                     <button className="icon-button" onClick={() => handleProductModalShow(item)}>
-                      <i className='ph-duotone ph-eye hover-button-eye'></i>
+                      <Eye className='hover-button' size={20} weight="bold" />
                     </button>
                     <button className="icon-button" onClick={() => handleDeleteProductModalShow(item)}>
-                      <i className='ph-duotone ph-trash hover-button-trash'></i>
+                      <Trash className='hover-button-trash' size={20} weight="bold" />
                     </button>
                   </td>
                 </tr>

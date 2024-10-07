@@ -9,6 +9,7 @@ import { faEye, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { Modal, Button } from 'react-bootstrap';
 import axios from 'axios';
 import { Form, Col, Row } from 'react-bootstrap';
+import { Eye, EyeSlash, Trash } from 'phosphor-react';
 
 const Donations = () => {
   const [donations, setDonations] = useState([]);
@@ -162,10 +163,10 @@ const Donations = () => {
                   </td>
                   <td className='text-center'>
                     <button className="icon-button" onClick={() => handleProductModalShow(item)}>
-                      <i className='ph-duotone ph-eye hover-button-eye'></i>
+                      <Eye className='hover-button' size={20} weight="bold" />
                     </button>
                     <button className="icon-button" onClick={() => handleDeleteProductModalShow(item.id)}>
-                      <i className='ph-duotone ph-trash hover-button-trash'></i>
+                      <Trash className='hover-button-trash' size={20} weight="bold" />
                     </button>
                   </td>
                 </tr>
@@ -399,10 +400,10 @@ const BuySell = () => {
                   </td>
                   <td className='text-center'>
                     <button className="icon-button" onClick={() => handleProductModalShow(item)}>
-                      <i className='ph-duotone ph-eye hover-button-eye'></i>
+                      <Eye className='hover-button' size={20} weight="bold" />
                     </button>
                     <button className="icon-button" onClick={() => handleDeleteProductModalShow(item)}>
-                      <i className='ph-duotone ph-trash hover-button-trash'></i>
+                      <Trash className='hover-button-trash' size={20} weight="bold" />
                     </button>
                   </td>
                 </tr>
