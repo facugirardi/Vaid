@@ -9,7 +9,7 @@ import BreadcrumbItem from '@/common/BreadcrumbItem';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 import { toast } from "react-toastify";
-import { Eye, EyeSlash, Trash } from 'phosphor-react';
+import { Eye, EyeSlash, Trash, PencilSimpleLine } from 'phosphor-react';
 
 const Headquarters = ({ onHeadquarterClick, addHistoryEntry, headquarters, setHeadquarters }) => {
   const [organizationId, setOrganizationId] = useState("");
@@ -168,10 +168,10 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry, headquarters, setHe
                 <td className="flex-grow-1 d-flex align-items-center justify-content-start p-inventory">{hq.address}</td>
                 <td className="d-flex align-items-center justify-content-end">
                   <button className="edit-button" onClick={(e) => { e.stopPropagation(); handleEditModalShow(hq); }}>
-                    <FontAwesomeIcon icon={faPencilAlt} className="hover-button-edit" />
+                    <PencilSimpleLine className='hover-button' size={21} weight="bold" />
                   </button>
                   <button className="edit-button trash-btn" onClick={(e) => { e.stopPropagation(); handleDeleteModalShow(hq); }}>
-                    <FontAwesomeIcon icon={faTrash} className="hover-button-trash" />
+                    <Trash className='hover-button-trash' size={20} weight="bold" />
                   </button>
                 </td>
               </tr>
