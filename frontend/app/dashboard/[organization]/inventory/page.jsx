@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faPlus, faTrash, faPencilAlt } from '@fortawesome/free-solid-svg-icons';
 import './styles.css';
 import Layout from '@/layouts/dashboard/index';
 import BreadcrumbItem from '@/common/BreadcrumbItem';
@@ -14,11 +14,14 @@ import { Eye, EyeSlash, Trash } from 'phosphor-react';
 const Headquarters = ({ onHeadquarterClick, addHistoryEntry, headquarters, setHeadquarters }) => {
   const [organizationId, setOrganizationId] = useState("");
   const [showHeadquarterModal, setShowHeadquarterModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedHeadquarter, setSelectedHeadquarter] = useState(null);
+  const [editName, setEditName] = useState("");
+  const [editAddress, setEditAddress] = useState("");
 
   const { data: user, isError, isLoading } = useRetrieveUserQuery();
-  
+
   useEffect(() => {
     const currentUrl = window.location.href;
     const url = new URL(currentUrl);
@@ -40,7 +43,15 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry, headquarters, setHe
 
   const handleHeadquarterModalClose = () => setShowHeadquarterModal(false);
   const handleHeadquarterModalShow = () => setShowHeadquarterModal(true);
-  
+
+  const handleEditModalClose = () => setShowEditModal(false);
+  const handleEditModalShow = (hq) => {
+    setSelectedHeadquarter(hq);
+    setEditName(hq.name);
+    setEditAddress(hq.address);
+    setShowEditModal(true);
+  };
+
   const handleDeleteModalClose = () => setShowDeleteModal(false);
   const handleDeleteModalShow = (hq) => {
     setSelectedHeadquarter(hq);
@@ -56,7 +67,6 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry, headquarters, setHe
         });
 
         if (response.ok) {
-            console.log('Sede eliminada con éxito');
             setHeadquarters(headquarters.filter(hq => hq.id !== selectedHeadquarter.id));
 
             if (headquarters.length === 1) {
@@ -66,14 +76,13 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry, headquarters, setHe
             addHistoryEntry(`Sede "${selectedHeadquarter.name}" eliminada por ${user.first_name} ${user.last_name}`);
             handleDeleteModalClose();
 
-
         } else {
             toast.error('Error al borrar la sede:', response.status);
         }
     } catch (error) {
         toast.error('Error:', error);
     }
-};
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -96,7 +105,6 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry, headquarters, setHe
 
         if (response.ok) {
             const newHeadquarter = await response.json();
-            console.log('Sede creada con éxito');
             setHeadquarters([...headquarters, newHeadquarter]);
             addHistoryEntry(`Sede "${newHeadquarter.name}" agregada por ${user.first_name} ${user.last_name}`);
             handleHeadquarterModalClose(); 
@@ -108,41 +116,74 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry, headquarters, setHe
     }
   };
 
+  const handleEditSubmit = async (event) => {
+    event.preventDefault();
+
+    const updatedData = {
+      name: editName,
+      address: editAddress,
+    };
+
+    try {
+      const response = await fetch(`http://localhost:8000/api/headquarters/${organizationId}/edit/${selectedHeadquarter.id}/`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedData),
+      });
+
+      if (response.ok) {
+        const updatedHeadquarter = await response.json();
+        const updatedHeadquartersList = headquarters.map(hq => hq.id === updatedHeadquarter.id ? updatedHeadquarter : hq);
+        setHeadquarters(updatedHeadquartersList);
+        toast.success('Sede actualizada con éxito');
+        handleEditModalClose();
+      } else {
+        toast.error('Error al actualizar la sede:', response.status);
+      }
+    } catch (error) {
+      toast.error('Error:', error);
+    }
+  };
+
   return (
     <div className="card">
       <h2>Sedes</h2>
       <table className='table'>
-      <tbody>
-        {headquarters.length === 0 ? (
-          <>
-          <p className='p-inventory'>No hay sedes disponibles.<br></br><br></br>Empieza agregando tu primera sede usando el botón '+'.</p>
-          </>
-        ) : (
-          headquarters.map(hq => (
-            <tr
-              key={hq.id}
-              className={`d-flex tr-class ${selectedHeadquarter?.id === hq.id ? 'selected-headquarter' : ''}`}
-              onClick={() => {
-                onHeadquarterClick(hq.id);
-                setSelectedHeadquarter(hq);
-              }}
-            >
-              <td className="flex-grow-1 d-flex align-items-center justify-content-start p-inventory">{hq.name}</td>
-              <td className="flex-grow-1 d-flex align-items-center justify-content-start p-inventory">{hq.address}</td>
-              <td className="d-flex align-items-center justify-content-end">
-                <button className="edit-button trash-btn" onClick={(e) => { e.stopPropagation(); handleDeleteModalShow(hq); }}>
-                  <Trash className='hover-button-trash' size={20} weight="bold" />
-                </button>
-              </td>
-            </tr>
-          ))
-        )}
-      </tbody>
+    <tbody>
+          {headquarters.length === 0 ? (
+            <p>No hay sedes disponibles.</p>
+          ) : (
+            headquarters.map(hq => (
+              <tr
+                key={hq.id}
+                className={`d-flex tr-class ${selectedHeadquarter?.id === hq.id ? 'selected-headquarter' : ''}`}
+                onClick={() => {
+                  onHeadquarterClick(hq.id);
+                  setSelectedHeadquarter(hq);
+                }}
+              >
+                <td className="flex-grow-1 d-flex align-items-center justify-content-start p-inventory">{hq.name}</td>
+                <td className="flex-grow-1 d-flex align-items-center justify-content-start p-inventory">{hq.address}</td>
+                <td className="d-flex align-items-center justify-content-end">
+                  <button className="edit-button" onClick={(e) => { e.stopPropagation(); handleEditModalShow(hq); }}>
+                    <FontAwesomeIcon icon={faPencilAlt} className="hover-button-edit" />
+                  </button>
+                  <button className="edit-button trash-btn" onClick={(e) => { e.stopPropagation(); handleDeleteModalShow(hq); }}>
+                    <FontAwesomeIcon icon={faTrash} className="hover-button-trash" />
+                  </button>
+                </td>
+              </tr>
+            ))
+          )}
+        </tbody>
       </table>
       <button className="add-button" onClick={handleHeadquarterModalShow}>
         <FontAwesomeIcon icon={faPlus} className='hover-button'/>
       </button>
 
+      {/* Modal for Adding Headquarters */}
       <Modal show={showHeadquarterModal} onHide={handleHeadquarterModalClose} backdropClassName="modal-backdrop" centered size='lg'>
         <Modal.Header closeButton>
           <Modal.Title>Agregar Sede</Modal.Title>
@@ -170,6 +211,51 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry, headquarters, setHe
         </Modal.Body>
       </Modal>
 
+      {/* Modal for Editing Headquarters */}
+      <Modal show={showEditModal} onHide={handleEditModalClose} backdropClassName="modal-backdrop" centered size='lg'>
+        <Modal.Header closeButton>
+          <Modal.Title>Editar Sede</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <form onSubmit={handleEditSubmit}>
+            <div className='container'>
+              <div className='row'>
+                <div className="mb-3 col-md-6">
+                  <label htmlFor="editHeadquarterName" className="form-label">Nombre de la Sede</label>
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    id="editHeadquarterName" 
+                    name="name" 
+                    value={editName}
+                    onChange={(e) => setEditName(e.target.value)} 
+                    required
+                  />
+                </div>
+                <div className="mb-3 col-md-6">
+                  <label htmlFor="editHeadquarterAddress" className="form-label">Nombre de la Dirección</label>
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    id="editHeadquarterAddress" 
+                    name="address" 
+                    value={editAddress}
+                    onChange={(e) => setEditAddress(e.target.value)} 
+                    required
+                  />
+                </div>
+              </div>
+              <div className='d-flex justify-content-center'>
+                <Button variant="primary" type="submit">
+                  Guardar Cambios
+                </Button>
+              </div>
+            </div>
+          </form>
+        </Modal.Body>
+      </Modal>
+
+      {/* Modal for Deleting Headquarters */}
       <Modal show={showDeleteModal} onHide={handleDeleteModalClose} backdropClassName="modal-backdrop" centered size='lg'>
         <Modal.Header closeButton>
           <Modal.Title>Eliminar Sede</Modal.Title>

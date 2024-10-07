@@ -273,8 +273,8 @@ const Page = () => {
                                                                         label="Lun"
                                                                         className="small-checkbox"
                                                                         name="availableDays"
-                                                                        value="Mon"
-                                                                        checked={formData.availableDays.includes("Mon")}
+                                                                        value="Lun"
+                                                                        checked={formData.availableDays.includes("Lun")}
                                                                         onChange={handleChange}
                                                                     />
                                                                     <Form.Check
@@ -284,8 +284,8 @@ const Page = () => {
                                                                         label="Mar"
                                                                         className="small-checkbox"
                                                                         name="availableDays"
-                                                                        value="Tue"
-                                                                        checked={formData.availableDays.includes("Tue")}
+                                                                        value="Mar"
+                                                                        checked={formData.availableDays.includes("Mar")}
                                                                         onChange={handleChange}
                                                                     />
                                                                     <Form.Check
@@ -295,8 +295,8 @@ const Page = () => {
                                                                         label="Mié"
                                                                         className="small-checkbox"
                                                                         name="availableDays"
-                                                                        value="Wed"
-                                                                        checked={formData.availableDays.includes("Wed")}
+                                                                        value="Mié"
+                                                                        checked={formData.availableDays.includes("Mié")}
                                                                         onChange={handleChange}
                                                                     />
                                                                     <Form.Check
@@ -306,8 +306,8 @@ const Page = () => {
                                                                         label="Jue"
                                                                         className="small-checkbox"
                                                                         name="availableDays"
-                                                                        value="Thu"
-                                                                        checked={formData.availableDays.includes("Thu")}
+                                                                        value="Jue"
+                                                                        checked={formData.availableDays.includes("Jue")}
                                                                         onChange={handleChange}
                                                                     />
                                                                     <Form.Check
@@ -317,8 +317,8 @@ const Page = () => {
                                                                         label="Vie"
                                                                         className="small-checkbox"
                                                                         name="availableDays"
-                                                                        value="Fri"
-                                                                        checked={formData.availableDays.includes("Fri")}
+                                                                        value="Vie"
+                                                                        checked={formData.availableDays.includes("Vie")}
                                                                         onChange={handleChange}
                                                                     />
                                                                     <Form.Check
@@ -328,8 +328,8 @@ const Page = () => {
                                                                         label="Sáb"
                                                                         className="small-checkbox"
                                                                         name="availableDays"
-                                                                        value="Sat"
-                                                                        checked={formData.availableDays.includes("Sat")}
+                                                                        value="Sáb"
+                                                                        checked={formData.availableDays.includes("Sáb")}
                                                                         onChange={handleChange}
                                                                     />
                                                                     <Form.Check
@@ -339,8 +339,8 @@ const Page = () => {
                                                                         label="Dom"
                                                                         className="small-checkbox"
                                                                         name="availableDays"
-                                                                        value="Sun"
-                                                                        checked={formData.availableDays.includes("Sun")}
+                                                                        value="Dom"
+                                                                        checked={formData.availableDays.includes("Dom")}
                                                                         onChange={handleChange}
                                                                     />
                                                                 </div>
@@ -358,7 +358,7 @@ const Page = () => {
                                                                         label="Mañana"
                                                                         className="small-checkbox"
                                                                         name="availableTimes"
-                                                                        value="Morning"
+                                                                        value="Mañana"
                                                                         checked={formData.availableTimes.includes("Mañana")}
                                                                         onChange={handleChange}
                                                                     />
@@ -369,7 +369,7 @@ const Page = () => {
                                                                         label="Tarde"
                                                                         className="small-checkbox"
                                                                         name="availableTimes"
-                                                                        value="Afternoon"
+                                                                        value="Tarde"
                                                                         checked={formData.availableTimes.includes("Tarde")}
                                                                         onChange={handleChange}
                                                                     />
@@ -381,7 +381,7 @@ const Page = () => {
                                                                         label="Noche"
                                                                         className="small-checkbox"
                                                                         name="availableTimes"
-                                                                        value="Night"
+                                                                        value="Noche"
                                                                         checked={formData.availableTimes.includes("Noche")}
                                                                         onChange={handleChange}
                                                                     />

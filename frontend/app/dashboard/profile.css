@@ -30,6 +30,16 @@ body{
   height: 50px !important;
 }
 
+.small-checkbox .form-check-input {
+  transform: scale(0.4); /* Ajusta el tamaño como desees */
+  height: 62px;
+}
+.label-checkbox {
+  font-size: 2.3rem;
+  align-items: center;
+  margin-left: 0px; /* Ajusta el tamaño como desees */
+}
+
 .changeimg:hover{
     opacity: 0.5;
     color: #000000;
@@ -40,6 +50,11 @@ body{
     height: 90px !important;
     width: 140px !important;
     margin-right: -50px !important;
+}
+
+.rounded-circle{
+  width: 90px !important;
+  height: 90px !important;
 }
 
 .suggestionsTitle{

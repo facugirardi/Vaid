@@ -53,6 +53,9 @@ const SocialTab = () => {
                   <Nav.Link eventKey="form" id="friends-tab">
                     <i className="ph-duotone ph-notebook me-2"></i>Detalles del Formulario
                   </Nav.Link> 
+                  <Nav.Link eventKey="requests" id="friends-tab">
+                    <i className="ph-duotone ph-sort-ascending me-2"></i>Solicitudes de Unión
+                  </Nav.Link> 
                 </>
               )}
             </Nav.Item>

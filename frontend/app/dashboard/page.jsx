@@ -12,6 +12,7 @@ import SocialTab from "@/views/Application/social-tab";
 import SocialProfile from "@/views/Application/social-media";
 import Suggestions from "@/views/Application/suggests";
 import { Col, Row, Tab } from "react-bootstrap";
+import Requests from "@/views/Application/orgRequests";
 
 const Page = () => {
   const { data: user, isError, isLoading } = useRetrieveUserQuery();
@@ -61,6 +62,7 @@ const Page = () => {
                   <Friends />
                   <Suggestions />
                   <FormDetails />
+                  <Requests />
                 </Tab.Content>
               </Row>
             </Tab.Container>

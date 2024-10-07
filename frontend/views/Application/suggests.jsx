@@ -78,10 +78,11 @@ const Suggestions = ({ userId }) => {
         // Function to fetch user's organizations
         const fetchOrganizations = async () => {
             try {
-                const response = await fetch('http://localhost:8000/api/user/all-organizations/');
+                const response = await fetch(`http://localhost:8000/api/organization/OrganizationList/?user_id=${user.id}`);
                 const data = await response.json();
                 if (response.ok) {
                     setOrganizations(data); // Assuming the API returns an array of organizations
+                    console.log('Organizaciones:', data);
                 } else {
                     console.error('Error al obtener organizaciones:', data);
                     setOrganizations([]);
@@ -117,8 +118,10 @@ const Suggestions = ({ userId }) => {
                                                 <div className="chat-avtar d-sm-inline-flex">
                                                     <Image 
                                                         className="rounded-circle img-thumbnail img-fluid wid-80" 
-                                                        src={org.image || avatar1} 
+                                                        src={org.profile_image ? `http://localhost:8000${org.profile_image}` : avatar1} 
                                                         alt={org.name || "Imagen de la organización"} 
+                                                        width={100}
+                                                        height={100}
                                                     />
                                                 </div>
                                                 <div className="my-3">

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Card, Col, Row, Tab } from "react-bootstrap";
+import { Card, Col, Row, Tab, Form } from "react-bootstrap";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPencilAlt, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 import { toast } from 'react-toastify';
 
@@ -8,6 +10,8 @@ const FriendsRequest = () => {
   const [userType, setUserType] = useState(null);
   const [userDetails, setUserDetails] = useState(null);
   const [organization, setOrganization] = useState(null);
+  const [editMode, setEditMode] = useState({});  // Para manejar el estado de edición
+  const [editedValues, setEditedValues] = useState({});  // Para almacenar los valores editados
   const [error, setError] = useState(null);
 
   const checkComplete = async () => {
@@ -35,7 +39,7 @@ const FriendsRequest = () => {
   useEffect(() => {
     checkComplete();
   }, [user]);
-  
+
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
@@ -85,19 +89,93 @@ const FriendsRequest = () => {
     }
   };
 
+  const handleFieldChange = (field, value) => {
+    setEditedValues((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const toggleEditMode = (field) => {
+    setEditMode((prev) => ({
+      ...prev,
+      [field]: !prev[field],
+    }));
+  };
+
+  const savePersonDetails = async () => {
+    try {
+      const updatedData = {
+        phone_number: editedValues.phone_number || userDetails?.person?.phone_number,
+        description: editedValues.description || userDetails?.person?.description,
+      };
+
+      const response = await fetch(`http://localhost:8000/api/person/${user.id}/update/`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedData),
+      });
+
+      if (!response.ok) {
+        throw new Error('No se pudo guardar los cambios');
+      }
+
+      const updatedPerson = await response.json();
+      
+      setUserDetails((prev) => ({
+        ...prev,
+        person: {
+          ...prev.person,
+          ...updatedPerson,
+        },
+      }));
+
+      toast.success('Detalles guardados exitosamente');
+      setEditMode({});  // Salir del modo de edición
+    } catch (error) {
+      toast.error(`Error guardando los cambios: ${error.message}`);
+    }
+  };
+
+  const saveOrganizationDescription = async () => {
+    try {
+      const updatedData = {
+        description: editedValues.description || organization?.description,
+      };
+
+      const response = await fetch(`http://localhost:8000/api/organization/${organization.id}/update-description/`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedData),
+      });
+
+      if (!response.ok) {
+        throw new Error('No se pudo guardar los cambios');
+      }
+
+      const updatedOrganization = await response.json();
+      
+      setOrganization((prev) => ({
+        ...prev,
+        ...updatedOrganization,
+      }));
+
+      toast.success('Descripción de la organización guardada exitosamente');
+      setEditMode({});  // Salir del modo de edición
+    } catch (error) {
+      toast.error(`Error guardando los cambios: ${error.message}`);
+    }
+  };
+
   useEffect(() => {
     if (user && userType === 2) {
       fetchOrganization();
     }
   }, [user, userType]);
-
-  if (userType === 1 && (!user || !userDetails)) {
-    return <p>Cargando...</p>;
-  }
-
-  if (userType === 2 && (!user || !organization)) {
-    return <p>Cargando...</p>;
-  }
 
   return (
     <React.Fragment>
@@ -108,7 +186,7 @@ const FriendsRequest = () => {
               <h5>Detalles Personales</h5>
             </Card.Header>
             <Card.Body>
-              <Row className="g-3">
+                <Row className="g-3">
                 <Col md={4}>
                   <p className="mb-0 text-muted">Nombre Completo</p>
                 </Col>
@@ -121,15 +199,7 @@ const FriendsRequest = () => {
                   <p className="mb-0 text-muted">País</p>
                 </Col>
                 <Col md={6}>
-                  <h6 className="mb-0">{userDetails.person.country}</h6>
-                </Col>
-              </Row>
-              <Row className="g-3 mt-0">
-                <Col md={4}>
-                  <p className="mb-0 text-muted">Teléfono</p>
-                </Col>
-                <Col md={6}>
-                  <h6 className="mb-0">{userDetails.person.phone_number}</h6>
+                  <h6 className="mb-0">{userDetails?.person?.country}</h6>
                 </Col>
               </Row>
               <Row className="g-3 mt-0">
@@ -140,19 +210,50 @@ const FriendsRequest = () => {
                   <h6 className="mb-0"><a href={`mailto:${user.email}`} className="link-primary">{user.email}</a></h6>
                 </Col>
               </Row>
-            </Card.Body>
-          </Card>
-          <Card>
-            <Card.Header>
-              <h5>Otra Información</h5>
-            </Card.Header>
-            <Card.Body>
-              <Row className="g-3">
+              <Row className="g-3 mt-0">
+                <Col md={4}>
+                  <p className="mb-0 text-muted">Teléfono</p>
+                </Col>
+                <Col md={6}>
+                  {editMode.phone_number ? (
+                    <Form.Control
+                      type="text"
+                      value={editedValues.phone_number || userDetails?.person?.phone_number || ''}
+                      onChange={(e) => handleFieldChange('phone_number', e.target.value)}
+                    />
+                  ) : (
+                    <h6 className="mb-0">{userDetails?.person?.phone_number}</h6>
+                  )}
+                </Col>
+                <Col md={2}>
+                  <FontAwesomeIcon
+                    icon={editMode.phone_number ? faCheckCircle : faPencilAlt}
+                    onClick={editMode.phone_number ? savePersonDetails : () => toggleEditMode('phone_number')}
+                    style={{ cursor: 'pointer' }}
+                  />
+                </Col>
+              </Row>
+              <Row className="g-3 mt-0">
                 <Col md={4}>
                   <p className="mb-0 text-muted">Descripción</p>
                 </Col>
                 <Col md={6}>
-                  <h6 className="mb-0">{userDetails.person.description}</h6>
+                  {editMode.description ? (
+                    <Form.Control
+                      as="textarea"
+                      value={editedValues.description || userDetails?.person?.description || ''}
+                      onChange={(e) => handleFieldChange('description', e.target.value)}
+                    />
+                  ) : (
+                    <h6 className="mb-0">{userDetails?.person?.description}</h6>
+                  )}
+                </Col>
+                <Col md={2}>
+                  <FontAwesomeIcon
+                    icon={editMode.description ? faCheckCircle : faPencilAlt}
+                    onClick={editMode.description ? savePersonDetails : () => toggleEditMode('description')}
+                    style={{ cursor: 'pointer' }}
+                  />
                 </Col>
               </Row>
             </Card.Body>
@@ -170,15 +271,7 @@ const FriendsRequest = () => {
                   <p className="mb-0 text-muted">Nombre de la Organización</p>
                 </Col>
                 <Col md={6}>
-                  <h6 className="mb-0">{organization ? organization.name : 'Cargando...'}</h6>
-                </Col>
-              </Row>
-              <Row className="g-3 mt-0">
-                <Col md={4}>
-                  <p className="mb-0 text-muted">País</p>
-                </Col>
-                <Col md={6}>
-                  <h6 className="mb-0">{organization.country}</h6>
+                  <h6 className="mb-0">{organization?.name}</h6>
                 </Col>
               </Row>
               <Row className="g-3 mt-0">
@@ -189,19 +282,36 @@ const FriendsRequest = () => {
                   <h6 className="mb-0"><a href={`mailto:${user.email}`} className="link-primary">{user.email}</a></h6>
                 </Col>
               </Row>
-            </Card.Body>
-          </Card>
-          <Card>
-            <Card.Header>
-              <h5>Otra Información</h5>
-            </Card.Header>
-            <Card.Body>
-              <Row className="g-3">
+              <Row className="g-3 mt-0">
+                <Col md={4}>
+                  <p className="mb-0 text-muted">País</p>
+                </Col>
+                <Col md={6}>
+                  <h6 className="mb-0">{organization?.country}</h6>
+                </Col>
+              </Row>
+
+              <Row className="g-3 mt-0">
                 <Col md={4}>
                   <p className="mb-0 text-muted">Descripción</p>
                 </Col>
                 <Col md={6}>
-                  <h6 className="mb-0">{organization ? organization.description : 'Cargando...'}</h6>
+                  {editMode.description ? (
+                    <Form.Control
+                      as="textarea"
+                      value={editedValues.description || organization?.description || ''}
+                      onChange={(e) => handleFieldChange('description', e.target.value)}
+                    />
+                  ) : (
+                    <h6 className="mb-0">{organization?.description}</h6>
+                  )}
+                </Col>
+                <Col md={2}>
+                  <FontAwesomeIcon
+                    icon={editMode.description ? faCheckCircle : faPencilAlt}
+                    onClick={editMode.description ? saveOrganizationDescription : () => toggleEditMode('description')}
+                    style={{ cursor: 'pointer' }}
+                  />
                 </Col>
               </Row>
             </Card.Body>
@@ -212,6 +322,6 @@ const FriendsRequest = () => {
       )}
     </React.Fragment>
   );
-}
+};
 
 export default FriendsRequest;

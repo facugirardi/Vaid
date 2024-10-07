@@ -158,7 +158,7 @@ const Inventory = ({ headquarterId, addHistoryEntry }) => {
         if (response.ok) {
             const newProduct = await response.json();
             setInventory([...inventory, newProduct]);
-            addHistoryEntry(`Producto "${newProduct.name}" agregado por ${user.first_name} ${user.last_name}`);
+            addHistoryEntry(`Producto "${newProduct.description}" agregado por ${user.first_name} ${user.last_name}`);
             setShowInventoryModal(false);
         } else {
             const errorData = await response.json();
