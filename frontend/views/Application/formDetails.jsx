@@ -237,7 +237,7 @@ const FormDetails = () => {
         <FontAwesomeIcon
           icon={faCheckCircle}
           onClick={() => saveChanges(field)} // Guarda los cambios cuando haces clic en el tick
-          style={{ cursor: 'pointer', color: 'green' }}
+          style={{ cursor: 'pointer'}}
         />
       );
     } else {
@@ -356,7 +356,23 @@ const FormDetails = () => {
                   {renderIcon('name')}
                 </Col>
               </Row>
-              {/* Otros campos de organización */}
+              <Row className="g-3 mt-0">
+                <Col md={4}>
+                  <p className="mb-0 text-muted">Correo Electrónico</p>
+                </Col>
+                <Col md={6}>
+                  <h6 className="mb-0"><a href={`mailto:${user.email}`} className="link-primary">{user.email}</a></h6>
+                </Col>
+              </Row>
+              <Row className="g-3 mt-0">
+                <Col md={4}>
+                  <p className="mb-0 text-muted">País</p>
+                </Col>
+                <Col md={6}>
+                  <h6 className="mb-0">{organization.country}</h6>
+                </Col>
+              </Row>
+
             </Card.Body>
           </Card>
         </Tab.Pane>

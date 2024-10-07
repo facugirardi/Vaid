@@ -34,6 +34,39 @@ from dateutil.relativedelta import relativedelta
 from collections import defaultdict
 
 
+class UpdatePersonView(APIView):
+    permission_classes = [AllowAny]
+
+    def put(self, request, person_id):
+        user = User.objects.get(id=person_id)
+        try:
+            person = Person.objects.get(User=user)
+        except Person.DoesNotExist:
+            return Response({'error': 'Person not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = PersonSerializer(person, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class UpdateOrganizationDescriptionView(APIView):
+    permission_classes = [AllowAny]
+
+    def put(self, request, organization_id):
+        try:
+            organization = Organization.objects.get(id=organization_id)
+        except Organization.DoesNotExist:
+            return Response({'error': 'Organization not found'}, status=status.HTTP_404_NOT_FOUND)
+
+        data = request.data.get('description')
+        if data:
+            organization.description = data
+            organization.save()
+            return Response({'description': organization.description}, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Description is required'}, status=status.HTTP_400_BAD_REQUEST)
+
 
 class SubscribeNewsletterView(APIView):
     permission_classes = [AllowAny]

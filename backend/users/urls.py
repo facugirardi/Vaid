@@ -91,4 +91,6 @@ urlpatterns = [
     path('organization/TotalAmountDonation/', TotalAmountDonationAPIView.as_view(), name='donation-total-amount'),
     path('organization/OrganizationList/', ListOrganizationAPIView.as_view(), name='organization-list'),
     path('organizations/candidatesorg/', ListCandidateOrganizationsAPIView.as_view(), name='candidate-organizations-list'),
+    path('person/<int:person_id>/update/', UpdatePersonView.as_view(), name='update_person'),
+    path('organization/<int:organization_id>/update-description/', UpdateOrganizationDescriptionView.as_view(), name='update_organization_description'),
 ]
