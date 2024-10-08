@@ -1028,6 +1028,51 @@ class ProductView(APIView):
         product.delete()
         return Response({"message": "Product deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
 
+    def put(self, request, pk):
+        print(request.data)
+    # Obtener el producto que se va a actualizar
+        product = get_object_or_404(Product, pk=pk)
+
+    # Obtener los datos enviados
+        data = request.data
+
+    # Verificar si la categoría existe, y crearla si no existe
+        category, created = ProductCategory.objects.get_or_create(name=data.get('Category'))
+        print(f"Category: {category}, Created: {created}")
+
+    # Convertir el ID del estado en el objeto correspondiente
+        try:
+            product_status = ProductStatus.objects.get(id=data.get('Status'))
+        except ProductStatus.DoesNotExist:
+            return Response({'error': 'Status not found'}, status=status.HTTP_400_BAD_REQUEST)
+        print(f"Status: {product_status}")
+
+    # Obtener o crear la entrada correspondiente en ProductInventory para actualizar las unidades
+        try:
+            product_inventory = ProductInventoryDetails.objects.get(Product=product)
+        except ProductInventoryDetails.DoesNotExist:
+            return Response({'error': 'Product inventory not found'}, status=status.HTTP_400_BAD_REQUEST)
+
+    # Actualizar las unidades (cuantity) en ProductInventory, si el campo está presente en los datos recibidos
+        if 'cuantity' in data:
+            product_inventory.cuantity = data['cuantity']
+            product_inventory.save()
+            print(f"Updated quantity to: {product_inventory.cuantity}")
+        else:
+            print("Quantity not provided in request data")
+
+    # Actualizar los datos del producto
+        data['Category'] = category.id
+        data['Status'] = product_status.id
+
+    # Serializar y validar los datos del producto
+        serializer = ProductSerializer(product, data=data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 class ProductForHeadquarterView(APIView):
     permission_classes = [AllowAny]
 

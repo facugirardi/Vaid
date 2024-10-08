@@ -281,7 +281,13 @@ const Inventory = ({ headquarterId, organizationId }) => {
   const [showInventoryModal, setShowInventoryModal] = useState(false);
   const [showProductModal, setShowProductModal] = useState(false);
   const [showDeleteProductModal, setShowDeleteProductModal] = useState(false);
+  const [showEditProductModal, setShowEditProductModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [editName, setEditName] = useState('');
+  const [editQuantity, setEditQuantity] = useState(0);
+  const [editStatus, setEditStatus] = useState(1);
+  const [editCategory, setEditCategory] = useState('');
+  const [editExpDate, setEditExpDate] = useState('');
 
   useEffect(() => {
     if (headquarterId) {
@@ -306,12 +312,62 @@ const Inventory = ({ headquarterId, organizationId }) => {
     setShowProductModal(true);
   };
 
+const handleEditProductSubmit = async (event) => {
+    event.preventDefault();
+
+    const updatedProduct = {
+      name: editName,
+      cuantity: editQuantity,
+      Status: editStatus, // Ahora envía el ID del estado
+      Category: editCategory,
+      expDate: editExpDate,
+    };
+
+    try {
+      const response = await fetch(`http://localhost:8000/api/products/${selectedProduct.id}/`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(updatedProduct),
+      });
+
+      if (response.ok) {
+        const updatedProductData = await response.json();
+        setInventory((prevInventory) => 
+          prevInventory.map((item) =>
+            item.id === updatedProductData.id ? { ...item, Product: updatedProductData } : item
+          )
+        );
+  
+        toast.success('Producto actualizado con éxito');
+        handleEditProductModalClose();
+      } else {
+        toast.error('Error al actualizar el producto:', response.status);
+      }
+    } catch (error) {
+      toast.error('Error:', error);
+    }
+};
+
   const handleProductModalClose = () => setShowProductModal(false);
 
   const handleDeleteProductModalShow = (product) => {
     setSelectedProduct(product);
     setShowDeleteProductModal(true);
   };
+
+  const handleEditProductModalShow = (product) => {
+    setSelectedProduct(product);
+    setEditName(product.Product.name);
+    setEditQuantity(product.cuantity);
+    setEditStatus(1); // Reiniciar el estado a 1 (Disponible)
+    setEditCategory(product.Product.category_name);
+    setEditExpDate(product.Product.expDate);
+    setShowEditProductModal(true);
+  };
+
+  const handleEditProductModalClose = () => setShowEditProductModal(false);
 
   const handleDeleteProductModalClose = () => setShowDeleteProductModal(false);
   
@@ -437,33 +493,36 @@ const Inventory = ({ headquarterId, organizationId }) => {
             <tbody>
               {inventory.map(item => (
                 <tr key={item.id}>
-                  <td className='text-center p-inventory'><b>{item.Product.name}</b></td>
+                  <td className='text-center p-inventory'><b>{item?.Product?.name}</b></td>
                   <td className='text-center '>{item.cuantity}</td>
-                  <td className='text-center p-inventory'><b>{item.Product.status_name}</b></td>
+                  <td className='text-center p-inventory'><b>{item?.Product?.status_name}</b></td>
                   <td
                     className="text-center p-donation"
                     style={{
                       color:
-                        item.Product.category_name === "Comida"
+                        item?.Product?.category_name === "Comida"
                           ? "#795548"
-                          : item.Product.category_name === "Herramientas"
+                          : item?.Product?.category_name === "Herramientas"
                           ? "#2196F3"
-                          : item.Product.category_name === "Bebidas"
+                          : item?.Product?.category_name === "Bebidas"
                           ? "#FF9800"
-                          : item.Product.category_name === "Dinero"
+                          : item?.Product?.category_name === "Dinero"
                           ? "#2BC155"
-                          : item.Product.category_name === "Otros"
+                          : item?.Product?.category_name === "Otros"
                           ? "#9E9E9E"
-                          : item.Product.category_name === "Medicamentos"
+                          : item?.Product?.category_name === "Medicamentos"
                           ? "#FF3E3E"
-                          : item.Product.category_name === "Ropa"
+                          : item?.Product?.category_name === "Ropa"
                           ? "#9C27B0"
                           : "inherit", 
                     }}
                   >
-                    {item.Product.category_name}
+                    {item?.Product?.category_name}
                   </td>
                   <td className='text-center'>
+                  <button className="icon-button" onClick={(e) => { e.stopPropagation(); handleEditProductModalShow(item); }}>
+                    <PencilSimpleLine className='hover-button' size={20} weight="bold" />
+                  </button>
                     <button className="icon-button" onClick={() => handleProductModalShow(item.Product)}>
                       <Eye className='hover-button' size={20} weight="bold" />
                     </button>
@@ -490,11 +549,11 @@ const Inventory = ({ headquarterId, organizationId }) => {
             <div className='container'>
               <div className='row'>
                 <div className="mb-3 col-md-4">
-                  <label htmlFor="productName" className="form-label">Nombre</label>
+                  <label htmlFor="productName" className="form-label">Descripción</label>
                   <input type="text" className="form-control" id="productName" name="name" placeholder='Nombre del Producto' required />
                 </div>
                 <div className="mb-3 col-md-2">
-                  <label htmlFor="quantity" className="form-label">Cantidad</label>
+                  <label htmlFor="quantity" className="form-label">Unidades</label>
                   <input type="number" className="form-control" id="quantity" name="quantity" placeholder='1' required />
                 </div>
                 <div className="mb-3 col-md-3">
@@ -523,6 +582,96 @@ const Inventory = ({ headquarterId, organizationId }) => {
           </form>
         </Modal.Body>
       </Modal>
+
+      <Modal show={showEditProductModal} onHide={handleEditProductModalClose} backdropClassName="modal-backdrop" centered size='lg'>
+        <Modal.Header closeButton>
+          <Modal.Title>Editar Producto</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <form onSubmit={handleEditProductSubmit}>
+            <div className='container'>
+              <div className='row'>
+                <div className="mb-3 col-md-6">
+                  <label htmlFor="editProductName" className="form-label">Descripción</label>
+                  <input 
+                    type="text" 
+                    className="form-control" 
+                    id="editProductName" 
+                    name="name" 
+                    value={editName}
+                    onChange={(e) => setEditName(e.target.value)} 
+                    required 
+                  />
+                </div>
+                <div className="mb-3 col-md-4">
+                  <label htmlFor="editProductStatus" className="form-label">Estado</label>
+                  <Form.Control 
+                    as="select" 
+                    className="form-select" 
+                    id="editProductStatus" 
+                    name="status"
+                    value={editStatus}
+                    onChange={(e) => setEditStatus(e.target.value)}
+                    required
+                  >
+                    <option value={1}>Disponible</option>
+                    <option value={2}>No Disponible</option>
+                  </Form.Control>
+                </div>
+                <div className="mb-3 col-md-2">
+                  <label htmlFor="editProductQuantity" className="form-label">Unidades</label>
+                  <input 
+                    type="number" 
+                    className="form-control" 
+                    id="editProductQuantity" 
+                    name="quantity" 
+                    value={editQuantity}
+                    onChange={(e) => setEditQuantity(e.target.value)} 
+                    required 
+                  />
+                </div>
+                <div className="mb-3 col-md-6">
+                  <label htmlFor="editProductCategory" className="form-label">Categoría</label>
+                  <Form.Control 
+                    as="select" 
+                    className="form-select" 
+                    id="editProductCategory" 
+                    name="category"
+                    value={editCategory}
+                    onChange={(e) => setEditCategory(e.target.value)}
+                    required
+                  >
+                    <option>Ropa</option>
+                    <option>Comida</option>
+                    <option>Bebidas</option>
+                    <option>Medicamentos</option>
+                    <option>Herramientas</option>
+                    <option>Otros</option>
+                    <option>Dinero</option>
+                  </Form.Control>
+                </div>
+                <div className="mb-3 col-md-6">
+                  <label htmlFor="editProductExpDate" className="form-label">Fecha de Expiración</label>
+                  <input 
+                    type="date" 
+                    className="form-control" 
+                    id="editProductExpDate" 
+                    name="expDate" 
+                    value={editExpDate}
+                    onChange={(e) => setEditExpDate(e.target.value)} 
+                  />
+                </div>
+              </div>
+              <div className='d-flex justify-content-center mt-20'>
+                <Button variant="primary" type="submit">
+                  Guardar Cambios
+                </Button>
+              </div>
+            </div>
+          </form>
+        </Modal.Body>
+      </Modal>
+
 
       <Modal show={showProductModal} onHide={handleProductModalClose} backdropClassName="modal-backdrop" centered size='lg'>
         <Modal.Header closeButton>
