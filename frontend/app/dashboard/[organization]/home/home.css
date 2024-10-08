@@ -4,7 +4,7 @@ font-family: 'Inter', sans-serif;
 
 
 .welcome-msg{
-    width: 90%;
+    width: 82%;
     height: 250px;
     border-radius: 14px;
     background: linear-gradient(30deg, #0139f2, #1a71f3);
@@ -22,8 +22,12 @@ font-family: 'Inter', sans-serif;
 .carousel-arrow{
     background-color: #fff;
     font-size: 30px;
-    border-radius: 50px;
+    border-radius: 50%;
     width: 60px;
+    height: 60px;
+    display: flex; /* Alinea el contenido en el centro */
+    justify-content: center; /* Centra el contenido horizontalmente */
+    align-items: center; /* Centra el contenido verticalmente */
 }
   
   .carousel-arrow:hover,
@@ -42,7 +46,7 @@ font-family: 'Inter', sans-serif;
   .carousel-container {
     width: 100%;
     padding-block: 16px 32px;
-    overflow-x: auto;
+    overflow: hidden;
     display: flex;
     width: 100%;
     gap: 8px;

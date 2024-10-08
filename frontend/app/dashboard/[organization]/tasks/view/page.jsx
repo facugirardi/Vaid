@@ -8,6 +8,7 @@ import './viewTask.css';
 import { Button, Card, Col, Form, Row, Modal } from "react-bootstrap";
 import cover1 from "@/public/assets/images/wallpaper_event.jpg";
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
+import { PlusCircle } from 'phosphor-react';
 
 const Page = () => {
     const [tasks, setTasks] = useState([]);
@@ -115,7 +116,7 @@ const Page = () => {
             <BreadcrumbItem mainTitle="Tareas" subTitle="Ver Tareas" />
             {isAdmin || isOrgAccount ? (
                 <button className="button-add-task" onClick={() => window.location.href = `/dashboard/${organizationId}/events/create`}>
-                    Añadir <i className='ph-duotone ph-plus-circle plus-icon'></i>
+                    Añadir <PlusCircle className='hover-button plus-icon' size={20} weight="bold" />
                 </button>) : <></>}
             </div>
             <Row>

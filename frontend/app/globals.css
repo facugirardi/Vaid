@@ -24,8 +24,7 @@
 
 .btn-footer-ln{
   border: 1px solid white !important;
-
-}
+} 
 .main-menu .navbar-collapse .mobile-menu li ul {
   opacity: 1 !important;
   visibility: unset !important;
@@ -195,7 +194,7 @@ p.amount span {
 }
 
 .breadcrumb-item + .breadcrumb-item{
-  padding-left: 0px !important;
+  padding-left: 0px !important;  
 }
 
 .page-header .breadcrumb .breadcrumb-item:last-child{

@@ -16,7 +16,7 @@ const BreadcrumbItem = ({ mainTitle, subTitle }) => {
           <Col className="col-md-12">
             <ul className="breadcrumb">
               <li className="breadcrumb-item">
-                <Link href="/dashboard">Home</Link>
+                <Link className='link-global' href="/dashboard">Home</Link>
               </li>
               <li className="breadcrumb-item">
                 <Link href="#">{mainTitle}</Link>
