@@ -150,11 +150,16 @@ const Page = () => {
                 </Row>
 
                 {/* Carrusel de Eventos */}
-                <Row className='event-list'>
-                    <Col xs={12}>
+                <Row className='event-list d-flex justify-content-center'>
+                <Col md={1}>   
+                        </Col>
+                    <Col md={10}>
                         <h5>Eventos</h5>
                         <p>Próximos Eventos</p>
                     </Col>
+                    <Col md={1}>   
+                        </Col>
+
                     {events.length > 0 ? (
                         <>
                             <Col xs={1} className="d-flex align-items-center justify-content-center">
@@ -224,11 +229,18 @@ const Page = () => {
                 </Row>
 
                 {/* Carrusel de Tareas */}
-                <Row className='event-list my-5'>
-                    <Col xs={12}>
+                <Row className='event-list my-20 d-flex justify-content-center'>
+                    <Col md={1}>   
+                        </Col>
+
+                    <Col md={10}>   
                         <h5>Tareas</h5>
                         <p>Tareas Pendientes</p>
                     </Col>
+
+                    <Col md={1}>   
+                    </Col>
+
                     {tasks.length > 0 ? (
                         <>
                             <Col xs={1} className="d-flex align-items-center justify-content-center">
