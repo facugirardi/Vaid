@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import Layout from '@/layouts/dashboard/index';
@@ -8,6 +8,7 @@ import BreadcrumbItem from '@/common/BreadcrumbItem';
 import FeatherIcon from "feather-icons-react";
 import './create.css';
 import { ToastContainer, toast } from 'react-toastify';
+import Select from 'react-select';  // Importamos react-select
 
 const CreateTaskPage = () => {
     const { data: user, isLoading, isError } = useRetrieveUserQuery();
@@ -20,7 +21,7 @@ const CreateTaskPage = () => {
         endTime: '',
         file: null,
         state: 'Pendiente',
-        category: '' // Estado para la categoría seleccionada
+        category: [] // Cambiado para manejar múltiples categorías
     });
     const [preview, setPreview] = useState(null);
     const [errors, setErrors] = useState({});
@@ -28,13 +29,9 @@ const CreateTaskPage = () => {
     const [categories, setCategories] = useState([]); // Estado para guardar las categorías de la organización
 
     useEffect(() => {
-        // Obtener la URL actual
         const currentUrl = window.location.href;
-        // Usar el constructor de URL para analizar la URL
         const url = new URL(currentUrl);
-        // Dividir el pathname en segmentos
         const pathSegments = url.pathname.split('/');
-        // Encontrar el segmento después de 'dashboard'
         const dashboardIndex = pathSegments.indexOf('dashboard');
         if (dashboardIndex !== -1 && pathSegments.length > dashboardIndex + 1) {
             setOrganizationId(pathSegments[dashboardIndex + 1]);
@@ -42,7 +39,6 @@ const CreateTaskPage = () => {
     }, []);
 
     useEffect(() => {
-        // Fetch para obtener las categorías de la organización
         const fetchCategories = async () => {
             if (organizationId) {
                 try {
@@ -53,7 +49,8 @@ const CreateTaskPage = () => {
                         },
                     });
                     const data = await response.json();
-                    setCategories(data); // Guardar las categorías en el estado
+                    const options = data.map(category => ({ value: category.id, label: category.name }));
+                    setCategories(options); // Guardar las etiquetas en el estado
                 } catch (error) {
                     console.error('Error al obtener las categorías:', error);
                 }
@@ -69,6 +66,24 @@ const CreateTaskPage = () => {
             ...formData,
             [name]: value,
         });
+    };
+
+    const handleCategoryChange = (selectedOptions) => {
+        // Verificar si la opción "Todas" está seleccionada
+        const allSelected = selectedOptions && selectedOptions.some(option => option.value === 'all');
+        if (allSelected) {
+            // Si "Todas" está seleccionada, sólo mantener esa opción
+            setFormData({
+                ...formData,
+                category: ['all']
+            });
+        } else {
+            // Si no está seleccionada "Todas", almacenar las otras categorías
+            setFormData({
+                ...formData,
+                category: selectedOptions ? selectedOptions.map(option => option.value) : []
+            });
+        }
     };
 
     const handleFileChange = (event) => {
@@ -99,7 +114,7 @@ const CreateTaskPage = () => {
         if (!time) newErrors.time = 'La hora de inicio es obligatoria';
         if (!endDate) newErrors.endDate = 'La fecha de fin es obligatoria';
         if (!endTime) newErrors.endTime = 'La hora de fin es obligatoria';
-        if (!category) newErrors.category = 'La categoría es obligatoria';
+        if (category.length === 0) newErrors.category = 'La categoría es obligatoria'; // Validación de categoría
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
@@ -113,7 +128,7 @@ const CreateTaskPage = () => {
         data.append('time', time);
         data.append('endTime', endTime);
         data.append('endDate', endDate); // Solo la fecha
-        data.append('category', category);
+        data.append('category', category); // Agregar categorías seleccionadas
         if (file) {
             data.append('file', file);
         }
@@ -132,7 +147,6 @@ const CreateTaskPage = () => {
                 setErrors(responseData);
             } else {
                 toast.success('¡Tarea creada con éxito!');
-                // Limpiar el formulario
                 setFormData({
                     name: '',
                     description: '',
@@ -142,7 +156,7 @@ const CreateTaskPage = () => {
                     endDate: '',
                     file: null,
                     state: 'Pendiente',
-                    category: ''
+                    category: []  // Reiniciar la categoría seleccionada
                 });
                 setPreview(null);
                 setErrors({});
@@ -220,20 +234,18 @@ const CreateTaskPage = () => {
                             </Row>
                             <Form.Group>
                                 <Form.Label className="form-label-2">Etiqueta <span className='asterisco-rojo'>*</span></Form.Label>
-                                <Form.Control
-                                    as="select"
-                                    className="form-select"
+                                <Select
                                     name="category"
-                                    value={formData.category}
-                                    onChange={handleChange}
-                                >
-                                    <option value="">Seleccione una opción <span className='asterisco-rojo'>*</span></option>
-                                    {categories.map((category) => (
-                                        <option key={category.id} value={category.id}>
-                                            {category.name}
-                                        </option>
-                                    ))}
-                                </Form.Control>
+                                    options={[
+                                        { value: 'all', label: 'Todas' },  // Opción fija "Todas"
+                                        ...categories,  // Resto de las categorías dinámicas
+                                    ]}
+                                    isMulti
+                                    onChange={handleCategoryChange}
+                                    className="basic-multi-select"
+                                    classNamePrefix="select"
+                                    isClearable
+                                />
                                 {errors.category && <small className="text-danger">{errors.category}</small>}
                             </Form.Group>
                             <Row className="form-group-2">
