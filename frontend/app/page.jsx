@@ -303,7 +303,7 @@ const page = () => {
                       data-aos-duration={1000}
                       data-aos-offset={50}
                     >
-                      <img src="assets/images/placeholder547x487.png" alt="Tab" style={{borderRadius:'10px'}}/>
+                      <img src="assets/images/hero/undraw_predictive_analytics_re_wxt8.svg" alt="Tab" style={{borderRadius:'10px'}}/>
                     </div>
                   </div>
                 </div>
@@ -312,7 +312,7 @@ const page = () => {
                 <div className="row align-items-center justify-content-center">
                   <div className="col-lg-6">
                     <div className="image">
-                    <img src="assets/images/placeholder547x487.png" alt="Tab" style={{borderRadius:'10px'}}/>
+                    <img src="assets/images/hero/undraw_button_style_re_uctt.svg" alt="Tab" style={{borderRadius:'10px'}}/>
                     </div>
                   </div>
                   <div className="col-xl-5 col-lg-6">
@@ -359,7 +359,7 @@ Con potentes herramientas de análisis de datos a tu alcance, te brindamos el po
                   </div>
                   <div className="col-lg-6">
                     <div className="image text-left text-lg-end">
-                    <img src="assets/images/placeholder547x487.png" alt="Tab" style={{borderRadius:'10px'}}/>
+                    <img src="assets/images/hero/undraw_projections_re_ulc6.svg" alt="Tab" style={{borderRadius:'10px'}}/>
                     </div>
                   </div>
                 </div>
@@ -684,7 +684,7 @@ Nuestra plataforma le ofrece las herramientas y la flexibilidad necesarias para 
                 data-aos-offset={50}
               >
                 <img
-                  src="assets/images/placeholderimage723.png"
+                  src="assets/images/hero/undraw_all_the_data_re_hh4w.svg"
                   alt="How To Manage"
                 />
               </div>

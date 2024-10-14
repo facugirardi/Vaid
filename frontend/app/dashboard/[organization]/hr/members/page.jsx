@@ -95,141 +95,142 @@ const Page = () => {
         }
     };
 
-const columns = useMemo(
-    () => [
-        {
-            header: "Nombre",
-            enableColumnFilter: false,
-            accessorKey: "name",
-            cell: (cellProps) => {
-                const row = cellProps.row.original;
-                return (
-                    <div className="d-inline-block align-middle">
-                        <div className="d-inline-block">
-                            <h6 className="m-b-0">{row.first_name} {row.last_name}</h6>
-                            <p className="m-b-0 text-primary">Miembro</p>
+    const columns = useMemo(
+        () => [
+            {
+                header: "Nombre",
+                enableColumnFilter: false,
+                accessorKey: "name",
+                cell: (cellProps) => {
+                    const row = cellProps.row.original;
+                    return (
+                        <div className="d-inline-block align-middle">
+                            <div className="d-inline-block">
+                                <h6 className="m-b-0">{row.first_name} {row.last_name}</h6>
+                                <p className="m-b-0 text-primary">Miembro</p>
+                            </div>
                         </div>
-                    </div>
-                );
+                    );
+                },
             },
-        },
-        {
-            header: "Días Disponibles",
-            accessorKey: "available_days",
-            enableColumnFilter: false,
-            cell: (cellProps) => {
-                const dayMap = {
-                    'Mon': 'Lunes',
-                    'Tue': 'Martes',
-                    'Wed': 'Miércoles',
-                    'Thu': 'Jueves',
-                    'Fri': 'Viernes',
-                    'Sat': 'Sábado',
-                    'Sun': 'Domingo',
-                };
+            {
+                header: "Días Disponibles",
+                accessorKey: "available_days",
+                enableColumnFilter: false,
+                cell: (cellProps) => {
+                    const dayMap = {
+                        'Mon': 'Lunes',
+                        'Tue': 'Martes',
+                        'Wed': 'Miércoles',
+                        'Thu': 'Jueves',
+                        'Fri': 'Viernes',
+                        'Sat': 'Sábado',
+                        'Sun': 'Domingo',
+                    };
 
-                let availableDays = cellProps.getValue();
+                    let availableDays = cellProps.getValue();
 
-                if (typeof availableDays === 'string' && availableDays.startsWith('[') && availableDays.endsWith(']')) {
-                    try {
-                        availableDays = availableDays
-                            .slice(1, -1)
-                            .replace(/'/g, '')
-                            .split(',')
-                            .map(day => day.trim());
-                    } catch (error) {
-                        console.error('Error al procesar los días disponibles:', error);
-                        availableDays = [];
+                    if (typeof availableDays === 'string' && availableDays.startsWith('[') && availableDays.endsWith(']')) {
+                        try {
+                            availableDays = availableDays
+                                .slice(1, -1)
+                                .replace(/'/g, '')
+                                .split(',')
+                                .map(day => day.trim());
+                        } catch (error) {
+                            console.error('Error al procesar los días disponibles:', error);
+                            availableDays = [];
+                        }
                     }
-                }
 
-                if (Array.isArray(availableDays)) {
-                    const fullDays = availableDays.map(day => dayMap[day] || day);
-                    return <span>{fullDays.join(', ')}</span>;
-                }
-
-                return <span>No hay datos de disponibilidad</span>;
-            },
-        },
-        {
-            header: "Horas Disponibles",
-            accessorKey: "available_times",
-            enableColumnFilter: false,
-            cell: (cellProps) => {
-                let availableTimes = cellProps.getValue();
-                
-                if (typeof availableTimes === 'string' && availableTimes.startsWith('[') && availableTimes.endsWith(']')) {
-                    try {
-                        availableTimes = availableTimes
-                            .slice(1, -1)
-                            .replace(/'/g, '')
-                            .split(',')
-                            .map(time => time.trim());
-                    } catch (error) {
-                        console.error('Error al procesar las horas disponibles:', error);
-                        availableTimes = [];
+                    if (Array.isArray(availableDays)) {
+                        const fullDays = availableDays.map(day => dayMap[day] || day);
+                        return <span>{fullDays.join(', ')}</span>;
                     }
-                }
 
-                if (Array.isArray(availableTimes)) {
-                    return <span>{availableTimes.join(', ')}</span>;
-                }
+                    return <span>No hay datos de disponibilidad</span>;
+                },
+            },
+            {
+                header: "Horas Disponibles",
+                accessorKey: "available_times",
+                enableColumnFilter: false,
+                cell: (cellProps) => {
+                    let availableTimes = cellProps.getValue();
 
-                return <span>No hay datos de horas disponibles</span>;
+                    if (typeof availableTimes === 'string' && availableTimes.startsWith('[') && availableTimes.endsWith(']')) {
+                        try {
+                            availableTimes = availableTimes
+                                .slice(1, -1)
+                                .replace(/'/g, '')
+                                .split(',')
+                                .map(time => time.trim());
+                        } catch (error) {
+                            console.error('Error al procesar las horas disponibles:', error);
+                            availableTimes = [];
+                        }
+                    }
+
+                    if (Array.isArray(availableTimes)) {
+                        return <span>{availableTimes.join(', ')}</span>;
+                    }
+
+                    return <span>No hay datos de horas disponibles</span>;
+                },
             },
-        },
-        {
-            header: "Nacimiento",
-            accessorKey: "born_date",
-            enableColumnFilter: false,
-        },
-        {
-            header: "País",
-            accessorKey: "country",
-            enableColumnFilter: false,
-        },
-        {
-            header: "Etiquetas Usuario",
-            accessorKey: "status",
-            enableColumnFilter: false,
-            cell: (cellProps) => {
-                return (
-                    <>
-                        <div className="overlay-edit-3">
-                            <ul className="list-inline mb-0">
-                                <li className="list-inline-item m-0">
-                                    <Button className="btn-action btn-action2 avtar avtar-s btn btn-secondary" onClick={() => handleShowTagModalAssign(cellProps.row.original)}>
-                                        <i className="ph-duotone ph-tag f-18 icon-action"></i>
-                                    </Button>
-                                </li>
-                            </ul>
-                        </div>
-                    </>
-                );
+            {
+                header: "Nacimiento",
+                accessorKey: "born_date",
+                enableColumnFilter: false,
             },
-        },
-        {
-            header: "Información",
-            enableColumnFilter: false,
-            accessorKey: "status",
-            cell: (cellProps) => {
-                return (
-                    <>
-                        <div className="overlay-edit-3">
-                            <ul className="list-inline mb-0">
-                                <li className="list-inline-item m-0">
-                                    <Button className="btn-action  avtar avtar-s btn btn-primary" onClick={() => handleShowModal(cellProps.row.original)}>
-                                        <i className="ph-duotone ph-info f-18 icon-action"></i>
-                                    </Button>
-                                </li>
-                            </ul>
-                        </div>
-                    </>
-                );
+            {
+                header: "País",
+                accessorKey: "country",
+                enableColumnFilter: false,
             },
-        },
-    ], []
-);
+            {
+                header: "Etiquetas Usuario",
+                accessorKey: "status",
+                enableColumnFilter: false,
+                cell: (cellProps) => {
+                    return (
+                        <>
+                            <div className="overlay-edit-3">
+                                <ul className="list-inline mb-0">
+                                    <li className="list-inline-item m-0">
+                                        <Button className="btn-action btn-action2 avtar avtar-s btn btn-secondary" onClick={() => handleShowTagModalAssign(cellProps.row.original)}>
+                                            <i className="ph-duotone ph-tag f-18 icon-action"></i>
+                                        </Button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </>
+                    );
+                },
+            },
+            {
+                header: "Información",
+                enableColumnFilter: false,
+                accessorKey: "status",
+                cell: (cellProps) => {
+                    return (
+                        <>
+                            <div className="overlay-edit-3">
+                                <ul className="list-inline mb-0">
+                                    <li className="list-inline-item m-0">
+                                        <Button className="btn-action  avtar avtar-s btn btn-primary" onClick={() => handleShowModal(cellProps.row.original)}>
+                                            <i className="ph-duotone ph-info f-18 icon-action"></i>
+                                        </Button>
+                                    </li>
+                                </ul>
+                            </div>
+                        </>
+                    );
+                },
+            },
+        ], []
+    );
+
     return (
         <Layout>
             <BreadcrumbItem mainTitle="Recursos Humanos" subTitle="Lista de Miembros" />
@@ -295,6 +296,7 @@ const columns = useMemo(
                     </Button>
                 </Modal.Footer>
             </Modal>
+            
 
             {/* Renderizar TagModal */}
             <TagModal show={showTagModal} handleClose={handleCloseTagModal} organizationId={organizationId} handleSearch={handleSearch} selectedCandidate={selectedCandidate} />
@@ -302,12 +304,11 @@ const columns = useMemo(
             {/* Renderizar TagModalAssign */}
             <TagModalAssign show={showTagModalAssign} handleClose={handleCloseTagModalAssign} organizationId={organizationId} handleSearch={handleSearch} selectedCandidate={selectedCandidate} />
 
-  <InviteUserModal
-    show={showInviteModal}
-    handleClose={handleCloseInviteModal}
-    organizationId={organizationId}
-/>
-     
+            <InviteUserModal
+                show={showInviteModal}
+                handleClose={handleCloseInviteModal}
+                organizationId={organizationId}
+            />
         </Layout>
     );
 };
@@ -390,6 +391,14 @@ const TagModal = ({ show, handleClose, handleSearch, organizationId, selectedCan
     const [showNewTagModal, setShowNewTagModal] = useState(false);
     const [tagName, setTagName] = useState("");
     const [isInline, setIsInline] = useState(false);
+    const [showEditTagModal, setShowEditTagModal] = useState(false);
+    const [tagToEdit, setTagToEdit] = useState(null);
+    
+    // Verificar que la función esté definida correctamente y antes de ser usada en el JSX
+    const handleShowEditTagModal = (tag) => {
+        setTagToEdit(tag);
+        setShowEditTagModal(true);
+    };
 
     useEffect(() => {
         const fetchTags = async () => {
@@ -518,6 +527,9 @@ const TagModal = ({ show, handleClose, handleSearch, organizationId, selectedCan
                                             <td className="text-center">{tag.isAdmin ? 'Administrador' : 'Miembro'}</td>
                                             <td className="text-center"><i className="ti ti-user"></i> {tag.member_count}</td>
                                             <td className="text-center">
+                                                <button className="icon-button btn btn-light btn-sm mx-1" onClick={() => handleShowEditTagModal(tag)}>
+                                                    <i className="ti ti-pencil"></i>
+                                                </button>
                                                 <button className="icon-button btn btn-light btn-sm mx-1" onClick={() => handleDeleteTag(tag.id)}>
                                                     <i className="ti ti-trash"></i>
                                                 </button>
@@ -601,11 +613,114 @@ const TagModal = ({ show, handleClose, handleSearch, organizationId, selectedCan
                     </Form>
                 </Modal.Body>
             </Modal>
+            <EditTagModal 
+                show={showEditTagModal} 
+                handleClose={() => setShowEditTagModal(false)} 
+                organizationId={organizationId} 
+                tagToEdit={tagToEdit}
+            />
+
         </>
     );
 };
 
-// Aquí está el nuevo TagModalAssign, que hace fetch de las etiquetas cada vez que se muestra.
+const EditTagModal = ({ show, handleClose, organizationId, tagToEdit }) => {
+    const [tagName, setTagName] = useState("");
+    const [isInline, setIsInline] = useState(false);
+
+    useEffect(() => {
+        if (tagToEdit) {
+            setTagName(tagToEdit.name);
+            setIsInline(tagToEdit.isAdmin);
+        }
+    }, [tagToEdit]);
+
+    const handleTagEdit = async (e) => {
+        e.preventDefault();
+        try {
+            const tagData = { name: tagName, isAdmin: isInline };
+            await axios.put(`http://localhost:8000/api/organizations/${organizationId}/tags/${tagToEdit.id}/`, tagData);
+            toast.success('¡Etiqueta actualizada con éxito!');
+            handleClose(); // Cierra el modal después de editar
+        } catch (error) {
+            toast.error('Error al actualizar la etiqueta:', error);
+        }
+    };
+
+    return (
+        <Modal show={show} onHide={handleClose} centered>
+            <Modal.Header closeButton>
+                <Modal.Title>Editar Etiqueta</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+            <Form onSubmit={handleTagEdit} className="tag-form">
+                        <Form.Group controlId="formTagName" className="me-3 flex-grow-1 d-flex align-items-center">
+                            <div className="container cont-ctall">
+                                <div className="row">
+                                    <div className="col-7 col-md-9">
+                                        <Form.Control
+                                            type="text"
+                                            placeholder="Nombre de la etiqueta"
+                                            value={tagName}
+                                            onChange={(e) => setTagName(e.target.value)}
+                                            required
+                                            className="me-3" // Ajuste para el margen entre el campo de texto y el switch
+                                        />
+                                    </div>
+                                    <div className="col-1 col-md-1 icon-switch">
+                                        <i className="ph-duotone ph-user icon-admin"></i>
+                                    </div>
+                                    <div className="col-1 col-md-1 icon-switch">
+                                        <div className="">
+                                            <Form.Check
+                                                className="form-switch custom-switch-v1 form-check-inline"
+                                                type="checkbox"
+                                            >
+                                                <Form.Check.Input
+                                                    type="checkbox"
+                                                    className="input-primary"
+                                                    id="customCheckinl2"
+                                                    checked={isInline}
+                                                    onChange={(e) => setIsInline(e.target.checked)}
+                                                />
+                                                <Form.Check.Label htmlFor="customCheckinl2"></Form.Check.Label>
+                                            </Form.Check>
+                                        </div>
+                                    </div>
+                                    <div className="col-1 col-md-1 icon-switch">
+                                        <i className="ph-duotone ph-user-gear icon-admin"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </Form.Group>
+                        <div className="box-create-btn container">
+                            <div className="row row-text-admin">
+                                <span className='col-1 col-md-1 icon-span-adm'><i className="ph-duotone ph-user-gear icon-admin"></i></span>
+                                <p className='col-3 col-md-5 p-adm1'>Esto es administrador</p>
+                                <span className='col-1 col-md-1 icon-span-adm p-adm2'><i className="ph-duotone ph-user icon-admin"></i></span>
+                                <p className='col-3 col-md-5'>Esto es un miembro</p>
+                            </div>
+                            <div className="row">
+                                <div className="col-2 col-md-4">
+                                </div>
+                                <div className="col-6 d-flex justify-content-center col-md-4">
+                                    <Button variant="primary" type="submit" className="create-tag-btn">
+                                        Guardar
+                                    </Button>
+                                </div>
+
+                                <div className="col-2 col-md-4">
+                                </div>
+
+                            </div>
+                        </div>
+                    </Form>
+
+
+            </Modal.Body>
+        </Modal>
+    );
+};
 
 const TagModalAssign = ({ show, handleClose, handleSearch, organizationId, selectedCandidate }) => {
     const [tags, setTags] = useState([]);
