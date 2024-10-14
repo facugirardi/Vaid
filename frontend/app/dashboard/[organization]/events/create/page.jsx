@@ -8,6 +8,7 @@ import BreadcrumbItem from '@/common/BreadcrumbItem';
 import FeatherIcon from "feather-icons-react";
 import './create.css';
 import { ToastContainer, toast } from 'react-toastify';
+import Select from 'react-select';  // Importar react-select
 
 const CreateTaskPage = () => {
     const { data: user, isLoading, isError } = useRetrieveUserQuery();
@@ -20,7 +21,7 @@ const CreateTaskPage = () => {
         endTime: '',
         file: null,
         state: 'Pendiente',
-        category: ''
+        category: []  // Cambiado para que sea un array, ya que `isMulti` devuelve un array
     });
     const [preview, setPreview] = useState(null);
     const [errors, setErrors] = useState({});
@@ -30,11 +31,8 @@ const CreateTaskPage = () => {
     useEffect(() => {
         // Obtener la URL actual
         const currentUrl = window.location.href;
-        // Usar URL constructor para analizar la URL
         const url = new URL(currentUrl);
-        // Dividir el pathname en segmentos
         const pathSegments = url.pathname.split('/');
-        // Encontrar el segmento después de 'dashboard'
         const dashboardIndex = pathSegments.indexOf('dashboard');
         if (dashboardIndex !== -1 && pathSegments.length > dashboardIndex + 1) {
             setOrganizationId(pathSegments[dashboardIndex + 1]);
@@ -42,7 +40,6 @@ const CreateTaskPage = () => {
     }, []);
 
     useEffect(() => {
-        // Fetch para obtener las etiquetas de la organización
         const fetchCategories = async () => {
             if (organizationId) {
                 try {
@@ -53,21 +50,31 @@ const CreateTaskPage = () => {
                         },
                     });
                     const data = await response.json();
-                    setCategories(data); // Guardar las etiquetas en el estado
+                    const options = data.map(tag => ({ value: tag.id, label: tag.name }));  // Adaptar etiquetas para react-select
+                    setCategories(options); // Guardar las etiquetas en el estado
+                    console.log(options); // Log para verificar los datos
                 } catch (error) {
                     console.error('Error fetching categories:', error);
                 }
             }
         };
-
+    
         fetchCategories();
     }, [organizationId]);
-
+    
     const handleChange = (event) => {
         const { name, value } = event.target;
         setFormData({
             ...formData,
             [name]: value,
+        });
+    };
+
+    const handleCategoryChange = (selectedOptions) => {
+        // Actualiza el estado con los valores seleccionados (array de categorías)
+        setFormData({
+            ...formData,
+            category: selectedOptions ? selectedOptions.map(option => option.value) : []  // Mapear para obtener solo los valores (id de categorías)
         });
     };
 
@@ -99,7 +106,7 @@ const CreateTaskPage = () => {
         if (!time) newErrors.time = 'La hora es obligatoria';
         if (!endDate) newErrors.endDate = 'La fecha de finalización es obligatoria';
         if (!endTime) newErrors.endTime = 'La hora de finalización es obligatoria';
-        if (!category) newErrors.category = 'La categoría es obligatoria';
+        if (category.length === 0) newErrors.category = 'La categoría es obligatoria'; // Validación para que haya al menos una categoría seleccionada
 
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
@@ -114,7 +121,7 @@ const CreateTaskPage = () => {
         data.append('endTime', endTime);
         data.append('endDate', endDate); // Solo la fecha
         data.append('state', state);
-        data.append('category', category);
+        data.append('category', category); // Enviar las categorías seleccionadas (array)
         if (file) {
             data.append('file', file);
         }
@@ -141,7 +148,7 @@ const CreateTaskPage = () => {
                     endDate: '',
                     file: null,
                     state: '',
-                    category: ''
+                    category: []  // Aquí se reinicia el array de categorías
                 });
                 setPreview(null);
                 setErrors({});
@@ -170,104 +177,101 @@ const CreateTaskPage = () => {
                     </div>
 
                     <Card.Body>
+
                         <Form onSubmit={handleSubmit}>
-                            <Row className="mb-3">
-                                <Col md={4} className="d-flex flex-column align-items-center">
-                                    <label htmlFor="upload-button" className="upload-button">
-                                        {preview ? (
-                                            <img src={preview} alt="Vista previa" className="preview-img" />
-                                        ) : (
-                                            <div className="icon-container">
-                                                <FeatherIcon icon="upload" />
-                                            </div>
-                                        )}
-                                        <input
-                                            id="upload-button"
-                                            type="file"
-                                            name="file"
-                                            onChange={handleFileChange}
-                                            style={{ display: 'none' }}
-                                        />
-                                    </label>
-                                </Col>
-                                <Col md={8}>
-                                    <Form.Group>
-                                        <Form.Label className="form-group-label">Título <span className='asterisco-rojo'>*</span></Form.Label>
-                                        <Form.Control
-                                            type="text"
-                                            name="name"
-                                            placeholder="Ingresa un título"
-                                            value={formData.name}
-                                            onChange={handleChange}
-                                        />
-                                        {errors.name && <small className="text-danger">{errors.name}</small>}
-                                    </Form.Group>
-                                    <Form.Group>
-                                        <Form.Label className="form-group-label">Descripción <span className='asterisco-rojo'>*</span></Form.Label>
-                                        <Form.Control
-                                            className="textarea-task"
-                                            as="textarea"
-                                            rows={3}
-                                            name="description"
-                                            placeholder="Ingresa una descripción"
-                                            value={formData.description}
-                                            onChange={handleChange}
-                                        />
-                                        {errors.description && <small className="text-danger">{errors.description}</small>}
-                                    </Form.Group>
-                                </Col>
-                            </Row>
+                        <Row className="mb-3">
+                            <Col md={4} className="d-flex flex-column align-items-center">
+                                <label htmlFor="upload-button" className="upload-button">
+                                    {preview ? (
+                                        <img src={preview} alt="Vista previa" className="preview-img" />
+                                    ) : (
+                                        <div className="icon-container">
+                                            <FeatherIcon icon="upload" />
+                                        </div>
+                                    )}
+                                    <input
+                                        id="upload-button"
+                                        type="file"
+                                        name="file"
+                                        onChange={handleFileChange}
+                                        style={{ display: 'none' }}
+                                    />
+                                </label>
+                            </Col>
+                            <Col md={8}>
+                                <Form.Group>
+                                    <Form.Label className="form-group-label">Título <span className='asterisco-rojo'>*</span></Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="name"
+                                        placeholder="Ingresa un título"
+                                        value={formData.name}
+                                        onChange={handleChange}
+                                    />
+                                    {errors.name && <small className="text-danger">{errors.name}</small>}
+                                </Form.Group>
+                                <Form.Group>
+                                    <Form.Label className="form-group-label">Descripción <span className='asterisco-rojo'>*</span></Form.Label>
+                                    <Form.Control
+                                        className="textarea-task"
+                                        as="textarea"
+                                        rows={3}
+                                        name="description"
+                                        placeholder="Ingresa una descripción"
+                                        value={formData.description}
+                                        onChange={handleChange}
+                                    />
+                                    {errors.description && <small className="text-danger">{errors.description}</small>}
+                                </Form.Group>
+                            </Col>
+                        </Row>
 
-                            <Form.Group>
-                                <Form.Label className="form-label-2">Etiqueta <span className='asterisco-rojo'>*</span></Form.Label>
-                                <Form.Control
-                                    as="select"
-                                    className="form-select"
-                                    name="category"
-                                    value={formData.category}
-                                    onChange={handleChange}
-                                >
-                                    <option value="">Selecciona una opción</option>
-                                    <option value={0}>Todos</option>
+                        <Form.Group>
+                            <Form.Label className="form-label-2">Etiqueta <span className='asterisco-rojo'>*</span></Form.Label>
+                            <Select
+                                name="category"
+                                options={[
+                                    { value: 'all', label: 'Todas' },  // Opción fija "Todas"
+                                    ...categories,  // Resto de las categorías dinámicas
+                                ]}
+                                isMulti
+                                onChange={handleCategoryChange}
+                                className="basic-multi-select"
+                                classNamePrefix="select"
+                                isClearable
+                            />
+                            {errors.category && <small className="text-danger">{errors.category}</small>}
+                        </Form.Group>
 
-                                    {categories.map((category) => (
-                                        <option key={category.id} value={category.id}>
-                                            {category.name}
-                                        </option>
-                                    ))}
-                                </Form.Control>
-                                {errors.category && <small className="text-danger">{errors.category}</small>}
-                            </Form.Group>
+                        <Row className="form-group-2">
+                            <Col sm={6} md={3}>
+                                <Form.Label className="form-label-2">Fecha de inicio <span className='asterisco-rojo'>*</span></Form.Label>
+                                <Form.Control type="date" name="date" value={formData.date} onChange={handleChange} />
+                                {errors.date && <small className="text-danger">{errors.date}</small>}
+                            </Col>
+                            <Col sm={6} md={3}>
+                                <Form.Label className="form-label-2">Fecha de fin <span className='asterisco-rojo'>*</span></Form.Label>
+                                <Form.Control type="date" name="endDate" value={formData.endDate} onChange={handleChange} />
+                                {errors.endDate && <small className="text-danger">{errors.endDate}</small>}
+                            </Col>
+                            <Col sm={6} md={3}>
+                                <Form.Label className="form-label-2">Hora de inicio <span className='asterisco-rojo'>*</span></Form.Label>
+                                <Form.Control type="time" name="time" value={formData.time} onChange={handleChange} />
+                                {errors.time && <small className="text-danger">{errors.time}</small>}
+                            </Col>
+                            <Col sm={6} md={3}>
+                                <Form.Label className="form-label-2">Hora de finalización <span className='asterisco-rojo'>*</span></Form.Label>
+                                <Form.Control type="time" name="endTime" value={formData.endTime} onChange={handleChange} />
+                                {errors.endTime && <small className="text-danger">{errors.endTime}</small>}
+                            </Col>
+                        </Row>
 
-                            <Row className="form-group-2">
-                                <Col sm={6} md={3}>
-                                    <Form.Label className="form-label-2">Fecha de inicio <span className='asterisco-rojo'>*</span></Form.Label>
-                                    <Form.Control type="date" name="date" value={formData.date} onChange={handleChange} />
-                                    {errors.date && <small className="text-danger">{errors.date}</small>}
-                                </Col>
-                                <Col sm={6} md={3}>
-                                    <Form.Label className="form-label-2">Fecha de fin <span className='asterisco-rojo'>*</span></Form.Label>
-                                    <Form.Control type="date" name="endDate" value={formData.endDate} onChange={handleChange} />
-                                    {errors.endDate && <small className="text-danger">{errors.endDate}</small>}
-                                </Col>
-                                <Col sm={6} md={3}>
-                                    <Form.Label className="form-label-2">Hora de inicio <span className='asterisco-rojo'>*</span></Form.Label>
-                                    <Form.Control type="time" name="time" value={formData.time} onChange={handleChange} />
-                                    {errors.time && <small className="text-danger">{errors.time}</small>}
-                                </Col>
-                                <Col sm={6} md={3}>
-                                    <Form.Label className="form-label-2">Hora de finalización <span className='asterisco-rojo'>*</span></Form.Label>
-                                    <Form.Control type="time" name="endTime" value={formData.endTime} onChange={handleChange} />
-                                    {errors.endTime && <small className="text-danger">{errors.endTime}</small>}
-                                </Col>
-                            </Row>
-
-                            <div className='d-flex justify-content-center mt-50'>
-                                <Button variant="success" type="submit" className="botontask submit-task">
-                                    Enviar
-                                </Button>
-                            </div>
-                        </Form>
+                        <div className='d-flex justify-content-center mt-50'>
+                            <Button variant="success" type="submit" className="botontask submit-task">
+                                Enviar
+                            </Button>
+                        </div>
+                    </Form>
                     </Card.Body>
                 </Card>
             </Row>
