@@ -284,7 +284,14 @@ const FormDetails = () => {
                 { label: "Dias Disponibles", field: 'available_days', display: displayField(userDetails?.person?.available_days, 'available_days', 'selectDays') },
                 { label: "Horarios Disponibles", field: 'available_times', display: displayField(userDetails?.person?.available_times, 'available_times', 'selectTimes') },
                 { label: "Modalidad", field: 'modality', display: displayField(userDetails?.person?.modality, 'modality', 'selectModality') },
-                { label: "Que te gusta hacer", field: 'topics', display: displayField(userDetails?.person?.topics, 'topics') },
+                {
+                  label: "Que te gusta hacer", 
+                  field: 'topics', 
+                  display: 
+                      typeof userDetails?.person?.topics === 'string'
+                      ? userDetails.person.topics.replace(/[\[\]']+/g, '').split(',').join(', ')
+                      : ''
+              },
                 { label: "Objetivos", field: 'goals', display: displayField(userDetails?.person?.goals, 'goals') },
                 { label: "Motivaciones", field: 'motivations', display: displayField(userDetails?.person?.motivations, 'motivations') },
                 { label: "Experiencia", field: 'experience', display: displayField(userDetails?.person?.experience, 'experience') },

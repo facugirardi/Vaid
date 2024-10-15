@@ -10,6 +10,7 @@ import ava2 from "@/public/assets/images/user/avatar-2.jpg";
 import Image from "next/image";
 import { ToastContainer, toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
+import Select from 'react-select';  // Importar react-select
 
 const Page = () => {
     const { data: user, isError, isLoading } = useRetrieveUserQuery();
@@ -29,7 +30,7 @@ const Page = () => {
         availableDays: [],
         availableTimes: [],
         modality: '',
-        topics: '',
+        topics: [],
         goals: '',
         motivations: ''
     });
@@ -70,6 +71,14 @@ const Page = () => {
         }
     };
 
+    const handleTopicsChange = (selectedOptions) => {
+        // Actualiza el estado con los valores seleccionados (array de temas)
+        setFormData({
+            ...formData,
+            topics: selectedOptions ? selectedOptions.map(option => option.value) : []  // Mapear para obtener solo los valores (temas seleccionados)
+        });
+    };
+    
     const validateForm = () => {
         const newErrors = {};
         if (!formData.dateOfBirth) newErrors.dateOfBirth = "La fecha de nacimiento es obligatoria";
@@ -151,7 +160,7 @@ const Page = () => {
                                             <Nav.Item className="nav-item" data-target-form="#educationDetailForm">
                                                 <Nav.Link eventKey="tab-3" href="#educationDetail" data-bs-toggle="tab" data-toggle="tab" className="nav-link icon-btn">
                                                     <i className="ph-duotone ph-user"></i>
-                                                    <span className="d-none d-sm-inline">Preferencias de Usuario</span>
+                                                    <span className="d-none d-sm-inline">Preferencias del Usuario</span>
                                                 </Nav.Link>
                                             </Nav.Item>
 
@@ -442,14 +451,38 @@ const Page = () => {
                                                     <div className="col-md-12">
                                                         <div className="mb-3">
                                                             <label className="form-label" htmlFor="schoolLocation">¿Qué te gusta hacer?</label>
-                                                            <input
-                                                                type="text"
-                                                                className="form-control"
-                                                                id="schoolLocation"
+                                                            <Select
                                                                 name="topics"
-                                                                placeholder="Introduce tus temas preferidos. Ej: Gimnasia, Hacer deporte, Jugar videojuegos, etc."
-                                                                value={formData.topics}
-                                                                onChange={handleChange}
+                                                                options={[
+                                                                    { value: 'Arte', label: 'Arte' },
+                                                                    { value: 'Música', label: 'Música' },
+                                                                    { value: 'Tecnología', label: 'Tecnología' },
+                                                                    { value: 'Ciencia', label: 'Ciencia' },
+                                                                    { value: 'Literatura', label: 'Literatura' },
+                                                                    { value: 'Deportes', label: 'Deportes' },
+                                                                    { value: 'Cine', label: 'Cine' },
+                                                                    { value: 'Fotografía', label: 'Fotografía' },
+                                                                    { value: 'Viajes', label: 'Viajes' },
+                                                                    { value: 'Historia', label: 'Historia' },
+                                                                    { value: 'Derechos Humanos', label: 'Derechos Humanos' },
+                                                                    { value: 'Voluntariado', label: 'Voluntariado' },
+                                                                    { value: 'Sostenibilidad', label: 'Sostenibilidad' },
+                                                                    { value: 'Ayuda Humanitaria', label: 'Ayuda Humanitaria' },
+                                                                    { value: 'Educación', label: 'Educación' },
+                                                                    { value: 'Igualdad de Género', label: 'Igualdad de Género' },
+                                                                    { value: 'Salud Pública', label: 'Salud Pública' },
+                                                                    { value: 'Pobreza', label: 'Pobreza' },
+                                                                    { value: 'Refugiados', label: 'Refugiados' },
+                                                                    { value: 'Inclusión Social', label: 'Inclusión Social' },                                                                    
+                                                                    { value: 'Política', label: 'Política' }
+                                                                ]}
+                                                                isMulti
+                                                                onChange={handleTopicsChange}  // Utiliza el nuevo handleTopicsChange
+                                                                className="basic-multi-select"
+                                                                classNamePrefix="select"
+                                                                id="topicsSelect"
+                                                                value={Array.isArray(formData.topics) ? formData.topics.map(value => ({ value, label: value })) : []}  // Mapear para mostrar los valores seleccionados
+                                                                isClearable
                                                             />
                                                         </div>
                                                     </div>
