@@ -20,9 +20,8 @@ const CreateTaskPage = () => {
         time: '',
         endTime: '',
         file: null,
-        state: 'Pendiente',
-        category: []  // Cambiado para que sea un array, ya que `isMulti` devuelve un array
-    });
+        state: 'Pendiente'
+        });
     const [preview, setPreview] = useState(null);
     const [errors, setErrors] = useState({});
     const [organizationId, setOrganizationId] = useState("");
@@ -70,14 +69,6 @@ const CreateTaskPage = () => {
         });
     };
 
-    const handleCategoryChange = (selectedOptions) => {
-        // Actualiza el estado con los valores seleccionados (array de categorías)
-        setFormData({
-            ...formData,
-            category: selectedOptions ? selectedOptions.map(option => option.value) : []  // Mapear para obtener solo los valores (id de categorías)
-        });
-    };
-
     const handleFileChange = (event) => {
         if (event.target.files && event.target.files[0]) {
             setFormData({
@@ -96,23 +87,23 @@ const CreateTaskPage = () => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
-        const { name, description, date, endDate, time, endTime, file, state, category } = formData;
+    
+        const { name, description, date, endDate, time, endTime, file, state } = formData;
         const newErrors = {};
-
+    
         if (!name) newErrors.name = 'El nombre es obligatorio';
         if (!description) newErrors.description = 'La descripción es obligatoria';
         if (!date) newErrors.date = 'La fecha es obligatoria';
         if (!time) newErrors.time = 'La hora es obligatoria';
         if (!endDate) newErrors.endDate = 'La fecha de finalización es obligatoria';
         if (!endTime) newErrors.endTime = 'La hora de finalización es obligatoria';
-        if (category.length === 0) newErrors.category = 'La categoría es obligatoria'; // Validación para que haya al menos una categoría seleccionada
-
+    
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
             return;
         }
-
+    
+        
         const data = new FormData();
         data.append('name', name);
         data.append('description', description);
@@ -121,24 +112,23 @@ const CreateTaskPage = () => {
         data.append('endTime', endTime);
         data.append('endDate', endDate); // Solo la fecha
         data.append('state', state);
-        data.append('category', category); // Enviar las categorías seleccionadas (array)
         if (file) {
             data.append('file', file);
         }
-
+    
         try {
             const response = await fetch(`http://localhost:8000/api/organizations/${organizationId}/events/`, {
                 method: 'POST',
                 headers: {},
                 body: data,
             });
-
+    
             if (!response.ok) {
                 const responseData = await response.json();
                 console.error('Error al crear el evento:', responseData);
                 setErrors(responseData);
             } else {
-                toast.success('¡Evento creado con éxito!')
+                toast.success('¡Evento creado con éxito!');
                 setFormData({
                     name: '',
                     description: '',
@@ -147,8 +137,7 @@ const CreateTaskPage = () => {
                     endTime: '',
                     endDate: '',
                     file: null,
-                    state: '',
-                    category: []  // Aquí se reinicia el array de categorías
+                    state: 'Pendiente'
                 });
                 setPreview(null);
                 setErrors({});
@@ -157,6 +146,7 @@ const CreateTaskPage = () => {
             console.error('Error de red:', error);
         }
     };
+    
 
     if (isLoading) return <p>Cargando...</p>;
     if (isError || !user) return <p>Error al cargar los datos del usuario.</p>;
@@ -227,7 +217,7 @@ const CreateTaskPage = () => {
                         </Row>
 
                         <Form.Group>
-                            <Form.Label className="form-label-2">Etiqueta <span className='asterisco-rojo'>*</span></Form.Label>
+                            <Form.Label className="form-label-2">Etiqueta</Form.Label>
                             <Select
                                 name="category"
                                 options={[
@@ -235,7 +225,6 @@ const CreateTaskPage = () => {
                                     ...categories,  // Resto de las categorías dinámicas
                                 ]}
                                 isMulti
-                                onChange={handleCategoryChange}
                                 className="basic-multi-select"
                                 classNamePrefix="select"
                                 isClearable
