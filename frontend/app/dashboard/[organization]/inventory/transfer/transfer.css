@@ -1,13 +1,77 @@
-.mx-auto{
-    margin-top: 100px;
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Work+Sans:wght@400;500;600&display=swap");
+body{
+    font-family: 'Inter', sans-serif;;
 }
 
-.mt-3{
-    margin-right: 3500px !important;
+.btn-send-trf{
+    margin-top: 195px !important;
+    height: 45px !important;
 }
 
-.large-text {
-    font-size: 1.5rem;
+.h5p{
+    margin-left: 10px !important;
+    font-weight: 500 !important;
+    font-size: 16px !important;
+    color: #606060 !important;
 }
 
+.tr-pat{
+    border-bottom: 1px solid #d3d3d3; /* Color gris claro */
+    width: 415%;
+    margin-left: -25px;
+}
 
+.cardtp1{
+    min-height: 150px !important;
+    box-shadow: none !important;
+    border: .7px solid #bfbfbfab;
+}
+
+.bx-none-s{
+    border: .7px solid #bfbfbfab;
+    box-shadow: none !important;
+}
+
+.cbpt{
+    padding-top: 10px !important;
+}
+
+.text-cbpt{
+    color: #6c6c6c !important;
+    font-size: 15px !important;
+}
+
+.icbtn1{
+    margin-right: 10px !important;
+}
+
+.icbtn2{
+    margin-left: 10px !important;
+}
+
+@media (max-width: 1325px) {
+    .table-responsive {
+        overflow-x: auto;
+    }
+
+    .product-table th, .product-table td {
+        white-space: nowrap; /* Prevents text wrapping */
+        font-size: 0.9rem; /* Adjust font size for smaller screens */
+    }
+
+    .product-table {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .btn-action {
+        font-size: 0.8rem; /* Smaller buttons */
+    }
+}
+
+@media (max-width: 992px) {
+    .btn-send-trf {
+        width: 100%;
+        margin-top: 1rem; /* Adjust margin for better spacing */
+    }
+}

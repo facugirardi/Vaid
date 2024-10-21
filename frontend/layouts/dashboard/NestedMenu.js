@@ -131,7 +131,7 @@ useEffect(() => {
           submenu: [
             { id: "inventory", label: "Inventario", icon: "ph-duotone ph-package", link: `/dashboard/${organizationId}/inventory/general`, dataPage: "inventory" },
             { id: "headquarter-inv", label: "Inventario por Sede", icon: "ph-duotone ph-warehouse", link: `/dashboard/${organizationId}/inventory`, dataPage: "headquarter-inv" },
-            // { id: "transfer-prod", label: "Transferir Productos", icon: "ph-duotone ph-swap", link: `/dashboard/${organizationId}/inventory/transfer`, dataPage: "transfer-prod" },
+            { id: "transfer-prod", label: "Transferir Productos", icon: "ph-duotone ph-swap", link: `/dashboard/${organizationId}/inventory/transfer`, dataPage: "transfer-prod" },
           ],
         },
           {
