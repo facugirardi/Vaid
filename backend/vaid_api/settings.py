@@ -85,7 +85,7 @@ DATABASES = {
         'ENGINE':'django.db.backends.postgresql_psycopg2',
         'NAME':'defaultdb',
         'USER':'avnadmin',
-        'PASSWORD':'AVNS_bHw6_EccGwFVjcfcpnr',
+        'PASSWORD':key.DBPASSWORD,
         'HOST':'vaid-facugirardi22-96f8.g.aivencloud.com',
         'PORT':'24856'
     }
