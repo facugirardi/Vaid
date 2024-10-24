@@ -30,22 +30,33 @@ class CandidateDetailSerializer(serializers.ModelSerializer):
     goals = serializers.DateField(source='Person.goals')
     motivations = serializers.DateField(source='Person.motivations')
     email = serializers.CharField(source='Person.User.email')
+    tags = serializers.SerializerMethodField()
 
     class Meta:
         model = Candidate
         fields = '__all__'
+        
+    def get_tags(self, obj):
+        person = obj.Person  # Asumiendo que Candidate tiene una relación directa con Person
+        tags = PersonTagDetails.objects.filter(Person=person).select_related('Tag').all()
+        return TagSerializer([tag_detail.Tag for tag_detail in tags], many=True).data
 
 
 class PersonSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(source='User.first_name')
     last_name =serializers.CharField(source='User.last_name')
-    
+    tags = serializers.SerializerMethodField()
     email = serializers.CharField(source='User.email')
 
 
     class Meta:
         model = Person
         fields = '__all__'
+        
+    def get_tags(self, obj):
+        # `obj` es la instancia de Person ya que estamos en PersonSerializer
+        tags = PersonTagDetails.objects.filter(Person=obj).select_related('Tag').all()
+        return TagSerializer([tag_detail.Tag for tag_detail in tags], many=True).data
 
 class OrganizationSerializer(serializers.ModelSerializer):    
     profile_image = serializers.SerializerMethodField()

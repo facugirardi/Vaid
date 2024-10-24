@@ -9,6 +9,7 @@ import TableContainer from '@/common/TableContainer';
 import { Button, Card, Col, Form, Row, Modal } from "react-bootstrap";
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import Select from 'react-select';
 
 const Page = () => {
     const [showModal, setShowModal] = useState(false);
@@ -18,6 +19,9 @@ const Page = () => {
     const [showTagModalAssign, setShowTagModalAssign] = useState(false); // Nuevo estado para TagModalAssign
     const [organizationId, setOrganizationId] = useState("");
     const [showInviteModal, setShowInviteModal] = useState(false);
+    const [allTags, setAllTags] = useState([]);
+    const [selectedTags, setSelectedTags] = useState([]);
+
 
     const handleShowInviteModal = () => setShowInviteModal(true);
     const handleCloseInviteModal = () => setShowInviteModal(false);
@@ -32,6 +36,35 @@ const Page = () => {
         }
     }, []);
 
+
+    useEffect(() => {
+        const fetchTags = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8000/api/organizations/${organizationId}/tags/`);
+                const options = response.data.map(tag => ({ value: tag.id, label: tag.name }));
+                console.log("Fetched Tags:", options);  // Debug: log fetched tags
+                setAllTags(options);
+            } catch (error) {
+                console.error('Error fetching tags:', error);
+            }
+        };
+    
+        fetchTags();
+    }, [organizationId]);
+    
+
+    const handleTagChange = (selectedOptions) => {
+        setSelectedTags(selectedOptions || []);
+    };
+    
+    const filteredCandidates = useMemo(() => {
+        if (selectedTags.length === 0) return candidates;
+        return candidates.filter(candidate =>
+            candidate.tags && Array.isArray(candidate.tags) && candidate.tags.some(tag => 
+                selectedTags.map(t => t.value).includes(tag.id))
+        );
+    }, [candidates, selectedTags]);
+    
     useEffect(() => {
         const fetchData = async () => {
             if (organizationId) {
@@ -241,7 +274,6 @@ const Page = () => {
                         <Card.Body>
                             <div className="container">
                                 <div className="row">
-                                <div className="col-md-8"></div>
                                 <button className="col-md-2 btn-tags-create theme-btn style-two" onClick={() => handleShowInviteModal()}>Invitar<span>
                                     <i className="ph-duotone ph-user"></i> 
                                         </span></button>
@@ -249,6 +281,26 @@ const Page = () => {
                                     <i className="ph-duotone ph-tag"></i> 
                                         </span></button>
                                 </div>
+                                <div className="row">
+                                <div className="col-md-5"></div>
+                                    <Col md={3}>
+                                    {candidates.length === 0 ? (
+                            <></>
+                                ) : (
+                                        <Select
+                                            isMulti
+                                            name="tags"
+                                            options={allTags}
+                                            className="basic-multi-select bms"
+                                            classNamePrefix="select"
+                                            placeholder="Filtrar por etiquetas"
+                                            onChange={handleTagChange}
+                                            value={selectedTags}
+                                        />
+                                )}
+                                    </Col>
+                                </div>
+
                             </div>
                         {candidates.length === 0 ? (
                             <div className="text-center mt-4">
@@ -257,7 +309,7 @@ const Page = () => {
                         ) : (
                             <TableContainer
                                 columns={columns}
-                                data={candidates}
+                                data={filteredCandidates}
                                 isGlobalFilter={true}
                                 isBordered={false}
                                 customPageSize={10}

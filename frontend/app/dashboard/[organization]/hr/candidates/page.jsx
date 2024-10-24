@@ -97,13 +97,13 @@ const Page = () => {
                 enableColumnFilter: false,
                 cell: (cellProps) => {
                     const dayMap = {
-                        'Mon': 'Lunes',
-                        'Tue': 'Martes',
-                        'Wed': 'Miércoles',
-                        'Thu': 'Jueves',
-                        'Fri': 'Viernes',
-                        'Sat': 'Sábado',
-                        'Sun': 'Domingo',
+                        'Lun': 'Lunes',
+                        'Mar': 'Martes',
+                        'Mie': 'Miércoles',
+                        'Jue': 'Jueves',
+                        'Vie': 'Viernes',
+                        'Sab': 'Sábado',
+                        'Dom': 'Domingo',
                     };
             
                     let disponibility = cellProps.getValue();
