@@ -1455,17 +1455,27 @@ class ProductTransferAPIView(APIView):
             headquarter1 = Headquarter.objects.get(id=headquarter1_id)
             headquarter2 = Headquarter.objects.get(id=headquarter2_id)
 
-                # Verificar si el producto está disponible en el inventario de la sede 1
-            product_inventory_details = ProductInventoryDetails.objects.get(Product=product, Inventory=headquarter1.inventory)
+            # Obtener el inventario de la sede
+            inventory1 = Inventory.objects.get(Headquarter=headquarter1)
+            inventory2 = Inventory.objects.get(Headquarter=headquarter2)
+
+            # Verificar si el producto está disponible en el inventario de la sede 1
+            product_inventory_details = ProductInventoryDetails.objects.get(Product=product, Inventory=inventory1)
             if product_inventory_details.cuantity < int(quantity):
                 return Response({'error': 'Not enough quantity in headquarter 1'}, status=status.HTTP_400_BAD_REQUEST)
 
-
-                # Actualizar las cantidades en los inventarios
+            # Actualizar las cantidades en los inventarios
             product_inventory_details.cuantity -= int(quantity)
             product_inventory_details.save()
 
-            product_inventory_details2, created = ProductInventoryDetails.objects.get_or_create(Product=product, Inventory=headquarter2.inventory)
+            # Obtener o crear el detalle de inventario para la sede de destino, inicializando cuantity en 0 si es creado
+            product_inventory_details2, created = ProductInventoryDetails.objects.get_or_create(
+                Product=product, 
+                Inventory=inventory2,
+                defaults={'cuantity': 0}
+            )
+
+            # Actualizar la cantidad en el inventario de la sede de destino
             product_inventory_details2.cuantity += int(quantity)
             product_inventory_details2.save()
 

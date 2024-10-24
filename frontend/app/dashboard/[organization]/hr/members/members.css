@@ -14,6 +14,11 @@ body{
   border: #f44336 1px solid;
 }
 
+.search-box-mt{
+  margin-top: -83px !important;
+  margin-bottom: 20px !important;
+}
+
 .button-ok{
   background-color: #2A50CF;
   border: #2A50CF 1px solid;

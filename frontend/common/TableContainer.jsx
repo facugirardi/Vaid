@@ -1,11 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { Row, Table, Button } from "react-bootstrap";
-
 import {
-  Column,
-  Table as ReactTable,
-  ColumnFiltersState,
-  FilterFn,
   useReactTable,
   getCoreRowModel,
   getFilteredRowModel,
@@ -13,29 +8,9 @@ import {
   getSortedRowModel,
   flexRender
 } from "@tanstack/react-table";
-
 import { rankItem } from "@tanstack/match-sorter-utils";
 
-// Column Filter
-const Filter = ({ column, table }) => {
-  const columnFilterValue = column.getFilterValue();
-
-  return (
-    <>
-      <DebouncedInput
-        type="text"
-        value={(columnFilterValue ?? "")}
-        onChange={(value) => column.setFilterValue(value)}
-        placeholder="Search..."
-        className="w-36 border shadow rounded"
-        list={column.id + "list"}
-      />
-      <div className="h-1"></div>
-    </>
-  );
-};
-
-// Global Filter
+// Global Filter Input
 const DebouncedInput = ({
   value: initialValue,
   onChange,
@@ -62,7 +37,7 @@ const DebouncedInput = ({
         {...props}
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder="Search..."
+        placeholder="Buscar..."
       />
       <i className="ri-search-line search-icon"></i>
     </div>
@@ -81,17 +56,23 @@ const TableContainer = ({
   isPagination,
   customPageSize,
   isGlobalFilter,
-  SearchPlaceholder
+  SearchPlaceholder = "Buscar miembros..."
 }) => {
   const [columnFilters, setColumnFilters] = useState([]);
   const [globalFilter, setGlobalFilter] = useState("");
 
+  // Función de filtro personalizada que busca en múltiples campos
   const fuzzyFilter = (row, columnId, value, addMeta) => {
-    const itemRank = rankItem(row.getValue(columnId), value);
+    // Concatenar los campos relevantes para la búsqueda
+    const searchContent = `${row.original.first_name} ${row.original.last_name} ${row.original.available_days} ${row.original.available_times} ${row.original.country} ${row.original.topics}`.toLowerCase();
+
+    // Comparar el valor ingresado con el contenido
+    const isMatch = searchContent.includes(value.toLowerCase());
     addMeta({
-      itemRank
+      itemRank: isMatch ? 0 : 1 // 0 para coincidencia, 1 para no coincidencia
     });
-    return itemRank.passed;
+
+    return isMatch;
   };
 
   const table = useReactTable({
@@ -130,35 +111,31 @@ const TableContainer = ({
     Number(customPageSize) && setPageSize(Number(customPageSize));
   }, [customPageSize, setPageSize]);
 
-  const onChangeInSelect = (event) => {
-    setPageSize(Number(event.target.value));
-  };
-
   return (
     <Fragment>
       {isGlobalFilter && (
-        <React.Fragment>
-        </React.Fragment>
+        <div className="col-md-3 mb-3 search-box-mt">
+          <DebouncedInput
+            value={globalFilter ?? ""}
+            onChange={(value) => setGlobalFilter(value)}
+            placeholder={SearchPlaceholder}
+            className="form-control"
+          />
+        </div>
       )}
-      <div
-        className={divClassName ? divClassName : "table-responsive react-table"}
-      >
+      <div className={divClassName ? divClassName : "table-responsive react-table"}>
         <Table className={tableClass} bordered={isBordered}>
           <thead className={theadClass}>
             {getHeaderGroups().map((headerGroup) => (
               <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
-                  const headerClass = `sort cursor-pointer ${
-                    thColumn ? thColumn : ""
-                  }`;
+                  const headerClass = `sort cursor-pointer ${thColumn ? thColumn : ""}`;
                   return (
                     <th
                       key={header.id}
                       colSpan={header.colSpan}
                       {...{
-                        className: header.column.getCanSort()
-                          ? headerClass
-                          : "",
+                        className: header.column.getCanSort() ? headerClass : "",
                         onClick: header.column.getToggleSortingHandler()
                       }}
                     >
@@ -172,11 +149,6 @@ const TableContainer = ({
                             asc: " ",
                             desc: " "
                           }[header.column.getIsSorted()] ?? null}
-                          {header.column.getCanFilter() ? (
-                            <div>
-                              <Filter column={header.column} table={table} />
-                            </div>
-                          ) : null}
                         </React.Fragment>
                       )}
                     </th>
@@ -213,6 +185,7 @@ const TableContainer = ({
         <Row className="align-items-center py-2 gy-2 text-center text-sm-start">
           <div className="col-sm">
             <div className="text-muted">
+              Página {getState().pagination.pageIndex + 1} de {getPageOptions().length}
             </div>
           </div>
           <div className="col-sm-auto">

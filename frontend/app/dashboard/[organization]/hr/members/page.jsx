@@ -99,7 +99,7 @@ const Page = () => {
         () => [
             {
                 header: "Nombre",
-                enableColumnFilter: false,
+                enableColumnFilter: false, 
                 accessorKey: "name",
                 cell: (cellProps) => {
                     const row = cellProps.row.original;
@@ -119,13 +119,13 @@ const Page = () => {
                 enableColumnFilter: false,
                 cell: (cellProps) => {
                     const dayMap = {
-                        'Mon': 'Lunes',
-                        'Tue': 'Martes',
-                        'Wed': 'Miércoles',
-                        'Thu': 'Jueves',
-                        'Fri': 'Viernes',
-                        'Sat': 'Sábado',
-                        'Sun': 'Domingo',
+                        'Lun': 'Lunes',
+                        'Mar': 'Martes',
+                        'Mie': 'Miércoles',
+                        'Jue': 'Jueves',
+                        'Vie': 'Viernes',
+                        'Sab': 'Sábado',
+                        'Dom': 'Domingo',
                     };
 
                     let availableDays = cellProps.getValue();
@@ -241,10 +241,10 @@ const Page = () => {
                         <Card.Body>
                             <div className="container">
                                 <div className="row">
-                                    <button className="col-md-2 btn-tags-create theme-btn style-two" onClick={() => handleShowInviteModal()}>Invitar<span>
+                                <div className="col-md-8"></div>
+                                <button className="col-md-2 btn-tags-create theme-btn style-two" onClick={() => handleShowInviteModal()}>Invitar<span>
                                     <i className="ph-duotone ph-user"></i> 
                                         </span></button>
-                                    <div className="col-md-8"></div>
                                     <button className="col-md-2 btn-tags-create theme-btn style-one" onClick={() => handleShowTagModal()}>Etiquetas <span>
                                     <i className="ph-duotone ph-tag"></i> 
                                         </span></button>
@@ -284,7 +284,24 @@ const Page = () => {
                             <p><strong>Calle:</strong> {selectedCandidate.street_name}</p>
                             <p><strong>Profesión:</strong> {selectedCandidate.profession}</p>
                             <p><strong>Experiencia:</strong> {selectedCandidate.experience}</p>
-                            <p><strong>Temas:</strong> {selectedCandidate.topics}</p>
+                            <p>
+                                <strong>Temas:</strong> {
+                                    selectedCandidate.topics
+                                        ? (() => {
+                                            try {
+                                                // Intenta convertir la cadena a un array
+                                                const topicsArray = JSON.parse(selectedCandidate.topics.replace(/'/g, '"'));
+                                                // Une los elementos con una coma y espacio
+                                                return Array.isArray(topicsArray) ? topicsArray.join(', ') : selectedCandidate.topics;
+                                            } catch (error) {
+                                                console.error('Error al parsear los temas:', error);
+                                                // Si hay un error al parsear, devuelve la cadena original sin cambios
+                                                return selectedCandidate.topics;
+                                            }
+                                        })()
+                                        : "No hay temas"
+                                }
+                            </p>
                             <p><strong>Objetivos:</strong> {selectedCandidate.goals}</p>
                             <p><strong>Motivaciones:</strong> {selectedCandidate.motivations}</p>
                         </div>

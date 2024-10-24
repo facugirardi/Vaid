@@ -187,7 +187,7 @@ const CreateTaskPage = () => {
                     <Card.Body>
                         <Form onSubmit={handleSubmit}>
                             <Row className="mb-3">
-                                <Col md={4} className="d-flex flex-column align-items-center">
+                                {/* <Col md={4} className="d-flex flex-column align-items-center">
                                     <label htmlFor="upload-button" className="upload-button">
                                         {preview ? (
                                             <img src={preview} alt="Vista previa" className="preview-img" />
@@ -204,8 +204,8 @@ const CreateTaskPage = () => {
                                             style={{ display: 'none' }}
                                         />
                                     </label>
-                                </Col>
-                                <Col md={8}>
+                                </Col> */}
+                                <Col md={12}>
                                     <Form.Group>
                                         <Form.Label className="form-group-label">Título <span className='asterisco-rojo'>*</span></Form.Label>
                                         <Form.Control

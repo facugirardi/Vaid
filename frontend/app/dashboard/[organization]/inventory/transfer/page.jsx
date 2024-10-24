@@ -86,7 +86,7 @@ const ProductTransactionPage = () => {
         setAvailableProducts(updatedProducts);
     };
 
-    const handleSendProducts = () => {
+    const handleSendProducts = async () => {
         if (giverHQ === receiverHQ) {
             toast.error("La sede de origen y la de destino no pueden ser la misma.");
             return;
@@ -94,43 +94,69 @@ const ProductTransactionPage = () => {
     
         if (giverHQ && receiverHQ && selectedProducts.length > 0) {
             const validProductsToSend = selectedProducts.filter(product => product.quantityAdded > 0);
-            
+    
             if (validProductsToSend.length === 0) {
                 toast.error("No se pueden enviar productos con cantidad cero.");
                 return;
             }
     
-            const updatedProducts = availableProducts.map(product => {
-                const selectedProduct = validProductsToSend.find(p => p.name === product.name);
-                if (selectedProduct) {
-                    product.units -= selectedProduct.quantityAdded;
-                    product.added = false;
-                }
-                return product;
-            });
+            try {
+                // Realizar las solicitudes de transferencia para cada producto seleccionado
+                for (const product of validProductsToSend) {
+                    const response = await fetch(
+                        `http://localhost:8000/api/organization/transferProduct?product_id=${product.Product.id}&headquarter1_id=${giverHQ}&headquarter2_id=${receiverHQ}&quantity=${product.quantityAdded}`, 
+                        {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                        }
+                    );
     
-            const productsWithStock = updatedProducts.filter(product => product.units > 0);
-            setAvailableProducts(productsWithStock);
-            setSentProducts([...sentProducts, ...validProductsToSend]);
-    
-            const updatedReceivedProducts = [...receivedProducts];
-            validProductsToSend.forEach((selectedProduct) => {
-                const existingProduct = updatedReceivedProducts.find(
-                    (p) => p.name === selectedProduct.name && p.expiration === selectedProduct.expiration
-                );
-                if (existingProduct) {
-                    existingProduct.quantityAdded += selectedProduct.quantityAdded;
-                } else {
-                    updatedReceivedProducts.push({ ...selectedProduct });
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        toast.error(`Error al transferir el producto ${product.Product.name}: ${errorData.error}`);
+                        return;
+                    }
                 }
-            });
-            setReceivedProducts(updatedReceivedProducts);
-            setSelectedProducts([]);
-            toast.success("¡Productos enviados exitosamente!");
+    
+                // Actualizar los estados después de una transferencia exitosa
+                const updatedProducts = availableProducts.map(product => {
+                    const selectedProduct = validProductsToSend.find(p => p.Product.id === product.Product.id);
+                    if (selectedProduct) {
+                        product.cuantity -= selectedProduct.quantityAdded;
+                        product.added = false;
+                    }
+                    return product;
+                });
+    
+                const productsWithStock = updatedProducts.filter(product => product.cuantity > 0);
+                setAvailableProducts(productsWithStock);
+                setSentProducts([...sentProducts, ...validProductsToSend]);
+    
+                const updatedReceivedProducts = [...receivedProducts];
+                validProductsToSend.forEach((selectedProduct) => {
+                    const existingProduct = updatedReceivedProducts.find(
+                        (p) => p.Product.id === selectedProduct.Product.id && p.Product.expDate === selectedProduct.Product.expDate
+                    );
+                    if (existingProduct) {
+                        existingProduct.quantityAdded += selectedProduct.quantityAdded;
+                    } else {
+                        updatedReceivedProducts.push({ ...selectedProduct });
+                    }
+                });
+                setReceivedProducts(updatedReceivedProducts);
+                setSelectedProducts([]);
+                toast.success("¡Productos enviados exitosamente!");
+            } catch (error) {
+                toast.error('Error al realizar la transferencia de productos.');
+                console.error('Error al transferir productos:', error);
+            }
         } else {
             toast.error("Por favor, selecciona una sede de origen, una sede de destino y al menos un producto.");
         }
     };
+
 
     const incrementQuantity = (product) => {
         const updatedProducts = [...availableProducts];
