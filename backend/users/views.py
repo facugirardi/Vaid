@@ -2163,12 +2163,18 @@ class TotalAmountDonationAPIView(APIView):
         if not organization_id:
             return Response({'error': 'ong is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        organization = Organization.objects.get(id=organization_id)
-        donations = DonationProductDetails.objects.filter(Organization=organization)
-       # donations = DonationProductDetails.objects.filter(Organization=organization, Product__Category = 1) suponiendo que la categoria 1 es la de dinero
-        total_amount = donations.aggregate(Sum('amount'))
-        return Response(total_amount, status=status.HTTP_200_OK)
+        try:
+            organization = Organization.objects.get(id=organization_id)
+            # Filtrar las donaciones de tipo 'Dinero' y sumar la quantity
+            donations = Donation.objects.filter(
+                Organization=organization, type="Dinero"
+            )
+            total_amount = donations.aggregate(total_quantity=Sum('quantity'))['total_quantity'] or 0
 
+            return Response({'total_amount': total_amount}, status=status.HTTP_200_OK)
+
+        except Organization.DoesNotExist:
+            return Response({'error': 'Organization not found'}, status=status.HTTP_404_NOT_FOUND)
 
 # Obtener la diferencia entre el total de la compras/ventas
 class TotalAmountOperationAPIView(APIView):
@@ -2185,7 +2191,7 @@ class TotalAmountOperationAPIView(APIView):
         operations = Operation.objects.filter(Organization=organization).annotate(
             adjusted_amount=Case(
                 # Si el tipo de operación es 'type 1' (puedes cambiar el valor según corresponda), multiplicar el amount por -1
-                When(type='Sale', then=F('amount') * Value(-1)),
+                When(type='Venta', then=F('amount') * Value(-1)),
                 # En los demás casos, dejar el amount sin cambios
                 default=F('amount'),
                 output_field=models.IntegerField(),

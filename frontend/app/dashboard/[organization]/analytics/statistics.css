@@ -1,0 +1,202 @@
+body{
+    font-family: 'Inter', sans-serif !important;
+  }
+  
+.custom-card {
+    height: 200px; /* Ajusta la altura como lo necesites */
+}
+
+.custom-card .card-body {
+    display: flex;
+    justify-content: left;
+    align-items: center;
+    margin-top: 10px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+body{
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .hover-button-trash:hover{
+    color: #c81d1d;
+    transition: .2s;
+  }
+  
+  .hover-button:hover{
+    color: #2950CE;
+    transition: .2s;
+  }
+  
+  .dashboard {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .header {
+    width: 100%;
+    background: #ffffff;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  nav {
+    margin-bottom: 10px;
+    color: #555;
+  }
+  
+  .main-content {
+    display: flex;
+    flex: 1;
+    padding: 20px;
+  }
+  
+  .left-column {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin-right: 20px;
+  }
+  
+  .right-column {
+    flex: 2;
+  }
+  
+  .card2 {
+    background: #ffffff;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+  }
+  
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  table th, table td {
+    padding: 10px;
+    border-bottom: 1px solid #dddddd;
+  }
+  
+  table th {
+    text-align: left;
+    color: #888;
+  }
+  
+  .icon-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  
+  .icon-button:last-child {
+    margin-right: 0;
+  }
+  
+  .add-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    color: rgb(0, 0, 0);
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    margin-left: 50px;
+  
+  }
+  
+  .history-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .history-list li {
+    display: flex;
+    margin-bottom: 10px;
+  }
+  .text-green {
+    color: green !important;
+  }
+  
+  .text-red {
+    color: red !important;
+  }
+  
+  .history-list .time {
+    width: 80px;
+    font-weight: bold;
+    color: #888;
+  }
+  
+  .history-list .event {
+    display: flex;
+    align-items: center;
+  }
+  
+  .history-list .label {
+    margin-right: 10px;
+    padding: 2px 5px;
+    border-radius: 3px;
+    color: #ffffff;
+    font-size: 12px;
+  }
+  
+  .card2 h2 {
+    margin-top: 0;
+    color: #333;
+    font-size: 20px;
+    margin-right: 50px;
+  }
+  
+  .card2 table {
+    margin-top: 20px;
+  }
+  
+  .edit-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #000000;
+  }
+  
+  .both-cont{
+    margin-top: 25px;
+  }
+  
+  .p-donation{
+  font-family: 'Inter', sans-serif;;
+      font-size: 14px;
+      font-weight: 400;
+      line-height: 1.6;
+      padding: 1px ;
+      margin-bottom: 5px;
+      color: #333; /* Color más oscuro para mejor contraste */
+  }
+
+  
