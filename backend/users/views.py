@@ -2207,46 +2207,45 @@ class TotalAmountOperationAPIView(APIView):
         return Response({'total_amount': total_amount}, status=status.HTTP_200_OK)
 
 
-# Obtener la donaciones del meses anteriores anterior y del actual
 class DonationMonthAPIView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
         organization_id = request.query_params.get('ong')
-        # Obtener la fecha actual
+        if not organization_id:
+            return Response({'error': 'Organization ID is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Obtener la fecha actual y el año actual
         current_date = timezone.now()
+        current_year = current_date.year
 
-        # Calcular la fecha de inicio para los últimos 6 meses
-        start_date = current_date - timedelta(days=6 * 30)  # Aproximadamente los últimos 6 meses
+        try:
+            # Filtrar y agrupar las donaciones por mes del año actual y tipo "Dinero"
+            donations_by_month = Donation.objects.filter(
+                Organization_id=organization_id,
+                date__year=current_year,  # Solo donaciones del año actual
+                type="Dinero"  # Filtrar solo las donaciones de tipo "Dinero"
+            ).annotate(
+                month=TruncMonth('date')  # Agrupar por mes usando la fecha de la donación
+            ).values('month').annotate(
+                total_quantity=Sum('quantity')  # Sumar las cantidades de las donaciones por mes
+            ).order_by('month')
 
-        # Filtrar y agrupar las donaciones por mes
-        donations_by_month = Donation.objects.filter(
-            Organization_id=organization_id,
-            date__gte=start_date  # Solo donaciones desde los últimos 6 meses
-        ).annotate(
-            month=TruncMonth('date')  # Agrupar por mes usando la fecha de la donación
-        ).values('month').annotate(
-            total_quantity=Sum('quantity')  # Sumar las cantidades de las donaciones por mes
-        ).order_by('month')  # Ordenar de más antiguo a más reciente
+            # Crear un array con 12 meses inicializados en 0 (enero a diciembre)
+            donations_per_month = [0] * 12
 
+            # Rellenar el array con los valores obtenidos de las donaciones
+            for donation in donations_by_month:
+                month = donation['month'].month  # Obtener el número del mes (1 para enero, 2 para febrero, ...)
+                donations_per_month[month - 1] = donation['total_quantity'] or 0  # Colocar la cantidad en la posición correcta
 
-        # Generar la respuesta con los últimos 6 meses
-        data = []
-        for donation in donations_by_month:
-            current_month = donation['month']
-            previous_month = current_month - relativedelta(months=1)
-            data.append({
-                'month': donation['month'].strftime('%B'),  # Convertir el mes a un nombre legible (ej: 'Julio')
-                'total_donations': donation['total_quantity'] or 0,  # Si no hay donaciones, devolver 0
-                'month_previous': previous_month.strftime('%B'),  # Convertir el mes a un nombre legible (ej: 'Julio')
-                'total_donations_previous': donation['total_quantity'] or 0
-            })
-            print(data)
-        print(data)
-        return Response(data)  
+            return Response(donations_per_month, status=status.HTTP_200_OK)
+        
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
-# Obtener las compras/ventas del mes anterior y del actual
+
 class OperationMonthAPIView(APIView):
     permission_classes = [AllowAny]
 
@@ -2257,49 +2256,39 @@ class OperationMonthAPIView(APIView):
         if not organization_id:
             return Response({'error': 'Organization ID is required'}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Fecha actual y fecha de los últimos 6 meses
+        # Fecha actual y el año actual
         current_date = timezone.now()
-        start_date = current_date - timedelta(days=6 * 30)  # Aproximadamente los últimos 6 meses
+        current_year = current_date.year
 
-        # Obtener las operaciones agrupadas por mes
+        # Obtener las operaciones de compras y ventas para el año actual, agrupadas por mes
         operations_by_month = Operation.objects.filter(
             Organization_id=organization_id,
-            date__gte=start_date  # Solo operaciones desde los últimos 6 meses
+            date__year=current_year  # Solo operaciones del año actual
         ).annotate(
             month=TruncMonth('date')  # Agrupar por mes
-        ).values('month').annotate(
-            total_quantity=Sum('quantity')  # Sumar las cantidades de las operaciones por mes
-        ).order_by('month')  # Ordenar de más antiguo a más reciente
+        ).values('month', 'type').annotate(
+            total_quantity=Sum('quantity')  # Sumar las cantidades de las operaciones por mes y tipo
+        ).order_by('month')
 
-        # Crear un diccionario para almacenar los resultados por mes
-        monthly_data = defaultdict(lambda: 0)
+        # Inicializar arrays para compras y ventas con 12 ceros (uno por cada mes)
+        compras = [0] * 12
+        ventas = [0] * 12
 
-        # Llenar el diccionario con los resultados de las operaciones por mes
+        # Rellenar los arrays con las cantidades de cada mes
         for operation in operations_by_month:
-            monthly_data[operation['month']] = operation['total_quantity']
+            month = operation['month'].month - 1  # Obtener el índice del mes (enero=0, diciembre=11)
+            quantity = operation['total_quantity']
 
-        # Generar la respuesta comparando el mes actual con el mes anterior
-        data = []
-        sorted_months = sorted(monthly_data.keys())  # Ordenar los meses cronológicamente
+            if operation['type'] == 'Compra':
+                compras[month] = quantity or 0
+            elif operation['type'] == 'Venta':
+                ventas[month] = quantity or 0
 
-        for i, current_month in enumerate(sorted_months):
-            total_current_month = monthly_data[current_month]
-            if i > 0:  # Comparar solo si no es el primer mes (porque no hay mes anterior)
-                previous_month = sorted_months[i - 1]
-                total_previous_month = monthly_data[previous_month]
-            else:
-                previous_month = None
-                total_previous_month = 0  # Si no hay mes anterior, poner 0
-
-            # Agregar los datos de este mes y el mes anterior a la respuesta
-            data.append({
-                'month': current_month.strftime('%B'),
-                'total_donations': total_current_month or 0,
-                'month_previous': previous_month.strftime('%B') if previous_month else 'N/A',
-                'total_donations_previous': total_previous_month or 0
-            })
-
-        return Response(data)
+        # Devolver la respuesta con los arrays de compras y ventas
+        return Response({
+            'compras': compras,
+            'ventas': ventas
+        }, status=status.HTTP_200_OK)
 
 
 # Obtener las donaciones por categoría del ultimo mes

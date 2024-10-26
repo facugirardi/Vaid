@@ -74,18 +74,18 @@ const Page = () => {
     const series = [
         {
             name: 'Ventas',
-            data: operationsByMonth.map(item => item.total_donations),
+            data: operationsByMonth?.ventas || Array(12).fill(0),
         },
         {
             name: 'Compras',
-            data: operationsByMonth.map(item => item.total_donations_previous),
+            data: operationsByMonth?.compras || Array(12).fill(0),
         },
     ];
-
+    
     const series2 = [
         {
             name: 'Donaciones',
-            data: donationsByMonth.map(item => item.total_donations),
+            data: donationsByMonth,
         },
     ];
     const series1 = [44, 55, 13, 43, 22, 0, 10];
@@ -164,7 +164,15 @@ const Page = () => {
                                             <td className='text-center p-donation'>$ {item.amount}</td>
                                             <td className='text-center p-donation'><b>{item.date}</b></td>
                                             <td className={`text-center p-donation ${item.type === 'Compra' ? 'text-green' : 'text-red'}`}>
-                                                {item.type}
+                                            {item.type === 'Compra' ? (
+                                                <>
+                                                    <i className="fa fa-arrow-up text-green"></i> {item.type}
+                                                </>
+                                                ) : (
+                                                <>
+                                                    <i className="fa fa-arrow-down text-red"></i> {item.type}
+                                                </>
+                                                )}
                                             </td>
                                         </tr>
                                     ))}
