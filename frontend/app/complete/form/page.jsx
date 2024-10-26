@@ -418,8 +418,8 @@ const Page = () => {
                                                                         name="modality"
                                                                         label="Presencial"
                                                                         className="small-checkbox"
-                                                                        value="In-person"
-                                                                        checked={formData.modality === "In-person"}
+                                                                        value="Presencial"
+                                                                        checked={formData.modality === "Presencial"}
                                                                         onChange={handleChange}
                                                                     />
                                                                     <Form.Check
@@ -440,8 +440,8 @@ const Page = () => {
                                                                         id="customCheckinlh3"
                                                                         label="Ambos tipos"
                                                                         className="small-checkbox"
-                                                                        value="Both types"
-                                                                        checked={formData.modality === "Both types"}
+                                                                        value="Ambos tipos"
+                                                                        checked={formData.modality === "Ambos tipos"}
                                                                         onChange={handleChange}
                                                                     />
                                                                 </div>
