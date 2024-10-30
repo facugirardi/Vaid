@@ -95,7 +95,7 @@ EMAIL_HOST = 'smtp.sendgrid.net'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'apikey'  # El usuario siempre es 'apikey'
-EMAIL_HOST_PASSWORD = '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'
+EMAIL_HOST_PASSWORD = key.EMAIL_HOST_PASSWORD
 
 USE_SES_V2 = True
 
