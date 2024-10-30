@@ -1650,7 +1650,33 @@ class DonationAPIView(APIView):
             return Response(DonationSerializer(donation).data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-   
+
+
+class DonationsByCategoryAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, organization_id):
+        try:
+            # Filtrar las donaciones de la organización, excluir "Dinero" y agrupar por el campo 'type'
+            donations = Donation.objects.filter(
+                Organization_id=organization_id
+            ).exclude(type="Dinero").values('type').annotate(total_donations=Sum('quantity')).order_by('type')
+
+            # Separar las categorías y los valores en arrays
+            categories = [item['type'] for item in donations]
+            total_donations = [item['total_donations'] or 0 for item in donations]
+
+            # Crear respuesta estructurada
+            data = {
+                'categories': categories,
+                'total_donations': total_donations,
+            }
+
+            return Response(data, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+  
+
 class DonationDetailAPIView(APIView):
     permission_classes = [AllowAny]
     # Obtener, actualizar o eliminar una donación específica

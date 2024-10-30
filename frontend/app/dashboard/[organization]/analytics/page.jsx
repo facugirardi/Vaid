@@ -20,6 +20,9 @@ const Page = () => {
     const [totalRecaudation, setTotalRecaudation] = useState(0);
     const [donationsByMonth, setDonationsByMonth] = useState([]);
     const [operationsByMonth, setOperationsByMonth] = useState([]);
+    const [categoryData, setCategoryData] = useState([]);
+    const [categories, setCategories] = useState([]);
+    const [totalDonations, setTotalDonations] = useState([]);
 
     useEffect(() => {
         const currentUrl = window.location.href;
@@ -62,6 +65,24 @@ const Page = () => {
                     const operationsByMonthResponse = await axios.get(`http://localhost:8000/api/organization/OperationMonth`, {
                         params: { ong: organizationId },
                     });
+
+                    const fetchDonationsByCategory = async () => {
+                        try {
+                            const response = await axios.get(`http://localhost:8000/api/organization/${organizationId}/donations-by-category`);
+                            
+                            // Asegúrate de usar response.data en lugar de data
+                            const { categories, total_donations } = response.data;
+                    
+                            // Asigna los valores directamente a las variables de estado
+                            setCategories(categories.length > 0 ? categories : ["Vacío"]);
+                            setTotalDonations(total_donations.length > 0 ? total_donations : [0]);
+                        } catch (error) {
+                            console.error('Error fetching donations by category:', error);
+                        }
+                    };
+
+                    fetchDonationsByCategory();
+
                     setOperationsByMonth(operationsByMonthResponse.data);
                 } catch (error) {
                     console.error('Error fetching data:', error);
@@ -69,7 +90,13 @@ const Page = () => {
             }
         };
         fetchData();
+        console.log(categories)
+        console.log(totalDonations)
+
     }, [organizationId]);
+
+
+    const series1 = totalDonations.length > 0 ? totalDonations : [0];
 
     const series = [
         {
@@ -88,8 +115,7 @@ const Page = () => {
             data: donationsByMonth,
         },
     ];
-    const series1 = [44, 55, 13, 43, 22, 0, 10];
-
+  
 
     const options = {
         chart: { height: 250, type: 'bar', fontFamily: 'Inter, sans-serif' },
@@ -104,12 +130,25 @@ const Page = () => {
 
     const options1 = {
         chart: { height: 250, type: 'pie', fontFamily: 'Inter, sans-serif' },
-        labels: ['Tools', 'Money', 'Medications', 'Food', 'Clothes', 'Drinks', 'Others'],
+        labels: categories,
         colors: ['#3276E8', '#2BC155', '#FF3E3E', '#795548', '#9C27B0', '#FF9800', '#9E9E9E'],
         legend: { show: true, position: 'bottom' },
-        dataLabels: { enabled: false, dropShadow: { enabled: false } },
+        dataLabels: { enabled: false },
         responsive: [{ breakpoint: 480, options1: { legend: { position: 'bottom' } } }],
-    };
+    };    
+
+    useEffect(() => {
+        const options1 = {
+            chart: { height: 250, type: 'pie', fontFamily: 'Inter, sans-serif' },
+            labels: categories,
+            colors: ['#3276E8', '#2BC155', '#FF3E3E', '#795548', '#9C27B0', '#FF9800', '#9E9E9E'],
+            legend: { show: true, position: 'bottom' },
+            dataLabels: { enabled: false },
+            responsive: [{ breakpoint: 480, options1: { legend: { position: 'bottom' } } }],
+        };    
+
+    },
+    [categories])
 
     return (
         <Layout>
