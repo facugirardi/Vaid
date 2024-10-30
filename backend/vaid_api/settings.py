@@ -87,14 +87,15 @@ DATABASES = {
     }
 }
 
-EMAIL_BACKEND = 'django_ses.SESBackend'
-DEFAULT_FROM_EMAIL = key.AWS_SES_FROM_EMAIL
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+DEFAULT_FROM_EMAIL = 'hello@vaidteam.com'
 
-AWS_SES_ACCESS_KEY_ID = key.AWS_SES_ACCESS_KEY_ID
-AWS_SES_SECRET_ACCESS_KEY = key.AWS_SES_SECRET_ACCESS_KEY
-AWS_SES_REGION_NAME = key.AWS_SES_REGION_NAME
-AWS_SES_REGION_ENDPOINT = f'email.{AWS_SES_REGION_NAME}.amazonaws.com'
-AWS_SES_FROM_EMAIL = key.AWS_SES_FROM_EMAIL
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'apikey'  # El usuario siempre es 'apikey'
+EMAIL_HOST_PASSWORD = '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'
 
 USE_SES_V2 = True
 
