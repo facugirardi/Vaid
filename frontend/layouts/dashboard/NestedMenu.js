@@ -105,6 +105,13 @@ useEffect(() => {
       setMenuItems([
         { id: "home", label: "Inicio", icon: "ph-duotone ph-house", link: `/dashboard/${organizationId}/home`, dataPage: "home" },
         {
+          type: "HASHMENU", id: 1, label: "Recursos Humanos", icon: "ph-duotone ph-users-three", dataPage: null, link: "#",
+          submenu: [
+            { id: "members-list", label: "Lista de Miembros", icon: "ph-duotone ph-user-list", link: `/dashboard/${organizationId}/hr/members`, dataPage: "members-list" },
+            { id: "candidates", label: "Lista de Candidatos", icon: "ph-duotone ph-users", link: `/dashboard/${organizationId}/hr/candidates`, dataPage: "candidates" },
+          ],
+        },
+        {
           type: "HASHMENU", id: 1, label: "Tareas", icon: "ph-duotone ph-clipboard-text", dataPage: null, link: "#",
           submenu: [
             { id: "view-tasks", label: "Ver Tareas", icon: "ph-duotone ph-clipboard", link: `/dashboard/${organizationId}/tasks/view`, dataPage: "view-tasks" },
@@ -118,14 +125,6 @@ useEffect(() => {
             { id: "create-events", label: "Crear Eventos", icon: "ph-duotone ph-calendar-plus", link: `/dashboard/${organizationId}/events/create`, dataPage: "create-events" },
           ],
         },
-        {
-          type: "HASHMENU", id: 1, label: "Recursos Humanos", icon: "ph-duotone ph-users-three", dataPage: null, link: "#",
-          submenu: [
-            { id: "members-list", label: "Lista de Miembros", icon: "ph-duotone ph-user-list", link: `/dashboard/${organizationId}/hr/members`, dataPage: "members-list" },
-            { id: "candidates", label: "Lista de Candidatos", icon: "ph-duotone ph-users", link: `/dashboard/${organizationId}/hr/candidates`, dataPage: "candidates" },
-          ],
-        },
-        { id: "analytics", label: "Estadisticas", icon: "ph-duotone ph-chart-bar", link: `/dashboard/${organizationId}/analytics`, dataPage: "analytics" },
         {
           type: "HASHMENU", id: 1, label: "Recursos", icon: "ph-duotone ph-archive", dataPage: null, link: "#",
           submenu: [
@@ -141,6 +140,7 @@ useEffect(() => {
             { id: "reg-ps", label: "Registrar Compras/Ventas", icon: "ph-duotone ph-tag", link: `/dashboard/${organizationId}/donations`, dataPage: "reg-ps" },
           ],
         },
+        { id: "analytics", label: "Estadisticas", icon: "ph-duotone ph-chart-bar", link: `/dashboard/${organizationId}/analytics`, dataPage: "analytics" },
       ]);
 
     } else {
