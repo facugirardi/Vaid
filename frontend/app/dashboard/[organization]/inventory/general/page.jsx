@@ -104,22 +104,32 @@ const Inventory = ({ headquarterId, addHistoryEntry }) => {
     if (!selectedProduct) return;
 
     try {
-      const response = await fetch(`http://localhost:8000/api/products/${selectedProduct.id}/`, {
-        method: 'DELETE',
-      });
+        const response = await fetch(`http://localhost:8000/api/products/${selectedProduct.id}/`, {
+            method: 'DELETE',
+        });
 
-      if (response.ok) {
-        console.log('Producto eliminado con éxito');
-        setInventory(inventory.filter(item => item.id !== selectedProduct.id));
-        addHistoryEntry(`Producto "${selectedProduct.name}" eliminado por ${user.first_name} ${user.last_name}`);
-        setShowDeleteProductModal(false);
-      } else {
-        console.error('Error al eliminar el producto:', response.status);
-      }
+        if (response.ok) {
+            console.log('Producto eliminado con éxito');
+            setInventory(inventory.filter(item => item.id !== selectedProduct.id));
+
+            // Asegúrate de que `user` esté disponible
+            if (user) {
+                // Registrar en el historial y esperar la respuesta antes de cerrar el modal
+                await addHistoryEntry(`Producto "${selectedProduct.name}" eliminado por ${user.first_name} ${user.last_name}`);
+            } else {
+                console.warn("Usuario no disponible para el registro en el historial.");
+            }
+
+            // Cerrar el modal y limpiar el producto seleccionado
+            setShowDeleteProductModal(false);
+            setSelectedProduct(null);
+        } else {
+            console.error('Error al eliminar el producto:', response.status);
+        }
     } catch (error) {
-      console.error('Error:', error);
+        console.error('Error:', error);
     }
-  };
+};
 
   const handleAddProductSubmit = async (event) => {
     event.preventDefault();
@@ -157,8 +167,9 @@ const Inventory = ({ headquarterId, addHistoryEntry }) => {
 
         if (response.ok) {
             const newProduct = await response.json();
-            setInventory([...inventory, newProduct]);
-            addHistoryEntry(`Producto "${newProduct.description}" agregado por ${user.first_name} ${user.last_name}`);
+            console.log('Producto agregado con éxito:', newProduct);
+            setInventory([...inventory, newProduct.Product]);
+            addHistoryEntry(`Producto "${newProduct.Product.name}" agregado por ${user.first_name} ${user.last_name}`);
             setShowInventoryModal(false);
         } else {
             const errorData = await response.json();
@@ -188,20 +199,42 @@ const Inventory = ({ headquarterId, addHistoryEntry }) => {
               <tr>
                 <th className='text-center'>Nombre</th>
                 <th className='text-center'>Cantidad</th>
-                <th className='text-center'>Fecha de Expiración</th>
-                <th className='text-center'>Categoría</th>
                 <th className='text-center'>Estado</th>
+                <th className='text-center'>Expiración</th>
+                <th className='text-center'>Categoría</th>
                 <th className='text-center'>Acciones</th>
               </tr>
             </thead>
             <tbody>
               {inventory.map(item => (
                 <tr key={item.id}>
-                  <td className='text-center'>{item.name}</td>
+                  <td className='text-center'><b>{item.name}</b></td>
                   <td className='text-center'>{item.total_quantity}</td>
+                  <td className='text-center'><b>{item.status_name}</b></td>
                   <td className='text-center'>{item.expDate ? item.expDate : '-'}</td>
-                  <td className='text-center'>{item.category_name}</td>
-                  <td className='text-center'>{item.status_name}</td>
+                  <td
+                    className="text-center"
+                    style={{
+                      color:
+                        item.category_name === "Comida"
+                          ? "#795548"
+                          : item.category_name === "Herramientas"
+                          ? "#2196F3"
+                          : item.category_name === "Bebidas"
+                          ? "#FF9800"
+                          : item.category_name === "Dinero"
+                          ? "#2BC155"
+                          : item.category_name === "Otros"
+                          ? "#9E9E9E"
+                          : item.category_name === "Medicamentos"
+                          ? "#FF3E3E"
+                          : item.category_name === "Ropa"
+                          ? "#9C27B0"
+                          : "inherit",
+                    }}
+                  >
+                    <b>{item.category_name}</b>
+                  </td>
                   <td className='text-center'>
                     <button className="icon-button" onClick={() => handleProductModalShow(item)}>
                       <Eye className='hover-button' size={20} weight="bold" />
