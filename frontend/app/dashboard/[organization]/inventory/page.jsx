@@ -316,37 +316,46 @@ const handleEditProductSubmit = async (event) => {
     event.preventDefault();
 
     const updatedProduct = {
-      name: editName,
-      cuantity: editQuantity,
-      Status: editStatus, // Ahora envía el ID del estado
-      Category: editCategory,
-      expDate: editExpDate,
+        name: editName,
+        cuantity: editQuantity,
+        Status: editStatus,
+        Category: editCategory,
+        expDate: editExpDate,
     };
 
     try {
-      const response = await fetch(`http://localhost:8000/api/products/${selectedProduct.id}/`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(updatedProduct),
-      });
+        const response = await fetch(`http://localhost:8000/api/products/${selectedProduct.id}/`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedProduct),
+        });
 
-      if (response.ok) {
-        const updatedProductData = await response.json();
-        setInventory((prevInventory) => 
-          prevInventory.map((item) =>
-            item.id === updatedProductData.id ? { ...item, Product: updatedProductData } : item
-          )
-        );
-  
-        toast.success('Producto actualizado con éxito');
-        handleEditProductModalClose();
-      } else {
-        toast.error('Error al actualizar el producto:', response.status);
-      }
+        if (response.ok) {
+            const updatedProductData = await response.json();
+
+            // Actualiza el inventario manteniendo los valores no cambiados
+            setInventory((prevInventory) =>
+                prevInventory.map((item) =>
+                    item.Product.id === updatedProductData.id
+                        ? { 
+                            ...item, 
+                            cuantity: updatedProductData.cuantity ?? item.cuantity,
+                            Product: { ...item.Product, ...updatedProductData }
+                        }
+                        : item
+                )
+            );
+
+            toast.success('Producto actualizado con éxito');
+            handleEditProductModalClose();
+        } else {
+            toast.error('Error al actualizar el producto:', response.status);
+        }
     } catch (error) {
-      toast.error('Error:', error);
+        console.error('Error:', error);
+        toast.error('Error al actualizar el producto');
     }
 };
 
@@ -356,17 +365,26 @@ const handleEditProductSubmit = async (event) => {
     setSelectedProduct(product);
     setShowDeleteProductModal(true);
   };
+const handleEditProductModalShow = (inventoryItem) => {
+    // Obtén el id de Product dentro del item de inventario
+    const productId = inventoryItem.Product.id;
 
-  const handleEditProductModalShow = (product) => {
-    setSelectedProduct(product);
-    setEditName(product.Product.name);
-    setEditQuantity(product.cuantity);
-    setEditStatus(1); // Reiniciar el estado a 1 (Disponible)
-    setEditCategory(product.Product.category_name);
-    setEditExpDate(product.Product.expDate);
-    setShowEditProductModal(true);
-  };
+    // Encuentra el elemento en el inventario que tenga el id del Product correcto
+    const productToEdit = inventory.find(item => item.Product.id === productId);
 
+    if (productToEdit) {
+        // Configura los datos del producto para editar
+        setSelectedProduct(productToEdit.Product);
+        setEditName(productToEdit.Product.name);
+        setEditQuantity(productToEdit.cuantity);
+        setEditStatus(productToEdit.Product.Status);
+        setEditCategory(productToEdit.Product.category_name);
+        setEditExpDate(productToEdit.Product.expDate);
+        setShowEditProductModal(true); // Abre el modal
+    } else {
+        console.warn("Producto no encontrado en el inventario:", inventoryItem);
+    }
+};
   const handleEditProductModalClose = () => setShowEditProductModal(false);
 
   const handleDeleteProductModalClose = () => setShowDeleteProductModal(false);
@@ -392,27 +410,39 @@ const handleEditProductSubmit = async (event) => {
     }
   };
 
-  const handleDeleteProduct = async () => {
+const handleDeleteProduct = async () => {
     if (!selectedProduct) return;
 
     try {
+        console.log("Producto a eliminar:", selectedProduct);
         const response = await fetch(`http://localhost:8000/api/products/${selectedProduct.id}/`, {
             method: 'DELETE',
         });
 
         if (response.ok) {
-            console.log('Producto borrado con éxito');
-            setInventory(inventory.filter(item => item.id !== selectedProduct.id));
+            console.log("Inventario antes de eliminar:", inventory);
+
+            // Convertir el id a un número en caso de diferencias de tipo
+            const selectedProductId = Number(selectedProduct.id);
+
+            // Actualizar el estado del inventario usando item.Product.id para el filtro
+            setInventory((prevInventory) => {
+                const updatedInventory = prevInventory.filter(item => Number(item.Product.id) !== selectedProductId);
+
+                console.log("Inventario después de eliminar:", updatedInventory);
+                return updatedInventory;
+            });
+
             setShowDeleteProductModal(false);
-            addHistoryEntry(`Producto "${selectedProduct.name}" eliminado por ${user.first_name} ${user.last_name}`);
-            
+            toast.success(`Producto "${selectedProduct.name}" eliminado con éxito`);
         } else {
             toast.error('Error al borrar el producto:', response.status);
         }
     } catch (error) {
         console.error('Error:', error);
+        toast.error('Error al borrar el producto');
     }
-  };
+};
 
   const handleAddProductSubmit = async (event) => {
     event.preventDefault();

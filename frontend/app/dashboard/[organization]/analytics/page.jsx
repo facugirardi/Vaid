@@ -221,7 +221,7 @@ const Page = () => {
                     </div>
                 </Col>
                 <Col md={5}>
-                    <div className="card2">
+                    <div className="card2 cardbgw">
                         <h5>Donaciones</h5>
                         {donations.length === 0 ? (
                             <p>No se encontraron registros.</p>
