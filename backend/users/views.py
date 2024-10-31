@@ -2403,3 +2403,89 @@ class ListCandidateOrganizationsAPIView(APIView):
             return Response({'error': 'Persona no encontrada'}, status=status.HTTP_404_NOT_FOUND)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+class IncomeList(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        org_id = request.query_params.get('org_id', None)
+        if org_id is not None:
+            incomes = Income.objects.filter(organization__id=org_id)
+        else:
+            incomes = Income.objects.all()
+
+        serializer = IncomeSerializer(incomes, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        # Asegúrate de incluir el org_id en los datos de la solicitud
+        org_id = request.query_params.get('org_id')
+        data = request.data.copy()
+        data['organization'] = org_id  # Agrega el ID de la organización a los datos
+
+        serializer = IncomeSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class IncomeDetail(APIView):
+    permission_classes = [AllowAny]
+
+    def get_object(self, pk):
+        try:
+            return Income.objects.get(pk=pk)
+        except Income.DoesNotExist:
+            return None
+
+    def delete(self, request, pk):
+        income = self.get_object(pk)
+        if income is None:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        income.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class ExpenseList(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        org_id = request.query_params.get('org_id', None)
+        if org_id is not None:
+            expenses = Expense.objects.filter(organization__id=org_id)
+        else:
+            expenses = Expense.objects.all()
+
+        serializer = ExpenseSerializer(expenses, many=True)
+        return Response(serializer.data)
+
+    def post(self, request):
+        # Asegúrate de incluir el org_id en los datos de la solicitud
+        org_id = request.query_params.get('org_id')
+        data = request.data.copy()
+        data['organization'] = org_id  # Agrega el ID de la organización a los datos
+
+        serializer = ExpenseSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class ExpenseDetail(APIView):
+    permission_classes = [AllowAny]
+
+    def get_object(self, pk):
+        try:
+            return Expense.objects.get(pk=pk)
+        except Expense.DoesNotExist:
+            return None
+
+    def delete(self, request, pk):
+        expense = self.get_object(pk)
+        if expense is None:
+            return Response(status=status.HTTP_404_NOT_FOUND)
+        expense.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
