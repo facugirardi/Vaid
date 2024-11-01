@@ -12,7 +12,7 @@ const Layout = ({ children }) => {
     return (
         <RequireAuth>
             <RequireComplete>
-            <RequireBeMember>
+                <RequireBeMember>
                     {children}
                 </RequireBeMember>
             </RequireComplete>

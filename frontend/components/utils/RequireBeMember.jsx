@@ -82,9 +82,5 @@ export default function RequireBeMember({ children }) {
         return <div>Error loading user data</div>;
     }
 
-    if (!isMemberOfOrganization) {
-        return window.location.href = '/dashboard';
-    }
-
     return <>{children}</>;
 }

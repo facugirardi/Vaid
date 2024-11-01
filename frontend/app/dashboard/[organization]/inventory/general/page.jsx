@@ -10,6 +10,7 @@ import { Modal, Button, Form} from 'react-bootstrap';
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 import { toast } from "react-toastify";
 import { Eye, EyeSlash, Trash } from 'phosphor-react';
+import Select from 'react-select'; // Importa React Select
 
 const Inventory = ({ headquarterId, addHistoryEntry }) => {
   const [inventory, setInventory] = useState([]);
@@ -20,7 +21,10 @@ const Inventory = ({ headquarterId, addHistoryEntry }) => {
   const [showDeleteProductModal, setShowDeleteProductModal] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [organizationId, setOrganizationId] = useState("");
-  
+  const [filterCategory, setFilterCategory] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
+  const [filterExpiration, setFilterExpiration] = useState('');
+
   const { data: user, isError, isLoading } = useRetrieveUserQuery();
   useEffect(() => {
     const currentUrl = window.location.href;
@@ -79,6 +83,77 @@ const Inventory = ({ headquarterId, addHistoryEntry }) => {
     loadHeadquarters();
   }, [organizationId]);
 
+
+  const applyFilters = (products) => {
+    let filteredProducts = products.filter(product => {
+      const matchesCategory = filterCategory ? product.category_name === filterCategory : true;
+      const matchesStatus = filterStatus ? product.status_name === filterStatus : true;
+      return matchesCategory && matchesStatus;
+    });
+  
+    // Ordenar los productos según la fecha de expiración
+    if (filterExpiration === 'asc') {
+      filteredProducts.sort((a, b) => new Date(a.expDate) - new Date(b.expDate));
+    } else if (filterExpiration === 'desc') {
+      filteredProducts.sort((a, b) => new Date(b.expDate) - new Date(a.expDate));
+    }
+  
+    return filteredProducts;
+  };
+  const categoryOptions = [
+    { value: '', label: 'Todas las Categorías' },
+    { value: 'Comida', label: 'Comida' },
+    { value: 'Herramientas', label: 'Herramientas' },
+    { value: 'Bebidas', label: 'Bebidas' },
+    { value: 'Dinero', label: 'Dinero' },
+    { value: 'Otros', label: 'Otros' },
+    { value: 'Medicamentos', label: 'Medicamentos' },
+    { value: 'Ropa', label: 'Ropa' },
+  ];
+
+  const statusOptions = [
+    { value: '', label: 'Todos los Estados' },
+    { value: 'Disponible', label: 'Disponible' },
+    { value: 'No Disponible', label: 'No Disponible' },
+  ];
+
+  const expirationOptions = [
+    { value: '', label: 'Sin Orden' },
+    { value: 'asc', label: 'Expira Antes' },
+    { value: 'desc', label: 'Expira Después' },
+  ];
+
+  const filterControls = (
+    <div className="filter-controls row">
+      <div className="col-md-4">
+        <Select
+          options={categoryOptions}
+          value={categoryOptions.find(option => option.value === filterCategory)}
+          onChange={(selectedOption) => setFilterCategory(selectedOption.value)}
+          placeholder="Selecciona una categoría"
+        />
+      </div>
+  
+      <div className="col-md-4">
+        <Select
+          options={statusOptions}
+          value={statusOptions.find(option => option.value === filterStatus)}
+          onChange={(selectedOption) => setFilterStatus(selectedOption.value)}
+          placeholder="Selecciona un estado"
+        />
+      </div>
+  
+      <div className="col-md-4">
+        <Select
+          options={expirationOptions}
+          value={expirationOptions.find(option => option.value === filterExpiration)}
+          onChange={(selectedOption) => setFilterExpiration(selectedOption.value)}
+          placeholder="Selecciona orden de expiración"
+        />
+      </div>
+    </div>
+  );
+  
   const handleInventoryModalShow = () => {
     loadHeadquarters(); 
     setShowInventoryModal(true);
@@ -184,74 +259,75 @@ const Inventory = ({ headquarterId, addHistoryEntry }) => {
   return (
     <div className="card">
       <h2>Productos</h2>
-      {inventory.length === 0 ? (
-        <>
-          <br />
-          <p>No se encontraron productos en el inventario.</p>
+      {filterControls}
+{applyFilters(inventory).length === 0 ? (
+  <>
+    <br />
+    <p>No se encontraron productos en el inventario.</p>
+    <button className="add-button" onClick={handleInventoryModalShow}>
+      <FontAwesomeIcon icon={faPlus} className='hover-button' />
+    </button>
+  </>
+) : (
+  <>
+  <table className="table">
+    <thead>
+      <tr>
+        <th className='text-center'>Nombre</th>
+        <th className='text-center'>Cantidad</th>
+        <th className='text-center'>Estado</th>
+        <th className='text-center'>Expiración</th>
+        <th className='text-center'>Categoría</th>
+        <th className='text-center'>Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      {applyFilters(inventory).map(item => (
+        <tr key={item.id}>
+          <td className='text-center'><b>{item.name}</b></td>
+          <td className='text-center'>{item.total_quantity}</td>
+          <td className='text-center'><b>{item.status_name}</b></td>
+          <td className='text-center'>{item.expDate ? item.expDate : '-'}</td>
+          <td
+            className="text-center"
+            style={{
+              color:
+                item.category_name === "Comida"
+                  ? "#795548"
+                  : item.category_name === "Herramientas"
+                  ? "#2196F3"
+                  : item.category_name === "Bebidas"
+                  ? "#FF9800"
+                  : item.category_name === "Dinero"
+                  ? "#2BC155"
+                  : item.category_name === "Otros"
+                  ? "#9E9E9E"
+                  : item.category_name === "Medicamentos"
+                  ? "#FF3E3E"
+                  : item.category_name === "Ropa"
+                  ? "#9C27B0"
+                  : "inherit",
+            }}
+          >
+            <b>{item.category_name}</b>
+          </td>
+          <td className='text-center'>
+            <button className="icon-button" onClick={() => handleProductModalShow(item)}>
+              <Eye className='hover-button' size={20} weight="bold" />
+            </button>
+            <button className="icon-button" onClick={() => handleDeleteProductModalShow(item)}>
+              <Trash className='hover-button-trash' size={20} weight="bold" />
+            </button>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
           <button className="add-button" onClick={handleInventoryModalShow}>
-            <FontAwesomeIcon icon={faPlus} className='hover-button' />
-          </button>
+          <FontAwesomeIcon icon={faPlus} className='hover-button' />
+        </button>
         </>
-      ) : (
-        <>
-          <table className="table">
-            <thead>
-              <tr>
-                <th className='text-center'>Nombre</th>
-                <th className='text-center'>Cantidad</th>
-                <th className='text-center'>Estado</th>
-                <th className='text-center'>Expiración</th>
-                <th className='text-center'>Categoría</th>
-                <th className='text-center'>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              {inventory.map(item => (
-                <tr key={item.id}>
-                  <td className='text-center'><b>{item.name}</b></td>
-                  <td className='text-center'>{item.total_quantity}</td>
-                  <td className='text-center'><b>{item.status_name}</b></td>
-                  <td className='text-center'>{item.expDate ? item.expDate : '-'}</td>
-                  <td
-                    className="text-center"
-                    style={{
-                      color:
-                        item.category_name === "Comida"
-                          ? "#795548"
-                          : item.category_name === "Herramientas"
-                          ? "#2196F3"
-                          : item.category_name === "Bebidas"
-                          ? "#FF9800"
-                          : item.category_name === "Dinero"
-                          ? "#2BC155"
-                          : item.category_name === "Otros"
-                          ? "#9E9E9E"
-                          : item.category_name === "Medicamentos"
-                          ? "#FF3E3E"
-                          : item.category_name === "Ropa"
-                          ? "#9C27B0"
-                          : "inherit",
-                    }}
-                  >
-                    <b>{item.category_name}</b>
-                  </td>
-                  <td className='text-center'>
-                    <button className="icon-button" onClick={() => handleProductModalShow(item)}>
-                      <Eye className='hover-button' size={20} weight="bold" />
-                    </button>
-                    <button className="icon-button" onClick={() => handleDeleteProductModalShow(item)}>
-                      <Trash className='hover-button-trash' size={20} weight="bold" />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <button className="add-button" onClick={handleInventoryModalShow}>
-            <FontAwesomeIcon icon={faPlus} className='hover-button' />
-          </button>
-        </>
-      )}
+  )}
 
       <Modal show={showInventoryModal} onHide={handleInventoryModalClose} backdropClassName="modal-backdrop" centered size='lg'>
         <Modal.Header closeButton>

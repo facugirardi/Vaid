@@ -10,6 +10,7 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 import { toast } from "react-toastify";
 import { Eye, EyeSlash, Trash, PencilSimpleLine } from 'phosphor-react';
+import Select from 'react-select'; // Importa React Select
 
 const Headquarters = ({ onHeadquarterClick, addHistoryEntry, headquarters, setHeadquarters, user }) => {
   const [organizationId, setOrganizationId] = useState("");
@@ -294,6 +295,48 @@ const Inventory = ({ headquarterId, organizationId, addHistoryEntry, user }) => 
   const [editStatus, setEditStatus] = useState(1);
   const [editCategory, setEditCategory] = useState('');
   const [editExpDate, setEditExpDate] = useState('');
+  const [filterCategory, setFilterCategory] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
+  const [filterExpiration, setFilterExpiration] = useState('');
+
+  const categoryOptions = [
+    { value: '', label: 'Todas las Categorías' },
+    { value: 'Comida', label: 'Comida' },
+    { value: 'Herramientas', label: 'Herramientas' },
+    { value: 'Bebidas', label: 'Bebidas' },
+    { value: 'Dinero', label: 'Dinero' },
+    { value: 'Otros', label: 'Otros' },
+    { value: 'Medicamentos', label: 'Medicamentos' },
+    { value: 'Ropa', label: 'Ropa' },
+  ];
+
+  const statusOptions = [
+    { value: '', label: 'Todos los Estados' },
+    { value: 'Disponible', label: 'Disponible' },
+    { value: 'No Disponible', label: 'No Disponible' },
+  ];
+
+  const expirationOptions = [
+    { value: '', label: 'Sin Orden' },
+    { value: 'asc', label: 'Expira Antes' },
+    { value: 'desc', label: 'Expira Después' },
+  ];
+
+  const applyFilters = (products) => {
+    let filteredProducts = products.filter(product => {
+      const matchesCategory = filterCategory ? product.Product.category_name === filterCategory : true;
+      const matchesStatus = filterStatus ? product.Product.status_name === filterStatus : true;
+      return matchesCategory && matchesStatus;
+    });
+
+    if (filterExpiration === 'asc') {
+      filteredProducts.sort((a, b) => new Date(a.Product.expDate) - new Date(b.Product.expDate));
+    } else if (filterExpiration === 'desc') {
+      filteredProducts.sort((a, b) => new Date(b.Product.expDate) - new Date(a.Product.expDate));
+    }
+
+    return filteredProducts;
+  };
 
   useEffect(() => {
     if (headquarterId) {
@@ -495,12 +538,45 @@ const handleDeleteProduct = async () => {
   return (
     <div className="card product-container">
       <h2>Productos</h2>
+      {/* Controles de Filtro */}
+      <div className="filter-controls row">
+        <div className="col-md-4">
+        <Select
+          options={categoryOptions}
+          value={categoryOptions.find(option => option.value === filterCategory)}
+          onChange={(selectedOption) => setFilterCategory(selectedOption.value)}
+          placeholder="Selecciona una categoría"
+          menuPortalTarget={document.body} // Hace que el menú se renderice fuera del contenedor
+          styles={{
+            menuPortal: base => ({ ...base, zIndex: 9999 }) // Ajusta el z-index para asegurar que esté encima
+          }}
+        />
+        </div>
+
+        <div className="col-md-4">
+          <Select
+            options={statusOptions}
+            value={statusOptions.find(option => option.value === filterStatus)}
+            onChange={(selectedOption) => setFilterStatus(selectedOption.value)}
+            placeholder="Selecciona un estado"
+          />
+        </div>
+
+        <div className="col-md-4">
+          <Select
+            options={expirationOptions}
+            value={expirationOptions.find(option => option.value === filterExpiration)}
+            onChange={(selectedOption) => setFilterExpiration(selectedOption.value)}
+            placeholder="Orden de expiración"
+          />
+        </div>
+      </div>
       {!headquarterId ? (
         <>
         <br/>
         <p className='p-inventory'>Por favor, selecciona una sede para ver el inventario.</p>
         </>
-      ) : inventory.length === 0 ? (
+      ) : applyFilters(inventory).length === 0 ? (
         <>
         <br/>
         <p className='p-inventory'>No se encontraron productos en el inventario.<br></br><br></br>Comienza agregando tus primeros productos usando el botón '+'.</p>
@@ -521,7 +597,7 @@ const handleDeleteProduct = async () => {
               </tr>
             </thead>
             <tbody>
-              {inventory.map(item => (
+              {applyFilters(inventory).map(item => (
                 <tr key={item.id}>
                   <td className='text-center p-inventory'><b>{item?.Product?.name}</b></td>
                   <td className='text-center '>{item.cuantity}</td>
