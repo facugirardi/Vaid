@@ -11,6 +11,7 @@ import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 import { toast } from "react-toastify";
 import { Eye, EyeSlash, Trash, PencilSimpleLine } from 'phosphor-react';
 import Select from 'react-select'; // Importa React Select
+import { faFilter } from '@fortawesome/free-solid-svg-icons'; // Asegúrate de importar el ícono de filtro
 
 const Headquarters = ({ onHeadquarterClick, addHistoryEntry, headquarters, setHeadquarters, user }) => {
   const [organizationId, setOrganizationId] = useState("");
@@ -172,7 +173,9 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry, headquarters, setHe
                 }}
               >
                 <td className="flex-grow-1 d-flex align-items-center justify-content-start p-inventory">{hq.name}</td>
-                <td className="flex-grow-1 d-flex align-items-center justify-content-start p-inventory">{hq.address}</td>
+                <td className=" d-flex align-items-center justify-content-start p-inventory">
+                  <span className='ml-td0'>{hq.address}</span>
+                </td>
                 <td className="d-flex align-items-center justify-content-end">
                   <button className="edit-button" onClick={(e) => { e.stopPropagation(); handleEditModalShow(hq); }}>
                     <PencilSimpleLine className='hover-button' size={21} weight="bold" />
@@ -298,6 +301,7 @@ const Inventory = ({ headquarterId, organizationId, addHistoryEntry, user }) => 
   const [filterCategory, setFilterCategory] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
   const [filterExpiration, setFilterExpiration] = useState('');
+  const [showFilters, setShowFilters] = useState(false); // Estado para controlar la visibilidad de los filtros
 
   const categoryOptions = [
     { value: '', label: 'Todas las Categorías' },
@@ -321,6 +325,7 @@ const Inventory = ({ headquarterId, organizationId, addHistoryEntry, user }) => 
     { value: 'asc', label: 'Expira Antes' },
     { value: 'desc', label: 'Expira Después' },
   ];
+  const toggleFilters = () => setShowFilters(!showFilters); // Función para alternar la visibilidad de los filtros
 
   const applyFilters = (products) => {
     let filteredProducts = products.filter(product => {
@@ -538,39 +543,37 @@ const handleDeleteProduct = async () => {
   return (
     <div className="card product-container">
       <h2>Productos</h2>
-      {/* Controles de Filtro */}
-      <div className="filter-controls row">
-        <div className="col-md-4">
-        <Select
-          options={categoryOptions}
-          value={categoryOptions.find(option => option.value === filterCategory)}
-          onChange={(selectedOption) => setFilterCategory(selectedOption.value)}
-          placeholder="Selecciona una categoría"
-          menuPortalTarget={document.body} // Hace que el menú se renderice fuera del contenedor
-          styles={{
-            menuPortal: base => ({ ...base, zIndex: 9999 }) // Ajusta el z-index para asegurar que esté encima
-          }}
-        />
-        </div>
 
-        <div className="col-md-4">
-          <Select
-            options={statusOptions}
-            value={statusOptions.find(option => option.value === filterStatus)}
-            onChange={(selectedOption) => setFilterStatus(selectedOption.value)}
-            placeholder="Selecciona un estado"
-          />
+      {showFilters && (
+        <div className="filter-controls row">
+          <div className="col-md-4">
+            <Select
+              options={categoryOptions}
+              value={categoryOptions.find(option => option.value === filterCategory)}
+              onChange={(selectedOption) => setFilterCategory(selectedOption.value)}
+              placeholder="Selecciona una categoría"
+              menuPortalTarget={document.body}
+              styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+            />
+          </div>
+          <div className="col-md-4">
+            <Select
+              options={statusOptions}
+              value={statusOptions.find(option => option.value === filterStatus)}
+              onChange={(selectedOption) => setFilterStatus(selectedOption.value)}
+              placeholder="Selecciona un estado"
+            />
+          </div>
+          <div className="col-md-4">
+            <Select
+              options={expirationOptions}
+              value={expirationOptions.find(option => option.value === filterExpiration)}
+              onChange={(selectedOption) => setFilterExpiration(selectedOption.value)}
+              placeholder="Orden de expiración"
+            />
+          </div>
         </div>
-
-        <div className="col-md-4">
-          <Select
-            options={expirationOptions}
-            value={expirationOptions.find(option => option.value === filterExpiration)}
-            onChange={(selectedOption) => setFilterExpiration(selectedOption.value)}
-            placeholder="Orden de expiración"
-          />
-        </div>
-      </div>
+      )}
       {!headquarterId ? (
         <>
         <br/>
@@ -643,6 +646,9 @@ const handleDeleteProduct = async () => {
           <button className="add-button" onClick={handleInventoryModalShow}>
             <FontAwesomeIcon icon={faPlus} className='hover-button'/>
           </button>
+          <div className="add-button filter-toggle" onClick={toggleFilters}>
+            <FontAwesomeIcon icon={faFilter} className='hover-button' />
+          </div>
         </>
       )}
 
