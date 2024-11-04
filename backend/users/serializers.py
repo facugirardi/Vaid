@@ -12,6 +12,17 @@ class NewsletterSubscriptionSerializer(serializers.ModelSerializer):
         model = NewsletterSubscription
         fields = ['email']
 
+class IncomeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Income
+        fields = '__all__'
+
+class ExpenseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Expense
+        fields = '__all__'
+
+
 class CandidateDetailSerializer(serializers.ModelSerializer):
     first_name = serializers.CharField(source='Person.User.first_name')
     last_name = serializers.CharField(source='Person.User.last_name')

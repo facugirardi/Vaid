@@ -10,8 +10,10 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 import { toast } from "react-toastify";
 import { Eye, EyeSlash, Trash, PencilSimpleLine } from 'phosphor-react';
+import Select from 'react-select'; // Importa React Select
+import { faFilter } from '@fortawesome/free-solid-svg-icons'; // Asegúrate de importar el ícono de filtro
 
-const Headquarters = ({ onHeadquarterClick, addHistoryEntry, headquarters, setHeadquarters }) => {
+const Headquarters = ({ onHeadquarterClick, addHistoryEntry, headquarters, setHeadquarters, user }) => {
   const [organizationId, setOrganizationId] = useState("");
   const [showHeadquarterModal, setShowHeadquarterModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -20,7 +22,6 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry, headquarters, setHe
   const [editName, setEditName] = useState("");
   const [editAddress, setEditAddress] = useState("");
 
-  const { data: user, isError, isLoading } = useRetrieveUserQuery();
 
   useEffect(() => {
     const currentUrl = window.location.href;
@@ -73,7 +74,9 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry, headquarters, setHe
                 onHeadquarterClick(null); 
             }
 
-            addHistoryEntry(`Sede "${selectedHeadquarter.name}" eliminada por ${user.first_name} ${user.last_name}`);
+            if (user) {
+              addHistoryEntry(`Registro de sede "${selectedHeadquarter.name}" eliminado por ${user.first_name} ${user.last_name}`, 'Eliminación de Sede');
+            }
             handleDeleteModalClose();
 
         } else {
@@ -106,8 +109,10 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry, headquarters, setHe
         if (response.ok) {
             const newHeadquarter = await response.json();
             setHeadquarters([...headquarters, newHeadquarter]);
-            addHistoryEntry(`Sede "${newHeadquarter.name}" agregada por ${user.first_name} ${user.last_name}`);
-            handleHeadquarterModalClose(); 
+            if (user) {
+              addHistoryEntry(`Registro de sede "${newHeadquarter.name}" agregado por ${user.first_name} ${user.last_name}`, 'Creación de Sede');
+            }
+                handleHeadquarterModalClose(); 
         } else {
             toast.error('Error en la respuesta:', response.status);
         }
@@ -138,6 +143,9 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry, headquarters, setHe
         const updatedHeadquartersList = headquarters.map(hq => hq.id === updatedHeadquarter.id ? updatedHeadquarter : hq);
         setHeadquarters(updatedHeadquartersList);
         toast.success('Sede actualizada con éxito');
+        if (user) {
+          addHistoryEntry(`Registro de sede "${updatedHeadquarter.name}" editado por ${user.first_name} ${user.last_name}`, 'Edición de Sede');
+        }
         handleEditModalClose();
       } else {
         toast.error('Error al actualizar la sede:', response.status);
@@ -165,7 +173,9 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry, headquarters, setHe
                 }}
               >
                 <td className="flex-grow-1 d-flex align-items-center justify-content-start p-inventory">{hq.name}</td>
-                <td className="flex-grow-1 d-flex align-items-center justify-content-start p-inventory">{hq.address}</td>
+                <td className=" d-flex align-items-center justify-content-start p-inventory">
+                  <span className='ml-td0'>{hq.address}</span>
+                </td>
                 <td className="d-flex align-items-center justify-content-end">
                   <button className="edit-button" onClick={(e) => { e.stopPropagation(); handleEditModalShow(hq); }}>
                     <PencilSimpleLine className='hover-button' size={21} weight="bold" />
@@ -276,7 +286,7 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry, headquarters, setHe
   );
 };
 
-const Inventory = ({ headquarterId, organizationId }) => {
+const Inventory = ({ headquarterId, organizationId, addHistoryEntry, user }) => {
   const [inventory, setInventory] = useState([]);
   const [showInventoryModal, setShowInventoryModal] = useState(false);
   const [showProductModal, setShowProductModal] = useState(false);
@@ -288,6 +298,50 @@ const Inventory = ({ headquarterId, organizationId }) => {
   const [editStatus, setEditStatus] = useState(1);
   const [editCategory, setEditCategory] = useState('');
   const [editExpDate, setEditExpDate] = useState('');
+  const [filterCategory, setFilterCategory] = useState('');
+  const [filterStatus, setFilterStatus] = useState('');
+  const [filterExpiration, setFilterExpiration] = useState('');
+  const [showFilters, setShowFilters] = useState(false); // Estado para controlar la visibilidad de los filtros
+
+  const categoryOptions = [
+    { value: '', label: 'Todas las Categorías' },
+    { value: 'Comida', label: 'Comida' },
+    { value: 'Herramientas', label: 'Herramientas' },
+    { value: 'Bebidas', label: 'Bebidas' },
+    { value: 'Dinero', label: 'Dinero' },
+    { value: 'Otros', label: 'Otros' },
+    { value: 'Medicamentos', label: 'Medicamentos' },
+    { value: 'Ropa', label: 'Ropa' },
+  ];
+
+  const statusOptions = [
+    { value: '', label: 'Todos los Estados' },
+    { value: 'Disponible', label: 'Disponible' },
+    { value: 'No Disponible', label: 'No Disponible' },
+  ];
+
+  const expirationOptions = [
+    { value: '', label: 'Sin Orden' },
+    { value: 'asc', label: 'Expira Antes' },
+    { value: 'desc', label: 'Expira Después' },
+  ];
+  const toggleFilters = () => setShowFilters(!showFilters); // Función para alternar la visibilidad de los filtros
+
+  const applyFilters = (products) => {
+    let filteredProducts = products.filter(product => {
+      const matchesCategory = filterCategory ? product.Product.category_name === filterCategory : true;
+      const matchesStatus = filterStatus ? product.Product.status_name === filterStatus : true;
+      return matchesCategory && matchesStatus;
+    });
+
+    if (filterExpiration === 'asc') {
+      filteredProducts.sort((a, b) => new Date(a.Product.expDate) - new Date(b.Product.expDate));
+    } else if (filterExpiration === 'desc') {
+      filteredProducts.sort((a, b) => new Date(b.Product.expDate) - new Date(a.Product.expDate));
+    }
+
+    return filteredProducts;
+  };
 
   useEffect(() => {
     if (headquarterId) {
@@ -347,7 +401,12 @@ const handleEditProductSubmit = async (event) => {
                         : item
                 )
             );
-
+            if (user) {
+              addHistoryEntry(`Producto "${updatedProductData.name}" editado por ${user.first_name} ${user.last_name}`, 'Cambio en Inventario');
+            } else {
+              console.warn("Usuario no disponible para el registro en el historial.");
+            }
+      
             toast.success('Producto actualizado con éxito');
             handleEditProductModalClose();
         } else {
@@ -389,26 +448,6 @@ const handleEditProductModalShow = (inventoryItem) => {
 
   const handleDeleteProductModalClose = () => setShowDeleteProductModal(false);
   
-  const addHistoryEntry = async (entry) => {
-    try {
-        const response = await fetch(`http://localhost:8000/api/${organizationId}/history/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        body: JSON.stringify({ description: entry, action: 'Cambio en Inventario', Organization: organizationId}),
-        });
-
-        if (response.ok) {
-            console.log('Historial registrado con éxito');
-            fetchHistory();
-        } else {
-            toast.error('Error al registrar el historial');
-        }
-    } catch (error) {
-        console.error('Error:', error);
-    }
-  };
 
 const handleDeleteProduct = async () => {
     if (!selectedProduct) return;
@@ -432,7 +471,12 @@ const handleDeleteProduct = async () => {
                 console.log("Inventario después de eliminar:", updatedInventory);
                 return updatedInventory;
             });
-
+            if (user) {
+              addHistoryEntry(`Producto "${selectedProduct.name}" eliminado por ${user.first_name} ${user.last_name}`, 'Cambio en Inventario');
+            } else {
+              console.warn("Usuario no disponible para el registro en el historial.");
+            }
+      
             setShowDeleteProductModal(false);
             toast.success(`Producto "${selectedProduct.name}" eliminado con éxito`);
         } else {
@@ -479,11 +523,15 @@ const handleDeleteProduct = async () => {
         });
 
         if (response.ok) {
-            const newProduct = await response.json();
-            setInventory([...inventory, newProduct]);
-            setShowInventoryModal(false);
-            addHistoryEntry(`Producto "${newProduct.name}" agregado por ${user.first_name} ${user.last_name}`);
-        } else {
+          const newProduct = await response.json();
+          setInventory([...inventory, newProduct]);
+          setShowInventoryModal(false);
+          if (user) {
+            addHistoryEntry(`Producto "${newProduct.Product.name}" agregado por ${user.first_name} ${user.last_name}`, 'Cambio en Inventario');
+          } else {
+            console.warn("Usuario no disponible para el registro en el historial.");
+          }
+          } else {
             const errorData = await response.json();
             toast.error('Error en la respuesta:', response.status, errorData);
         }
@@ -495,12 +543,43 @@ const handleDeleteProduct = async () => {
   return (
     <div className="card product-container">
       <h2>Productos</h2>
+
+      {showFilters && (
+        <div className="filter-controls row">
+          <div className="col-md-4">
+            <Select
+              options={categoryOptions}
+              value={categoryOptions.find(option => option.value === filterCategory)}
+              onChange={(selectedOption) => setFilterCategory(selectedOption.value)}
+              placeholder="Selecciona una categoría"
+              menuPortalTarget={document.body}
+              styles={{ menuPortal: base => ({ ...base, zIndex: 9999 }) }}
+            />
+          </div>
+          <div className="col-md-4">
+            <Select
+              options={statusOptions}
+              value={statusOptions.find(option => option.value === filterStatus)}
+              onChange={(selectedOption) => setFilterStatus(selectedOption.value)}
+              placeholder="Selecciona un estado"
+            />
+          </div>
+          <div className="col-md-4">
+            <Select
+              options={expirationOptions}
+              value={expirationOptions.find(option => option.value === filterExpiration)}
+              onChange={(selectedOption) => setFilterExpiration(selectedOption.value)}
+              placeholder="Orden de expiración"
+            />
+          </div>
+        </div>
+      )}
       {!headquarterId ? (
         <>
         <br/>
         <p className='p-inventory'>Por favor, selecciona una sede para ver el inventario.</p>
         </>
-      ) : inventory.length === 0 ? (
+      ) : applyFilters(inventory).length === 0 ? (
         <>
         <br/>
         <p className='p-inventory'>No se encontraron productos en el inventario.<br></br><br></br>Comienza agregando tus primeros productos usando el botón '+'.</p>
@@ -521,7 +600,7 @@ const handleDeleteProduct = async () => {
               </tr>
             </thead>
             <tbody>
-              {inventory.map(item => (
+              {applyFilters(inventory).map(item => (
                 <tr key={item.id}>
                   <td className='text-center p-inventory'><b>{item?.Product?.name}</b></td>
                   <td className='text-center '>{item.cuantity}</td>
@@ -567,6 +646,9 @@ const handleDeleteProduct = async () => {
           <button className="add-button" onClick={handleInventoryModalShow}>
             <FontAwesomeIcon icon={faPlus} className='hover-button'/>
           </button>
+          <div className="add-button filter-toggle" onClick={toggleFilters}>
+            <FontAwesomeIcon icon={faFilter} className='hover-button' />
+          </div>
         </>
       )}
 
@@ -759,42 +841,47 @@ const History = ({ organizationId, localHistory, setLocalHistory }) => {
   return (
     <div className="card history-container">
       <h2>Historial</h2>
-      <br></br>
-<ul className="history-list mt-20">
-  {Array.isArray(localHistory) && localHistory.length === 0 ? (
-    <p className='p-inventory'>No hay historial todavía</p>
-  ) : (
-    Array.isArray(localHistory) &&
-    localHistory.map((entry, index) => (
-      <div key={index} className='container'>
-        <div className='row align-items-center'>
-          <div className='col-5 col-md-3 text-center'>
-            <p className='p-history'>{entry.date}</p>
-          </div>
-          <div className='col-5 col-md-8'>
-            <p className='p-history'><b>{entry.action}</b>
-            {entry.description.includes('agregado') && (
-              <span className="badge bg-success ms-2">Agregado</span>
-            )}
-            {entry.description.includes('eliminado') && (
-              <span className="badge bg-danger ms-2">Eliminado</span>
-            )}
-            </p>
-            <p className='p-history'>
-            {entry.description}
-          </p>
-          </div>
-        </div> 
-        <br/>
-      </div>
-    ))
-  )}
-</ul>
+      <br />
+      <ul className="history-list mt-20">
+        {Array.isArray(localHistory) && localHistory.length === 0 ? (
+          <p className='p-inventory'>No hay historial todavía</p>
+        ) : (
+          Array.isArray(localHistory) &&
+          [...localHistory]
+            .reverse() // Invierte el orden para mostrar del más reciente al más antiguo
+            .map((entry, index) => (
+              <div key={index} className='container'>
+                <div className='row align-items-center'>
+                  <div className='col-5 col-md-3 text-center'>
+                    <p className='p-history'>{entry.date}</p>
+                  </div>
+                  <div className='col-5 col-md-8'>
+                    <p className='p-history'>
+                      <b>{entry.action}</b>
+                      {entry.description.includes('agregado') && (
+                        <span className="badge bg-success ms-2">Agregado</span>
+                      )}
+                      {entry.description.includes('eliminado') && (
+                        <span className="badge bg-danger ms-2">Eliminado</span>
+                      )}
+                      {entry.description.includes('editado') && (
+                        <span className="badge bg-warning ms-2">Editado</span>
+                      )}
+                    </p>
+                    <p className='p-history'>{entry.description}</p>
+                  </div>
+                </div> 
+                <br />
+              </div>
+            ))
+        )}
+      </ul>
     </div>
   );
 };
 
 const Page = () => {
+  const { data: user, isError, isLoading } = useRetrieveUserQuery();
   const [selectedHeadquarterId, setSelectedHeadquarterId] = useState(null);
   const [organizationId, setOrganizationId] = useState("");
   const [localHistory, setLocalHistory] = useState([]);
@@ -802,72 +889,85 @@ const Page = () => {
   const [headquarters, setHeadquarters] = useState([]);
 
   useEffect(() => {
-      const currentUrl = window.location.href;
-      const url = new URL(currentUrl);
-      const pathSegments = url.pathname.split('/');
-      const dashboardIndex = pathSegments.indexOf('dashboard');
-      if (dashboardIndex !== -1 && pathSegments.length > dashboardIndex + 1) {
-          setOrganizationId(pathSegments[dashboardIndex + 1]);
-      }
+    const currentUrl = window.location.href;
+    const url = new URL(currentUrl);
+    const pathSegments = url.pathname.split('/');
+    const dashboardIndex = pathSegments.indexOf('dashboard');
+    if (dashboardIndex !== -1 && pathSegments.length > dashboardIndex + 1) {
+      setOrganizationId(pathSegments[dashboardIndex + 1]);
+    }
   }, []);
 
   const handleHeadquarterClick = (hqId) => {
     setSelectedHeadquarterId(hqId);
     setSelectedHeadquarter(headquarters.find(hq => hq.id === hqId)); 
   };
-  
-  const addHistoryEntry = async (entry) => {
-      try {
-          const response = await fetch(`http://localhost:8000/api/${organizationId}/history/`, {
-              method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-              },
-          body: JSON.stringify({ description: entry, action: 'Cambio en Inventario', Organization: organizationId}),
-          });
-
-          if (response.ok) {
-              console.log('Historial registrado con éxito');
-              fetchHistory();
-          } else {
-              toast.error('Error al registrar el historial');
-          }
-      } catch (error) {
-          console.error('Error:', error);
-      }
-  };
 
   const fetchHistory = async () => {
+    if (organizationId) {
       try {
-          const response = await fetch(`http://localhost:8000/api/organizations/${organizationId}/history/`);
-          const data = await response.json();
-          setLocalHistory(data);
+        const response = await fetch(`http://localhost:8000/api/organizations/${organizationId}/history/`);
+        const data = await response.json();
+        setLocalHistory(data);
       } catch (error) {
-          console.error('Error al obtener el historial:', error);
+        console.error('Error al obtener el historial:', error);
       }
+    }
+  };
+
+  const addHistoryEntry = async (description, action) => {
+    if (!user) {
+      console.error('Usuario no disponible para el registro en el historial.');
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:8000/api/${organizationId}/history/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ description, action, Organization: organizationId }),
+      });
+
+      if (response.ok) {
+        console.log('Historial registrado con éxito');
+        fetchHistory(); // Actualiza el historial después de registrar una entrada
+      } else {
+        toast.error('Error al registrar el historial');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   return (
     <Layout>
-        <div className="container">
-            <BreadcrumbItem mainTitle="Gestión de Recursos" subTitle="Inventario por Sede" />
-            <div className='row'>
-                <div className="col-md-6">
-                    <Headquarters
-                      onHeadquarterClick={handleHeadquarterClick}
-                      addHistoryEntry={addHistoryEntry}
-                      headquarters={headquarters}
-                      setHeadquarters={setHeadquarters}
-                    />
-                    <History organizationId={organizationId} localHistory={localHistory} setLocalHistory={setLocalHistory} />
-                </div>
-                <div className="col-md-6">
-                    <Inventory headquarterId={selectedHeadquarterId} organizationId={organizationId} />
-                </div>
-            </div>
+      <div className="container">
+        <BreadcrumbItem mainTitle="Gestión de Recursos" subTitle="Inventario por Sede" />
+        <div className='row'>
+          <div className="col-md-6">
+            <Headquarters
+              onHeadquarterClick={handleHeadquarterClick}
+              addHistoryEntry={addHistoryEntry}
+              headquarters={headquarters}
+              setHeadquarters={setHeadquarters}
+              user={user}
+            />
+            <History organizationId={organizationId} localHistory={localHistory} setLocalHistory={setLocalHistory} />
+          </div>
+          <div className="col-md-6">
+            <Inventory
+              headquarterId={selectedHeadquarterId}
+              organizationId={organizationId}
+              addHistoryEntry={addHistoryEntry}
+              user={user}
+            />
+          </div>
         </div>
+      </div>
     </Layout>
-);
+  );
 };
 
 export default Page;

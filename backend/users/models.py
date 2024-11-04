@@ -271,3 +271,25 @@ class NewsletterSubscription(models.Model):
 
     def __str__(self):
         return self.email
+
+class Income(models.Model):
+    description = models.CharField(max_length=255, default='Ingreso general')
+    date = models.DateField(default=timezone.now)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)  # Para manejar cantidades monetarias
+    category = models.CharField(max_length=255)  # Para categorizar ingresos
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.description} - {self.amount} on {self.date}"
+
+
+class Expense(models.Model):
+    description = models.CharField(max_length=255, default='Gasto general')
+    date = models.DateField(default=timezone.now)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)  # Para manejar cantidades monetarias
+    category = models.CharField(max_length=255)  # Para categorizar egresos
+    organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.description} - {self.amount} on {self.date}"
+

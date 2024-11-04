@@ -15,6 +15,9 @@ body {
     background-color: #f0f8ff; /* Mantener el mismo color en hover */
   }
   
+.ml-td0{
+    margin-right: 165px !important;
+}
 
 .hover-button-trash:hover{
     color: #c81d1d;
@@ -250,4 +253,8 @@ table th {
 }
 .bg-danger{
   background-color: #e04f4f !important;
+}
+
+.filter-toggle{
+    margin-right: 30px !important;
 }

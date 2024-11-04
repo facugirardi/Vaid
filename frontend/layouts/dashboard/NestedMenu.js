@@ -138,6 +138,8 @@ useEffect(() => {
           submenu: [
             { id: "reg-don", label: "Registrar Donaciones", icon: "ph-duotone ph-hand-heart", link: `/dashboard/${organizationId}/donations`, dataPage: "reg-don" },
             { id: "reg-ps", label: "Registrar Compras/Ventas", icon: "ph-duotone ph-tag", link: `/dashboard/${organizationId}/donations`, dataPage: "reg-ps" },
+            { id: "reg-ps", label: "Registrar Transacciones", icon: "ph-duotone ph-money", link: `/dashboard/${organizationId}/transactions`, dataPage: "reg-ps" },
+
           ],
         },
         { id: "analytics", label: "Estadisticas", icon: "ph-duotone ph-chart-bar", link: `/dashboard/${organizationId}/analytics`, dataPage: "analytics" },

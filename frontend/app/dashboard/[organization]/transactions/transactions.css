@@ -1,0 +1,224 @@
+body{
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.hover-button-trash:hover{
+  color: #c81d1d;
+  transition: .2s;
+}
+
+.hover-button:hover{
+  color: #2950CE;
+  transition: .2s;
+}
+
+.dashboard {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header {
+  width: 100%;
+  background: #ffffff;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+nav {
+  margin-bottom: 10px;
+  color: #555;
+}
+
+.main-content {
+  display: flex;
+  flex: 1;
+  padding: 20px;
+}
+
+.left-column {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  margin-right: 20px;
+}
+
+.right-column {
+  flex: 2;
+}
+
+.card {
+  background: #ffffff;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table th, table td {
+  padding: 10px;
+  border-bottom: 1px solid #dddddd;
+}
+
+table th {
+  text-align: left;
+  color: #888;
+}
+
+.icon-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.icon-button:last-child {
+  margin-right: 0;
+}
+
+.add-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 20px;
+  color: rgb(0, 0, 0);
+  position: absolute;
+  right: 20px;
+  top: 20px;
+  margin-left: 50px;
+
+}
+
+.history-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.history-list li {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.history-list .time {
+  width: 80px;
+  font-weight: bold;
+  color: #888;
+}
+
+.history-list .event {
+  display: flex;
+  align-items: center;
+}
+
+.history-list .label {
+  margin-right: 10px;
+  padding: 2px 5px;
+  border-radius: 3px;
+  color: #ffffff;
+  font-size: 12px;
+}
+
+.card h2 {
+  margin-top: 0;
+  color: #333;
+  font-size: 20px;
+  margin-right: 50px;
+}
+
+.card table {
+  margin-top: 20px;
+}
+
+.edit-button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  color: #000000;
+}
+
+.fa-ellipsis-v {
+  margin-left: 10px;
+}
+
+.trash-btn{
+margin-left: 15px !important;
+}
+
+.tr-class{
+cursor: pointer;
+}
+.tr-class:hover{
+  background-color: #f2f1f6;
+  transition: .2s;
+
+}
+
+.modal-backdrop {
+background-color: transparent;
+}
+
+.modal-open .modal {
+backdrop-filter: blur(5px); /* Adjust the blur amount as needed */
+}
+
+.linea-punteada {
+  border-left: 2px dashed #888;
+  height: 100px; /* Ajusta la altura según tus necesidades */
+  margin: 0 20px; /* Espaciado alrededor de la línea */
+  margin-bottom: -15px;
+}
+
+.fecha-historial{
+  margin-top: 30px;
+}
+
+.both-cont{
+  margin-top: 25px;
+}
+
+.p-donation{
+font-family: 'Inter', sans-serif;;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.6;
+    padding: 1px ;
+    margin-bottom: 5px;
+    color: #333; /* Color más oscuro para mejor contraste */
+}
+
+.text-green {
+  color: green !important;
+}
+
+.text-red {
+  color: red !important;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+.table td, .table th {
+  white-space: nowrap; /* Evita que el texto se divida en múltiples líneas */
+}
+
+@media (max-width: 768px) {
+  .table td, .table th {
+    font-size: 12px; /* Ajusta el tamaño de la fuente para pantallas pequeñas */
+  }
+}
+
