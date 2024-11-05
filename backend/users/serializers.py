@@ -18,10 +18,24 @@ class IncomeSerializer(serializers.ModelSerializer):
         model = Income
         fields = '__all__'
 
+    def create(self, validated_data):
+        # Asigna la organización manualmente si está en el contexto
+        organization = self.context.get("organization")
+        if organization:
+            validated_data["organization"] = organization
+        return super().create(validated_data)
+
 class ExpenseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Expense
         fields = '__all__'
+
+    def create(self, validated_data):
+        # Asigna la organización manualmente si está en el contexto
+        organization = self.context.get("organization")
+        if organization:
+            validated_data["organization"] = organization
+        return super().create(validated_data)
 
 
 class CandidateDetailSerializer(serializers.ModelSerializer):

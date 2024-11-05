@@ -242,8 +242,12 @@ const Donations = () => {
             <p><strong>Fecha:</strong> {selectedProduct.date}</p>
             <p><strong>Cantidad:</strong> {selectedProduct.quantity}</p>
             <p><strong>Tipo:</strong> {selectedProduct.type}</p>
-            <p><strong>Archivo:</strong><a href='http:localhost:8000/{selectedProduct.file}'>Link</a></p>
-          </div>
+            {selectedProduct.file && (
+                <p>
+                  <strong>Archivo:</strong> <a href={`http://localhost:8000${selectedProduct.file}`} target="_blank" rel="noopener noreferrer">Abrir Archivo</a>
+                </p>
+              )}
+            </div>
         )}
       </Modal.Body>
       </Modal>
@@ -483,7 +487,12 @@ const BuySell = () => {
               <p><strong>Monto:</strong> {selectedProduct.amount}</p>
               <p><strong>Fecha:</strong> {selectedProduct.date}</p>
               <p><strong>Tipo:</strong> {selectedProduct.type}</p>
-            </div>
+              {selectedProduct.file && (
+                <p>
+                  <strong>Archivo:</strong> <a href={`http://localhost:8000${selectedProduct.file}`} target="_blank" rel="noopener noreferrer">Abrir Archivo</a>
+                </p>
+              )}
+              </div>
           )}
         </Modal.Body>
       </Modal>

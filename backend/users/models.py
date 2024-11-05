@@ -279,6 +279,7 @@ class Income(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)  # Para manejar cantidades monetarias
     category = models.CharField(max_length=255)  # Para categorizar ingresos
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    file = models.FileField(upload_to='incomes_files/', blank=True, null=True)  # Campo para archivo
 
     def __str__(self):
         return f"{self.description} - {self.amount} on {self.date}"
@@ -290,6 +291,7 @@ class Expense(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)  # Para manejar cantidades monetarias
     category = models.CharField(max_length=255)  # Para categorizar egresos
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    file = models.FileField(upload_to='expenses_files/', blank=True, null=True)  # Campo para archivo
 
     def __str__(self):
         return f"{self.description} - {self.amount} on {self.date}"

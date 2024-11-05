@@ -2443,6 +2443,7 @@ class ListCandidateOrganizationsAPIView(APIView):
 
 class IncomeList(APIView):
     permission_classes = [AllowAny]
+    parser_classes = [MultiPartParser, FormParser]  # Habilita la carga de archivos
 
     def get(self, request):
         org_id = request.query_params.get('org_id', None)
@@ -2455,15 +2456,27 @@ class IncomeList(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        # Asegúrate de incluir el org_id en los datos de la solicitud
         org_id = request.query_params.get('org_id')
+        organization = get_object_or_404(Organization, id=org_id)
+        
+        # Copia los datos y agrega el `organization`
         data = request.data.copy()
-        data['organization'] = org_id  # Agrega el ID de la organización a los datos
+        data['organization'] = organization.id  # Asegúrate de que el campo sea el ID de la organización
+
+        # Manejo de campo de fecha
+        if 'date' in data:
+            try:
+                date_value = datetime.strptime(data['date'], '%Y-%m-%d').date()
+                data['date'] = date_value
+            except ValueError:
+                return Response({'error': 'Invalid date format for date. Use YYYY-MM-DD.'}, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = IncomeSerializer(data=data)
         if serializer.is_valid():
-            serializer.save()
+            income = serializer.save(file=request.FILES.get('fileIncome'))
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        print("Errores de serialización:", serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class IncomeDetail(APIView):
@@ -2485,6 +2498,7 @@ class IncomeDetail(APIView):
 
 class ExpenseList(APIView):
     permission_classes = [AllowAny]
+    parser_classes = [MultiPartParser, FormParser]  # Habilita la carga de archivos
 
     def get(self, request):
         org_id = request.query_params.get('org_id', None)
@@ -2496,16 +2510,29 @@ class ExpenseList(APIView):
         serializer = ExpenseSerializer(expenses, many=True)
         return Response(serializer.data)
 
+
     def post(self, request):
-        # Asegúrate de incluir el org_id en los datos de la solicitud
         org_id = request.query_params.get('org_id')
+        organization = get_object_or_404(Organization, id=org_id)
+        
+        # Copia los datos y agrega el `organization`
         data = request.data.copy()
-        data['organization'] = org_id  # Agrega el ID de la organización a los datos
+        data['organization'] = organization.id  # Agrega el ID de la organización al campo correspondiente
+
+        # Manejo de campo de fecha
+        if 'date' in data:
+            try:
+                date_value = datetime.strptime(data['date'], '%Y-%m-%d').date()
+                data['date'] = date_value
+            except ValueError:
+                return Response({'error': 'Invalid date format for date. Use YYYY-MM-DD.'}, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = ExpenseSerializer(data=data)
         if serializer.is_valid():
-            serializer.save()
+            expense = serializer.save(file=request.FILES.get('fileExpense'))
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        print("Errores de serialización:", serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ExpenseDetail(APIView):
