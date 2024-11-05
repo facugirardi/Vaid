@@ -191,6 +191,7 @@ class Donation(models.Model):
     date = models.DateField(default=timezone.now)
     quantity = models.IntegerField(default=0)
     type = models.CharField(max_length=255)
+    file = models.FileField(upload_to='donations/', null=True, blank=True)  # Nuevo campo para archivos
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
 
@@ -212,7 +213,7 @@ class Operation(models.Model):
     amount = models.IntegerField(default=0)
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     type = models.CharField(max_length=255, default='')
-    invoice = models.FileField(upload_to='invoices/', null=True, blank=True)
+    invoice = models.FileField(upload_to='invoices/', null=True, blank=True)  # Campo de archivo opcional
 
 
 class OperationProductDetails(models.Model):

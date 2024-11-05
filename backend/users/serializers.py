@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import *
 from django.core.exceptions import ValidationError
+from datetime import datetime
 
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
@@ -236,14 +237,17 @@ class ProductSerializerChild(serializers.Serializer):
     quantity = serializers.IntegerField()
 
 class OperationSerializer(serializers.ModelSerializer):
-    # products = serializers.ListField(
-    #     child=ProductSerializerChild(), write_only=True
-    # )
-    # operation_products = OperationProductDetailsSerializer(source='operationproductdetails_set', many=True, read_only=True)
+    time = serializers.SerializerMethodField()
 
     class Meta:
         model = Operation
-        fields = ['id', 'description', 'date', 'quantity', 'amount', 'type', 'Organization', 'invoice']
+        fields = '__all__'
+
+    def get_time(self, obj):
+        # Si `time` es un objeto `datetime`, extrae solo la hora
+        if isinstance(obj.time, datetime):
+            return obj.time.time()  # Obtén solo la hora
+        return obj.time  # Retorna el valor si ya es `time`
 
     # def create(self, validated_data):
     #     products_data = validated_data.pop('products')
@@ -285,10 +289,17 @@ class DonationProductDetailsSerializer(serializers.ModelSerializer):
 
 
 class DonationSerializer(serializers.ModelSerializer):
+    date = serializers.SerializerMethodField()
 
     class Meta:
         model = Donation
-        fields = ['id', 'description', 'quantity', 'date', 'type', 'Organization']
+        fields = '__all__'
+
+    def get_date(self, obj):
+        # Convert datetime to date
+        if isinstance(obj.date, datetime):
+            return obj.date.date()
+        return obj.date
 
     # def create(self, validated_data):
     #     products_data = validated_data.pop('products')
