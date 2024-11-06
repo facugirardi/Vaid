@@ -29,7 +29,7 @@ from rest_framework.exceptions import ValidationError
 from django.db.models import Sum, F, Case, When, Value
 from django.db.models.functions import TruncMonth
 from django.utils import timezone
-from datetime import timedelta
+from datetime import timedelta, time, datetime
 from dateutil.relativedelta import relativedelta
 from collections import defaultdict
 
@@ -1382,6 +1382,7 @@ class TaskParticipationView(APIView):
 #     ]
 class OperationAPIView(APIView):
     permission_classes = [AllowAny]
+    parser_classes = (MultiPartParser, FormParser)  # Permite subir archivos
 
     def get(self, request, organization_id, operation_id=None):
         if operation_id:
@@ -1394,14 +1395,32 @@ class OperationAPIView(APIView):
             return Response(serializer.data)
 
     def post(self, request, organization_id):
-        print(request.data)
-        request.data['Organization'] = organization_id
-        serializer = OperationSerializer(data=request.data)
+        # Hacer una copia mutable de request.data
+        data = request.data.copy()
         
+        if 'time' in data:
+            try:
+                # Convertir a `time`
+                time_value = datetime.strptime(data['time'], '%H:%M:%S').time()
+                data['time'] = time_value
+            except ValueError:
+                return Response({'error': 'Invalid time format for time. Use HH:MM:SS.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if 'expDate' in data:
+            try:
+                # Convertir a `date`
+                exp_date = datetime.strptime(data['expDate'], '%Y-%m-%d').date()
+                data['expDate'] = exp_date
+            except ValueError:
+                return Response({'error': 'Invalid date format for expDate. Use YYYY-MM-DD.'}, status=status.HTTP_400_BAD_REQUEST)
+
+
+        # Ahora puedes modificar 'data' como necesites
+        data['Organization'] = organization_id
+        serializer = OperationSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, organization_id, operation_id):
@@ -1621,6 +1640,8 @@ se espera un body similar a este:{
 """
 class DonationAPIView(APIView):
     permission_classes = [AllowAny]
+    parser_classes = (MultiPartParser, FormParser)  # Permite subir archivos
+
 #Hace falta que se vean los detalles de la donacions
     def get(self, request):
         org_id = request.query_params.get('org_id')
@@ -1634,21 +1655,35 @@ class DonationAPIView(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        print(request.data)
         org_id = request.query_params.get('org_id')
-
-        if not org_id:
-            return Response({'error': 'org_id is required'}, status=status.HTTP_400_BAD_REQUEST)
-
         organization = get_object_or_404(Organization, id=org_id)
         data = request.data.copy()
         data['Organization'] = organization.id
-        serializer = DonationSerializer(data=data)
 
+        print("Datos recibidos para donación:", data)  # Para depuración
+
+        if 'time' in data:
+            try:
+                # Convertir a `time`
+                time_value = datetime.strptime(data['time'], '%H:%M:%S').time()
+                data['time'] = time_value
+            except ValueError:
+                return Response({'error': 'Invalid time format for time. Use HH:MM:SS.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if 'expDate' in data:
+            try:
+                # Convertir a `date`
+                exp_date = datetime.strptime(data['expDate'], '%Y-%m-%d').date()
+                data['expDate'] = exp_date
+            except ValueError:
+                return Response({'error': 'Invalid date format for expDate. Use YYYY-MM-DD.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        serializer = DonationSerializer(data=data)
         if serializer.is_valid():
-            donation = serializer.save()
+            donation = serializer.save(file=request.FILES.get('fileDonation'))
             return Response(DonationSerializer(donation).data, status=status.HTTP_201_CREATED)
 
+        print("Errores de serialización:", serializer.errors)  # Para depuración
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -2408,6 +2443,7 @@ class ListCandidateOrganizationsAPIView(APIView):
 
 class IncomeList(APIView):
     permission_classes = [AllowAny]
+    parser_classes = [MultiPartParser, FormParser]  # Habilita la carga de archivos
 
     def get(self, request):
         org_id = request.query_params.get('org_id', None)
@@ -2420,15 +2456,27 @@ class IncomeList(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        # Asegúrate de incluir el org_id en los datos de la solicitud
         org_id = request.query_params.get('org_id')
+        organization = get_object_or_404(Organization, id=org_id)
+        
+        # Copia los datos y agrega el `organization`
         data = request.data.copy()
-        data['organization'] = org_id  # Agrega el ID de la organización a los datos
+        data['organization'] = organization.id  # Asegúrate de que el campo sea el ID de la organización
+
+        # Manejo de campo de fecha
+        if 'date' in data:
+            try:
+                date_value = datetime.strptime(data['date'], '%Y-%m-%d').date()
+                data['date'] = date_value
+            except ValueError:
+                return Response({'error': 'Invalid date format for date. Use YYYY-MM-DD.'}, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = IncomeSerializer(data=data)
         if serializer.is_valid():
-            serializer.save()
+            income = serializer.save(file=request.FILES.get('fileIncome'))
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        print("Errores de serialización:", serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class IncomeDetail(APIView):
@@ -2450,6 +2498,7 @@ class IncomeDetail(APIView):
 
 class ExpenseList(APIView):
     permission_classes = [AllowAny]
+    parser_classes = [MultiPartParser, FormParser]  # Habilita la carga de archivos
 
     def get(self, request):
         org_id = request.query_params.get('org_id', None)
@@ -2461,16 +2510,29 @@ class ExpenseList(APIView):
         serializer = ExpenseSerializer(expenses, many=True)
         return Response(serializer.data)
 
+
     def post(self, request):
-        # Asegúrate de incluir el org_id en los datos de la solicitud
         org_id = request.query_params.get('org_id')
+        organization = get_object_or_404(Organization, id=org_id)
+        
+        # Copia los datos y agrega el `organization`
         data = request.data.copy()
-        data['organization'] = org_id  # Agrega el ID de la organización a los datos
+        data['organization'] = organization.id  # Agrega el ID de la organización al campo correspondiente
+
+        # Manejo de campo de fecha
+        if 'date' in data:
+            try:
+                date_value = datetime.strptime(data['date'], '%Y-%m-%d').date()
+                data['date'] = date_value
+            except ValueError:
+                return Response({'error': 'Invalid date format for date. Use YYYY-MM-DD.'}, status=status.HTTP_400_BAD_REQUEST)
 
         serializer = ExpenseSerializer(data=data)
         if serializer.is_valid():
-            serializer.save()
+            expense = serializer.save(file=request.FILES.get('fileExpense'))
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        print("Errores de serialización:", serializer.errors)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class ExpenseDetail(APIView):

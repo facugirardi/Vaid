@@ -191,6 +191,7 @@ class Donation(models.Model):
     date = models.DateField(default=timezone.now)
     quantity = models.IntegerField(default=0)
     type = models.CharField(max_length=255)
+    file = models.FileField(upload_to='donations/', null=True, blank=True)  # Nuevo campo para archivos
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
 
 
@@ -212,7 +213,7 @@ class Operation(models.Model):
     amount = models.IntegerField(default=0)
     Organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     type = models.CharField(max_length=255, default='')
-    invoice = models.FileField(upload_to='invoices/', null=True, blank=True)
+    invoice = models.FileField(upload_to='invoices/', null=True, blank=True)  # Campo de archivo opcional
 
 
 class OperationProductDetails(models.Model):
@@ -278,6 +279,7 @@ class Income(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)  # Para manejar cantidades monetarias
     category = models.CharField(max_length=255)  # Para categorizar ingresos
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    file = models.FileField(upload_to='incomes_files/', blank=True, null=True)  # Campo para archivo
 
     def __str__(self):
         return f"{self.description} - {self.amount} on {self.date}"
@@ -289,6 +291,7 @@ class Expense(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)  # Para manejar cantidades monetarias
     category = models.CharField(max_length=255)  # Para categorizar egresos
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    file = models.FileField(upload_to='expenses_files/', blank=True, null=True)  # Campo para archivo
 
     def __str__(self):
         return f"{self.description} - {self.amount} on {self.date}"

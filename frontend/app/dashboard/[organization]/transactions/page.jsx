@@ -80,22 +80,21 @@ const Income = () => {
 
   const handleDeleteProductModalClose = () => setShowDeleteProductModal(false);
 
+
+
   const handleAddIncome = async (e) => {
     e.preventDefault();
-
+  
     const formData = new FormData(e.target);
-
-    const incomeData = {
-      description: formData.get('description'),
-      date: formData.get('date'),
-      amount: formData.get('amount'),
-      category: formData.get('category')
-    };
-
+    formData.append('org_id', organizationId);
+  
     try {
-      await axios.post(`http://localhost:8000/api/incomes/`, incomeData, {
+      await axios.post(`http://localhost:8000/api/incomes/`, formData, {
         params: {
           org_id: organizationId,
+        },
+        headers: {
+          'Content-Type': 'multipart/form-data',
         },
       });
       fetchIncomes();
@@ -162,11 +161,11 @@ const Income = () => {
           <form onSubmit={handleAddIncome}>
             <div className='container'>
               <div className='row'>
-                <div className="mb-3 col-md-4">
+                <div className="mb-3 col-md-5">
                   <label htmlFor="description" className="form-label">Descripción</label>
                   <input type="text" className="form-control" id="description" name="description" placeholder='Agregar Descripción' required />
                 </div>
-                <div className="mb-3 col-md-3">
+                <div className="mb-3 col-md-5">
                   <label htmlFor="category" className="form-label">Categoría</label>
                   <Form.Control as="select" className="form-select" id="category" name="category">
                     <option>Renta</option>
@@ -179,9 +178,13 @@ const Income = () => {
                   <label htmlFor="amount" className="form-label">Monto</label>
                   <input type="number" className="form-control" id="amount" name="amount" placeholder='$ 1' required />
                 </div>
-                <div className="mb-3 col-md-3">
+                <div className="mb-3 col-md-5">
                   <label htmlFor="date" className="form-label">Fecha</label>
                   <input type="date" className="form-control" id="date" name="date" required />
+                </div>
+                <div className="mb-3 col-md-7">
+                  <label htmlFor="fileIncome" className="form-label">Subir Archivos</label>
+                  <input type="file" className="form-control" id="fileIncome" name="fileIncome" />
                 </div>
               </div>
               <div className='d-flex justify-content-center'>
@@ -206,6 +209,11 @@ const Income = () => {
               <p><strong>Monto:</strong> ${selectedProduct.amount}</p>
               <p><strong>Fecha:</strong> {selectedProduct.date}</p>
               <p><strong>Categoría:</strong> {selectedProduct.category}</p>
+              {selectedProduct.file && (
+                <p>
+                  <strong>Archivo:</strong> <a href={`http://localhost:8000${selectedProduct.file}`} target="_blank" rel="noopener noreferrer">Abrir Archivo</a>
+                </p>
+              )}
             </div>
           )}
         </Modal.Body>
@@ -298,20 +306,17 @@ const Expense = () => {
 
   const handleAddExpense = async (e) => {
     e.preventDefault();
-
+  
     const formData = new FormData(e.target);
-
-    const expenseData = {
-      description: formData.get('description'),
-      date: formData.get('date'),
-      amount: formData.get('amount'),
-      category: formData.get('category')
-    };
-
+    formData.append('org_id', organizationId);
+  
     try {
-      await axios.post(`http://localhost:8000/api/expenses/`, expenseData, {
+      await axios.post(`http://localhost:8000/api/expenses/`, formData, {
         params: {
           org_id: organizationId,
+        },
+        headers: {
+          'Content-Type': 'multipart/form-data',
         },
       });
       fetchExpenses();
@@ -320,7 +325,7 @@ const Expense = () => {
       console.error('Error al agregar el egreso:', error);
     }
   };
-
+  
   return (
     <div className="card">
       <h2>Egreso de Dinero</h2>
@@ -378,11 +383,11 @@ const Expense = () => {
           <form onSubmit={handleAddExpense}>
             <div className='container'>
               <div className='row'>
-                <div className="mb-3 col-md-4">
+                <div className="mb-3 col-md-5">
                   <label htmlFor="description" className="form-label">Descripción</label>
                   <input type="text" className="form-control" id="description" name="description" placeholder='Agregar Descripción' required />
                 </div>
-                <div className="mb-3 col-md-3">
+                <div className="mb-3 col-md-5">
                   <label htmlFor="category" className="form-label">Categoría</label>
                   <Form.Control as="select" className="form-select" id="category" name="category">
                     <option>Gastos Generales</option>
@@ -395,9 +400,13 @@ const Expense = () => {
                   <label htmlFor="amount" className="form-label">Monto</label>
                   <input type="number" className="form-control" id="amount" name="amount" placeholder='$ 1' required />
                 </div>
-                <div className="mb-3 col-md-3">
+                <div className="mb-3 col-md-5">
                   <label htmlFor="date" className="form-label">Fecha</label>
                   <input type="date" className="form-control" id="date" name="date" required />
+                </div>
+                <div className="mb-3 col-md-7">
+                  <label htmlFor="fileExpense" className="form-label">Subir Archivos</label>
+                  <input type="file" className="form-control" id="fileExpense" name="fileExpense" />
                 </div>
               </div>
               <div className='d-flex justify-content-center'>
@@ -422,6 +431,11 @@ const Expense = () => {
               <p><strong>Monto:</strong> ${selectedProduct.amount}</p>
               <p><strong>Fecha:</strong> {selectedProduct.date}</p>
               <p><strong>Categoría:</strong> {selectedProduct.category}</p>
+              {selectedProduct.file && (
+                <p>
+                  <strong>Archivo:</strong> <a href={`http://localhost:8000${selectedProduct.file}`} target="_blank" rel="noopener noreferrer">Abrir Archivo</a>
+                </p>
+              )}
             </div>
           )}
         </Modal.Body>

@@ -87,17 +87,18 @@ const Donations = () => {
     
     const formData = new FormData(e.target);
   
-    const donationData = {
-      description: formData.get('description'),
-      date: formData.get('expDate'),
-      type: formData.get('Category'),
-      quantity: formData.get('quantity')
-    };
-  
+    // Agrega el ID de la organización a los parámetros de la URL
+    formData.append('org_id', organizationId);
+    formData.set('type', formData.get('Category'));  // Cambia 'Category' a 'type'
+    formData.delete('Category');  // Elimina el campo 'Category' original
+    
     try {
-      await axios.post(`http://localhost:8000/api/donations/`, donationData, {
+      await axios.post(`http://localhost:8000/api/donations/`, formData, {
         params: {
           org_id: organizationId,
+        },  
+        headers: {
+          'Content-Type': 'multipart/form-data'
         },
       });
       fetchDonations(); 
@@ -105,7 +106,7 @@ const Donations = () => {
     } catch (error) {
       console.error('Error al agregar la donación:', error);
     }
-  };
+  };  
   
   return (
     <div className="card">
@@ -180,20 +181,20 @@ const Donations = () => {
       )}
         
       {/* Modal para agregar inventario */}
-      <Modal show={showInventoryModal} onHide={handleInventoryModalClose} backdropClassName="modal-backdrop" centered size='xl'>
+      <Modal show={showInventoryModal} onHide={handleInventoryModalClose} backdropClassName="modal-backdrop" centered size='lg'>
         <Modal.Header closeButton>
           <Modal.Title>Agregar Donación</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form onSubmit={handleAddDonation}>
+          <form onSubmit={handleAddDonation} encType="multipart/form-data">
             <div className='container'>
               <div className='row'>
-                <div className="mb-3 col-md-4">
-                  <label htmlFor="productName" className="form-label">Descripción</label>
+                <div className="mb-4 col-md-5">
+                  <label htmlFor="productName" className="form-label">Descripción <span className='red'>*</span></label>
                   <input type="text" className="form-control" id="description" name="description" placeholder='Agregar Nombre' required />
                 </div>
-                <div className="mb-3 col-md-3">
-                <label htmlFor="productType" className="form-label">Tipo</label>
+                <div className="mb-4 col-md-5">
+                <label htmlFor="productType" className="form-label">Tipo <span className='red'>*</span></label>
                   <Form.Control as="select" className="form-select" id="Category" name="Category">
                                     <option>Ropa</option>
                                     <option>Comida</option>
@@ -204,14 +205,20 @@ const Donations = () => {
                                     <option>Dinero</option>
                   </Form.Control>
                 </div>
-                <div className="mb-3 col-md-2">
-                  <label htmlFor="quantity" className="form-label">Cantidad</label>
+                <div className="mb-2 col-md-2">
+                  <label htmlFor="quantity" className="form-label">Cantidad <span className='red'>*</span></label>
                   <input type="number" className="form-control" id="quantity" name="quantity" placeholder='1' required />
                 </div>
-                <div className="mb-3 col-md-3">
-                  <label htmlFor="expDate" className="form-label">Fecha</label>
+                <div className="mb-4 col-md-5">
+                  <label htmlFor="expDate" className="form-label">Fecha <span className='red'>*</span></label>
                   <input type="date" className="form-control" id="expDate" name="expDate" />
                 </div>
+
+                <div className="mb-4 col-md-7">
+                  <label htmlFor="expDate" className="form-label">Subir Archivos</label>
+                  <input type="file" className="form-control" id="fileDonation" name="fileDonation" />
+                </div>
+
               </div>
               <div className='d-flex justify-content-center'>
                 <Button variant="primary" type="submit" className='col-md-3 mt-40'>
@@ -235,7 +242,12 @@ const Donations = () => {
             <p><strong>Fecha:</strong> {selectedProduct.date}</p>
             <p><strong>Cantidad:</strong> {selectedProduct.quantity}</p>
             <p><strong>Tipo:</strong> {selectedProduct.type}</p>
-          </div>
+            {selectedProduct.file && (
+                <p>
+                  <strong>Archivo:</strong> <a href={`http://localhost:8000${selectedProduct.file}`} target="_blank" rel="noopener noreferrer">Abrir Archivo</a>
+                </p>
+              )}
+            </div>
         )}
       </Modal.Body>
       </Modal>
@@ -329,23 +341,22 @@ const BuySell = () => {
     
     const formData = new FormData(e.target);
   
-    const operationData = {
-      description: formData.get('description'),
-      date: formData.get('date'),
-      type: formData.get('type'),
-      quantity: formData.get('quantity'),
-      amount: formData.get('amount'),
-    };
+    // Agrega el ID de la organización a los parámetros de la URL
+    formData.append('org_id', organizationId);
   
     try {
-      await axios.post(`http://localhost:8000/api/organization/${organizationId}/operation/`, operationData);
+      await axios.post(`http://localhost:8000/api/organization/${organizationId}/operation/`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        },
+      });
       fetchBuySell(); 
       handleInventoryModalClose();
     } catch (error) {
       console.error('Error al agregar la operación:', error);
     }
   };
-  
+    
   const handleDeleteOperation = async (operationId) => {
     try {
       await axios.delete(`http://localhost:8000/api/organization/${organizationId}/operation/${operationId}/`);
@@ -422,12 +433,16 @@ const BuySell = () => {
           <Modal.Title>Agregar Operación</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <form onSubmit={handleAddOperation}>
+          <form onSubmit={handleAddOperation} encType="multipart/form-data">
             <div className='container'>
               <div className='row'>
-                <div className="mb-3 col-md-8">
+                <div className="mb-3 col-md-6">
                   <label htmlFor="description" className="form-label">Descripción</label>
                   <input type="text" className="form-control" id="description" name="description" placeholder='Nombre del Producto' required />
+                </div>
+                <div className="mb-3 col-md-6">
+                  <label htmlFor="date" className="form-label">Fecha</label>
+                  <input type="date" className="form-control" id="date" name="date" required/>
                 </div>
                 <div className="mb-3 col-md-2">
                   <label htmlFor="quantity" className="form-label">Cantidad</label>
@@ -437,16 +452,16 @@ const BuySell = () => {
                   <label htmlFor="quantity" className="form-label">Monto Total</label>
                   <input type="number" className="form-control" id="amount" name="amount" placeholder='$ 1' required />
                 </div>
-                <div className="mb-3 col-md-6">
-                  <label htmlFor="date" className="form-label">Fecha</label>
-                  <input type="date" className="form-control" id="date" name="date" required/>
-                </div>
-                <div className="mb-3 col-md-6">
+                <div className="mb-3 col-md-8">
                   <label htmlFor="type" className="form-label">Tipo de Operación</label>
                   <Form.Control as="select" className="form-select" name="type">
                                     <option>Compra</option>
                                     <option>Venta</option>
                   </Form.Control>
+                </div>
+                <div className="mb-4 col-md-12">
+                  <label htmlFor="expDate" className="form-label">Subir Archivos</label>
+                  <input type="file" className="form-control" id="fileDonation" name="fileDonation" />
                 </div>
               </div>
               <div className='d-flex justify-content-center'>
@@ -472,7 +487,12 @@ const BuySell = () => {
               <p><strong>Monto:</strong> {selectedProduct.amount}</p>
               <p><strong>Fecha:</strong> {selectedProduct.date}</p>
               <p><strong>Tipo:</strong> {selectedProduct.type}</p>
-            </div>
+              {selectedProduct.file && (
+                <p>
+                  <strong>Archivo:</strong> <a href={`http://localhost:8000${selectedProduct.file}`} target="_blank" rel="noopener noreferrer">Abrir Archivo</a>
+                </p>
+              )}
+              </div>
           )}
         </Modal.Body>
       </Modal>
