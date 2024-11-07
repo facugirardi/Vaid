@@ -343,4 +343,7 @@ class DonationSerializer(serializers.ModelSerializer):
     #     return donation
     
 
-
+class TaskHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TaskHistory
+        fields = '__all__'

@@ -32,6 +32,7 @@ from django.utils import timezone
 from datetime import timedelta, time, datetime
 from dateutil.relativedelta import relativedelta
 from collections import defaultdict
+from .models import TaskHistory
 
 
 class UpdatePersonView(APIView):
@@ -2551,3 +2552,50 @@ class ExpenseDetail(APIView):
         expense.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+
+class TaskHistoryActionAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, task_id, action=None):
+        try:
+            task = Task.objects.get(id=task_id)
+        except Task.DoesNotExist:
+            return Response({"error": "Task not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Obtenemos todos los registros de historial para la tarea especificada
+        history_entries = TaskHistory.objects.filter(task=task).order_by('-timestamp')
+        serializer = TaskHistorySerializer(history_entries, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+    def post(self, request, task_id, action):
+        try:
+            task = Task.objects.get(id=task_id)
+        except Task.DoesNotExist:
+            return Response({"error": "Task not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        action_map = {
+            "completada": "Completada",
+            "pendiente": "Pendiente",
+            "tomada": "Tomada",
+            "dejada": "Dejada"
+        }
+
+        if action not in action_map:
+            return Response({"error": "Invalid action."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            person = Person.objects.get(User=request.user)
+        except Person.DoesNotExist:
+            return Response({"error": "Person profile not found for the user."}, status=status.HTTP_404_NOT_FOUND)
+
+        history_entry = TaskHistory(
+            task=task,
+            user=person,  # Asegúrate de que `request.user` esté autenticado o ajusta según sea necesario.
+            action=action_map[action],
+            description=f"La tarea fue marcada como {action_map[action]}."
+        )
+        history_entry.save()
+
+        serializer = TaskHistorySerializer(history_entry)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)

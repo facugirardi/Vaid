@@ -296,3 +296,13 @@ class Expense(models.Model):
     def __str__(self):
         return f"{self.description} - {self.amount} on {self.date}"
 
+
+class TaskHistory(models.Model):
+    task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    user = models.ForeignKey(Person, on_delete=models.CASCADE)
+    action = models.CharField(max_length=255)  # Ejemplo: 'Entrada', 'Salida', 'Completada', 'Pendiente'
+    description = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.task.name} - {self.action} by {self.user.email} at {self.timestamp}"
