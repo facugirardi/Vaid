@@ -2584,17 +2584,14 @@ class TaskHistoryActionAPIView(APIView):
         if action not in action_map:
             return Response({"error": "Invalid action."}, status=status.HTTP_400_BAD_REQUEST)
 
-        try:
-            person = Person.objects.get(User=request.user)
-        except Person.DoesNotExist:
-            return Response({"error": "Person profile not found for the user."}, status=status.HTTP_404_NOT_FOUND)
+        description = request.data.get("description", f"La tarea fue marcada como {action_map[action]}.")
 
         history_entry = TaskHistory(
             task=task,
-            user=person,  # Asegúrate de que `request.user` esté autenticado o ajusta según sea necesario.
             action=action_map[action],
-            description=f"La tarea fue marcada como {action_map[action]}."
+            description=description
         )
+        print(history_entry)
         history_entry.save()
 
         serializer = TaskHistorySerializer(history_entry)

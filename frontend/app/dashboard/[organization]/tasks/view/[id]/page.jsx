@@ -20,6 +20,7 @@ const Page = () => {
     const [isOrgAccount, setIsOrgAccount] = useState(false); // Verificar si es cuenta de organización
     const [isTaken, setIsTaken] = useState(false); // Estado para saber si la tarea está tomada
     const { data: user, isError, isLoading } = useRetrieveUserQuery();
+    const [history, setHistory] = useState([]); // Estado para almacenar el historial de cambios
 
     // Obtener el organizationId y el taskId de la URL
     useEffect(() => {
@@ -39,8 +40,8 @@ const Page = () => {
 
     // Fetch de la tarea por su ID
     useEffect(() => {
-        if (organizationId && taskId) {
-            const fetchData = async () => {
+        const fetchTaskData = async () => {
+            if (organizationId && taskId) {
                 try {
                     const response = await fetch(`http://localhost:8000/api/organizations/${organizationId}/tasks/${taskId}`, {
                         method: 'GET',
@@ -53,10 +54,28 @@ const Page = () => {
                 } catch (error) {
                     console.error("Error fetching task:", error);
                 }
-            };
+            }
+        };
 
-            fetchData();
-        }
+        const fetchTaskHistory = async () => {
+            try {
+                const response = await fetch(`http://localhost:8000/api/task-history/${taskId}/`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                if (response.ok) {
+                    const historyData = await response.json();
+                    setHistory(historyData); // Actualizar el estado del historial
+                }
+            } catch (error) {
+                console.error("Error fetching task history:", error);
+            }
+        };
+
+        fetchTaskData();
+        fetchTaskHistory();
     }, [organizationId, taskId]);
 
     // Verificar si el usuario es administrador y si ya tomó la tarea
@@ -123,6 +142,87 @@ const Page = () => {
     };
 
 
+    // HISTORIAL DE CAMBIOS
+    const markTaskAsUntaken = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/api/task-history/${taskId}/dejada/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    description: `${user.first_name} ${user.last_name} salió de la tarea.`
+                }),
+            });
+    
+            if (response.ok) {
+                setIsTaken(false);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+    
+    const markTaskAsTaken = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/api/task-history/${taskId}/tomada/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    description: `${user.first_name} ${user.last_name} se unió a la tarea.`
+                }),
+            });
+    
+            if (response.ok) {
+                setIsTaken(true);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+    
+    const markTaskAsPending = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/api/task-history/${taskId}/pendiente/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    description: `${user.first_name} ${user.last_name} marcó la tarea como pendiente.`
+                }),
+            });
+    
+            if (response.ok) {
+                setTask({ ...task, state: 'Pendiente' });
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+    const markTaskAsCompleted = async () => {
+        try {
+            const response = await fetch(`http://localhost:8000/api/task-history/${taskId}/completada/`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    description: `${user.first_name} ${user.last_name} completó la tarea.`
+                }),
+            });
+    
+            if (response.ok) {
+                setTask({ ...task, state: 'Completada' });
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    };
+    // FIN DE HISTORIAL DE CAMBIOS        
+
     const handleMarkAsDone = async () => {
         try {
             const response = await fetch(`http://localhost:8000/api/tasks/${taskId}/mark-as-done/`, {
@@ -135,6 +235,7 @@ const Page = () => {
             if (response.ok) {
                 toast.success('¡Tarea marcada como hecha!');
                 setTask({ ...task, state: 'Finalizado' });
+                markTaskAsCompleted();
             } else {
                 toast.error('Error al marcar la tarea como hecha');
             }
@@ -156,6 +257,7 @@ const Page = () => {
             if (response.ok) {
                 toast.success('¡Tarea marcada como pendiente!');
                 setTask({ ...task, state: 'Pendiente' });
+                markTaskAsPending();
             } else {
                 toast.error('Error al marcar la tarea como pendiente');
             }
@@ -199,6 +301,11 @@ const Page = () => {
                 const successMessage = isTaken ? 'Tarea dejada exitosamente' : 'Tarea tomada exitosamente';
                 toast.success(successMessage);
                 setIsTaken(!isTaken); 
+                if (isTaken) {
+                    markTaskAsTaken();
+                } else {
+                    markTaskAsUntaken();
+                }
             } else {
                 const errorMessage = isTaken ? 'Error al dejar la tarea' : 'Error al tomar la tarea';
                 toast.error(errorMessage);
@@ -209,6 +316,26 @@ const Page = () => {
         }
     };
     
+
+    const getStatusIcon = (description) => {
+        if (description.includes("unió") || description.includes("completó")) {
+            return (
+                <svg width="30" height="30" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="21.5" cy="21.5" r="21" stroke="#2BC155"/>
+                    <path d="M21.7499 31.0093C21.7436 31.4235 21.4028 31.7541 20.9886 31.7478C20.5744 31.7415 20.2438 31.4007 20.2501 30.9865L21.7499 31.0093ZM20.7515 12.4617C21.0489 12.1733 21.5237 12.1805 21.8121 12.4778L26.5119 17.3228C26.8003 17.6201 26.7931 18.0949 26.4958 18.3833C26.1985 18.6718 25.7236 18.6645 25.4352 18.3672L21.2576 14.0605L16.9509 18.2382C16.6536 18.5266 16.1788 18.5194 15.8904 18.222C15.602 17.9247 15.6092 17.4499 15.9065 17.1615L20.7515 12.4617ZM20.2501 30.9865L20.5238 12.9886L22.0237 13.0114L21.7499 31.0093L20.2501 30.9865Z" fill="#2BC155"/>
+                </svg>
+            );
+        } else if (description.includes("salió") || description.includes("pendiente")) {
+            return (
+                <svg width="30" height="30" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="21.5002" cy="21.5001" r="21" transform="rotate(178.6 21.5002 21.5001)" stroke="#FF3E3E"/>
+                    <path d="M21.0179 11.9996C21.014 11.5854 21.3467 11.2465 21.7609 11.2427C22.1751 11.2389 22.514 11.5716 22.5178 11.9858L21.0179 11.9996ZM22.469 30.5173C22.1788 30.8129 21.704 30.8173 21.4084 30.5271L16.5916 25.7984C16.296 25.5082 16.2917 25.0333 16.5818 24.7377C16.872 24.4422 17.3469 24.4378 17.6425 24.728L21.924 28.9313L26.1274 24.6497C26.4176 24.3541 26.8924 24.3497 27.188 24.6399C27.4836 24.9301 27.488 25.405 27.1978 25.7005L22.469 30.5173ZM22.5178 11.9858L22.6838 29.985L21.1839 29.9988L21.0179 11.9996L22.5178 11.9858Z" fill="#FF3E3E"/>
+                </svg>
+            );
+        }
+        return null;
+    };
+
     return (
         <Layout>
             <BreadcrumbItem mainTitle="Tareas" subTitle="Ver Tareas"/>
@@ -309,12 +436,20 @@ const Page = () => {
                                 )}
                             </div>
                         </div>
-                        <div className='container event-cont position-relative mt-30'>
+                        <div className='hc-cont container event-cont position-relative mt-30'>
                             <p className="title-hc"><b>Historial de Cambios</b></p>
-                            <svg width="43" height="43" viewBox="0 0 43 43" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="21.5" cy="21.5" r="21" stroke="#2BC155"/>
-                            <path d="M21.7499 31.0093C21.7436 31.4235 21.4028 31.7541 20.9886 31.7478C20.5744 31.7415 20.2438 31.4007 20.2501 30.9865L21.7499 31.0093ZM20.7515 12.4617C21.0489 12.1733 21.5237 12.1805 21.8121 12.4778L26.5119 17.3228C26.8003 17.6201 26.7931 18.0949 26.4958 18.3833C26.1985 18.6718 25.7236 18.6645 25.4352 18.3672L21.2576 14.0605L16.9509 18.2382C16.6536 18.5266 16.1788 18.5194 15.8904 18.222C15.602 17.9247 15.6092 17.4499 15.9065 17.1615L20.7515 12.4617ZM20.2501 30.9865L20.5238 12.9886L22.0237 13.0114L21.7499 31.0093L20.2501 30.9865Z" fill="#2BC155"/>
-                            </svg>
+                            <div className="history-list">
+                            {history.length > 0 ? (
+                                    history.map((item, index) => (
+                                        <div key={index} className="history-item d-flex align-items-center">
+                                            {getStatusIcon(item.description)}
+                                            <p className="description-hc">{item.description}</p>
+                                        </div>
+                                    ))
+                                ) : (
+                                    <p className="title2-hc">No hay historial de cambios disponible.</p>
+                                )}
+                        </div>
                         </div>
                     </div>
                 </div>

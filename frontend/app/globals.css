@@ -228,3 +228,12 @@ p.amount span {
 .page-link active{
   border: 1px solid #696969 !important;
 }
+
+@media (max-width: 768px) { /* Ajusta el ancho según el tamaño deseado para ocultarlo */
+  .breadcrumb{
+      display: none !important;
+  }
+  .page-header-title {
+    margin-left: -100%;
+  }
+}

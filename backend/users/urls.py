@@ -98,6 +98,7 @@ urlpatterns = [
     path('incomes/<int:pk>/', IncomeDetail.as_view(), name='income-detail'),
     path('expenses/', ExpenseList.as_view(), name='expense-list'),
     path('expenses/<int:pk>/', ExpenseDetail.as_view(), name='expense-detail'),
+    path('task-history/<int:task_id>/', TaskHistoryActionAPIView.as_view(), name='task-history'),
     path('task-history/<int:task_id>/completada/', TaskHistoryActionAPIView.as_view(), {'action': 'completada'}, name='task-completada'),
     path('task-history/<int:task_id>/pendiente/', TaskHistoryActionAPIView.as_view(), {'action': 'pendiente'}, name='task-pendiente'),
     path('task-history/<int:task_id>/tomada/', TaskHistoryActionAPIView.as_view(), {'action': 'tomada'}, name='task-tomada'),
