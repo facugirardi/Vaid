@@ -96,6 +96,14 @@ font-family: 'Inter', sans-serif;
     .carousel-slide {
       flex: 1 0 90%;
     }
+
+    .h4-wel{
+      font-size: 25px !important;
+  }
+    .p-wel{
+      font-size: 16px !important
+  }
+
   }
   
     

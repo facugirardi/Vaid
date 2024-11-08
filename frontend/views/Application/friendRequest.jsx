@@ -214,7 +214,7 @@ const FriendsRequest = () => {
                 <Col md={4}>
                   <p className="mb-0 text-muted">Teléfono</p>
                 </Col>
-                <Col md={6}>
+                <Col md={6} className='col-10'>
                   {editMode.phone_number ? (
                     <Form.Control
                       type="text"
@@ -225,8 +225,8 @@ const FriendsRequest = () => {
                     <h6 className="mb-0">{userDetails?.person?.phone_number}</h6>
                   )}
                 </Col>
-                <Col md={2}>
-                  <FontAwesomeIcon
+                <Col md={2} className='col-2'>
+                 <FontAwesomeIcon
                     icon={editMode.phone_number ? faCheckCircle : faPencilAlt}
                     onClick={editMode.phone_number ? savePersonDetails : () => toggleEditMode('phone_number')}
                     style={{ cursor: 'pointer' }}
@@ -237,7 +237,7 @@ const FriendsRequest = () => {
                 <Col md={4}>
                   <p className="mb-0 text-muted">Descripción</p>
                 </Col>
-                <Col md={6}>
+                <Col md={6} className='col-10'>
                   {editMode.description ? (
                     <Form.Control
                       as="textarea"
@@ -248,7 +248,7 @@ const FriendsRequest = () => {
                     <h6 className="mb-0">{userDetails?.person?.description}</h6>
                   )}
                 </Col>
-                <Col md={2}>
+                <Col md={2} className='col-2'>
                   <FontAwesomeIcon
                     icon={editMode.description ? faCheckCircle : faPencilAlt}
                     onClick={editMode.description ? savePersonDetails : () => toggleEditMode('description')}
@@ -295,7 +295,7 @@ const FriendsRequest = () => {
                 <Col md={4}>
                   <p className="mb-0 text-muted">Descripción</p>
                 </Col>
-                <Col md={6}>
+                <Col md={6} className='col-10'>
                   {editMode.description ? (
                     <Form.Control
                       as="textarea"
@@ -306,7 +306,7 @@ const FriendsRequest = () => {
                     <h6 className="mb-0">{organization?.description}</h6>
                   )}
                 </Col>
-                <Col md={2}>
+                <Col md={2} className='col-2'>
                   <FontAwesomeIcon
                     icon={editMode.description ? faCheckCircle : faPencilAlt}
                     onClick={editMode.description ? saveOrganizationDescription : () => toggleEditMode('description')}

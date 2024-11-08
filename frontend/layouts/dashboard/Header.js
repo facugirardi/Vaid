@@ -9,6 +9,7 @@ import SimpleBar from "simplebar-react";
 import { menuItems } from "./MenuData";
 import NestedMenu from "./NestedMenu";
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
+import './header.css';
 
 const Header = ({ themeMode }) => {
 
