@@ -190,3 +190,25 @@ table th {
 .filter-controls{
     margin-top: 10px;
 }
+
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table th, .table td {
+    white-space: nowrap;
+}
+.filter-toggle{
+    margin-right: 30px !important;
+}
+@media (max-width: 768px) {
+    .table th, .table td {
+        padding: 8px;
+        font-size: 14px;
+    }
+
+    .table th {
+        text-align: left;
+    }
+}

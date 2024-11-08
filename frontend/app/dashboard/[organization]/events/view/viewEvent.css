@@ -211,3 +211,8 @@ backdrop-filter: blur(5px); /* Ajusta la cantidad de desenfoque según sea neces
       color: #272835; /* Color más oscuro para mejor contraste */
   }
   
+
+  @media (max-width: 768px) {
+
+    }
+    

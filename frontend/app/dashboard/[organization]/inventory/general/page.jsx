@@ -11,6 +11,7 @@ import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 import { toast } from "react-toastify";
 import { Eye, EyeSlash, Trash } from 'phosphor-react';
 import Select from 'react-select'; // Importa React Select
+import { faFilter } from '@fortawesome/free-solid-svg-icons'; // Asegúrate de importar el ícono de filtro
 
 const Inventory = ({ headquarterId, addHistoryEntry }) => {
   const [inventory, setInventory] = useState([]);
@@ -24,7 +25,10 @@ const Inventory = ({ headquarterId, addHistoryEntry }) => {
   const [filterCategory, setFilterCategory] = useState('');
   const [filterStatus, setFilterStatus] = useState('');
   const [filterExpiration, setFilterExpiration] = useState('');
+  const [showFilters, setShowFilters] = useState(false); // Nuevo estado para mostrar/ocultar filtros
 
+  const toggleFilters = () => setShowFilters(!showFilters); // Función para alternar visibilidad de filtros
+  
   const { data: user, isError, isLoading } = useRetrieveUserQuery();
   useEffect(() => {
     const currentUrl = window.location.href;
@@ -123,36 +127,7 @@ const Inventory = ({ headquarterId, addHistoryEntry }) => {
     { value: 'desc', label: 'Expira Después' },
   ];
 
-  const filterControls = (
-    <div className="filter-controls row">
-      <div className="col-md-4">
-        <Select
-          options={categoryOptions}
-          value={categoryOptions.find(option => option.value === filterCategory)}
-          onChange={(selectedOption) => setFilterCategory(selectedOption.value)}
-          placeholder="Selecciona una categoría"
-        />
-      </div>
-  
-      <div className="col-md-4">
-        <Select
-          options={statusOptions}
-          value={statusOptions.find(option => option.value === filterStatus)}
-          onChange={(selectedOption) => setFilterStatus(selectedOption.value)}
-          placeholder="Selecciona un estado"
-        />
-      </div>
-  
-      <div className="col-md-4">
-        <Select
-          options={expirationOptions}
-          value={expirationOptions.find(option => option.value === filterExpiration)}
-          onChange={(selectedOption) => setFilterExpiration(selectedOption.value)}
-          placeholder="Selecciona orden de expiración"
-        />
-      </div>
-    </div>
-  );
+
   
   const handleInventoryModalShow = () => {
     loadHeadquarters(); 
@@ -259,7 +234,38 @@ const Inventory = ({ headquarterId, addHistoryEntry }) => {
   return (
     <div className="card">
       <h2>Productos</h2>
-      {filterControls}
+      {showFilters && (
+      
+      <div className="filter-controls row">
+      <div className="col-md-4">
+        <Select
+          options={categoryOptions}
+          value={categoryOptions.find(option => option.value === filterCategory)}
+          onChange={(selectedOption) => setFilterCategory(selectedOption.value)}
+          placeholder="Selecciona una categoría"
+        />
+      </div>
+  
+      <div className="col-md-4">
+        <Select
+          options={statusOptions}
+          value={statusOptions.find(option => option.value === filterStatus)}
+          onChange={(selectedOption) => setFilterStatus(selectedOption.value)}
+          placeholder="Selecciona un estado"
+        />
+      </div>
+  
+      <div className="col-md-4">
+        <Select
+          options={expirationOptions}
+          value={expirationOptions.find(option => option.value === filterExpiration)}
+          onChange={(selectedOption) => setFilterExpiration(selectedOption.value)}
+          placeholder="Selecciona orden de expiración"
+        />
+      </div>
+    </div>
+
+      )}
 {applyFilters(inventory).length === 0 ? (
   <>
     <br />
@@ -270,6 +276,7 @@ const Inventory = ({ headquarterId, addHistoryEntry }) => {
   </>
 ) : (
   <>
+<div className="table-responsive">
   <table className="table">
     <thead>
       <tr>
@@ -326,6 +333,10 @@ const Inventory = ({ headquarterId, addHistoryEntry }) => {
           <button className="add-button" onClick={handleInventoryModalShow}>
           <FontAwesomeIcon icon={faPlus} className='hover-button' />
         </button>
+        <button className="add-button filter-toggle" onClick={toggleFilters}>
+        <FontAwesomeIcon icon={faFilter} /> {showFilters ? '' : ''}
+      </button>
+      </div>
         </>
   )}
 

@@ -85,6 +85,7 @@ body{
     margin-bottom: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     border-radius: 10px;
+    overflow-x: auto; /* Habilita el desplazamiento horizontal */
   }
   
   .card-header {
@@ -96,10 +97,14 @@ body{
   table {
     width: 100%;
     border-collapse: collapse;
+    table-layout: auto; /* Mantiene el ancho en modo automático */
   }
   
   table th, table td {
     padding: 10px;
+    word-break: break-word; /* Permite saltos de línea en palabras largas */
+    white-space: nowrap; /* Mantiene el texto en una línea */
+    text-overflow: ellipsis; /* Agrega puntos suspensivos si es necesario */
     border-bottom: 1px solid #dddddd;
   }
   

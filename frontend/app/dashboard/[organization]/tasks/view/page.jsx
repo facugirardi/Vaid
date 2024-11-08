@@ -113,7 +113,7 @@ const Page = () => {
     return (
         <Layout>
             <div className="header">
-            <BreadcrumbItem mainTitle="Tareas" subTitle="Ver Tareas" />
+            <BreadcrumbItem mainTitle="Tareas" subTitle="Lista de Tareas" />
             {isAdmin || isOrgAccount ? (
                 <button className="button-add-task" onClick={() => window.location.href = `/dashboard/${organizationId}/tasks/create`}>
                     Añadir <PlusCircle className='hover-button plus-icon' size={20} weight="bold" />

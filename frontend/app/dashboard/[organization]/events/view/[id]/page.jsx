@@ -10,6 +10,7 @@ import { faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toast } from "react-toastify";
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
+import { faTimes } from "@fortawesome/free-solid-svg-icons"; // Importar el icono X
 
 const Page = () => {
     const [isAdmin, setIsAdmin] = useState(false);
@@ -411,14 +412,32 @@ const handleSendEmail = async (email) => {
         toast.error('Error al enviar la invitación por correo.');
     }
 };
+const handleRedirect = () => {
+    window.location.href = `http://localhost:3000/dashboard/${organizationId}/events/view`; // Redireccionar
+};
 
     return (
         <Layout>
             {event && (
                 <div className="d-flex">
-                    <div className='container event-cont'>
+                    <div className='container event-cont position-relative mt-30'>
+                    <button 
+                            onClick={handleRedirect} 
+                            className="btn-close"
+                            style={{ 
+                                position: "absolute", 
+                                top: "10px", 
+                                right: "10px", 
+                                background: "transparent", 
+                                border: "none", 
+                                fontSize: "20px", 
+                                cursor: "pointer"
+                            }}
+                        >
+                            <FontAwesomeIcon icon={faTimes} />
+                        </button>
                         <div className="row">
-                            <div className="image-container col-12 col-md-5">
+                            <div className="image-container col-12 col-md-12 col-lg-5 d-flex justify-content-center">
                                 <Image 
                                     src={cover1} 
                                     alt="image" 
@@ -427,7 +446,7 @@ const handleSendEmail = async (email) => {
                                     height={300}
                                 />
                             </div>
-                            <div className="details-container col-md-7">
+                            <div className="details-container col-md-12 col-lg-7">
                                 <div className="d-inline-flex align-items-center mb-10">
                                     <span className="text-dark"> {event.state}</span>
                                     <i className={`chat-badge ${event.state === 'Finalizado' ? 'bg-success' : 'bg-danger'}`}></i>
@@ -437,19 +456,19 @@ const handleSendEmail = async (email) => {
                                 <Form.Group className='form-group-all'>
                                     <div className="row">
                                         <div className='col-md-3'>
-                                            <p className='title-dates'>Fecha de inicio</p>
+                                            <p className='title-dates fecha1'>Fecha de inicio</p>
                                             <Form.Control type="date" defaultValue={event.date} readOnly/>
                                         </div>
                                         <div className="col-md-3">
-                                            <p className='title-dates'>Fecha de fin</p>
+                                            <p className='title-dates fecha1'>Fecha de fin</p>
                                             <Form.Control type="date" defaultValue={event.endDate} readOnly/>
                                         </div>
                                         <div className="col-md-3">
-                                            <p className='title-dates'>Hora de inicio</p>
+                                            <p className='title-dates fecha1'>Hora de inicio</p>
                                             <Form.Control type="time" defaultValue={event.time} readOnly/>
                                         </div>
                                         <div className="col-md-3">
-                                            <p className='title-dates'>Hora de fin</p>
+                                            <p className='title-dates fecha1'>Hora de fin</p>
                                             <Form.Control type="time" defaultValue={event.endTime} readOnly/>
                                         </div>
                                     </div>
@@ -588,9 +607,7 @@ const handleSendEmail = async (email) => {
                                 {isAdmin || isOrgAccount ? (
                                 <Button className="btn-close-task3 mx-2" onClick={handleDeleteEvent}>Eliminar</Button>
                                 ) : <></>}
-                                <Button className="btn-close-task2 mx-2" onClick={handleShareLink}>
-                                    <i className="fa fa-share-alt" />
-                                </Button>
+
                                 </div>
                             </div>
                         </div>

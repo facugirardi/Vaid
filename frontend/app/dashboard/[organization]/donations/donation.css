@@ -59,6 +59,7 @@ nav {
   margin-bottom: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
+  overflow-x: auto; /* Habilita el desplazamiento horizontal */
 }
 
 .card-header {
@@ -67,7 +68,7 @@ nav {
   align-items: center;
 }
 
-table {
+.table {
   width: 100%;
   border-collapse: collapse;
 }
@@ -75,6 +76,9 @@ table {
 table th, table td {
   padding: 10px;
   border-bottom: 1px solid #dddddd;
+  word-break: break-word; /* Permite el salto de línea en palabras largas */
+  white-space: nowrap; /* Mantiene el texto en una línea hasta que sea necesario el salto */
+  text-overflow: ellipsis; /* Añade puntos suspensivos en contenido largo */
 }
 
 table th {

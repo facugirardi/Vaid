@@ -359,7 +359,7 @@ const Page = () => {
                             <FontAwesomeIcon icon={faTimes} />
                         </button>
                         <div className="row">
-                            <div className="image-container col-12 col-md-5 d-flex justify-content-center">
+                            <div className="image-container col-md-12 col-lg-5  d-flex justify-content-center">
                                 <Image 
                                     src={cover1} 
                                     alt="imagen" 
@@ -368,7 +368,7 @@ const Page = () => {
                                     height={300}
                                 />
                             </div>
-                            <div className="details-container col-md-7">
+                            <div className="details-container col-md-12 col-lg-7 ">
                             <div className="cover-data">
                                         <div className="d-inline-flex align-items-center mb-10">
                                             <span className="text-dark"> {task.state}</span>
@@ -382,19 +382,19 @@ const Page = () => {
                                 <Form.Group className='form-group-all'>
                                     <div className="row">
                                         <div className='col-md-3'>
-                                            <p className='title-dates'>Fecha de inicio</p>
+                                            <p className='title-dates fecha1'>Fecha de Inicio</p>
                                             <Form.Control type="date" defaultValue={task.date} readOnly/>
                                         </div>
-                                        <div className="col-md-3">
-                                            <p className='title-dates'>Fecha de fin</p>
+                                        <div className="col-md-3 ">
+                                            <p className='title-dates fecha1'>Fecha de Fin</p>
                                             <Form.Control type="date" defaultValue={task.endDate} readOnly/>
                                         </div>
-                                        <div className="col-md-3">
-                                            <p className='title-dates'>Hora de inicio</p>
+                                        <div className="col-md-3 ">
+                                            <p className='title-dates fecha1'>Hora de Inicio</p>
                                             <Form.Control type="time" defaultValue={task.time} readOnly/>
                                         </div>
-                                        <div className="col-md-3">
-                                            <p className='title-dates'>Hora de fin</p>
+                                        <div className="col-md-3 ">
+                                            <p className='title-dates fecha1'>Hora de Fin</p>
                                             <Form.Control type="time" defaultValue={task.endTime} readOnly/>
                                         </div>
                                     </div>

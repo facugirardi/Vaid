@@ -302,8 +302,10 @@ backdrop-filter: blur(5px); /* Ajusta la cantidad de desenfoque según sea neces
     padding: 50px !important; /* Añadir padding a .details-container */
   }
 
+
+
   .image-container {
-    margin-top: 50px !important; /* Añadir margen superior */
+    margin-top: 35px !important; /* Añadir margen superior */
   }
 
   .image-container img{
@@ -311,3 +313,20 @@ backdrop-filter: blur(5px); /* Ajusta la cantidad de desenfoque según sea neces
   }
 }
 
+@media (max-width: 769px) {
+  .fecha1{
+    margin-top: 20px !important; /* Añadir margin a .fecha */
+  }
+}
+
+@media (max-width: 1250px) {
+  .image-container {
+      display: block;
+      width: 100%;
+      order: -1; /* Opcional: coloca la imagen en la parte superior */
+  }
+
+  .details-container {
+      width: 100%;
+  }
+}

@@ -227,8 +227,9 @@ backdrop-filter: blur(5px); /* Ajusta la cantidad de desenfoque según sea neces
 .event-cont{
   background-color: #fff;
   padding: 50px;
+  border: 1px solid rgb(215, 215, 215);
   width: 92.5%;
-  border-radius: 25px;
+  border-radius: 14px;
 }
 
 .add-guest-container{
@@ -261,6 +262,19 @@ backdrop-filter: blur(5px); /* Ajusta la cantidad de desenfoque según sea neces
   border-radius: 10px;
   margin-top: 40px;
   width: 98.3%;
+  overflow-x: auto; /* Agregar scroll horizontal si es necesario */
+}
+
+.table-guest-container table {
+  width: 100%;
+  table-layout: fixed; /* Forzar las celdas a ajustarse al ancho del contenedor */
+  word-wrap: break-word; /* Hacer que las palabras largas se dividan para evitar desbordamiento */
+}
+
+.table-guest-container th, .table-guest-container td {
+  white-space: nowrap; /* Evita que el contenido se extienda en una sola línea */
+  overflow: hidden;
+  text-overflow: ellipsis; /* Agrega puntos suspensivos si el texto es demasiado largo */
 }
 
 .hover-button-trash:hover{
@@ -314,4 +328,46 @@ backdrop-filter: blur(5px); /* Ajusta la cantidad de desenfoque según sea neces
 }
 .icon-eye-mr{
   margin-right: 8px;
+}
+
+@media (max-width: 575px) {
+  .details-container {
+    padding: 50px !important; /* Añadir padding a .details-container */
+  }
+
+  .add-guest-container
+  {
+    padding: 20px !important;
+    width: 87% !important;
+  }
+
+  .table-guest-container{
+    padding: 20px !important;
+    width: 87% !important;   
+  }
+
+  .image-container img{
+    width: 350px !important;
+  }
+
+  .image-container {
+    margin-top: 35px !important; /* Añadir margen superior */
+  }
+}
+
+@media (max-width: 1250px) {
+  .image-container {
+      display: block;
+      width: 100%;
+      order: -1; /* Opcional: coloca la imagen en la parte superior */
+  }
+
+  .details-container {
+      width: 100%;
+  }
+}
+@media (max-width: 769px) {
+  .fecha1{
+    margin-top: 20px !important; /* Añadir margin a .fecha */
+  }
 }
