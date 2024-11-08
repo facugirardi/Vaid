@@ -12,6 +12,7 @@ import "./globals.css";
 import CustomProvider from "@/redux/provider";
 import { Setup } from '@/components/utils'
 import CustomPersist from "@/redux/persistgate";
+import Head from 'next/head';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,6 +27,9 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+      <Head>
+        <link rel="manifest" href="/manifest.json" />
+      </Head>
       <body>
         <CustomProvider>
           <CustomPersist>
