@@ -158,6 +158,7 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry, headquarters, setHe
   return (
     <div className="card">
       <h2>Sedes</h2>
+      <div className="table-responsive">
       <table className='table'>
     <tbody>
           {headquarters.length === 0 ? (
@@ -189,6 +190,7 @@ const Headquarters = ({ onHeadquarterClick, addHistoryEntry, headquarters, setHe
           )}
         </tbody>
       </table>
+      </div>
       <button className="add-button" onClick={handleHeadquarterModalShow}>
         <FontAwesomeIcon icon={faPlus} className='hover-button'/>
       </button>
@@ -857,7 +859,7 @@ const History = ({ organizationId, localHistory, setLocalHistory }) => {
                   </div>
                   <div className='col-5 col-md-8'>
                     <p className='p-history'>
-                      <b>{entry.action}</b>
+                      <b className='entreyaction'>{entry.action}</b>
                       {entry.description.includes('agregado') && (
                         <span className="badge bg-success ms-2">Agregado</span>
                       )}

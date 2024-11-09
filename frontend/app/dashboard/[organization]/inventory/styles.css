@@ -220,7 +220,6 @@ table th {
   .product-container {
     max-height: 600px; /* Ajusta esta altura según tu diseño */
     overflow-y: auto;
-    overflow-x: hidden; /* Evita el desplazamiento horizontal si no es necesario */
   }
 
   
@@ -258,3 +257,25 @@ table th {
 .filter-toggle{
     margin-right: 30px !important;
 }
+
+.table-responsive {
+    overflow-x: auto; /* Permite el desplazamiento horizontal */
+    -webkit-overflow-scrolling: touch; /* Suaviza el desplazamiento en dispositivos móviles */
+}
+
+.table th, .table td {
+    white-space: nowrap; /* Evita que el contenido se ajuste a múltiples líneas */
+}
+
+@media (max-width: 768px) {
+    .table-responsive th, .table-responsive td {
+        font-size: 0.9rem; /* Ajusta el tamaño de la fuente en pantallas pequeñas */
+    }
+    .entreyaction{
+        display: none;
+    }
+    .badge{
+        margin-left: 0px !important;
+    }
+}
+

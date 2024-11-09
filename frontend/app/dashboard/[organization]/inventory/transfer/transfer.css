@@ -75,3 +75,10 @@ body{
         margin-top: 1rem; /* Adjust margin for better spacing */
     }
 }
+
+@media (max-width: 768px) {
+    .btn-send-trf {
+        margin-top: 40px !important;
+        margin-bottom: 50px !important;
+    }
+}
