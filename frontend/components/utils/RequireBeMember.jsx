@@ -59,8 +59,8 @@ export default function RequireBeMember({ children }) {
                     });
                     const data = await response.json();
                     setIsMemberOfOrganization(data.is_member);
-    
-                    if (setIsMemberOfOrganization === false) {
+                    console.log(data)
+                    if (data.is_member === false) {
                         window.location.href = '/dashboard';
                     }
                 }
