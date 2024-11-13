@@ -160,9 +160,9 @@ const page = () => {
             data-aos-duration={1000}
             data-aos-offset={50}
           >
-            <a href="https://vasodeleche.org/" target="_blank">
+            <a href="https://www.cruzroja.org.ar/" target="_blank">
               <img
-                src="assets/images/client-logos/vaso.png"
+                src="assets/images/client-logos/cruzroja.png"
                 alt="Client Logo"
               />
             </a>
@@ -174,23 +174,9 @@ const page = () => {
             data-aos-duration={1000}
             data-aos-offset={50}
           >
-            <a href="https://vasodeleche.org/" target="_blank">
+            <a href="https://fundacionvicentina.org.ar/" target="_blank">
               <img
-                src="assets/images/client-logos/vaso.png"
-                alt="Client Logo"
-              />
-            </a>
-          </div>
-          <div
-            className="client-logo-item"
-            data-aos="fade-up"
-            data-aos-delay={150}
-            data-aos-duration={1000}
-            data-aos-offset={50}
-          >
-            <a href="https://vasodeleche.org/" target="_blank">
-              <img
-                src="assets/images/client-logos/vaso.png"
+                src="assets/images/client-logos/vicentina.png"
                 alt="Client Logo"
               />
             </a>
@@ -202,9 +188,9 @@ const page = () => {
             data-aos-duration={1000}
             data-aos-offset={50}
           >
-            <a href="https://vasodeleche.org/" target="_blank">
+            <a href="https://mujeresqueavanzan.org/" target="_blank">
               <img
-                src="assets/images/client-logos/vaso.png"
+                src="assets/images/client-logos/mqa.png"
                 alt="Client Logo"
               />
             </a>
