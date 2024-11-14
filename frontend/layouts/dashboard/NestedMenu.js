@@ -109,6 +109,7 @@ useEffect(() => {
           submenu: [
             { id: "members-list", label: "Lista de Miembros", icon: "ph-duotone ph-user-list", link: `/dashboard/${organizationId}/hr/members`, dataPage: "members-list" },
             { id: "candidates", label: "Lista de Candidatos", icon: "ph-duotone ph-users", link: `/dashboard/${organizationId}/hr/candidates`, dataPage: "candidates" },
+            { id: "import", label: "Importar Miembros", icon: "ph-duotone ph-user-plus", link: `/dashboard/${organizationId}/hr/import_members`, dataPage: "import" },
           ],
         },
         {

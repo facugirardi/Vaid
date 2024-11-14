@@ -5,7 +5,7 @@ import Layout from '@/layouts/dashboard/index';
 import BreadcrumbItem from '@/common/BreadcrumbItem';
 import Image from "next/image";
 import './viewTask.css';
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, Modal } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons"; // Importar el icono X
 import cover1 from "@/public/assets/images/wallpaper_event.jpg";
@@ -22,6 +22,11 @@ const Page = () => {
     const { data: user, isError, isLoading } = useRetrieveUserQuery();
     const [history, setHistory] = useState([]); // Estado para almacenar el historial de cambios
 
+    const [isOpen, setIsOpen] = useState(false); // Estado para abrir el modal
+
+    const handleToggleModal = () => {
+        setIsOpen(!isOpen);
+    };
     // Obtener el organizationId y el taskId de la URL
     useEffect(() => {
         const currentUrl = window.location.href;
@@ -342,6 +347,34 @@ const Page = () => {
             {task && (
                 <div className="d-flex">
                     <div className='container event-cont position-relative mt-30'>
+                        {/* Nuevo div rectangular con imágenes de perfil y flecha */}
+                        <div className="profile-container">
+                            <div className="profile-images">
+                                <Image src={cover1} alt="Perfil 1" width={27} height={27} className="rounded-circle" />
+                                <Image src={cover1} alt="Perfil 2" width={27} height={27} className="rounded-circle img-tas" />
+                                <Image src={cover1} alt="Perfil 3" width={27} height={27} className="rounded-circle img-tas" />
+                            </div>
+                            <button className="arrow-button" onClick={handleToggleModal}>
+                                <svg width="24" height="24" fill="currentColor" className="bi bi-arrow-down-circle">
+                                    <path fillRule="evenodd" d="M16 12a.5.5 0 0 1-.5.5h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0v3h3a.5.5 0 0 1 .5.5z"/>
+                                    <path fillRule="evenodd" d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zm0 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1z"/>
+                                </svg>
+                            </button>
+                        </div>
+
+                        {/* Modal para abrir contenido adicional */}
+                        <Modal show={isOpen} onHide={handleToggleModal}>
+                            <Modal.Header closeButton>
+                                <Modal.Title>Información Adicional</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <p>Aquí puedes mostrar contenido adicional o información detallada relacionada.</p>
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <Button variant="secondary" onClick={handleToggleModal}>Cerrar</Button>
+                            </Modal.Footer>
+                        </Modal>
+
                         {/* Botón de cierre (X) */}
                         <button 
                             onClick={handleRedirect} 
@@ -358,7 +391,7 @@ const Page = () => {
                         >
                             <FontAwesomeIcon icon={faTimes} />
                         </button>
-                        <div className="row">
+                        <div className="row row-con">
                             <div className="image-container col-md-12 col-lg-5  d-flex justify-content-center">
                                 <Image 
                                     src={cover1} 

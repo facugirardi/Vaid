@@ -261,6 +261,10 @@ backdrop-filter: blur(5px); /* Ajusta la cantidad de desenfoque según sea neces
   width: 145px;
 }
 
+.row-con{
+  margin-top: 45px;
+}
+
 .event-cont{
   background-color: #fff;
   padding: 50px;
@@ -330,3 +334,37 @@ backdrop-filter: blur(5px); /* Ajusta la cantidad de desenfoque según sea neces
       width: 100%;
   }
 }
+
+.img-tas{
+  margin-left:-10px;
+}
+
+.profile-container {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 50px;
+    padding: 4px;
+    margin-left: 5%;
+    margin-top: -20px;
+    margin-bottom: 0px;
+    width: fit-content;
+    border: 1px solid #d3d3d3;
+}
+
+.profile-images {
+    display: flex;
+    gap: 5px;
+}
+
+.arrow-button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px;
+    color: #007bff;
+}
+.arrow-button:hover {
+    color: #0056b3;
+}
+

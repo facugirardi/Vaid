@@ -1,0 +1,49 @@
+body{
+  font-family: 'Inter', sans-serif;
+}
+
+.upload-card {
+    max-width: 700px;
+    border: 1px solid #2A50CF;
+    border-radius: 28px;
+    margin-top: 120px !important;
+}
+
+.svg-file {
+    margin-top: 30px !important;
+}
+
+.h5-file {
+  color: #2A50CF;
+  font-size: 20px;
+  margin-top: 10px;
+  font-weight: 300;
+}
+
+.h3-file{
+  color: #2A50CF;
+  font-size: 18px;
+  font-weight: 300;
+
+}
+
+.btn-file-up {
+    background-color: #2A50CF;
+    border: none;
+    width: 35%;
+    height: 45px;
+}
+
+.btn-file-up:hover {
+    background-color: #2C50CF;
+}
+
+.tct {
+    margin-top: 20px;
+    font-size: 0.9rem;
+}
+
+.clip{
+  margin-right: 10px;
+}
+
