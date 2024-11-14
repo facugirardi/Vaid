@@ -2596,3 +2596,23 @@ class TaskHistoryActionAPIView(APIView):
 
         serializer = TaskHistorySerializer(history_entry)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+# lista de participantes de una tarea que muestre toda la infomacion de cada participante
+class TaskParticipantsAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request, task_id):
+        try:
+            task = Task.objects.get(id=task_id)
+        except Task.DoesNotExist:
+            return Response({"error": "Task not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Obtener los participantes relacionados con la tarea
+        participants = Person.objects.filter(
+            id__in=TaskPersonDetails.objects.filter(Task=task).values_list('Person', flat=True)
+        )   
+
+        # Serializar los participantes
+        serializer = PersonSerializer(participants, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
