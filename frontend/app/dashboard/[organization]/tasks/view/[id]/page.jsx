@@ -24,6 +24,7 @@ const Page = () => {
     const [isTaken, setIsTaken] = useState(false); // Estado para saber si la tarea está tomada
     const { data: user, isError, isLoading } = useRetrieveUserQuery();
     const [history, setHistory] = useState([]); // Estado para almacenar el historial de cambios
+    const [participants, setParticipants] = useState([]); // Estado para almacenar participantes
 
     const [isOpen, setIsOpen] = useState(false); // Estado para abrir el modal
 
@@ -45,6 +46,10 @@ const Page = () => {
             setTaskId(pathSegments[viewIndex + 1]); // Aquí obtienes el ID de la tarea
         }
     }, []);
+    const getRandomCover = () => {
+        const covers = [cover4, cover3, cover2];
+        return covers[Math.floor(Math.random() * covers.length)];
+    };
 
     // Fetch de la tarea por su ID
     useEffect(() => {
@@ -64,7 +69,7 @@ const Page = () => {
                 }
             }
         };
-
+    
         const fetchTaskHistory = async () => {
             try {
                 const response = await fetch(`http://localhost:8000/api/task-history/${taskId}/`, {
@@ -82,8 +87,19 @@ const Page = () => {
             }
         };
 
+        const fetchParticipants = async () => {
+            try {
+                const response = await fetch(`http://localhost:8000/api/task/${taskId}/participants/`);
+                const data = await response.json();
+                setParticipants(data);
+            } catch (error) {
+                console.error("Error fetching participants:", error);
+            }
+        };
         fetchTaskData();
         fetchTaskHistory();
+        fetchParticipants();
+
     }, [organizationId, taskId]);
 
     // Verificar si el usuario es administrador y si ya tomó la tarea
@@ -308,8 +324,13 @@ const Page = () => {
             if (response.ok) {
                 const successMessage = isTaken ? 'Tarea dejada exitosamente' : 'Tarea tomada exitosamente';
                 toast.success(successMessage);
-                setIsTaken(!isTaken); 
-                if (isTaken) {
+    
+                // Actualiza el estado de isTaken primero
+                const newIsTakenState = !isTaken;
+                setIsTaken(newIsTakenState);
+    
+                // Luego, llama a la función correspondiente para actualizar el historial
+                if (newIsTakenState) {
                     markTaskAsTaken();
                 } else {
                     markTaskAsUntaken();
@@ -323,7 +344,7 @@ const Page = () => {
             console.error('Error:', error);
         }
     };
-    
+        
 
     const getStatusIcon = (description) => {
         if (description.includes("unió") || description.includes("completó")) {
@@ -365,16 +386,26 @@ const Page = () => {
                         </div>
 
                         {/* Modal para abrir contenido adicional */}
-                        <Modal show={isOpen} onHide={handleToggleModal}>
-                            <Modal.Header closeButton>
-                                <Modal.Title>Información Adicional</Modal.Title>
+                        <Modal show={isOpen} onHide={handleToggleModal} centered>
+                        <Modal.Header closeButton>
+                                <Modal.Title>Participantes de la Tarea</Modal.Title>
                             </Modal.Header>
                             <Modal.Body>
-                                <p>Aquí puedes mostrar contenido adicional o información detallada relacionada.</p>
+                                {participants.length > 0 ? (
+                                    <ul className="participants-list">
+                                        {participants.map((participant, index) => (
+                                            <li key={index} className="participant-item d-flex align-items-center">
+                                                <Image src={getRandomCover()} alt="Participante" width={40} height={40} className="rounded-circle participant-img" />
+                                                <div className="participant-details">
+                                                    <p className="participant-name">{participant.first_name} {participant.last_name}</p>
+                                                </div>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <p>No hay participantes en esta tarea.</p>
+                                )}
                             </Modal.Body>
-                            <Modal.Footer>
-                                <Button variant="secondary" onClick={handleToggleModal}>Cerrar</Button>
-                            </Modal.Footer>
                         </Modal>
 
                         {/* Botón de cierre (X) */}

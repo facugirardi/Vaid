@@ -368,3 +368,33 @@ backdrop-filter: blur(5px); /* Ajusta la cantidad de desenfoque según sea neces
     color: #0056b3;
 }
 
+.participants-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.participant-item {
+  display: flex;
+  align-items: center;
+  padding: 8px;
+}
+
+.participant-img {
+  margin-right: 12px;
+}
+
+.participant-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.participant-name {
+  font-weight: bold;
+  margin: 0;
+}
+
+.participant-role {
+  font-size: 0.9em;
+  color: #6c757d;
+}

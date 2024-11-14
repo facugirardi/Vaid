@@ -73,7 +73,7 @@ const Header = ({ themeMode }) => {
                 <Image src={logoDark} alt="logo" width={90} className="logo-lg landing-logo" />
               }
               <span className="badge bg-brand-color-2 rounded-pill ms-2 theme-version">
-                Demo v0.8
+                Beta v0.1
               </span>
             </a>
           </div>
