@@ -9,7 +9,7 @@ import BreadcrumbItem from '@/common/BreadcrumbItem';
 import { Modal, Button, Form} from 'react-bootstrap';
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 import { toast } from "react-toastify";
-import { Eye, EyeSlash, Trash } from 'phosphor-react';
+import { Eye, EyeSlash, Trash, Funnel } from 'phosphor-react';
 import Select from 'react-select'; // Importa React Select
 import { faFilter } from '@fortawesome/free-solid-svg-icons'; // Asegúrate de importar el ícono de filtro
 
@@ -334,7 +334,8 @@ const Inventory = ({ headquarterId, addHistoryEntry }) => {
           <FontAwesomeIcon icon={faPlus} className='hover-button' />
         </button>
         <button className="add-button filter-toggle" onClick={toggleFilters}>
-        <FontAwesomeIcon icon={faFilter} /> {showFilters ? '' : ''}
+        <Funnel className="hover-button" size={23} />
+        {showFilters ? '' : '' }
       </button>
       </div>
         </>

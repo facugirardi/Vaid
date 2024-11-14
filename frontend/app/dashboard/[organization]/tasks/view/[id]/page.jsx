@@ -5,10 +5,13 @@ import Layout from '@/layouts/dashboard/index';
 import BreadcrumbItem from '@/common/BreadcrumbItem';
 import Image from "next/image";
 import './viewTask.css';
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, Modal } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons"; // Importar el icono X
+import cover4 from "@/public/assets/images/4.png";
 import cover1 from "@/public/assets/images/wallpaper_event.jpg";
+import cover2 from "@/public/assets/images/48.png";
+import cover3 from "@/public/assets/images/98.png";
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 import { toast } from "react-toastify";
 
@@ -22,6 +25,11 @@ const Page = () => {
     const { data: user, isError, isLoading } = useRetrieveUserQuery();
     const [history, setHistory] = useState([]); // Estado para almacenar el historial de cambios
 
+    const [isOpen, setIsOpen] = useState(false); // Estado para abrir el modal
+
+    const handleToggleModal = () => {
+        setIsOpen(!isOpen);
+    };
     // Obtener el organizationId y el taskId de la URL
     useEffect(() => {
         const currentUrl = window.location.href;
@@ -342,6 +350,33 @@ const Page = () => {
             {task && (
                 <div className="d-flex">
                     <div className='container event-cont position-relative mt-30'>
+                        {/* Nuevo div rectangular con imágenes de perfil y flecha */}
+                        <div className="profile-container">
+                            <div className="profile-images">
+                                <Image src={cover4} alt="Perfil 1" width={27} height={27} className="rounded-circle" />
+                                <Image src={cover2} alt="Perfil 2" width={27} height={27} className="rounded-circle img-tas" />
+                                <Image src={cover3} alt="Perfil 3" width={27} height={27} className="rounded-circle img-tas" />
+                            </div>
+                            <button className="arrow-button" onClick={handleToggleModal}>
+                            <svg width="18" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5.0033 7.01343L9.49343 11.3081L13.9836 7.01343" stroke="#2a50cf" stroke-width="1.3" stroke-linecap="square" stroke-linejoin="round"/>
+                            </svg>
+                            </button>
+                        </div>
+
+                        {/* Modal para abrir contenido adicional */}
+                        <Modal show={isOpen} onHide={handleToggleModal}>
+                            <Modal.Header closeButton>
+                                <Modal.Title>Información Adicional</Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <p>Aquí puedes mostrar contenido adicional o información detallada relacionada.</p>
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <Button variant="secondary" onClick={handleToggleModal}>Cerrar</Button>
+                            </Modal.Footer>
+                        </Modal>
+
                         {/* Botón de cierre (X) */}
                         <button 
                             onClick={handleRedirect} 
@@ -358,7 +393,7 @@ const Page = () => {
                         >
                             <FontAwesomeIcon icon={faTimes} />
                         </button>
-                        <div className="row">
+                        <div className="row row-con">
                             <div className="image-container col-md-12 col-lg-5  d-flex justify-content-center">
                                 <Image 
                                     src={cover1} 
