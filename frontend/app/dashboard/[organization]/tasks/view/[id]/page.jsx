@@ -8,7 +8,10 @@ import './viewTask.css';
 import { Button, Form, Modal } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons"; // Importar el icono X
+import cover4 from "@/public/assets/images/4.png";
 import cover1 from "@/public/assets/images/wallpaper_event.jpg";
+import cover2 from "@/public/assets/images/48.png";
+import cover3 from "@/public/assets/images/98.png";
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 import { toast } from "react-toastify";
 
@@ -350,15 +353,14 @@ const Page = () => {
                         {/* Nuevo div rectangular con imágenes de perfil y flecha */}
                         <div className="profile-container">
                             <div className="profile-images">
-                                <Image src={cover1} alt="Perfil 1" width={27} height={27} className="rounded-circle" />
-                                <Image src={cover1} alt="Perfil 2" width={27} height={27} className="rounded-circle img-tas" />
-                                <Image src={cover1} alt="Perfil 3" width={27} height={27} className="rounded-circle img-tas" />
+                                <Image src={cover4} alt="Perfil 1" width={27} height={27} className="rounded-circle" />
+                                <Image src={cover2} alt="Perfil 2" width={27} height={27} className="rounded-circle img-tas" />
+                                <Image src={cover3} alt="Perfil 3" width={27} height={27} className="rounded-circle img-tas" />
                             </div>
                             <button className="arrow-button" onClick={handleToggleModal}>
-                                <svg width="24" height="24" fill="currentColor" className="bi bi-arrow-down-circle">
-                                    <path fillRule="evenodd" d="M16 12a.5.5 0 0 1-.5.5h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0v3h3a.5.5 0 0 1 .5.5z"/>
-                                    <path fillRule="evenodd" d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0zm0 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1z"/>
-                                </svg>
+                            <svg width="18" height="18" viewBox="0 0 19 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5.0033 7.01343L9.49343 11.3081L13.9836 7.01343" stroke="#2a50cf" stroke-width="1.3" stroke-linecap="square" stroke-linejoin="round"/>
+                            </svg>
                             </button>
                         </div>
 
