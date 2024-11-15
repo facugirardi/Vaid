@@ -104,4 +104,5 @@ urlpatterns = [
     path('task-history/<int:task_id>/tomada/', TaskHistoryActionAPIView.as_view(), {'action': 'tomada'}, name='task-tomada'),
     path('task-history/<int:task_id>/dejada/', TaskHistoryActionAPIView.as_view(), {'action': 'dejada'}, name='task-dejada'),
     path('task/<int:task_id>/participants/', TaskParticipantsAPIView.as_view(), name='task-participants'),
+    path('import_members/', ExtractPersonInfoAPIView.as_view()),
 ]
