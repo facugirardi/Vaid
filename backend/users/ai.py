@@ -1,4 +1,5 @@
 from g4f.client import Client
+import json
 
 def extract_person_info(text):
     client = Client()
@@ -16,7 +17,17 @@ def extract_person_info(text):
             messages=[{"role": "user", "content": prompt}]
         )
         result = response.choices[0].message.content.strip()
-        extracted_data = eval(result)  # Convierte el resultado en una lista de diccionarios
-        return extracted_data
+        
+        # Validar que sea un JSON válido antes de convertirlo
+        try:
+            json_data = json.loads(result)  # Validar JSON
+        except json.JSONDecodeError as decode_error:
+            print(decode_error)
+            raise ValueError(f"Invalid JSON returned: {str(decode_error)}\nResponse was: {result}")
+
+        # Convertir el JSON validado a una cadena de array JS
+        js_array = json.dumps(json_data)  # Devuelve una cadena JSON válida compatible con JS
+        return js_array
     except Exception as e:
+        print(e)
         raise ValueError(f"Error with g4f extraction: {str(e)}")

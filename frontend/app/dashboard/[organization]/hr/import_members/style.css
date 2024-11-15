@@ -6,11 +6,15 @@ body{
     max-width: 700px;
     border: 1px solid #2A50CF;
     border-radius: 28px;
-    margin-top: 120px !important;
+    margin-top: 80px !important;
 }
 
 .svg-file {
     margin-top: 30px !important;
+}
+
+.text-black{
+  color: black;
 }
 
 .h5-file {
@@ -35,7 +39,7 @@ body{
 }
 
 .btn-file-up:hover {
-    background-color: #2C50CF;
+  background-color: #1239c5;
 }
 
 .tct {
@@ -47,3 +51,58 @@ body{
   margin-right: 10px;
 }
 
+.card-list-2{
+  margin-top: 20px;
+  border: 1px solid #2A50CF;
+  max-width: 900px;
+}
+
+.tabla-upload th{
+  background-color: white !important;
+  border: none !important;
+}
+
+.tabla-upload tr{
+  background-color: white !important;
+}
+
+.tabla-upload tbody{
+  background-color: white !important;
+}
+
+.edit-button-uplist{
+  margin-right: 15px;
+  transition: .2s;
+}
+
+.edit-button-uplist:hover{
+  cursor: pointer;
+  scale: 1.1;
+  transition: .2s;
+}
+
+
+.trash-button-uplist{
+  transition: .2s;
+}
+
+.trash-button-uplist:hover{
+  cursor: pointer;
+  scale: 1.1;
+  transition: .2s;
+}
+
+.btn-file-up2 {
+  background-color: #2A50CF;
+  border: none;
+  width: 10%;
+  height: 45px;
+}
+
+.btn-file-up2:hover {
+  background-color: #1239c5;
+}
+
+.clip2{
+  margin-bottom: 3px;
+}
