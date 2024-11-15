@@ -33,8 +33,6 @@ s3transfer==0.10.1
 six==1.16.0
 pillow
 django-libsql
-psycopg2
-psycopg2-binary
 g4f[all]
 groq
 pandas
