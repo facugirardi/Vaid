@@ -4,7 +4,9 @@ def extract_person_info(text):
     client = Client()
     prompt = (
         "Please extract all names, surnames, and emails of individuals found in the following text. "
-        "Return the information in an array of Python objects, each with 'first_name', 'last_name', and 'email'.\n\n"
+        "Return only the information in strict JSON format as an array of objects, each containing 'first_name', 'last_name', and 'email'. "
+        "Do not include any additional text, explanations, or formatting characters such as backticks. "
+        "Only output the JSON array itself with no extra characters.\n\n"
         f"{text}"
     )
 

@@ -2638,6 +2638,7 @@ class ExtractPersonInfoAPIView(APIView):
                 text = ' '.join([paragraph.text for paragraph in doc.paragraphs])
             elif file_ext in ['txt']:
                 text = file.read().decode('utf-8')
+                print(text)
             elif file_ext in ['xls', 'xlsx']:
                 df = pd.read_excel(file)
                 text = df.to_string()
