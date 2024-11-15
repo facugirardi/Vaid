@@ -107,7 +107,7 @@ const Page = () => {
                     Seleccionar archivo
                   </button>
                 </div>
-                <p className="text-muted tct">Sube un archivo con el nombre, apellido y email de cada miembro.<br/>El formato debe ser: pdf, txt, xls o xlsx</p>
+                <p className="text-muted tct">Sube un archivo con el nombre, apellido y email de cada miembro.<br/>El formato debe ser: doc, docx, txt, xls o xlsx.</p>
               </div>
             </Row>
         </Layout>

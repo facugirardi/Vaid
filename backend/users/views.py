@@ -33,7 +33,8 @@ from datetime import timedelta, time, datetime
 from dateutil.relativedelta import relativedelta
 from collections import defaultdict
 from .models import TaskHistory
-
+import pandas as pd
+from .ai import *
 
 class UpdatePersonView(APIView):
     permission_classes = [AllowAny]
@@ -2616,3 +2617,44 @@ class TaskParticipantsAPIView(APIView):
         # Serializar los participantes
         serializer = PersonSerializer(participants, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    
+# class ExtractPersonInfoAPIView(APIView):
+#     permission_classes = [AllowAny]
+#     parser_classes = (MultiPartParser, FormParser)
+
+#     def post(self, request):
+#         file = request.FILES.get('file')
+#         if not file:
+#             return Response({'error': 'No file provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+#         file_ext = file.name.split('.')[-1].lower()
+#         text = None
+
+#         try:
+#             if file_ext in ['doc', 'docx']:
+#                 doc = Document(file)
+#                 text = ' '.join([paragraph.text for paragraph in doc.paragraphs])
+#             elif file_ext in ['txt']:
+#                 text = file.read().decode('utf-8')
+#             elif file_ext in ['xls', 'xlsx']:
+#                 df = pd.read_excel(file)
+#                 text = df.to_string()
+#             else:
+#                 return Response({'error': 'Unsupported file format'}, status=status.HTTP_400_BAD_REQUEST)
+#         except Exception as e:
+#             return Response({'error': f'Error reading file: {str(e)}'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+#         if not text:
+#             return Response({'error': 'Could not extract text from file'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+#         MAX_TEXT_LENGTH = 10000
+#         if len(text) > MAX_TEXT_LENGTH:
+#             return Response({'error': 'Text too long to process'}, status=status.HTTP_400_BAD_REQUEST)
+
+#         try:
+#             extracted_data = extract_person_info(text)
+#         except ValueError as e:
+#             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+#         return Response({'extracted_data': extracted_data}, status=status.HTTP_200_OK)
