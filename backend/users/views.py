@@ -36,6 +36,9 @@ from .models import TaskHistory
 import pandas as pd
 from .ai import *
 from docx import Document
+from django.utils.crypto import get_random_string
+from rest_framework.decorators import api_view
+from django.db import transaction
 
 class UpdatePersonView(APIView):
     permission_classes = [AllowAny]
@@ -2660,3 +2663,100 @@ class ExtractPersonInfoAPIView(APIView):
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
         return Response({'extracted_data': extracted_data}, status=status.HTTP_200_OK)
+
+class CreateMembersAPIView(APIView):
+    permission_classes = [AllowAny]
+
+    """
+    Crear usuarios, asociarlos a una organización y enviar correos.
+    """
+    def post(self, request):
+        try:
+            print(request.data)
+            organization_id = request.data.get('organizationId')
+            members = request.data.get('members', [])
+            print(members)
+            if not organization_id or not members:
+                return Response({"error": "Faltan datos"}, status=status.HTTP_400_BAD_REQUEST)
+
+            try:
+                organization = Organization.objects.get(id=organization_id)
+            except Organization.DoesNotExist:
+                return Response({"error": "Organización no encontrada"}, status=status.HTTP_404_NOT_FOUND)
+
+            created_members = []
+            duplicate_emails = []
+
+            with transaction.atomic():
+                for member in members:
+                    print(member)
+                    email = member.get('email')
+                    first_name = member.get('first_name', 'Sin información')
+                    last_name = member.get('last_name', 'Sin información')
+
+                    if not email:
+                        continue  # Si no hay correo, omitir este miembro
+
+                    # Verificar si el correo ya existe
+                    if UserAccount.objects.filter(email=email).exists():
+                        duplicate_emails.append(email)
+                        continue  # Omitir este miembro y continuar con los demás
+
+                    # Generar contraseña aleatoria
+                    password = get_random_string(length=8)
+
+                    # Crear usuario
+                    user = UserAccount.objects.create_user(
+                        email=email,
+                        password=password,
+                        first_name=first_name,
+                        last_name=last_name
+                    )
+                    print('ok')
+
+                    # Crear persona asociada al usuario
+                    person = Person.objects.create(
+                        User=user,
+                        phone_number='000-000-0000',  # Datos predeterminados
+                        address='Sin información',
+                        disponibility='Sin información',
+                        born_date='2000-01-01',
+                        country='Sin información',
+                        description='Sin información'
+                    )
+
+                    # Asociar persona con la organización
+                    PersonOrganizationDetails.objects.create(
+                        Person=person,
+                        Organization=organization
+                    )
+
+                    # Enviar correo de bienvenida
+                    send_mail(
+                        subject="Bienvenido a Vaid",
+                        message=f"""
+                        ¡Hola {first_name} {last_name}!
+                        
+                        Se ha creado tu cuenta en Vaid.
+
+                        **Credenciales de acceso**
+                        Usuario: {email}
+                        Contraseña: {password}
+
+                        Por favor, cambia tu contraseña y actualiza tu información personal al iniciar sesión.
+                        """,
+                        from_email="hello@vaidteam.com",
+                        recipient_list=[email],
+                    )
+
+                    # Añadir al listado de miembros creados
+                    created_members.append({
+                        "first_name": first_name,
+                        "last_name": last_name,
+                        "email": email,
+                    })
+
+            return Response({"created_members": created_members}, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

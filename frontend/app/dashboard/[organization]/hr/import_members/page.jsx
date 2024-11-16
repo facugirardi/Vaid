@@ -8,6 +8,7 @@ import { Row, Spinner } from "react-bootstrap";
 import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
 import sad from "@/public/assets/images/image.png";
 import Image from "next/image";
+import { toast } from "react-toastify";
 
 const Page = () => {
     const [organizationId, setOrganizationId] = useState("");
@@ -25,6 +26,43 @@ const Page = () => {
         }
     }, []);
 
+
+
+    const handleCreateMembers = async () => {
+        if (!data || data.length === 0) {
+            toast.error("No hay miembros procesados para subir.");
+            return;
+        }
+    
+        setIsLoading(true);
+        try {
+            const response = await fetch("http://localhost:8000/api/create_members/", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    organizationId, // Extraído desde la URL
+                    members: data, // Miembros procesados desde el archivo
+                }),
+            });
+    
+            if (response.ok) {
+                toast.success("Miembros creados exitosamente.");
+                setData(null); // Limpia los datos después de enviarlos
+            } else {
+                const errorData = await response.json();
+                console.error("Error al crear miembros:", errorData);
+                toast.error("Hubo un error al crear los miembros.");
+            }
+        } catch (error) {
+            console.error("Error al conectar con el servidor:", error);
+            toast.error("Error al conectar con el servidor.");
+        } finally {
+            setIsLoading(false);
+        }
+    };
+    
     const handleFileUpload = async (file) => {
         if (!file) return;
     
@@ -287,8 +325,8 @@ const Page = () => {
                     <div className='d-flex justify-content-center'>
                     <button
                         className="btn btn-primary mb-3 btn-file-up2"
-                        onClick={() => document.getElementById("fileInput").click()}
-                        disabled={isLoading} // Desactivar botón mientras carga
+                        onClick={handleCreateMembers}
+                        disabled={isLoading}
                     >
                         <svg className='clip clip2' width="19" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <path d="M17.125 11.875V15.0417C17.125 15.4616 16.9582 15.8643 16.6613 16.1613C16.3643 16.4582 15.9616 16.625 15.5417 16.625H4.45833C4.03841 16.625 3.63568 16.4582 3.33875 16.1613C3.04181 15.8643 2.875 15.4616 2.875 15.0417V11.875" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
