@@ -18,16 +18,24 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata = {
   title: {
-    template: "Vaid",
-    default: "Vaid",
+    template: "Vaid - #1 en Soluciones de Gestión para Organizaciones Sin Fines de Lucro",
+    default: "Vaid - #1 en Soluciones de Gestión para Organizaciones Sin Fines de Lucro",
   },
-  description: "AI Management Solutions for Nonprofits",
+  description:
+    "Vaid es una plataforma innovadora diseñada para optimizar la gestión en organizaciones sin fines de lucro. Con el poder de la inteligencia artificial, Vaid simplifica la administración de recursos, reclutamiento, eventos y tareas, permitiendo a las ONG centrarse en maximizar su impacto social. Fácil de usar, eficiente y escalable, es la herramienta perfecta para transformar tu organización.",
 };
+
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <Head>
+        <meta name="robots" content="index, follow" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="author" content="Vaid" />
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/favicon.ico" />
+        <meta name="theme-color" content="#ffffff" />
         <link rel="manifest" href="/manifest.json" />
       </Head>
       <body>
