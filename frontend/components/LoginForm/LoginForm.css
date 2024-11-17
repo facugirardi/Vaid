@@ -96,8 +96,14 @@ body{
 
 }
 
+.remember-forgot label{
+    display: flex;
+}
+
 .remember-forgot label input {
     margin-right: 4px;
+    height: 100%;
+    width: 100%;
 }
 
 .label_input{
