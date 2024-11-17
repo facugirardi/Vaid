@@ -100,8 +100,8 @@ const LoginForm = () => {
                     </div>
                 </div>
 
-                <div className="remember-forgot flex-item justify-content-left">
-                    <label><input type="checkbox" />Recuérdame</label>
+                <div className="remember-forgot flex-item">
+                    {/* <label><input type="checkbox" />Recuérdame</label> */}
                     <a href='/password-reset'>¿Olvidaste tu contraseña?</a>
                 </div>
                 
