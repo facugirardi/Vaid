@@ -21,6 +21,7 @@ const Page = () => {
     const [showInviteModal, setShowInviteModal] = useState(false);
     const [allTags, setAllTags] = useState([]);
     const [selectedTags, setSelectedTags] = useState([]);
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
 
     const handleShowInviteModal = () => setShowInviteModal(true);
@@ -34,6 +35,19 @@ const Page = () => {
         if (dashboardIndex !== -1 && pathSegments.length > dashboardIndex + 1) {
             setOrganizationId(pathSegments[dashboardIndex + 1]);
         }
+    }, []);
+
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        window.addEventListener("resize", handleResize);
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+        };
     }, []);
 
 
@@ -128,20 +142,86 @@ const Page = () => {
         }
     };
 
-    const columns = useMemo(
-        () => [
+    const columns = useMemo(() => {
+        if (isMobile) {
+            // Columnas para dispositivos móviles
+            return [
+                {
+                    header: "Nombre",
+                    accessorKey: "name",
+                    cell: (cellProps) => {
+                        const row = cellProps.row.original;
+                        return (
+                            <div className="d-inline-block align-middle">
+                                <h6 className="m-b-0">{row.first_name} {row.last_name}</h6>
+                            </div>
+                        );
+                    },
+                },
+                {
+                    header: "Acciones",
+                    accessorKey: "actions",
+                    cell: (cellProps) => {
+                        const [menuOpen, setMenuOpen] = useState(false);
+        
+                        const toggleMenu = () => {
+                            setMenuOpen(!menuOpen);
+                        };
+        
+                        const handleOptionClick = (action) => {
+                            setMenuOpen(false); // Cierra el menú
+                            const candidate = cellProps.row.original;
+        
+                            switch (action) {
+                                case 'eliminar':
+                                    handleDelete(candidate);
+                                    break;
+                                case 'etiquetas':
+                                    handleShowTagModalAssign(candidate);
+                                    break;
+                                case 'ver':
+                                    handleShowModal(candidate);
+                                    break;
+                                case 'cerrar':
+                                    setMenuOpen(false); // Cierra el menú al seleccionar "Cerrar menú"
+                                    break;
+                                default:
+                                    break;
+                            }
+                        };
+        
+                        return (
+                            <div className="btn-action-menu" style={{ position: 'relative' }}>
+                                <button className="btn btn-light" onClick={toggleMenu}>
+                                    ...
+                                </button>
+                                {menuOpen && (
+                                    <div className="action-menu open" style={{ position: 'absolute', right: '0', background: '#fff', boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)', zIndex: 10, borderRadius: '8px', padding: '10px' }}>
+                                        <button onClick={() => handleOptionClick('etiquetas')}>Etiquetas</button>
+                                        <button onClick={() => handleOptionClick('ver')}>Ver Miembro</button>
+                                        <button style={{ color: 'red' }} onClick={() => handleOptionClick('eliminar')}>Eliminar</button>
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    },
+                },
+            ];
+        }
+        
+
+        // Columnas para escritorio
+        return [
             {
                 header: "Nombre",
-                enableColumnFilter: false, 
+                enableColumnFilter: false,
                 accessorKey: "name",
                 cell: (cellProps) => {
                     const row = cellProps.row.original;
                     return (
                         <div className="d-inline-block align-middle">
-                            <div className="d-inline-block">
-                                <h6 className="m-b-0">{row.first_name} {row.last_name}</h6>
-                                <p className="m-b-0 text-primary">Miembro</p>
-                            </div>
+                            <h6 className="m-b-0">{row.first_name} {row.last_name}</h6>
+                            <p className="m-b-0 text-primary">Miembro</p>
                         </div>
                     );
                 },
@@ -227,17 +307,15 @@ const Page = () => {
                 enableColumnFilter: false,
                 cell: (cellProps) => {
                     return (
-                        <>
-                            <div className="overlay-edit-3">
-                                <ul className="list-inline mb-0">
-                                    <li className="list-inline-item m-0">
-                                        <Button className="btn-action btn-action2 avtar avtar-s btn btn-secondary" onClick={() => handleShowTagModalAssign(cellProps.row.original)}>
-                                            <i className="ph-duotone ph-tag f-18 icon-action"></i>
-                                        </Button>
-                                    </li>
-                                </ul>
-                            </div>
-                        </>
+                        <div className="overlay-edit-3">
+                            <ul className="list-inline mb-0">
+                                <li className="list-inline-item m-0">
+                                    <Button className="btn-action btn-action2 avtar avtar-s btn btn-secondary" onClick={() => handleShowTagModalAssign(cellProps.row.original)}>
+                                        <i className="ph-duotone ph-tag f-18 icon-action"></i>
+                                    </Button>
+                                </li>
+                            </ul>
+                        </div>
                     );
                 },
             },
@@ -247,22 +325,20 @@ const Page = () => {
                 accessorKey: "status",
                 cell: (cellProps) => {
                     return (
-                        <>
-                            <div className="overlay-edit-3">
-                                <ul className="list-inline mb-0">
-                                    <li className="list-inline-item m-0">
-                                        <Button className="btn-action  avtar avtar-s btn btn-primary" onClick={() => handleShowModal(cellProps.row.original)}>
-                                            <i className="ph-duotone ph-info f-18 icon-action"></i>
-                                        </Button>
-                                    </li>
-                                </ul>
-                            </div>
-                        </>
+                        <div className="overlay-edit-3">
+                            <ul className="list-inline mb-0">
+                                <li className="list-inline-item m-0">
+                                    <Button className="btn-action avtar avtar-s btn btn-primary" onClick={() => handleShowModal(cellProps.row.original)}>
+                                        <i className="ph-duotone ph-info f-18 icon-action"></i>
+                                    </Button>
+                                </li>
+                            </ul>
+                        </div>
                     );
                 },
             },
-        ], []
-    );
+        ];
+    }, [isMobile]);
 
     return (
         <Layout>
@@ -291,7 +367,7 @@ const Page = () => {
                                             isMulti
                                             name="tags"
                                             options={allTags}
-                                            className="basic-multi-select bms"
+                                            className="basic-multi-select bms bap"
                                             classNamePrefix="select"
                                             placeholder="Filtrar por etiquetas"
                                             onChange={handleTagChange}
@@ -331,11 +407,14 @@ const Page = () => {
                     {selectedCandidate && (
                         <div>
                             <p><strong>Nombre:</strong> {selectedCandidate.first_name} {selectedCandidate.last_name}</p>
-                            <p><strong>País:</strong> {selectedCandidate.country}</p>
                             <p><strong>Fecha de Nacimiento:</strong> {selectedCandidate.born_date}</p>
+                            <p><strong>País:</strong> {selectedCandidate.country}</p>
+                            <p><strong>Ciudad:</strong> {selectedCandidate.city}</p>
                             <p><strong>Calle:</strong> {selectedCandidate.street_name}</p>
                             <p><strong>Profesión:</strong> {selectedCandidate.profession}</p>
                             <p><strong>Experiencia:</strong> {selectedCandidate.experience}</p>
+                            <p><strong>Disponibilidad:</strong> {selectedCandidate.available_days} / {selectedCandidate.available_times}</p>
+
                             <p>
                                 <strong>Temas:</strong> {
                                     selectedCandidate.topics

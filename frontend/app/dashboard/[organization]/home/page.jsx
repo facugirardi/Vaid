@@ -140,7 +140,7 @@ const Page = () => {
             <Container fluid>
                 <Row className='d-flex justify-content-center'>
                     <Col md={8} className='welcome-msg text-center'>
-                        <div className='d-flex justify-content-center mt-80'>
+                        <div className='d-flex justify-content-center mt-80a'>
                         <h4 className='h4-wel'>¡Bienvenido a Vaid, {user.first_name}!</h4><br></br>
                         </div>
                         <div className='d-flex justify-content-center mt-5'> 

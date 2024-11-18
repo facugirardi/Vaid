@@ -106,3 +106,54 @@ body{
 .clip2{
   margin-bottom: 3px;
 }
+
+@media (max-width: 768px) { /* Ajuste para pantallas más pequeñas */
+
+  .btn-file-up2{
+    width: 35%;
+  }
+  
+  .btn-file-up{
+    width: 50%;
+  }
+}
+
+@media (max-width: 768px) {
+  .tabla-upload {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .tabla-upload thead {
+    display: none; /* Oculta el encabezado de la tabla */
+  }
+
+  .tabla-upload tbody tr {
+    display: block;
+    margin-bottom: 1rem; /* Espaciado entre filas */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+  }
+
+  .tabla-upload tbody td {
+    display: flex;
+    justify-content: center;
+    padding: 8px 10px;
+    border: none;
+  }
+
+  .tabla-upload tbody td::before {
+    content: attr(data-label); /* Muestra el encabezado como etiqueta */
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: #555;
+  }
+
+  .edit-button-uplist,
+  .trash-button-uplist {
+    width: auto;
+    margin: 0 5px;
+  }
+}

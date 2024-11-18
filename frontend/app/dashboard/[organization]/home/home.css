@@ -11,6 +11,10 @@ font-family: 'Inter', sans-serif;
     margin-top: 50px;
 }
 
+.mt-80a{
+  margin-top: 80px !important;
+}
+
 .btn-create-sm{
   font-size: 15px;
 }
@@ -93,6 +97,15 @@ font-family: 'Inter', sans-serif;
   
  
   @media (max-width: 600px) {
+
+    .welcome-msg{
+      height: 200px;
+    }
+
+    .mt-80a{
+      margin-top: 45px !important;
+    }
+
     .carousel-slide {
       flex: 1 0 90%;
     }

@@ -189,7 +189,6 @@ const Page = () => {
                                 <thead>
                                     <tr>
                                         <th className='text-center'>Nombre</th>
-                                        <th className='text-center'>Unidades</th>
                                         <th className='text-center'>Monto</th>
                                         <th className='text-center'>Fecha</th>
                                         <th className='text-center'>Operación</th>
@@ -199,7 +198,6 @@ const Page = () => {
                                     {buysell.map(item => (
                                         <tr key={item.id}>
                                             <td className='text-center p-donation'><b>{item.description}</b></td>
-                                            <td className='text-center p-donation'>{item.quantity}</td>
                                             <td className='text-center p-donation'>$ {item.amount}</td>
                                             <td className='text-center p-donation'><b>{item.date}</b></td>
                                             <td className={`text-center p-donation ${item.type === 'Compra' ? 'text-green' : 'text-red'}`}>
