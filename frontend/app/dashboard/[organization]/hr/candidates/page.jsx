@@ -145,26 +145,19 @@ const Page = () => {
                 enableColumnFilter: false,
             },
             {
-                header: "Entrevistado",
+                header: "Acciones",
                 enableColumnFilter: false,
                 accessorKey: "interviewed",
                 cell: (cellProps) => {
                     return (
                         <>
-                            {cellProps.getValue() === "True" ?
-                                <span className="badge bg-light-success">Sí</span>
-                                :
-                                <span className="badge bg-light-danger">No</span>
-                            }
-                            <div className="overlay-edit">
-                                <ul className="list-inline mb-0">
+                                <ul className="button-cns list-inline mb-0">
                                     <li className="list-inline-item m-0">
                                         <Button className="avtar avtar-s btn btn-primary" onClick={() => handleShowModal(cellProps.row.original)}>
                                             <i className="ti ti-plus f-18"></i>
                                         </Button>
                                     </li>
                                 </ul>
-                            </div>
                         </>
                     );
                 },

@@ -142,6 +142,21 @@ const Page = () => {
         }
     };
 
+
+    const handleDelete2 = async (selectedCandidate2) => {
+        if (!selectedCandidate2) return;
+        try {
+            await fetch(`http://localhost:8000/api/person-organization-details/${selectedCandidate2.id}/${organizationId}/delete/`, {
+                method: 'DELETE',
+            });
+            setCandidates(candidates.filter(candidate => candidate.id !== selectedCandidate2.id));
+            handleCloseModal();
+        } catch (error) {
+            toast.error('Error al eliminar:', error);
+        }
+    };
+
+
     const columns = useMemo(() => {
         if (isMobile) {
             // Columnas para dispositivos móviles
@@ -174,7 +189,7 @@ const Page = () => {
         
                             switch (action) {
                                 case 'eliminar':
-                                    handleDelete(candidate);
+                                    handleDelete2(candidate);
                                     break;
                                 case 'etiquetas':
                                     handleShowTagModalAssign(candidate);

@@ -55,4 +55,99 @@ body{
 
 }
 
+.button-cns{
+  margin-left: 20px !important;
+}
 
+@media (max-width: 768px) { /* Ajuste para pantallas más pequeñas */
+  /* Mover el selector de etiquetas más abajo */
+  .bap {
+    display: none;
+  }
+
+.pagination{
+  display: flex;
+  justify-content: center;
+}
+
+  .pagination li{
+    padding: 20px;
+    margin-bottom: 30px;
+  }
+  .pagination li button{
+    width: 130% !important;
+  }
+
+  .btn-tags-create{
+    margin-bottom: 80px !important;
+  }
+
+  /* Ocultar columnas específicas en la tabla */
+  .table thead th:not(:nth-child(1)):not(:nth-last-child(1)),
+  .table tbody td:not(:nth-child(1)):not(:nth-last-child(1)) {
+    display: none; /* Solo deja visible la primera columna (Nombre) y la última (Acciones) */
+  }
+
+  /* Ajustar el botón de acciones */
+  .btn-action-menu {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* Estilo para el menú emergente */
+  .action-menu {
+    position: absolute;
+    top: 100%; /* Posiciona el menú debajo del botón */
+    right: 0; /* Alinea a la derecha */
+    background: #fff; /* Fondo blanco */
+    border: 1px solid #ddd; /* Borde gris claro */
+    border-radius: 8px; /* Bordes redondeados */
+    z-index: 99999 !important; /* Asegura que el menú quede por encima de absolutamente todo */
+    padding: 5px 0; /* Espaciado interno */
+    width: 200px; /* Ancho fijo */
+    display: none; /* Oculto por defecto */
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.15); /* Sombra más visible */
+    animation: fadeIn 0.3s ease-in-out; /* Animación suave al aparecer */
+  }
+
+  .action-menu.open {
+    display: block; /* Muestra el menú cuando está activo */
+  }
+
+  .action-menu button {
+    background: none; /* Sin fondo para botones */
+    border: none; /* Sin bordes */
+    width: 100%; /* Botones ocupan todo el ancho */
+    text-align: left; /* Texto alineado a la izquierda */
+    padding: 10px 15px; /* Espaciado interno */
+    font-size: 14px; /* Tamaño de fuente */
+    cursor: pointer; /* Cambia el cursor al pasar */
+    color: #333; /* Texto gris oscuro */
+    display: block; /* Asegura que los botones se apilen verticalmente */
+    transition: background 0.2s ease-in-out; /* Transición suave para el fondo */
+  }
+
+  .action-menu button:hover {
+    background: #f0f0f0; /* Fondo gris claro al pasar el ratón */
+    color: #000; /* Texto negro al pasar el ratón */
+  }
+
+  /* Espaciado entre botones */
+  .action-menu button + button {
+    border-top: 1px solid #eee; /* Líneas divisorias entre botones */
+  }
+
+  /* Animación para el menú */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
